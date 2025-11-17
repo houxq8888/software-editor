@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui version="4.0"> 
+ <class>MainWindow</class> 
+ <widget class="QMainWindow" name="MainWindow"> 
+  <property name="geometry"> 
+   <rect> 
+    <x>0</x> 
+    <y>0</y> 
+    <width>800</width> 
+    <height>600</height> 
+   </rect> 
+  </property> 
+  <property name="windowTitle"> 
+   <string>软件产品编辑界面</string> 
+  </property> 
+  <widget class="QWidget" name="centralWidget"> 
+   <layout class="QVBoxLayout" name="verticalLayout"> 
+    <item> 
+     <widget class="QTabWidget" name="tabWidget"> 
+      <widget class="QWidget" name="basicInfoTab"> 
+       <attribute name="title"> 
+        <string>基本信息</string> 
+       </attribute> 
+       <layout class="QVBoxLayout" name="verticalLayout_2"> 
+        <item> 
+         <widget class="QGroupBox" name="groupBox"> 
+          <property name="title"> 
+           <string>产品基本信息</string> 
+          </property> 
+          <layout class="QGridLayout" name="gridLayout"> 
+           <item row="0" column="0"> 
+            <widget class="QLabel" name="label"> 
+             <property name="text"> 
+              <string>产品名称:</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="0" column="1"> 
+            <widget class="QLineEdit" name="productNameLineEdit"> 
+             <property name="placeholderText"> 
+              <string>请输入产品名称</string> 
+             </property> 
+            </widget> 
+           </item> 
+          </layout> 
+         </widget> 
+        </item> 
+       </layout> 
+      </widget> 
+      <widget class="QWidget" name="featuresTab"> 
+       <attribute name="title"> 
+        <string>功能特性</string> 
+       </attribute> 
+       <layout class="QVBoxLayout" name="verticalLayout_7"> 
+        <item> 
+         <widget class="QGroupBox" name="groupBox_2"> 
+          <property name="title"> 
+           <string>功能特性列表</string> 
+          </property> 
+          <layout class="QGridLayout" name="gridLayout_5"> 
+           <item row="0" column="0"> 
+            <widget class="QLabel" name="label_7"> 
+             <property name="text"> 
+              <string>功能名称:</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="0" column="1"> 
+            <widget class="QLineEdit" name="featureNameLineEdit"> 
+             <property name="placeholderText"> 
+              <string>请输入功能名称</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="1" column="0"> 
+            <widget class="QLabel" name="label_8"> 
+             <property name="text"> 
+              <string>功能描述:</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="1" column="1"> 
+            <widget class="QTextEdit" name="featureDescriptionTextEdit"> 
+             <property name="placeholderText"> 
+              <string>请输入功能描述</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="2" column="0"> 
+            <widget class="QPushButton" name="addFeatureButton"> 
+             <property name="text"> 
+              <string>添加功能</string> 
+             </property> 
+            </widget> 
+           </item> 
+           <item row="2" column="1"> 
+            <widget class="QPushButton" name="removeFeatureButton"> 
+             <property name="text"> 
+              <string>删除功能</string> 
+             </property> 
+            </widget> 
+           </item> 
+          </layout> 
+         </widget> 
+        </item> 
+       </layout> 
+      </widget> 
+     </tabWidget> 
+    </item> 
+    <item> 
+     <widget class="QGroupBox" name="groupBox_5"> 
+      <property name="title"> 
+       <string>操作</string> 
+      </property> 
+      <layout class="QHBoxLayout" name="horizontalLayout"> 
+       <item> 
+        <widget class="QPushButton" name="saveButton"> 
+         <property name="text"> 
+          <string>保存</string> 
+         </property> 
+        </widget> 
+       </item> 
+      </layout> 
+     </widget> 
+    </item> 
+   </layout> 
+  </widget> 
+ </widget> 
+</ui>
