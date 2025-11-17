@@ -238,6 +238,7 @@
          </item>
         </layout>
        </widget>
+      </tabWidget>
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_5">
