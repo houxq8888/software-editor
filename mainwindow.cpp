@@ -6,14 +6,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_currentFile("")
     , m_isModified(false)
-    , m_featuresModel(new QStandardItemModel(this))
 {
     ui->setupUi(this);
-    ui->featuresListView->setModel(m_featuresModel);
-    ui->featuresListView->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    // Set header for features list
-    m_featuresModel->setHorizontalHeaderLabels({"功能特性"});
+    ui->featuresListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->featuresListWidget->setAlternatingRowColors(true);
 
     // Connect signals
     connect(ui->nameLineEdit, &QLineEdit::textChanged, this, [this]() { setModified(true); });
@@ -117,8 +113,22 @@ void MainWindow::on_addFeatureButton_clicked()
 {
     ProductFeature feature = getCurrentFeatureFromEditors();
     if (!feature.name.isEmpty()) {
+        // Save current feature if any
+        ProductFeature currentFeature = getCurrentFeatureFromEditors();
+        if (!currentFeature.name.isEmpty() && ui->featuresListWidget->currentRow() >= 0) {
+            int currentRow = ui->featuresListWidget->currentRow();
+            QList<ProductFeature> features = m_product.features();
+            if (currentRow >= 0 && currentRow < features.size()) {
+                features[currentRow] = currentFeature;
+                m_product.setFeatures(features);
+            }
+        }
+
+        // Add new feature
         m_product.addFeature(feature);
-        updateFeaturesList();
+        QListWidgetItem *item = new QListWidgetItem(feature.name);
+        ui->featuresListWidget->addItem(item);
+        ui->featuresListWidget->setCurrentRow(ui->featuresListWidget->count() - 1);
         ui->featureNameLineEdit->clear();
         ui->featureDescriptionTextEdit->clear();
         setModified(true);
@@ -127,24 +137,21 @@ void MainWindow::on_addFeatureButton_clicked()
 
 void MainWindow::on_removeFeatureButton_clicked()
 {
-    QModelIndex index = ui->featuresListView->currentIndex();
-    if (index.isValid()) {
-        int row = index.row();
+    int row = ui->featuresListWidget->currentRow();
+    if (row >= 0) {
         m_product.removeFeature(row);
-        m_featuresModel->removeRow(row);
+        delete ui->featuresListWidget->takeItem(row);
         setModified(true);
     }
 }
 
-void MainWindow::on_featuresListView_clicked(const QModelIndex &index)
+void MainWindow::on_featuresListWidget_itemClicked(QListWidgetItem *item)
 {
-    if (index.isValid()) {
-        int row = index.row();
-        if (row >= 0 && row < m_product.features().size()) {
-            const ProductFeature &feature = m_product.features().at(row);
-            ui->featureNameLineEdit->setText(feature.name);
-            ui->featureDescriptionTextEdit->setText(feature.description);
-        }
+    int row = ui->featuresListWidget->row(item);
+    if (row >= 0 && row < m_product.features().size()) {
+        const ProductFeature &feature = m_product.features().at(row);
+        ui->featureNameLineEdit->setText(feature.name);
+        ui->featureDescriptionTextEdit->setPlainText(feature.description);
     }
 }
 
@@ -160,9 +167,13 @@ void MainWindow::clearProductData()
     ui->descriptionTextEdit->clear();
     ui->featureNameLineEdit->clear();
     ui->featureDescriptionTextEdit->clear();
-    m_featuresModel->clear();
-    m_featuresModel->setHorizontalHeaderLabels({"功能特性"});
+    ui->featuresListWidget->clear();
     m_product = Product();
+}
+
+void MainWindow::updateFeatureEditors()
+{
+    // Implement feature editor updates if needed
 }
 
 void MainWindow::loadProductData(const Product &product)
@@ -185,8 +196,8 @@ void MainWindow::saveProductData()
 {
     // Save current feature if any
     ProductFeature feature = getCurrentFeatureFromEditors();
-    if (!feature.name.isEmpty() && ui->featuresListView->currentIndex().isValid()) {
-        int row = ui->featuresListView->currentIndex().row();
+    if (!feature.name.isEmpty() && ui->featuresListWidget->currentRow() >= 0) {
+        int row = ui->featuresListWidget->currentRow();
         if (row >= 0 && row < m_product.features().size()) {
             QList<ProductFeature> features = m_product.features();
             features[row] = feature;
@@ -239,13 +250,11 @@ bool MainWindow::saveChanges()
 
 void MainWindow::updateFeaturesList()
 {
-    m_featuresModel->clear();
-    m_featuresModel->setHorizontalHeaderLabels({"功能特性"});
+    ui->featuresListWidget->clear();
 
     for (const auto &feature : m_product.features()) {
-        QStandardItem *item = new QStandardItem(feature.name);
-        item->setData(feature.description, Qt::UserRole + 1);
-        m_featuresModel->appendRow(item);
+        QListWidgetItem *item = new QListWidgetItem(feature.name);
+        ui->featuresListWidget->addItem(item);
     }
 }
 
@@ -255,4 +264,9 @@ ProductFeature MainWindow::getCurrentFeatureFromEditors() const
     feature.name = ui->featureNameLineEdit->text();
     feature.description = ui->featureDescriptionTextEdit->toPlainText();
     return feature;
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox::about(this, "关于产品编辑器", "这是一个基于Qt的产品编辑工具，用于创建和管理产品信息。");
 }
