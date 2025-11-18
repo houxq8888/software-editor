@@ -147,6 +147,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
@@ -155,6 +156,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
@@ -195,6 +197,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \

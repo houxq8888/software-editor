@@ -31,6 +31,63 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
+struct qt_meta_tag_ZN16CustomListWidgetE_t {};
+} // unnamed namespace
+
+template <> constexpr inline auto CustomListWidget::qt_create_metaobjectdata<qt_meta_tag_ZN16CustomListWidgetE_t>()
+{
+    namespace QMC = QtMocConstants;
+    QtMocHelpers::StringRefStorage qt_stringData {
+        "CustomListWidget"
+    };
+
+    QtMocHelpers::UintData qt_methods {
+    };
+    QtMocHelpers::UintData qt_properties {
+    };
+    QtMocHelpers::UintData qt_enums {
+    };
+    return QtMocHelpers::metaObjectData<CustomListWidget, qt_meta_tag_ZN16CustomListWidgetE_t>(QMC::MetaObjectFlag{}, qt_stringData,
+            qt_methods, qt_properties, qt_enums);
+}
+Q_CONSTINIT const QMetaObject CustomListWidget::staticMetaObject = { {
+    QMetaObject::SuperData::link<QListWidget::staticMetaObject>(),
+    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN16CustomListWidgetE_t>.stringdata,
+    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN16CustomListWidgetE_t>.data,
+    qt_static_metacall,
+    nullptr,
+    qt_staticMetaObjectRelocatingContent<qt_meta_tag_ZN16CustomListWidgetE_t>.metaTypes,
+    nullptr
+} };
+
+void CustomListWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    auto *_t = static_cast<CustomListWidget *>(_o);
+    (void)_t;
+    (void)_c;
+    (void)_id;
+    (void)_a;
+}
+
+const QMetaObject *CustomListWidget::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *CustomListWidget::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_staticMetaObjectStaticContent<qt_meta_tag_ZN16CustomListWidgetE_t>.strings))
+        return static_cast<void*>(this);
+    return QListWidget::qt_metacast(_clname);
+}
+
+int CustomListWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QListWidget::qt_metacall(_c, _id, _a);
+    return _id;
+}
+namespace {
 struct qt_meta_tag_ZN14UILayoutWindowE_t {};
 } // unnamed namespace
 
@@ -43,10 +100,7 @@ template <> constexpr inline auto UILayoutWindow::qt_create_metaobjectdata<qt_me
         "",
         "on_actionLoad_Layout_triggered",
         "on_actionUndo_triggered",
-        "on_actionRedo_triggered",
-        "onItemPressed",
-        "QListWidgetItem*",
-        "item"
+        "on_actionRedo_triggered"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -58,10 +112,6 @@ template <> constexpr inline auto UILayoutWindow::qt_create_metaobjectdata<qt_me
         QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionRedo_triggered'
         QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onItemPressed'
-        QtMocHelpers::SlotData<void(QListWidgetItem *)>(6, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 7, 8 },
-        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -89,10 +139,10 @@ void UILayoutWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 1: _t->on_actionLoad_Layout_triggered(); break;
         case 2: _t->on_actionUndo_triggered(); break;
         case 3: _t->on_actionRedo_triggered(); break;
-        case 4: _t->onItemPressed((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
         default: ;
         }
     }
+    (void)_a;
 }
 
 const QMetaObject *UILayoutWindow::metaObject() const
@@ -114,14 +164,14 @@ int UILayoutWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 4;
     }
     return _id;
 }

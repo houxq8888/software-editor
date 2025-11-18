@@ -205,7 +205,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Project
+CMAKE_PROJECT_NAME:STATIC=software-editor
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=D:/Qt/Tools/mingw1310_64/bin/ranlib.exe
@@ -359,6 +359,15 @@ Vulkan_LIBRARY:FILEPATH=Vulkan_LIBRARY-NOTFOUND
 
 //Path to a program.
 WINDEPLOYQT_EXECUTABLE:FILEPATH=D:/Qt/6.9.1/mingw_64/bin/windeployqt.exe
+
+//Value Computed by CMake
+software-editor_BINARY_DIR:STATIC=D:/virtualMachine/github/software-editor/build
+
+//Value Computed by CMake
+software-editor_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+software-editor_SOURCE_DIR:STATIC=D:/virtualMachine/github/software-editor
 
 
 ########################

@@ -8,13 +8,26 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QListWidget>
 #include <QListWidgetItem>
+#include <QDrag>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class UILayoutWindow;
 }
 QT_END_NAMESPACE
+
+// 自定义QListWidget类，用于实现拖放功能
+class CustomListWidget : public QListWidget
+{
+    Q_OBJECT
+public:
+    explicit CustomListWidget(QWidget *parent = nullptr);
+
+protected:
+    void startDrag(Qt::DropActions supportedActions) override;
+};
 
 // 自定义图形项类，用于表示可编辑的控件
 class LayoutItem : public QGraphicsItem
@@ -64,10 +77,8 @@ private slots:
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
 
-private slots:
-    void onItemPressed(QListWidgetItem *item);
-
 private:
+    bool eventFilter(QObject *obj, QEvent *event);
     Ui::UILayoutWindow *ui;
     QGraphicsScene *m_scene;
 

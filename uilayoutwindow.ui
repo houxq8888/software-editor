@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>UILayoutWindow</class>
+ <customwidgets>
+  <customwidget>
+   <class>CustomListWidget</class>
+   <extends>QListWidget</extends>
+   <header>uilayoutwindow.h</header>
+  </customwidget>
+ </customwidgets>
  <widget class="QMainWindow" name="UILayoutWindow">
   <property name="geometry">
    <rect>
@@ -30,7 +37,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="widgetListWidget">
+         <widget class="CustomListWidget" name="widgetListWidget">
           <property name="dragEnabled">
            <bool>true</bool>
           </property>

@@ -71,7 +71,7 @@ software-editor_autogen/timestamp: D:/Qt/6.9.1/mingw_64/bin/moc.exe
 software-editor_autogen/timestamp: D:/Qt/6.9.1/mingw_64/bin/uic.exe
 software-editor_autogen/timestamp: CMakeFiles/software-editor_autogen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target software-editor"
-	D:\Qt\Tools\CMake_64\bin\cmake.exe -E cmake_autogen D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenInfo.json Release
+	D:\Qt\Tools\CMake_64\bin\cmake.exe -E cmake_autogen D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenInfo.json Debug
 	D:\Qt\Tools\CMake_64\bin\cmake.exe -E touch D:/virtualMachine/github/software-editor/build/software-editor_autogen/timestamp
 
 software-editor_autogen: CMakeFiles/software-editor_autogen

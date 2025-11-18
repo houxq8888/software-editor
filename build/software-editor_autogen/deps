@@ -166,6 +166,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
@@ -174,6 +175,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
