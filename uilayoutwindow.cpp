@@ -74,8 +74,10 @@ void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void LayoutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_isResizing) {
-        QPointF delta = event->pos() - boundingRect().bottomRight();
-        setSize(m_width + delta.x(), m_height + delta.y());
+        QPointF newPos = event->pos();
+        qreal newWidth = qMax(newPos.x(), 20.0);
+        qreal newHeight = qMax(newPos.y(), 20.0);
+        setSize(newWidth, newHeight);
     } else if (m_isDragging) {
         QPointF delta = event->pos() - m_lastMousePos;
         setPos(pos() + delta);
@@ -148,7 +150,6 @@ void UILayoutWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void UILayoutWindow::dragMoveEvent(QDragMoveEvent *event)
 {
-    // 只在graphicsView上接受拖放
     QPoint pos = event->position().toPoint();
     if (ui->graphicsView->geometry().contains(pos)) {
         event->acceptProposedAction();
@@ -160,18 +161,18 @@ void UILayoutWindow::dragMoveEvent(QDragMoveEvent *event)
 void UILayoutWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasText()) {
-        // 检查拖放位置是否在graphicsView上
-        QPoint pos = event->position().toPoint();
-        if (ui->graphicsView->geometry().contains(pos)) {
-            QString widgetType = event->mimeData()->text();
-            QPointF scenePos = ui->graphicsView->mapToScene(pos - ui->graphicsView->geometry().topLeft());
-            LayoutItem *item = new LayoutItem(widgetType);
-            item->setPos(scenePos - item->boundingRect().center());
-            m_scene->addItem(item);
-            event->acceptProposedAction();
-        } else {
-            event->ignore();
-        }
+        // 计算相对于graphicsView的局部位置
+        QPoint localPos = event->position().toPoint() - ui->graphicsView->geometry().topLeft();
+        // 转换为场景坐标
+        QPointF scenePos = ui->graphicsView->mapToScene(localPos);
+        
+        QString widgetType = event->mimeData()->text();
+        LayoutItem *item = new LayoutItem(widgetType);
+        // 设置位置为场景坐标中心
+        item->setPos(scenePos - item->boundingRect().center());
+        m_scene->addItem(item);
+        
+        event->acceptProposedAction();
     } else {
         event->ignore();
     }
@@ -194,6 +195,8 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
             itemObj["type"] = layoutItem->widgetType();
             itemObj["x"] = layoutItem->pos().x();
             itemObj["y"] = layoutItem->pos().y();
+            itemObj["width"] = layoutItem->width();
+            itemObj["height"] = layoutItem->height();
             itemsArray.append(itemObj);
         }
     }
@@ -235,9 +238,12 @@ void UILayoutWindow::on_actionLoad_Layout_triggered()
         QString type = itemObj["type"].toString();
         qreal x = itemObj["x"].toDouble();
         qreal y = itemObj["y"].toDouble();
+        qreal width = itemObj.value("width").toDouble(100);
+        qreal height = itemObj.value("height").toDouble(80);
 
         LayoutItem *item = new LayoutItem(type);
         item->setPos(x, y);
+        item->setSize(width, height);
         m_scene->addItem(item);
     }
 }
