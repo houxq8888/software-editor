@@ -79,8 +79,8 @@ clean: CMakeFiles/software-editor_autogen.dir/clean
 # Target rules for target CMakeFiles/software-editor.dir
 
 # All Build rule for target.
-CMakeFiles/software-editor.dir/all: CMakeFiles/software-editor_autogen_timestamp_deps.dir/all
 CMakeFiles/software-editor.dir/all: CMakeFiles/software-editor_autogen.dir/all
+CMakeFiles/software-editor.dir/all: CMakeFiles/software-editor_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target software-editor"

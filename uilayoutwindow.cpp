@@ -14,9 +14,9 @@
 LayoutItem::LayoutItem(const QString &widgetType, QGraphicsItem *parent)
     : QGraphicsItem(parent), m_widgetType(widgetType), m_isDragging(false), m_isResizing(false), m_width(100), m_height(80)
 {
-    setFlag(ItemIsMovable);
-    setFlag(ItemIsSelectable);
-    setFlag(ItemSendsGeometryChanges);
+    setFlag(ItemIsMovable, true);
+    setFlag(ItemIsSelectable, true);
+    setFlag(ItemSendsGeometryChanges, true);
     setAcceptHoverEvents(true);
 }
 
@@ -64,11 +64,12 @@ void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QRectF resizeHandle(boundingRect().bottomRight() - QPointF(10, 10), QSizeF(10, 10));
     if (resizeHandle.contains(event->pos())) {
         m_isResizing = true;
+        event->accept();
     } else {
         m_lastMousePos = event->pos();
         m_isDragging = true;
+        QGraphicsItem::mousePressEvent(event);
     }
-    QGraphicsItem::mousePressEvent(event);
 }
 
 void LayoutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -78,11 +79,14 @@ void LayoutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         qreal newWidth = qMax(newPos.x(), 20.0);
         qreal newHeight = qMax(newPos.y(), 20.0);
         setSize(newWidth, newHeight);
+        event->accept();
     } else if (m_isDragging) {
         QPointF delta = event->pos() - m_lastMousePos;
         setPos(pos() + delta);
+        event->accept();
+    } else {
+        QGraphicsItem::mouseMoveEvent(event);
     }
-    QGraphicsItem::mouseMoveEvent(event);
 }
 
 void LayoutItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
