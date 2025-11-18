@@ -16,7 +16,7 @@ echo Debug: MINGW_DIR = %MINGW_DIR%
 set PATH=%MINGW_DIR%\bin;%PATH%
 
 REM Create build directory
-set BUILD_DIR=d:\virtualMachine\github\productFactory\software-editor\build
+set BUILD_DIR=d:\virtualMachine\github\software-editor\build
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 cd "%BUILD_DIR%"
 echo Debug: Current directory is %CD%

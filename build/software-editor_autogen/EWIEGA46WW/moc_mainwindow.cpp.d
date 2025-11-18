@@ -1,5 +1,6 @@
 D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46WW/moc_mainwindow.cpp: D:/virtualMachine/github/software-editor/mainwindow.h \
   D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
@@ -63,8 +64,10 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qhashfunctions.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevicebase.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterable.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterator.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
@@ -149,8 +152,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/QStandardItem \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/QStandardItemModel \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
@@ -171,22 +172,36 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtGui/qregion.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgb.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgba64.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qstandarditemmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtgui-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs_win.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFileDialog \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractslider.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfiledialog.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
