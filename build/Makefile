@@ -295,6 +295,30 @@ software-editor_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.s
 .PHONY : software-editor_autogen/mocs_compilation.cpp.s
 
+uilayoutwindow.obj: uilayoutwindow.cpp.obj
+.PHONY : uilayoutwindow.obj
+
+# target to build an object file
+uilayoutwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
+.PHONY : uilayoutwindow.cpp.obj
+
+uilayoutwindow.i: uilayoutwindow.cpp.i
+.PHONY : uilayoutwindow.i
+
+# target to preprocess a source file
+uilayoutwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.i
+.PHONY : uilayoutwindow.cpp.i
+
+uilayoutwindow.s: uilayoutwindow.cpp.s
+.PHONY : uilayoutwindow.s
+
+# target to generate assembly for a file
+uilayoutwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.s
+.PHONY : uilayoutwindow.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -322,6 +346,9 @@ help:
 	@echo ... software-editor_autogen/mocs_compilation.obj
 	@echo ... software-editor_autogen/mocs_compilation.i
 	@echo ... software-editor_autogen/mocs_compilation.s
+	@echo ... uilayoutwindow.obj
+	@echo ... uilayoutwindow.i
+	@echo ... uilayoutwindow.s
 .PHONY : help
 
 

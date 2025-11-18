@@ -469,4 +469,52 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtmochelpers.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtmocconstants.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q23type_traits.h
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q23type_traits.h \
+ D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_uilayoutwindow.cpp \
+ D:/virtualMachine/github/software-editor/uilayoutwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h
