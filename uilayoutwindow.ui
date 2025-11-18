@@ -103,6 +103,20 @@
     <string>重做</string>
    </property>
   </action>
+  <action name="actionPreview">
+   <property name="text">
+    <string>预览</string>
+   </property>
+  </action>
+ </widget>
+ <widget class="QToolBar" name="mainToolBar">
+  <attribute name="toolBarArea">
+   <number>1</number>
+  </attribute>
+  <attribute name="toolBarBreak">
+   <bool>false</bool>
+  </attribute>
+  <addaction name="actionPreview"/>
  </widget>
  <resources/>
  <connections/>
