@@ -435,7 +435,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemview.h \
@@ -451,6 +451,9 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_uilayoutwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
@@ -471,7 +474,6 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
@@ -483,12 +485,11 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
+ D:/virtualMachine/github/software-editor/uilayoutwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsSceneMouseEvent \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicssceneevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFileDialog \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfiledialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
@@ -550,4 +551,6 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDir \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h

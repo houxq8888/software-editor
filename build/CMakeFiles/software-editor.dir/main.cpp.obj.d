@@ -397,6 +397,10 @@ CMakeFiles/software-editor.dir/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTextStream \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
  D:\virtualMachine\github\software-editor\mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
