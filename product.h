@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include <QJsonObject>
+#include <QJsonArray>
 
 struct ProductFeature
 {

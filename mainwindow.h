@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QStandardItemModel>
-#include <QStandardItem>
+#include <QListWidget>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -30,13 +29,14 @@ private slots:
     void on_actionSave_triggered();
     void on_actionSave_As_triggered();
     void on_actionExit_triggered();
+    void on_actionAbout_triggered();
 
     void on_iconBrowseButton_clicked();
     void on_screenshotBrowseButton_clicked();
 
     void on_addFeatureButton_clicked();
     void on_removeFeatureButton_clicked();
-    void on_featuresListView_clicked(const QModelIndex &index);
+    void on_featuresListWidget_itemClicked(QListWidgetItem *item);
 
     void updateFeatureEditors();
 
@@ -45,7 +45,7 @@ private:
     Product m_product;
     QString m_currentFile;
     bool m_isModified;
-    QStandardItemModel *m_featuresModel;
+    QListWidget *m_featuresListWidget;
 
     void clearProductData();
     void loadProductData(const Product &product);
