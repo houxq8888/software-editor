@@ -216,6 +216,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \

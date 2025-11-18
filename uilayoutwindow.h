@@ -8,6 +8,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,16 +26,23 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     QString widgetType() const { return m_widgetType; }
+    qreal width() const { return m_width; }
+    qreal height() const { return m_height; }
+    void setSize(qreal width, qreal height);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
 
 private:
     QString m_widgetType;
     QPointF m_lastMousePos;
     bool m_isDragging;
+    bool m_isResizing;
+    qreal m_width;
+    qreal m_height;
 };
 
 class UILayoutWindow : public QMainWindow
@@ -55,6 +63,9 @@ private slots:
     void on_actionLoad_Layout_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
+
+private slots:
+    void onItemPressed(QListWidgetItem *item);
 
 private:
     Ui::UILayoutWindow *ui;
