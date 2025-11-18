@@ -709,6 +709,7 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj: D:/virtualMachine/github/soft
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
@@ -1603,6 +1604,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -2128,6 +2130,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: D:/virtualMachine/github/
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHBoxLayout \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
@@ -3359,6 +3362,8 @@ D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/streambuf
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/system_error:
 
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/ell_integral.tcc:
+
+D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem:
 
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/gamma.tcc:
 

@@ -557,4 +557,5 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem

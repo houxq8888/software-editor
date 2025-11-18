@@ -12,16 +12,17 @@
 #include <QDir>
 
 LayoutItem::LayoutItem(const QString &widgetType, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_widgetType(widgetType), m_isDragging(false)
+    : QGraphicsItem(parent), m_widgetType(widgetType), m_isDragging(false), m_isResizing(false), m_width(100), m_height(80)
 {
     setFlag(ItemIsMovable);
     setFlag(ItemIsSelectable);
     setFlag(ItemSendsGeometryChanges);
+    setAcceptHoverEvents(true);
 }
 
 QRectF LayoutItem::boundingRect() const
 {
-    return QRectF(0, 0, 100, 80);
+    return QRectF(0, 0, m_width, m_height);
 }
 
 void LayoutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -38,23 +39,44 @@ void LayoutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->setPen(QPen(Qt::black));
     painter->drawText(rect, Qt::AlignCenter, m_widgetType);
 
-    // 如果选中，绘制选中边框
+    // 如果选中，绘制选中边框和缩放手柄
     if (option->state & QStyle::State_Selected) {
         painter->setPen(QPen(Qt::blue, 2, Qt::DashLine));
         painter->drawRect(rect.adjusted(1, 1, -1, -1));
+        
+        // 绘制右下角缩放手柄
+        QRectF resizeHandle(rect.bottomRight() - QPointF(10, 10), QSizeF(10, 10));
+        painter->setPen(QPen(Qt::blue, 1));
+        painter->setBrush(QBrush(Qt::blue));
+        painter->drawRect(resizeHandle);
     }
+}
+
+void LayoutItem::setSize(qreal width, qreal height)
+{
+    m_width = qMax(width, 20.0);
+    m_height = qMax(height, 20.0);
+    update();
 }
 
 void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    m_lastMousePos = event->pos();
-    m_isDragging = true;
+    QRectF resizeHandle(boundingRect().bottomRight() - QPointF(10, 10), QSizeF(10, 10));
+    if (resizeHandle.contains(event->pos())) {
+        m_isResizing = true;
+    } else {
+        m_lastMousePos = event->pos();
+        m_isDragging = true;
+    }
     QGraphicsItem::mousePressEvent(event);
 }
 
 void LayoutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (m_isDragging) {
+    if (m_isResizing) {
+        QPointF delta = event->pos() - boundingRect().bottomRight();
+        setSize(m_width + delta.x(), m_height + delta.y());
+    } else if (m_isDragging) {
         QPointF delta = event->pos() - m_lastMousePos;
         setPos(pos() + delta);
     }
@@ -64,7 +86,19 @@ void LayoutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void LayoutItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     m_isDragging = false;
+    m_isResizing = false;
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void LayoutItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    QRectF resizeHandle(boundingRect().bottomRight() - QPointF(10, 10), QSizeF(10, 10));
+    if (resizeHandle.contains(event->pos())) {
+        setCursor(Qt::SizeFDiagCursor);
+    } else {
+        setCursor(Qt::ArrowCursor);
+    }
+    QGraphicsItem::hoverMoveEvent(event);
 }
 
 UILayoutWindow::UILayoutWindow(QWidget *parent)
@@ -85,6 +119,15 @@ UILayoutWindow::UILayoutWindow(QWidget *parent)
 
     // 加载插件
     loadPlugins();
+
+    // 设置QListWidget的拖放属性
+    ui->widgetListWidget->setDragEnabled(true);
+
+    // 设置QGraphicsView的拖放属性
+    ui->graphicsView->setAcceptDrops(true);
+
+    // 连接列表项点击事件
+    connect(ui->widgetListWidget, &QListWidget::itemPressed, this, &UILayoutWindow::onItemPressed);
 }
 
 UILayoutWindow::~UILayoutWindow()
@@ -93,36 +136,48 @@ UILayoutWindow::~UILayoutWindow()
     delete m_scene;
 }
 
+// 实现拖放事件处理器
 void UILayoutWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasText()) {
         event->acceptProposedAction();
+    } else {
+        event->ignore();
     }
 }
 
 void UILayoutWindow::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasText()) {
+    // 只在graphicsView上接受拖放
+    QPoint pos = event->position().toPoint();
+    if (ui->graphicsView->geometry().contains(pos)) {
         event->acceptProposedAction();
+    } else {
+        event->ignore();
     }
 }
 
 void UILayoutWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasText()) {
-        QString widgetType = event->mimeData()->text();
-
-        // 将窗口坐标转换为场景坐标
-        QPointF scenePos = ui->graphicsView->mapToScene(event->pos());
-
-        // 创建新的布局项
-        LayoutItem *item = new LayoutItem(widgetType);
-        item->setPos(scenePos - item->boundingRect().center());
-        m_scene->addItem(item);
-
-        event->acceptProposedAction();
+        // 检查拖放位置是否在graphicsView上
+        QPoint pos = event->position().toPoint();
+        if (ui->graphicsView->geometry().contains(pos)) {
+            QString widgetType = event->mimeData()->text();
+            QPointF scenePos = ui->graphicsView->mapToScene(pos - ui->graphicsView->geometry().topLeft());
+            LayoutItem *item = new LayoutItem(widgetType);
+            item->setPos(scenePos - item->boundingRect().center());
+            m_scene->addItem(item);
+            event->acceptProposedAction();
+        } else {
+            event->ignore();
+        }
+    } else {
+        event->ignore();
     }
 }
+
+
 
 void UILayoutWindow::on_actionSave_Layout_triggered()
 {
@@ -199,23 +254,76 @@ void UILayoutWindow::on_actionRedo_triggered()
 
 void UILayoutWindow::initWidgetLibrary()
 {
-    // 添加内置控件类型
+    // 添加内置控件类型 - 基本控件
     QStringList widgetTypes = {
         "QLabel",
         "QPushButton",
         "QLineEdit",
+        "QTextEdit",
+        "QPlainTextEdit",
+        "QSpinBox",
+        "QDoubleSpinBox",
+        "QSlider",
+        "QDial",
+        "QProgressBar",
+        "QScrollBar",
+        "QSpinBox",
+        "QDoubleSpinBox",
+        "QDateTimeEdit",
+        "QDateEdit",
+        "QTimeEdit",
+        "QCalendarWidget",
+        "QCheckBox",
+        "QRadioButton",
+        "QGroupBox",
+        "QToolButton",
+        "QCommandLinkButton",
         "QCheckBox",
         "QRadioButton",
         "QComboBox",
-        "QSlider",
-        "QSpinBox",
-        "QTextEdit",
-        "QGroupBox"
+        "QFontComboBox",
+        "QListWidget",
+        "QTreeWidget",
+        "QTableWidget",
+        "QTabWidget",
+        "QDockWidget",
+        "QSplitter",
+        "QStackedWidget",
+        "QScrollArea",
+        "QMdiArea",
+        "QFrame",
+        "QLCDNumber"
     };
 
     foreach (const QString &type, widgetTypes) {
         ui->widgetListWidget->addItem(type);
     }
+}
+
+void UILayoutWindow::onItemPressed(QListWidgetItem *item)
+{
+    if (!item) {
+        return;
+    }
+
+    QString widgetType = item->text();
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setText(widgetType);
+
+    QDrag *drag = new QDrag(ui->widgetListWidget);
+    drag->setMimeData(mimeData);
+
+    // 创建拖动时的预览
+    QPixmap pixmap(80, 60);
+    pixmap.fill(Qt::lightGray);
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::black);
+    painter.drawRect(0, 0, 79, 59);
+    painter.drawText(pixmap.rect(), Qt::AlignCenter, widgetType);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(pixmap.rect().center());
+
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 void UILayoutWindow::loadPlugins()
