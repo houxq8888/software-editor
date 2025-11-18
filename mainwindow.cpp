@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "uilayoutwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,8 +23,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->descriptionTextEdit, &QTextEdit::textChanged, this, [this]() { setModified(true); });
     connect(ui->featureNameLineEdit, &QLineEdit::textChanged, this, [this]() { setModified(true); });
     connect(ui->featureDescriptionTextEdit, &QTextEdit::textChanged, this, [this]() { setModified(true); });
+    
 
     clearProductData();
+
+    ui->mainToolBar->setIconSize(QSize(24, 24));
+    ui->statusBar->showMessage("就绪");
 }
 
 MainWindow::~MainWindow()
@@ -84,6 +89,16 @@ void MainWindow::on_actionSave_As_triggered()
         setModified(false);
         setWindowTitle(QString("产品编辑器 - %1").arg(QFileInfo(fileName).fileName()));
     }
+}
+
+void MainWindow::on_saveButton_clicked()
+{
+    on_actionSave_triggered();
+}
+
+void MainWindow::on_loadButton_clicked()
+{
+    on_actionOpen_triggered();
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -269,4 +284,10 @@ ProductFeature MainWindow::getCurrentFeatureFromEditors() const
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox::about(this, "关于产品编辑器", "这是一个基于Qt的产品编辑工具，用于创建和管理产品信息。");
+}
+
+void MainWindow::on_actionOpen_UI_Layout_Editor_triggered()
+{
+    UILayoutWindow *layoutWindow = new UILayoutWindow(this);
+    layoutWindow->show();
 }

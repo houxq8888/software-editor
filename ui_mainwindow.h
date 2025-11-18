@@ -40,11 +40,7 @@ public:
     QAction *actionSave_As;
     QAction *actionExit;
     QAction *actionAbout;
-    QMenuBar *mainMenuBar;
-    QMenu *mainMenuFile;
-    QMenu *mainMenuHelp;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
+    QAction *actionOpen_UI_Layout_Editor;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -66,10 +62,10 @@ public:
     QGridLayout *gridLayout_2;
     QLabel *iconPathLabel;
     QLineEdit *iconPathLineEdit;
-    QPushButton *iconPathButton;
+    QPushButton *iconBrowseButton;
     QLabel *screenshotPathLabel;
     QLineEdit *screenshotPathLineEdit;
-    QPushButton *screenshotPathButton;
+    QPushButton *screenshotBrowseButton;
     QGroupBox *groupBox_3;
     QVBoxLayout *verticalLayout_3;
     QTextEdit *descriptionTextEdit;
@@ -90,8 +86,11 @@ public:
     QPushButton *loadButton;
     QPushButton *exportButton;
     QMenuBar *menuBar;
-    QMenu *menuFile;
-    QMenu *menuHelp;
+    QMenu *menu;
+    QMenu *menu_3;
+    QMenu *menu_2;
+    QToolBar *mainToolBar;
+    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -110,19 +109,8 @@ public:
         actionExit->setObjectName("actionExit");
         actionAbout = new QAction(MainWindow);
         actionAbout->setObjectName("actionAbout");
-        mainMenuBar = new QMenuBar(MainWindow);
-        mainMenuBar->setObjectName("mainMenuBar");
-        mainMenuFile = new QMenu(mainMenuBar);
-        mainMenuFile->setObjectName("mainMenuFile");
-        mainMenuHelp = new QMenu(mainMenuBar);
-        mainMenuHelp->setObjectName("mainMenuHelp");
-        MainWindow->setMenuBar(mainMenuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName("mainToolBar");
-        MainWindow->addToolBar(Qt::ToolBarArea::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(MainWindow);
-        statusBar->setObjectName("statusBar");
-        MainWindow->setStatusBar(statusBar);
+        actionOpen_UI_Layout_Editor = new QAction(MainWindow);
+        actionOpen_UI_Layout_Editor->setObjectName("actionOpen_UI_Layout_Editor");
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName("centralWidget");
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -204,10 +192,10 @@ public:
 
         gridLayout_2->addWidget(iconPathLineEdit, 0, 1, 1, 1);
 
-        iconPathButton = new QPushButton(groupBox_2);
-        iconPathButton->setObjectName("iconPathButton");
+        iconBrowseButton = new QPushButton(groupBox_2);
+        iconBrowseButton->setObjectName("iconBrowseButton");
 
-        gridLayout_2->addWidget(iconPathButton, 0, 2, 1, 1);
+        gridLayout_2->addWidget(iconBrowseButton, 0, 2, 1, 1);
 
         screenshotPathLabel = new QLabel(groupBox_2);
         screenshotPathLabel->setObjectName("screenshotPathLabel");
@@ -219,10 +207,10 @@ public:
 
         gridLayout_2->addWidget(screenshotPathLineEdit, 1, 1, 1, 1);
 
-        screenshotPathButton = new QPushButton(groupBox_2);
-        screenshotPathButton->setObjectName("screenshotPathButton");
+        screenshotBrowseButton = new QPushButton(groupBox_2);
+        screenshotBrowseButton->setObjectName("screenshotBrowseButton");
 
-        gridLayout_2->addWidget(screenshotPathButton, 1, 2, 1, 1);
+        gridLayout_2->addWidget(screenshotBrowseButton, 1, 2, 1, 1);
 
 
         verticalLayout_2->addWidget(groupBox_2);
@@ -271,7 +259,6 @@ public:
 
         featureDescriptionTextEdit = new QTextEdit(groupBox_4);
         featureDescriptionTextEdit->setObjectName("featureDescriptionTextEdit");
-        featureDescriptionTextEdit->setMaximumHeight(100);
 
         gridLayout_3->addWidget(featureDescriptionTextEdit, 1, 1, 1, 1);
 
@@ -317,30 +304,37 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName("menuBar");
-        menuBar->setGeometry(QRect(0, 0, 800, 26));
-        menuFile = new QMenu(menuBar);
-        menuFile->setObjectName("menuFile");
-        menuHelp = new QMenu(menuBar);
-        menuHelp->setObjectName("menuHelp");
+        menuBar->setGeometry(QRect(0, 0, 800, 40));
+        menu = new QMenu(menuBar);
+        menu->setObjectName("menu");
+        menu_3 = new QMenu(menuBar);
+        menu_3->setObjectName("menu_3");
+        menu_2 = new QMenu(menuBar);
+        menu_2->setObjectName("menu_2");
         MainWindow->setMenuBar(menuBar);
+        mainToolBar = new QToolBar(MainWindow);
+        mainToolBar->setObjectName("mainToolBar");
+        MainWindow->addToolBar(Qt::ToolBarArea::LeftToolBarArea, mainToolBar);
+        statusBar = new QStatusBar(MainWindow);
+        statusBar->setObjectName("statusBar");
+        MainWindow->setStatusBar(statusBar);
 
-        mainMenuFile->addAction(actionNew);
-        mainMenuFile->addAction(actionOpen);
-        mainMenuFile->addSeparator();
-        mainMenuFile->addAction(actionSave);
-        mainMenuFile->addAction(actionSave_As);
-        mainMenuFile->addSeparator();
-        mainMenuFile->addAction(actionExit);
-        mainMenuHelp->addAction(actionAbout);
-        menuFile->addAction(actionNew);
-        menuFile->addAction(actionOpen);
-        menuFile->addAction(actionSave);
-        menuFile->addAction(actionSave_As);
-        menuFile->addSeparator();
-        menuFile->addAction(actionExit);
-        menuHelp->addAction(actionAbout);
+        menuBar->addAction(menu->menuAction());
+        menuBar->addAction(menu_3->menuAction());
+        menuBar->addAction(menu_2->menuAction());
+        menu->addAction(actionNew);
+        menu->addAction(actionOpen);
+        menu->addAction(actionSave);
+        menu->addAction(actionSave_As);
+        menu->addAction(actionExit);
+        menu_3->addAction(actionOpen_UI_Layout_Editor);
+        menu_2->addAction(actionAbout);
+        mainToolBar->addAction(actionNew);
 
         retranslateUi(MainWindow);
+
+        tabWidget->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -366,8 +360,7 @@ public:
 #endif // QT_CONFIG(shortcut)
         actionExit->setText(QCoreApplication::translate("MainWindow", "\351\200\200\345\207\272", nullptr));
         actionAbout->setText(QCoreApplication::translate("MainWindow", "\345\205\263\344\272\216", nullptr));
-        mainMenuFile->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
-        mainMenuHelp->setTitle(QCoreApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
+        actionOpen_UI_Layout_Editor->setText(QCoreApplication::translate("MainWindow", "\346\211\223\345\274\200UI\345\270\203\345\261\200\347\274\226\350\276\221\345\231\250", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "\344\272\247\345\223\201\345\237\272\346\234\254\344\277\241\346\201\257", nullptr));
         nameLabel->setText(QCoreApplication::translate("MainWindow", "\344\272\247\345\223\201\345\220\215\347\247\260\357\274\232", nullptr));
         nameLineEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "\350\276\223\345\205\245\344\272\247\345\223\201\345\220\215\347\247\260", nullptr));
@@ -382,10 +375,10 @@ public:
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266\350\256\276\347\275\256", nullptr));
         iconPathLabel->setText(QCoreApplication::translate("MainWindow", "\345\233\276\346\240\207\350\267\257\345\276\204\357\274\232", nullptr));
         iconPathLineEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "\351\200\211\346\213\251\344\272\247\345\223\201\345\233\276\346\240\207", nullptr));
-        iconPathButton->setText(QCoreApplication::translate("MainWindow", "\346\265\217\350\247\210...", nullptr));
+        iconBrowseButton->setText(QCoreApplication::translate("MainWindow", "\346\265\217\350\247\210...", nullptr));
         screenshotPathLabel->setText(QCoreApplication::translate("MainWindow", "\346\210\252\345\233\276\350\267\257\345\276\204\357\274\232", nullptr));
         screenshotPathLineEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "\351\200\211\346\213\251\344\272\247\345\223\201\346\210\252\345\233\276", nullptr));
-        screenshotPathButton->setText(QCoreApplication::translate("MainWindow", "\346\265\217\350\247\210...", nullptr));
+        screenshotBrowseButton->setText(QCoreApplication::translate("MainWindow", "\346\265\217\350\247\210...", nullptr));
         groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "\344\272\247\345\223\201\346\217\217\350\277\260", nullptr));
         descriptionTextEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "\350\276\223\345\205\245\344\272\247\345\223\201\346\217\217\350\277\260", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(basicInfoTab), QCoreApplication::translate("MainWindow", "\345\237\272\346\234\254\344\277\241\346\201\257", nullptr));
@@ -401,8 +394,9 @@ public:
         saveButton->setText(QCoreApplication::translate("MainWindow", "\344\277\235\345\255\230", nullptr));
         loadButton->setText(QCoreApplication::translate("MainWindow", "\345\212\240\350\275\275", nullptr));
         exportButton->setText(QCoreApplication::translate("MainWindow", "\345\257\274\345\207\272", nullptr));
-        menuFile->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
-        menuHelp->setTitle(QCoreApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
+        menu->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
+        menu_3->setTitle(QCoreApplication::translate("MainWindow", "UI\345\270\203\345\261\200", nullptr));
+        menu_2->setTitle(QCoreApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
     } // retranslateUi
 
 };

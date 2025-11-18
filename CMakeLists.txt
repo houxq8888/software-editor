@@ -14,6 +14,8 @@ add_executable(software-editor
     mainwindow.ui
     product.cpp
     product.h
+    uilayoutwindow.cpp
+    uilayoutwindow.h
 )
 
 target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
