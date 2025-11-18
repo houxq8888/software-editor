@@ -3,11 +3,13 @@
 
 CMakeFiles/software-editor.dir/main.cpp.obj
  D:/virtualMachine/github/software-editor/main.cpp
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTextStream
  D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h
@@ -651,6 +653,7 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h
  D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/QAction
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent
  D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform
@@ -659,6 +662,7 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h
@@ -1558,6 +1562,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h
  D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h
  D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent
  D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform
@@ -1566,6 +1571,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h
@@ -1900,6 +1906,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj
 
 CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
  D:/virtualMachine/github/software-editor/uilayoutwindow.cpp
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDir
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument
@@ -2433,5 +2440,6 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
  D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
  D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wctype.h
  D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_uilayoutwindow.h
+ D:/virtualMachine/github/software-editor/uilayoutwindow.h
  D:/virtualMachine/github/software-editor/uilayoutwindow.h
 

@@ -16,13 +16,13 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "uilayoutwindow.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -39,7 +39,7 @@ public:
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
-    QListWidget *widgetListWidget;
+    CustomListWidget *widgetListWidget;
     QGraphicsView *graphicsView;
     QMenuBar *menubar;
     QMenu *menu;
@@ -74,7 +74,7 @@ public:
 
         verticalLayout_2->addWidget(label);
 
-        widgetListWidget = new QListWidget(dockWidgetContents);
+        widgetListWidget = new CustomListWidget(dockWidgetContents);
         widgetListWidget->setObjectName("widgetListWidget");
         widgetListWidget->setDragEnabled(true);
 
