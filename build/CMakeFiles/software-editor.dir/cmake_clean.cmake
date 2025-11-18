@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/software-editor.dir/product.cpp.obj.d"
   "CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj"
   "CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj.d"
+  "CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj"
+  "CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj.d"
   "CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt"
   "CMakeFiles/software-editor_autogen.dir/ParseCache.txt"
   "software-editor_autogen"

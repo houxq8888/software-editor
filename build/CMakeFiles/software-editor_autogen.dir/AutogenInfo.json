@@ -308,6 +308,12 @@
 			"MU",
 			"EWIEGA46WW/moc_product.cpp",
 			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/uilayoutwindow.h",
+			"MU",
+			"EWIEGA46WW/moc_uilayoutwindow.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -384,7 +390,12 @@
 	[
 		[ "D:/virtualMachine/github/software-editor/main.cpp", "MU", null ],
 		[ "D:/virtualMachine/github/software-editor/mainwindow.cpp", "MU", null ],
-		[ "D:/virtualMachine/github/software-editor/product.cpp", "MU", null ]
+		[ "D:/virtualMachine/github/software-editor/product.cpp", "MU", null ],
+		[
+			"D:/virtualMachine/github/software-editor/uilayoutwindow.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

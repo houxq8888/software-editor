@@ -30,11 +30,12 @@ private slots:
     void on_actionSave_As_triggered();
     void on_actionExit_triggered();
     void on_actionAbout_triggered();
-
+    void on_actionOpen_UI_Layout_Editor_triggered();
     void on_iconBrowseButton_clicked();
     void on_screenshotBrowseButton_clicked();
-
     void on_addFeatureButton_clicked();
+    void on_saveButton_clicked();
+    void on_loadButton_clicked();
     void on_removeFeatureButton_clicked();
     void on_featuresListWidget_itemClicked(QListWidgetItem *item);
 
