@@ -470,6 +470,11 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:\virtualMachine\github\software-editor\editareawidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
  D:\virtualMachine\github\software-editor\previewwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
@@ -509,8 +514,6 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTableWidget \

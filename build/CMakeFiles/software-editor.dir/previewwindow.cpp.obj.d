@@ -486,6 +486,11 @@ CMakeFiles/software-editor.dir/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:\virtualMachine\github\software-editor\editareawidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \

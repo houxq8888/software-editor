@@ -1,12 +1,7 @@
-D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46WW/moc_uilayoutwindow.cpp: D:/virtualMachine/github/software-editor/uilayoutwindow.h \
+D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46WW/moc_editareawidget.cpp: D:/virtualMachine/github/software-editor/editareawidget.h \
   D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h \
@@ -14,8 +9,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20type_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20utility.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q23utility.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qabstractitemmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qalgorithms.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qanystringview.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qarraydata.h \
@@ -25,7 +18,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic_cxx11.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbasicatomic.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbindingstorage.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearray.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayalgorithms.h \
@@ -42,16 +34,10 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainerinfo.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainertools_impl.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcontiguouscache.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdatastream.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qendian.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qexceptionhandling.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qflags.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qfloat16.h \
@@ -63,15 +49,12 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qglobalstatic.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qhash.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qhashfunctions.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevicebase.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterable.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterator.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qlatin1stringview.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qline.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qlogging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qmalloc.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
@@ -79,10 +62,8 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qmath.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qmetacontainer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qmetatype.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qminmax.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qnamespace.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qnumeric.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qobject_impl.h \
@@ -94,7 +75,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qprocessordetection.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qrefcount.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qregularexpression.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qscopedpointer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qscopeguard.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qset.h \
@@ -141,102 +121,44 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtversionchecks.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtypeinfo.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtypes.h \
-  D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qutf8stringview.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qvarlengtharray.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontinfo.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontmetrics.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qicon.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qimage.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpixelformat.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpixmap.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpolygon.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qregion.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgb.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgba64.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextformat.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtgui-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
-  D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs_win.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSlider \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpinBox \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractbutton.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemview.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractslider.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayoutitem.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qspinbox.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -451,6 +373,4 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/sys/types.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
-  D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-  D:/virtualMachine/github/software-editor/editareawidget.h \
-  D:/virtualMachine/github/software-editor/previewwindow.h
+  D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h

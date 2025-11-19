@@ -298,6 +298,12 @@
 	"HEADERS" : 
 	[
 		[
+			"D:/virtualMachine/github/software-editor/editareawidget.h",
+			"MU",
+			"EWIEGA46WW/moc_editareawidget.cpp",
+			null
+		],
+		[
 			"D:/virtualMachine/github/software-editor/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -393,6 +399,11 @@
 	"SETTINGS_FILE" : "D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"D:/virtualMachine/github/software-editor/editareawidget.cpp",
+			"MU",
+			null
+		],
 		[ "D:/virtualMachine/github/software-editor/main.cpp", "MU", null ],
 		[ "D:/virtualMachine/github/software-editor/mainwindow.cpp", "MU", null ],
 		[

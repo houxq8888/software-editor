@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/software-editor.dir/editareawidget.cpp.obj"
+  "CMakeFiles/software-editor.dir/editareawidget.cpp.obj.d"
   "CMakeFiles/software-editor.dir/main.cpp.obj"
   "CMakeFiles/software-editor.dir/main.cpp.obj.d"
   "CMakeFiles/software-editor.dir/mainwindow.cpp.obj"

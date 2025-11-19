@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "D:/virtualMachine/github/software-editor/editareawidget.cpp" "CMakeFiles/software-editor.dir/editareawidget.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/editareawidget.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/main.cpp" "CMakeFiles/software-editor.dir/main.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/main.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/mainwindow.cpp" "CMakeFiles/software-editor.dir/mainwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/mainwindow.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/previewwindow.cpp" "CMakeFiles/software-editor.dir/previewwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/previewwindow.cpp.obj.d"
