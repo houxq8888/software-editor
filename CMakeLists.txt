@@ -18,6 +18,7 @@ add_executable(software-editor
     product.h
     uilayoutwindow.cpp
     uilayoutwindow.h
+    uilayoutwindow.ui
     previewwindow.cpp
     previewwindow.h
     previewwindow.ui
