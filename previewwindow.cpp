@@ -44,93 +44,102 @@ PreviewWindow::~PreviewWindow()
     qDeleteAll(m_widgetMap.values());
     m_widgetMap.clear();
 }
+QWidget* PreviewWindow::createWidgetFromType(const QString &widgetType, QWidget *parent) {
+    qDebug() << "Creating widget of type:" << widgetType;
+    // 根据控件类型创建真实的Qt控件
+    if (widgetType == "QPushButton") {
+        return new QPushButton("Button", parent);
+    } else if (widgetType == "QLineEdit") {
+        QLineEdit *lineEdit = new QLineEdit(parent);
+        lineEdit->setText("Line Edit");
+        return lineEdit;
+    } else if (widgetType == "QLabel") {
+        return new QLabel("Label", parent);
+    } else if (widgetType == "QCheckBox") {
+        return new QCheckBox("Check Box", parent);
+    } else if (widgetType == "QRadioButton") {
+        return new QRadioButton("Radio Button", parent);
+    } else if (widgetType == "QTextEdit") {
+        QTextEdit *textEdit = new QTextEdit(parent);
+        textEdit->setText("Text Edit");
+        return textEdit;
+    } else if (widgetType == "QComboBox") {
+        QComboBox *comboBox = new QComboBox(parent);
+        comboBox->addItem("Option 1");
+        comboBox->addItem("Option 2");
+        comboBox->addItem("Option 3");
+        return comboBox;
+    } else if (widgetType == "QSpinBox") {
+        return new QSpinBox(parent);
+    } else if (widgetType == "QSlider") {
+        return new QSlider(Qt::Horizontal, parent);
+    } else if (widgetType == "QProgressBar") {
+        QProgressBar *progressBar = new QProgressBar(parent);
+        progressBar->setValue(50);
+        return progressBar;
+    } else if (widgetType == "QCalendarWidget") {
+        return new QCalendarWidget(parent);
+    } else if (widgetType == "QGroupBox") {
+        return new QGroupBox("Group Box", parent);
+    } else if (widgetType == "QTabWidget") {
+        QTabWidget *tabWidget = new QTabWidget(parent);
+        return tabWidget;
+    } else if (widgetType == "QListWidget") {
+        QListWidget *listWidget = new QListWidget(parent);
+        listWidget->addItem("Item 1");
+        listWidget->addItem("Item 2");
+        listWidget->addItem("Item 3");
+        return listWidget;
+    } else if (widgetType == "QTableWidget") {
+        return new QTableWidget(3, 3, parent);
+    } else {
+        // 默认返回一个QWidget
+        QWidget *widget = new QWidget(parent);
+        widget->setStyleSheet("background-color: lightgray; border: 1px solid gray;");
+        return widget;
+    }
+}
 
 void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){ 
     // 清除之前的预览控件
+    qDebug() << "Clearing previous widgets from m_widgetMap";
     qDeleteAll(m_widgetMap.values());
     m_widgetMap.clear();
 
+    // 设置previewWidget为容器
+    QWidget *containerWidget = m_previewWidget;
+
+    // 如果没有设置布局，手动设置布局
+    if (!containerWidget->layout()) {
+        qDebug() << "No layout set for m_previewWidget. Setting QVBoxLayout.";
+        QVBoxLayout *layout = new QVBoxLayout(containerWidget);
+        containerWidget->setLayout(layout);
+    }
     // 遍历所有布局项并创建真实控件
     foreach (LayoutItem *item, items) {
         if (!item) continue;
 
-        QWidget *widget = nullptr;
         QString widgetType = item->widgetType();
+        qDebug() << "Processing item with widgetType:" << widgetType;
 
-        // 根据控件类型创建真实的Qt控件
-        if (widgetType == "QPushButton") {
-            widget = new QPushButton("Button", m_previewWidget);
-        } else if (widgetType == "QLineEdit") {
-            QLineEdit *lineEdit = new QLineEdit(m_previewWidget);
-            lineEdit->setText("Line Edit");
-            widget = lineEdit;
-        } else if (widgetType == "QLabel") {
-            QString text = item->text().isEmpty() ? "Label" : item->text();
-            widget = new QLabel(text, m_previewWidget);
-        } else if (widgetType == "QCheckBox") {
-            widget = new QCheckBox("Check Box", m_previewWidget);
-        } else if (widgetType == "QRadioButton") {
-            widget = new QRadioButton("Radio Button", m_previewWidget);
-        } else if (widgetType == "QTextEdit") {
-            QTextEdit *textEdit = new QTextEdit(m_previewWidget);
-            textEdit->setText("Text Edit");
-            widget = textEdit;
-        } else if (widgetType == "QComboBox") {
-            QComboBox *comboBox = new QComboBox(m_previewWidget);
-            comboBox->addItem("Option 1");
-            comboBox->addItem("Option 2");
-            comboBox->addItem("Option 3");
-            widget = comboBox;
-        } else if (widgetType == "QSpinBox") {
-            widget = new QSpinBox(m_previewWidget);
-        } else if (widgetType == "QSlider") {
-            QSlider *slider = new QSlider(Qt::Horizontal, m_previewWidget);
-            widget = slider;
-        } else if (widgetType == "QProgressBar") {
-            QProgressBar *progressBar = new QProgressBar(m_previewWidget);
-            progressBar->setValue(50);
-            widget = progressBar;
-        } else if (widgetType == "QCalendarWidget") {
-            widget = new QCalendarWidget(m_previewWidget);
-        } else if (widgetType == "QGroupBox") {
-            QGroupBox *groupBox = new QGroupBox("Group Box", m_previewWidget);
-            widget = groupBox;
-        } else if (widgetType == "QTabWidget") {
-            QTabWidget *tabWidget = new QTabWidget(m_previewWidget);
-            QStringList tabs = item->text().split("|");
-            if (tabs.isEmpty()) {
-                tabs << "Tab 1" << "Tab 2";
-            }
-            for (const QString &tabName : tabs) {
-                QWidget *tab = new QWidget();
-                tabWidget->addTab(tab, tabName);
-            }
-            widget = tabWidget;
-        } else if (widgetType == "QListWidget") {
-            QListWidget *listWidget = new QListWidget(m_previewWidget);
-            listWidget->addItem("Item 1");
-            listWidget->addItem("Item 2");
-            listWidget->addItem("Item 3");
-            widget = listWidget;
-        } else if (widgetType == "QTableWidget") {
-            QTableWidget *tableWidget = new QTableWidget(3, 3, m_previewWidget);
-            widget = tableWidget;
-        } else {
-            // 默认创建一个QWidget
-            widget = new QWidget(m_previewWidget);
-            widget->setStyleSheet("background-color: lightgray; border: 1px solid gray;");
+        QWidget *widget = createWidgetFromType(widgetType, containerWidget);
+        if (!widget) {
+            qDebug() << "Failed to create widget of type:" << widgetType;
+            continue;
         }
 
-        if (widget) {
-            // 设置控件位置和大小
-            widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
-            widget->show();
+        // 设置控件位置和大小
+        widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
 
-            // 保存映射关系
-            m_widgetMap[item] = widget;
-        }
+        // 将控件加入到布局中
+        containerWidget->layout()->addWidget(widget);
+
+        // 保存映射关系
+        m_widgetMap[item] = widget;
+        qDebug() << "Added widget to m_widgetMap";
     }
 
     // 更新预览
     m_previewWidget->update();
+    qDebug() << "Updated m_previewWidget";
 }
