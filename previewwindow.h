@@ -28,6 +28,9 @@ public:
     void setLayoutItems(const QList<LayoutItem *> &items);
 
 private:
+    QWidget* createWidgetFromType(const QString &widgetType, QWidget *parent);
+
+private:
     Ui::PreviewWindow *ui;
     QWidget *m_previewWidget;
     QMap<LayoutItem *, QWidget *> m_widgetMap;
