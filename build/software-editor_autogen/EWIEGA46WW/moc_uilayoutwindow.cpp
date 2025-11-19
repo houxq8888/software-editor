@@ -97,12 +97,18 @@ template <> constexpr inline auto LayoutItem::qt_create_metaobjectdata<qt_meta_t
     QtMocHelpers::StringRefStorage qt_stringData {
         "LayoutItem",
         "textDoubleClicked",
-        ""
+        "",
+        "textChanged",
+        "newText"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'textDoubleClicked'
         QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'textChanged'
+        QtMocHelpers::SignalData<void(const QString &)>(3, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 4 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -127,11 +133,14 @@ void LayoutItem::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->textDoubleClicked(); break;
+        case 1: _t->textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         if (QtMocHelpers::indexOfMethod<void (LayoutItem::*)()>(_a, &LayoutItem::textDoubleClicked, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (LayoutItem::*)(const QString & )>(_a, &LayoutItem::textChanged, 1))
             return;
     }
 }
@@ -155,14 +164,14 @@ int LayoutItem::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
@@ -171,6 +180,12 @@ int LayoutItem::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void LayoutItem::textDoubleClicked()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void LayoutItem::textChanged(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
 }
 namespace {
 struct qt_meta_tag_ZN14UILayoutWindowE_t {};

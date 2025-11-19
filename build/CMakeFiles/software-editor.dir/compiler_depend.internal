@@ -2669,6 +2669,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStatusBar
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout
@@ -2703,6 +2704,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstatusbar.h
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h
