@@ -59,7 +59,7 @@ void CustomListWidget::startDrag(Qt::DropActions supportedActions)
 }
 
 LayoutItem::LayoutItem(const QString &widgetType, const QString &text, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_widgetType(widgetType), m_text(text), m_isDragging(false), m_isResizing(false), m_width(100), m_height(80)
+    : QGraphicsObject(parent), m_widgetType(widgetType), m_text(text), m_isDragging(false), m_isResizing(false), m_width(100), m_height(80)
 {
     setFlag(ItemIsMovable, true);
     setFlag(ItemIsSelectable, true);
@@ -593,12 +593,7 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
         m_scene->addItem(layoutItem);
 
         // 连接文本双击信号
-        connect(layoutItem, &LayoutItem::textDoubleClicked, this, [this]() {
-            LayoutItem *item = qobject_cast<LayoutItem*>(sender());
-            if (item) {
-                onLayoutItemDoubleClicked(item);
-            }
-        });
+        connect(layoutItem, &LayoutItem::textDoubleClicked, this, &UILayoutWindow::onLayoutItemDoubleClicked);
 
         // 调试信息
         qDebug() << "控件类型:" << widgetType;
@@ -708,7 +703,7 @@ void UILayoutWindow::on_actionNew_Layout_triggered()
     }
 }
 
-void UILayoutWindow::on_actionPreview_Layout_triggered()
+void UILayoutWindow::onActionPreviewTriggered()
 {
     // 获取所有布局项
     QList<LayoutItem*> items;
@@ -778,9 +773,9 @@ void UILayoutWindow::initWidgetLibrary()
         item->setData(Qt::UserRole, type);
     }
 
-    // 连接预览按钮
-    connect(ui->actionPreview_Layout, &QAction::triggered, this, &UILayoutWindow::onActionPreviewTriggered);
-    
+    // 连接预览布局动作的信号和槽
+    connect(ui->actionPreview, &QAction::triggered, this, &UILayoutWindow::onActionPreviewTriggered);
+
     // 初始化场景
     setupScene();
 }
@@ -802,8 +797,24 @@ void UILayoutWindow::setupScene()
     
     // 设置视图的缩放
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->setViewportMargins(10, 10, 10, 10);
+    // ui->graphicsView->setViewportMargins(10, 10, 10, 10);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+}
+
+void UILayoutWindow::drawGrid()
+{
+    // 实现网格绘制逻辑
+    QPen gridPen(Qt::lightGray, 1, Qt::DotLine);
+    
+    // 绘制垂直线
+    for (int x = 0; x <= 2000; x += 20) {
+        m_scene->addLine(x, 0, x, 2000, gridPen);
+    }
+    
+    // 绘制水平线
+    for (int y = 0; y <= 2000; y += 20) {
+        m_scene->addLine(0, y, 2000, y, gridPen);
+    }
 }
 
 void UILayoutWindow::on_widgetListWidget_itemDoubleClicked(QListWidgetItem *item)

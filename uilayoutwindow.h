@@ -92,7 +92,7 @@ private slots:
     void on_actionRedo_triggered();
     void on_widgetListWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_actionNew_Layout_triggered();
-    void on_actionPreview_Layout_triggered();
+    void onActionPreviewTriggered();
 
 private:
     Ui::UILayoutWindow *ui;
