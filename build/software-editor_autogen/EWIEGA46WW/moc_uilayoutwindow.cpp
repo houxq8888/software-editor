@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../uilayoutwindow.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -86,106 +87,6 @@ int CustomListWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QListWidget::qt_metacall(_c, _id, _a);
     return _id;
-}
-namespace {
-struct qt_meta_tag_ZN10LayoutItemE_t {};
-} // unnamed namespace
-
-template <> constexpr inline auto LayoutItem::qt_create_metaobjectdata<qt_meta_tag_ZN10LayoutItemE_t>()
-{
-    namespace QMC = QtMocConstants;
-    QtMocHelpers::StringRefStorage qt_stringData {
-        "LayoutItem",
-        "textDoubleClicked",
-        "",
-        "textChanged",
-        "newText"
-    };
-
-    QtMocHelpers::UintData qt_methods {
-        // Signal 'textDoubleClicked'
-        QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
-        // Signal 'textChanged'
-        QtMocHelpers::SignalData<void(const QString &)>(3, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 4 },
-        }}),
-    };
-    QtMocHelpers::UintData qt_properties {
-    };
-    QtMocHelpers::UintData qt_enums {
-    };
-    return QtMocHelpers::metaObjectData<LayoutItem, qt_meta_tag_ZN10LayoutItemE_t>(QMC::MetaObjectFlag{}, qt_stringData,
-            qt_methods, qt_properties, qt_enums);
-}
-Q_CONSTINIT const QMetaObject LayoutItem::staticMetaObject = { {
-    QMetaObject::SuperData::link<QGraphicsObject::staticMetaObject>(),
-    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN10LayoutItemE_t>.stringdata,
-    qt_staticMetaObjectStaticContent<qt_meta_tag_ZN10LayoutItemE_t>.data,
-    qt_static_metacall,
-    nullptr,
-    qt_staticMetaObjectRelocatingContent<qt_meta_tag_ZN10LayoutItemE_t>.metaTypes,
-    nullptr
-} };
-
-void LayoutItem::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    auto *_t = static_cast<LayoutItem *>(_o);
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: _t->textDoubleClicked(); break;
-        case 1: _t->textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        default: ;
-        }
-    }
-    if (_c == QMetaObject::IndexOfMethod) {
-        if (QtMocHelpers::indexOfMethod<void (LayoutItem::*)()>(_a, &LayoutItem::textDoubleClicked, 0))
-            return;
-        if (QtMocHelpers::indexOfMethod<void (LayoutItem::*)(const QString & )>(_a, &LayoutItem::textChanged, 1))
-            return;
-    }
-}
-
-const QMetaObject *LayoutItem::metaObject() const
-{
-    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
-}
-
-void *LayoutItem::qt_metacast(const char *_clname)
-{
-    if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_staticMetaObjectStaticContent<qt_meta_tag_ZN10LayoutItemE_t>.strings))
-        return static_cast<void*>(this);
-    return QGraphicsObject::qt_metacast(_clname);
-}
-
-int LayoutItem::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
-{
-    _id = QGraphicsObject::qt_metacall(_c, _id, _a);
-    if (_id < 0)
-        return _id;
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
-            qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
-    }
-    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
-    }
-    return _id;
-}
-
-// SIGNAL 0
-void LayoutItem::textDoubleClicked()
-{
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
-}
-
-// SIGNAL 1
-void LayoutItem::textChanged(const QString & _t1)
-{
-    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
 }
 namespace {
 struct qt_meta_tag_ZN14UILayoutWindowE_t {};

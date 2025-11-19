@@ -129,7 +129,7 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
         }
 
         // 设置控件位置和大小
-        widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
+        // widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
 
         // 将控件加入到布局中
         containerWidget->layout()->addWidget(widget);

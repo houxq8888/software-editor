@@ -478,18 +478,35 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_uilayoutwindow.cpp \
  D:/virtualMachine/github/software-editor/uilayoutwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayoutitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextformat.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpinBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qspinbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSlider \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
@@ -524,7 +541,4 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:/virtualMachine/github/software-editor/previewwindow.h
