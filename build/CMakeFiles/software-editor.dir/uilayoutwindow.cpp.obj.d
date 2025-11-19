@@ -487,6 +487,8 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStatusBar \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstatusbar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
