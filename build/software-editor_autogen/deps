@@ -169,6 +169,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
@@ -189,6 +190,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
@@ -720,6 +722,8 @@ software-editor_autogen/timestamp: \
 	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
 	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeSystem.cmake \
 	D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
+	D:/virtualMachine/github/software-editor/editareawidget.cpp \
+	D:/virtualMachine/github/software-editor/editareawidget.h \
 	D:/virtualMachine/github/software-editor/main.cpp \
 	D:/virtualMachine/github/software-editor/mainwindow.cpp \
 	D:/virtualMachine/github/software-editor/mainwindow.h \
