@@ -13,7 +13,6 @@
 #include <QtGui/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDockWidget>
-#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -44,7 +43,7 @@ public:
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
     CustomListWidget *widgetListWidget;
-    QGraphicsView *graphicsView;
+    QWidget *graphicsView;
     QMenuBar *menubar;
     QMenu *menu;
     QMenu *menu_2;
@@ -72,12 +71,11 @@ public:
         horizontalLayout->setObjectName("horizontalLayout");
         splitter = new QSplitter(centralwidget);
         splitter->setObjectName("splitter");
-        splitter->setOrientation(Qt::Horizontal);
+        splitter->setOrientation(Qt::Orientation::Horizontal);
         splitter->setHandleWidth(8);
         splitter->setChildrenCollapsible(false);
         dockWidget = new QDockWidget(splitter);
         dockWidget->setObjectName("dockWidget");
-        dockWidget->setMinimumWidth(200);
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName("dockWidgetContents");
         verticalLayout_2 = new QVBoxLayout(dockWidgetContents);
@@ -95,7 +93,7 @@ public:
 
         dockWidget->setWidget(dockWidgetContents);
         splitter->addWidget(dockWidget);
-        graphicsView = new QGraphicsView(splitter);
+        graphicsView = new QWidget(splitter);
         graphicsView->setObjectName("graphicsView");
         graphicsView->setAcceptDrops(true);
         splitter->addWidget(graphicsView);
@@ -105,7 +103,7 @@ public:
         UILayoutWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(UILayoutWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1000, 26));
+        menubar->setGeometry(QRect(0, 0, 1000, 21));
         menu = new QMenu(menubar);
         menu->setObjectName("menu");
         menu_2 = new QMenu(menubar);

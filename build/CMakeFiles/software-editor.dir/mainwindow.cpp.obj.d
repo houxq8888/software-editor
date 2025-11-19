@@ -526,16 +526,20 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:\virtualMachine\github\software-editor\uilayoutwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpinBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qspinbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSlider \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
@@ -558,10 +562,6 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:\virtualMachine\github\software-editor\previewwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h
