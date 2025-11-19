@@ -199,6 +199,30 @@ software-editor_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor_autogen.dir\build.make CMakeFiles/software-editor_autogen.dir/build
 .PHONY : software-editor_autogen/fast
 
+editareawidget.obj: editareawidget.cpp.obj
+.PHONY : editareawidget.obj
+
+# target to build an object file
+editareawidget.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.obj
+.PHONY : editareawidget.cpp.obj
+
+editareawidget.i: editareawidget.cpp.i
+.PHONY : editareawidget.i
+
+# target to preprocess a source file
+editareawidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.i
+.PHONY : editareawidget.cpp.i
+
+editareawidget.s: editareawidget.cpp.s
+.PHONY : editareawidget.s
+
+# target to generate assembly for a file
+editareawidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.s
+.PHONY : editareawidget.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -358,6 +382,9 @@ help:
 	@echo ... software-editor_autogen
 	@echo ... software-editor_autogen_timestamp_deps
 	@echo ... software-editor
+	@echo ... editareawidget.obj
+	@echo ... editareawidget.i
+	@echo ... editareawidget.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

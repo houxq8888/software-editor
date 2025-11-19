@@ -1,9 +1,9 @@
 CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj: \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\mocs_compilation.cpp \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_mainwindow.cpp \
- D:/virtualMachine/github/software-editor/mainwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
+ D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_editareawidget.cpp \
+ D:/virtualMachine/github/software-editor/editareawidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qglobal.h \
@@ -156,7 +156,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qnamespace.h \
@@ -383,6 +382,23 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtmochelpers.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtmocconstants.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q23type_traits.h \
+ D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_mainwindow.cpp \
+ D:/virtualMachine/github/software-editor/mainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
@@ -462,18 +478,10 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/virtualMachine/github/software-editor/product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtmochelpers.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtmocconstants.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q23type_traits.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_previewwindow.cpp \
  D:/virtualMachine/github/software-editor/previewwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\EWIEGA46WW/moc_uilayoutwindow.cpp \
@@ -495,8 +503,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextformat.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
@@ -525,7 +531,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
@@ -541,4 +546,5 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:/virtualMachine/github/software-editor/editareawidget.h \
  D:/virtualMachine/github/software-editor/previewwindow.h
