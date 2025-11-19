@@ -45,91 +45,10 @@ PreviewWindow::~PreviewWindow()
     m_widgetMap.clear();
 }
 
-void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items)
-{
+void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){ 
     // 清除之前的预览控件
     qDeleteAll(m_widgetMap.values());
     m_widgetMap.clear();
-    
-    // 创建一个布局管理器
-    QLayout *existingLayout = m_previewWidget->layout();
-    if (existingLayout) {
-        delete existingLayout;
-    }
-    QVBoxLayout *layout = new QVBoxLayout(m_previewWidget);
-    layout->setContentsMargins(20, 20, 20, 20);
-    layout->setSpacing(20);
-    
-    // 创建所有预览控件
-    foreach (LayoutItem *item, items) {
-        QWidget *widget = nullptr;
-        QString widgetType = item->widgetType();
-        QString text = item->text();
-        
-        // 根据控件类型创建实际的Qt控件
-        if (widgetType == "QLabel") {
-            QLabel *label = new QLabel(text, m_previewWidget);
-            widget = label;
-        } else if (widgetType == "QLineEdit") {
-            QLineEdit *lineEdit = new QLineEdit(text, m_previewWidget);
-            widget = lineEdit;
-        } else if (widgetType == "QPushButton") {
-            QPushButton *button = new QPushButton(text.isEmpty() ? "Button" : text, m_previewWidget);
-            widget = button;
-        } else if (widgetType == "QTextEdit") {
-            QTextEdit *textEdit = new QTextEdit(text.isEmpty() ? "Text Edit" : text, m_previewWidget);
-            widget = textEdit;
-        } 
-        // 支持更多控件类型
-        else if (widgetType == "QCheckBox") {
-            QCheckBox *checkBox = new QCheckBox(text.isEmpty() ? "CheckBox" : text, m_previewWidget);
-            widget = checkBox;
-        } else if (widgetType == "QRadioButton") {
-            QRadioButton *radioButton = new QRadioButton(text.isEmpty() ? "RadioButton" : text, m_previewWidget);
-            widget = radioButton;
-        } else if (widgetType == "QComboBox") {
-            QComboBox *comboBox = new QComboBox(m_previewWidget);
-            comboBox->addItem(text.isEmpty() ? "Option 1" : text);
-            comboBox->addItem("Option 2");
-            comboBox->addItem("Option 3");
-            widget = comboBox;
-        } else if (widgetType == "QSpinBox") {
-            QSpinBox *spinBox = new QSpinBox(m_previewWidget);
-            if (!text.isEmpty()) {
-                spinBox->setValue(text.toInt());
-            }
-            widget = spinBox;
-        } else if (widgetType == "QSlider") {
-            QSlider *slider = new QSlider(Qt::Horizontal, m_previewWidget);
-            if (!text.isEmpty()) {
-                slider->setValue(text.toInt());
-            }
-            widget = slider;
-        }
-        
-        if (widget) {
-            // 设置控件大小
-            widget->setFixedSize(item->width(), item->height());
-            
-            // 添加到布局中
-            layout->addWidget(widget);
-            
-            // 保存映射关系
-            m_widgetMap.insert(item, widget);
-        }
-    }
-
-    // 创建一个布局管理器
-    QVBoxLayout *mainLayout = new QVBoxLayout(m_previewWidget);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-    m_previewWidget->setLayout(mainLayout);
-
-    // 创建一个容器widget来容纳所有预览控件
-    QWidget *containerWidget = new QWidget(m_previewWidget);
-    containerWidget->setStyleSheet("background-color: transparent;");
-    containerWidget->setFixedSize(800, 600);
-    mainLayout->addWidget(containerWidget);
 
     // 遍历所有布局项并创建真实控件
     foreach (LayoutItem *item, items) {
@@ -140,67 +59,71 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items)
 
         // 根据控件类型创建真实的Qt控件
         if (widgetType == "QPushButton") {
-            widget = new QPushButton("Button", containerWidget);
+            widget = new QPushButton("Button", m_previewWidget);
         } else if (widgetType == "QLineEdit") {
-            QLineEdit *lineEdit = new QLineEdit(containerWidget);
+            QLineEdit *lineEdit = new QLineEdit(m_previewWidget);
             lineEdit->setText("Line Edit");
             widget = lineEdit;
         } else if (widgetType == "QLabel") {
-            widget = new QLabel("Label", containerWidget);
+            QString text = item->text().isEmpty() ? "Label" : item->text();
+            widget = new QLabel(text, m_previewWidget);
         } else if (widgetType == "QCheckBox") {
-            widget = new QCheckBox("Check Box", containerWidget);
+            widget = new QCheckBox("Check Box", m_previewWidget);
         } else if (widgetType == "QRadioButton") {
-            widget = new QRadioButton("Radio Button", containerWidget);
+            widget = new QRadioButton("Radio Button", m_previewWidget);
         } else if (widgetType == "QTextEdit") {
-            QTextEdit *textEdit = new QTextEdit(containerWidget);
+            QTextEdit *textEdit = new QTextEdit(m_previewWidget);
             textEdit->setText("Text Edit");
             widget = textEdit;
         } else if (widgetType == "QComboBox") {
-            QComboBox *comboBox = new QComboBox(containerWidget);
+            QComboBox *comboBox = new QComboBox(m_previewWidget);
             comboBox->addItem("Option 1");
             comboBox->addItem("Option 2");
             comboBox->addItem("Option 3");
             widget = comboBox;
         } else if (widgetType == "QSpinBox") {
-            widget = new QSpinBox(containerWidget);
+            widget = new QSpinBox(m_previewWidget);
         } else if (widgetType == "QSlider") {
-            QSlider *slider = new QSlider(Qt::Horizontal, containerWidget);
+            QSlider *slider = new QSlider(Qt::Horizontal, m_previewWidget);
             widget = slider;
         } else if (widgetType == "QProgressBar") {
-            QProgressBar *progressBar = new QProgressBar(containerWidget);
+            QProgressBar *progressBar = new QProgressBar(m_previewWidget);
             progressBar->setValue(50);
             widget = progressBar;
         } else if (widgetType == "QCalendarWidget") {
-            widget = new QCalendarWidget(containerWidget);
+            widget = new QCalendarWidget(m_previewWidget);
         } else if (widgetType == "QGroupBox") {
-            QGroupBox *groupBox = new QGroupBox("Group Box", containerWidget);
+            QGroupBox *groupBox = new QGroupBox("Group Box", m_previewWidget);
             widget = groupBox;
         } else if (widgetType == "QTabWidget") {
-            QTabWidget *tabWidget = new QTabWidget(containerWidget);
-            QWidget *tab1 = new QWidget();
-            QWidget *tab2 = new QWidget();
-            tabWidget->addTab(tab1, "Tab 1");
-            tabWidget->addTab(tab2, "Tab 2");
+            QTabWidget *tabWidget = new QTabWidget(m_previewWidget);
+            QStringList tabs = item->text().split("|");
+            if (tabs.isEmpty()) {
+                tabs << "Tab 1" << "Tab 2";
+            }
+            for (const QString &tabName : tabs) {
+                QWidget *tab = new QWidget();
+                tabWidget->addTab(tab, tabName);
+            }
             widget = tabWidget;
         } else if (widgetType == "QListWidget") {
-            QListWidget *listWidget = new QListWidget(containerWidget);
+            QListWidget *listWidget = new QListWidget(m_previewWidget);
             listWidget->addItem("Item 1");
             listWidget->addItem("Item 2");
             listWidget->addItem("Item 3");
             widget = listWidget;
         } else if (widgetType == "QTableWidget") {
-            QTableWidget *tableWidget = new QTableWidget(3, 3, containerWidget);
+            QTableWidget *tableWidget = new QTableWidget(3, 3, m_previewWidget);
             widget = tableWidget;
         } else {
             // 默认创建一个QWidget
-            widget = new QWidget(containerWidget);
+            widget = new QWidget(m_previewWidget);
             widget->setStyleSheet("background-color: lightgray; border: 1px solid gray;");
         }
 
         if (widget) {
             // 设置控件位置和大小
             widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
-            widget->setParent(containerWidget);
             widget->show();
 
             // 保存映射关系

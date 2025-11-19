@@ -59,12 +59,26 @@ void CustomListWidget::startDrag(Qt::DropActions supportedActions)
 }
 
 LayoutItem::LayoutItem(const QString &widgetType, const QString &text, QGraphicsItem *parent)
-    : QGraphicsObject(parent), m_widgetType(widgetType), m_text(text), m_isDragging(false), m_isResizing(false), m_width(100), m_height(80)
+    : QGraphicsObject(parent), m_widgetType(widgetType), m_text(text), m_isDragging(false), m_isResizing(false), m_isEditing(false), m_width(100), m_height(80), m_textItem(nullptr)
 {
     setFlag(ItemIsMovable, true);
     setFlag(ItemIsSelectable, true);
     setFlag(ItemSendsGeometryChanges, true);
     setAcceptHoverEvents(true);
+
+    // 初始化文本编辑控件
+    if (m_widgetType == "QLabel" || m_widgetType == "QTabWidget") {
+        m_textItem = new QGraphicsTextItem(this);
+        m_textItem->setVisible(false);
+        m_textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        m_textItem->setFont(QFont("Arial", 12));
+    }
+}
+
+LayoutItem::~LayoutItem()
+{
+    delete m_textItem;
+    m_textItem = nullptr;
 }
 
 QRectF LayoutItem::boundingRect() const
@@ -204,13 +218,17 @@ void LayoutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->setBrush(QBrush(Qt::lightGray));
         painter->drawRect(rect);
         // 绘制标签页
+        QStringList tabs = m_text.split("|");
+        if (tabs.isEmpty()) {
+            tabs << "Tab 1" << "Tab 2";
+        }
+        
         painter->setBrush(QBrush(Qt::white));
-        painter->drawRect(rect.adjusted(5, 5, -rect.width() / 2, 30));
-        painter->drawRect(rect.adjusted(rect.width() / 2, 5, -5, 30));
-        // 绘制标签文字
-        painter->setPen(QPen(Qt::black));
-        painter->drawText(rect.adjusted(15, 5, -rect.width() / 2, 30), Qt::AlignCenter, "Tab 1");
-        painter->drawText(rect.adjusted(rect.width() / 2 + 10, 5, -10, 30), Qt::AlignCenter, "Tab 2");
+        int tabWidth = (rect.width() - 10) / tabs.size();
+        for (int i = 0; i < tabs.size(); ++i) {
+            painter->drawRect(rect.adjusted(5 + i * tabWidth, 5, -5 - (tabs.size() - i - 1) * tabWidth, 30));
+            painter->drawText(rect.adjusted(5 + i * tabWidth + 5, 5, -5 - (tabs.size() - i - 1) * tabWidth - 5, 30), Qt::AlignCenter, tabs[i]);
+        }
         // 绘制标签页内容
         painter->drawRect(rect.adjusted(5, 35, -5, -5));
     } else if (m_widgetType == "QListWidget") {
@@ -506,12 +524,45 @@ void LayoutItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void LayoutItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    // 只有QLabel和QLineEdit可以编辑文本
-    if (m_widgetType == "QLabel" || m_widgetType == "QLineEdit") {
-        // 发射自定义信号，通知主窗口需要编辑文本
-        emit textDoubleClicked();
+    // 只有QLabel和QTabWidget可以编辑文本
+    if (m_widgetType == "QLabel" || m_widgetType == "QTabWidget") {
+        startEditing();
     }
     QGraphicsItem::mouseDoubleClickEvent(event);
+}
+
+void LayoutItem::startEditing()
+{
+    if (m_textItem && !m_isEditing) {
+        m_isEditing = true;
+        m_textItem->setVisible(true);
+        m_textItem->setPlainText(m_text);
+        m_textItem->setPos(0, 0);
+        m_textItem->setTextWidth(boundingRect().width());
+        m_textItem->setFont(QFont("Arial", 12));
+        m_textItem->setFlag(QGraphicsItem::ItemIsFocusable, true);
+        m_textItem->setFocus();
+        m_textItem->setSelected(true);
+    }
+}
+
+void LayoutItem::finishEditing()
+{
+    if (m_textItem && m_isEditing) {
+        m_isEditing = false;
+        m_textItem->setVisible(false);
+        m_text = m_textItem->toPlainText();
+        update();
+        emit textChanged(m_text);
+    }
+}
+
+QVariant LayoutItem::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == ItemSelectedChange && value == false) {
+        finishEditing();
+    }
+    return QGraphicsObject::itemChange(change, value);
 }
 
 UILayoutWindow::UILayoutWindow(QWidget *parent)
@@ -519,6 +570,14 @@ UILayoutWindow::UILayoutWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // 初始化splitter
+    QList<int> sizes;
+    sizes << 200 << 800; // 设置初始大小比例
+    ui->splitter->setSizes(sizes);
+    ui->splitter->setStretchFactor(0, 0); // 左侧控件库不可拉伸
+    ui->splitter->setStretchFactor(1, 1); // 右侧编辑区可拉伸
+    ui->splitter->setHandleWidth(8); // 设置分隔条宽度
+    ui->splitter->setChildrenCollapsible(false); // 禁止子控件折叠
     // 初始化图形场景
     m_scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(m_scene);
@@ -945,17 +1004,36 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
         return;
     }
     
-    // 只有QLabel和QLineEdit可以编辑文本
-    if (item->widgetType() != "QLabel" && item->widgetType() != "QLineEdit") {
-        return;
-    }
-    
-    // 创建文本输入对话框
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("编辑文本"), tr("请输入文本:"), QLineEdit::Normal, item->text(), &ok);
-    
-    if (ok && !text.isEmpty()) {
-        // 更新布局项的文本
-        item->setText(text);
+    if (item->widgetType() == "QLabel") {
+        // 创建文本输入对话框
+        bool ok;
+        QString text = QInputDialog::getText(this, tr("编辑文本"), tr("请输入文本:"), QLineEdit::Normal, item->text(), &ok);
+        
+        if (ok) {
+            // 更新布局项的文本
+            item->setText(text);
+        }
+    } else if (item->widgetType() == "QTabWidget") {
+        // 创建标签页选择和编辑对话框
+        bool ok;
+        QStringList tabs = item->text().split("|");
+        if (tabs.isEmpty()) {
+            tabs << "Tab 1" << "Tab 2";
+        }
+        
+        QString tabName = QInputDialog::getItem(this, tr("选择标签页"), tr("选择要编辑的标签页:"), tabs, 0, false, &ok);
+        
+        if (ok) {
+            QString newText = QInputDialog::getText(this, tr("编辑标签页"), tr("请输入新的标签页标题:"), QLineEdit::Normal, tabName, &ok);
+            
+            if (ok && !newText.isEmpty()) {
+                // 更新标签页标题
+                int index = tabs.indexOf(tabName);
+                if (index != -1) {
+                    tabs[index] = newText;
+                    item->setText(tabs.join("|"));
+                }
+            }
+        }
     }
 }

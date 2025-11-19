@@ -27,10 +27,19 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="handleWidth">
+       <number>8</number>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
       <widget class="QDockWidget" name="dockWidget">
        <attribute name="dockWidgetArea">
         <number>1</number>
        </attribute>
+       <property name="minimumWidth">
+        <number>200</number>
+       </property>
        <widget class="QWidget" name="dockWidgetContents">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>

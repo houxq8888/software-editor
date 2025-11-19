@@ -37,6 +37,7 @@ class LayoutItem : public QGraphicsObject
     Q_OBJECT
 public:
     explicit LayoutItem(const QString &widgetType, const QString &text = "", QGraphicsItem *parent = nullptr);
+    ~LayoutItem() override;
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -48,8 +49,13 @@ public:
     void setSize(qreal width, qreal height);
     void setText(const QString &text);
 
+    // 文本编辑相关方法
+    void startEditing();
+    void finishEditing();
+
 signals:
     void textDoubleClicked();
+    void textChanged(const QString &newText);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -57,6 +63,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
     QString m_widgetType;
@@ -64,8 +71,10 @@ private:
     QPointF m_lastMousePos;
     bool m_isDragging;
     bool m_isResizing;
+    bool m_isEditing;
     qreal m_width;
     qreal m_height;
+    QGraphicsTextItem *m_textItem;
 };
 
 class UILayoutWindow : public QMainWindow

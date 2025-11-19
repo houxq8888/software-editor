@@ -2663,6 +2663,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: D:/virtualMachine/github/
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStatusBar \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
@@ -2697,6 +2698,7 @@ CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj: D:/virtualMachine/github/
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstatusbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
@@ -3621,6 +3623,8 @@ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h:
 
 D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h:
 
+D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter:
+
 D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h:
 
 D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h:
@@ -3954,6 +3958,8 @@ D:/Qt/6.9.1/mingw_64/include/QtCore/QPluginLoader:
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits:
 
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/utility:
+
+D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h:
 
 D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/atomic_word.h:
 

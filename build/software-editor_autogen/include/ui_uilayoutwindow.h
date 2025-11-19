@@ -73,8 +73,11 @@ public:
         splitter = new QSplitter(centralwidget);
         splitter->setObjectName("splitter");
         splitter->setOrientation(Qt::Horizontal);
+        splitter->setHandleWidth(8);
+        splitter->setChildrenCollapsible(false);
         dockWidget = new QDockWidget(splitter);
         dockWidget->setObjectName("dockWidget");
+        dockWidget->setMinimumWidth(200);
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName("dockWidgetContents");
         verticalLayout_2 = new QVBoxLayout(dockWidgetContents);
