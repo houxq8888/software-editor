@@ -390,6 +390,39 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtmochelpers.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtmocconstants.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
@@ -410,7 +443,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qregularexpression.h \
@@ -424,7 +456,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdirlisting.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfiledevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
@@ -460,7 +491,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_ops.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfileinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimezone.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
@@ -514,37 +544,21 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCommandLinkButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:/virtualMachine/github/software-editor/editareawidget.h \
  D:/virtualMachine/github/software-editor/previewwindow.h

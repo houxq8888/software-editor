@@ -486,25 +486,31 @@ CMakeFiles/software-editor.dir/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCommandLinkButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:\virtualMachine\github\software-editor\editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCalendarWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcalendarwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTableWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtablewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtableview.h \
