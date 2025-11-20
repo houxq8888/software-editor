@@ -44,7 +44,12 @@ template <> constexpr inline auto EditAreaWidget::qt_create_metaobjectdata<qt_me
         "handleIndex",
         "delta",
         "handleReleased",
-        "handlesShouldHide"
+        "handlesShouldHide",
+        "doubleClicked",
+        "pos",
+        "widgetSelected",
+        "QWidget*",
+        "widget"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -56,6 +61,14 @@ template <> constexpr inline auto EditAreaWidget::qt_create_metaobjectdata<qt_me
         QtMocHelpers::SignalData<void()>(5, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'handlesShouldHide'
         QtMocHelpers::SignalData<void()>(6, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'doubleClicked'
+        QtMocHelpers::SignalData<void(const QPoint &)>(7, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QPoint, 8 },
+        }}),
+        // Signal 'widgetSelected'
+        QtMocHelpers::SignalData<void(QWidget *)>(9, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 10, 11 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -82,7 +95,21 @@ void EditAreaWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 0: _t->handleDragged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[2]))); break;
         case 1: _t->handleReleased(); break;
         case 2: _t->handlesShouldHide(); break;
+        case 3: _t->doubleClicked((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 4: _t->widgetSelected((*reinterpret_cast< std::add_pointer_t<QWidget*>>(_a[1]))); break;
         default: ;
+        }
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 4:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QWidget* >(); break;
+            }
+            break;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
@@ -91,6 +118,10 @@ void EditAreaWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         if (QtMocHelpers::indexOfMethod<void (EditAreaWidget::*)()>(_a, &EditAreaWidget::handleReleased, 1))
             return;
         if (QtMocHelpers::indexOfMethod<void (EditAreaWidget::*)()>(_a, &EditAreaWidget::handlesShouldHide, 2))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (EditAreaWidget::*)(const QPoint & )>(_a, &EditAreaWidget::doubleClicked, 3))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (EditAreaWidget::*)(QWidget * )>(_a, &EditAreaWidget::widgetSelected, 4))
             return;
     }
 }
@@ -114,14 +145,14 @@ int EditAreaWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        if (_id < 5)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 5;
     }
     return _id;
 }
@@ -142,5 +173,17 @@ void EditAreaWidget::handleReleased()
 void EditAreaWidget::handlesShouldHide()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void EditAreaWidget::doubleClicked(const QPoint & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1);
+}
+
+// SIGNAL 4
+void EditAreaWidget::widgetSelected(QWidget * _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 4, nullptr, _t1);
 }
 QT_WARNING_POP
