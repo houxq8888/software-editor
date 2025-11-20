@@ -199,126 +199,6 @@ software-editor_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor_autogen.dir\build.make CMakeFiles/software-editor_autogen.dir/build
 .PHONY : software-editor_autogen/fast
 
-editareawidget.obj: editareawidget.cpp.obj
-.PHONY : editareawidget.obj
-
-# target to build an object file
-editareawidget.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.obj
-.PHONY : editareawidget.cpp.obj
-
-editareawidget.i: editareawidget.cpp.i
-.PHONY : editareawidget.i
-
-# target to preprocess a source file
-editareawidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.i
-.PHONY : editareawidget.cpp.i
-
-editareawidget.s: editareawidget.cpp.s
-.PHONY : editareawidget.s
-
-# target to generate assembly for a file
-editareawidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/editareawidget.cpp.s
-.PHONY : editareawidget.cpp.s
-
-main.obj: main.cpp.obj
-.PHONY : main.obj
-
-# target to build an object file
-main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/main.cpp.obj
-.PHONY : main.cpp.obj
-
-main.i: main.cpp.i
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/main.cpp.s
-.PHONY : main.cpp.s
-
-mainwindow.obj: mainwindow.cpp.obj
-.PHONY : mainwindow.obj
-
-# target to build an object file
-mainwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/mainwindow.cpp.obj
-.PHONY : mainwindow.cpp.obj
-
-mainwindow.i: mainwindow.cpp.i
-.PHONY : mainwindow.i
-
-# target to preprocess a source file
-mainwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/mainwindow.cpp.i
-.PHONY : mainwindow.cpp.i
-
-mainwindow.s: mainwindow.cpp.s
-.PHONY : mainwindow.s
-
-# target to generate assembly for a file
-mainwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/mainwindow.cpp.s
-.PHONY : mainwindow.cpp.s
-
-previewwindow.obj: previewwindow.cpp.obj
-.PHONY : previewwindow.obj
-
-# target to build an object file
-previewwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/previewwindow.cpp.obj
-.PHONY : previewwindow.cpp.obj
-
-previewwindow.i: previewwindow.cpp.i
-.PHONY : previewwindow.i
-
-# target to preprocess a source file
-previewwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/previewwindow.cpp.i
-.PHONY : previewwindow.cpp.i
-
-previewwindow.s: previewwindow.cpp.s
-.PHONY : previewwindow.s
-
-# target to generate assembly for a file
-previewwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/previewwindow.cpp.s
-.PHONY : previewwindow.cpp.s
-
-product.obj: product.cpp.obj
-.PHONY : product.obj
-
-# target to build an object file
-product.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/product.cpp.obj
-.PHONY : product.cpp.obj
-
-product.i: product.cpp.i
-.PHONY : product.i
-
-# target to preprocess a source file
-product.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/product.cpp.i
-.PHONY : product.cpp.i
-
-product.s: product.cpp.s
-.PHONY : product.s
-
-# target to generate assembly for a file
-product.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/product.cpp.s
-.PHONY : product.cpp.s
-
 software-editor_autogen/mocs_compilation.obj: software-editor_autogen/mocs_compilation.cpp.obj
 .PHONY : software-editor_autogen/mocs_compilation.obj
 
@@ -343,29 +223,173 @@ software-editor_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.s
 .PHONY : software-editor_autogen/mocs_compilation.cpp.s
 
-uilayoutwindow.obj: uilayoutwindow.cpp.obj
-.PHONY : uilayoutwindow.obj
+src/customtreewidget.obj: src/customtreewidget.cpp.obj
+.PHONY : src/customtreewidget.obj
 
 # target to build an object file
-uilayoutwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.obj
-.PHONY : uilayoutwindow.cpp.obj
+src/customtreewidget.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.obj
+.PHONY : src/customtreewidget.cpp.obj
 
-uilayoutwindow.i: uilayoutwindow.cpp.i
-.PHONY : uilayoutwindow.i
+src/customtreewidget.i: src/customtreewidget.cpp.i
+.PHONY : src/customtreewidget.i
 
 # target to preprocess a source file
-uilayoutwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.i
-.PHONY : uilayoutwindow.cpp.i
+src/customtreewidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.i
+.PHONY : src/customtreewidget.cpp.i
 
-uilayoutwindow.s: uilayoutwindow.cpp.s
-.PHONY : uilayoutwindow.s
+src/customtreewidget.s: src/customtreewidget.cpp.s
+.PHONY : src/customtreewidget.s
 
 # target to generate assembly for a file
-uilayoutwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/uilayoutwindow.cpp.s
-.PHONY : uilayoutwindow.cpp.s
+src/customtreewidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.s
+.PHONY : src/customtreewidget.cpp.s
+
+src/editareawidget.obj: src/editareawidget.cpp.obj
+.PHONY : src/editareawidget.obj
+
+# target to build an object file
+src/editareawidget.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj
+.PHONY : src/editareawidget.cpp.obj
+
+src/editareawidget.i: src/editareawidget.cpp.i
+.PHONY : src/editareawidget.i
+
+# target to preprocess a source file
+src/editareawidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.i
+.PHONY : src/editareawidget.cpp.i
+
+src/editareawidget.s: src/editareawidget.cpp.s
+.PHONY : src/editareawidget.s
+
+# target to generate assembly for a file
+src/editareawidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.s
+.PHONY : src/editareawidget.cpp.s
+
+src/main.obj: src/main.cpp.obj
+.PHONY : src/main.obj
+
+# target to build an object file
+src/main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/main.cpp.obj
+.PHONY : src/main.cpp.obj
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/mainwindow.obj: src/mainwindow.cpp.obj
+.PHONY : src/mainwindow.obj
+
+# target to build an object file
+src/mainwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj
+.PHONY : src/mainwindow.cpp.obj
+
+src/mainwindow.i: src/mainwindow.cpp.i
+.PHONY : src/mainwindow.i
+
+# target to preprocess a source file
+src/mainwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.i
+.PHONY : src/mainwindow.cpp.i
+
+src/mainwindow.s: src/mainwindow.cpp.s
+.PHONY : src/mainwindow.s
+
+# target to generate assembly for a file
+src/mainwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.s
+.PHONY : src/mainwindow.cpp.s
+
+src/previewwindow.obj: src/previewwindow.cpp.obj
+.PHONY : src/previewwindow.obj
+
+# target to build an object file
+src/previewwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj
+.PHONY : src/previewwindow.cpp.obj
+
+src/previewwindow.i: src/previewwindow.cpp.i
+.PHONY : src/previewwindow.i
+
+# target to preprocess a source file
+src/previewwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.i
+.PHONY : src/previewwindow.cpp.i
+
+src/previewwindow.s: src/previewwindow.cpp.s
+.PHONY : src/previewwindow.s
+
+# target to generate assembly for a file
+src/previewwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.s
+.PHONY : src/previewwindow.cpp.s
+
+src/product.obj: src/product.cpp.obj
+.PHONY : src/product.obj
+
+# target to build an object file
+src/product.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.obj
+.PHONY : src/product.cpp.obj
+
+src/product.i: src/product.cpp.i
+.PHONY : src/product.i
+
+# target to preprocess a source file
+src/product.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.i
+.PHONY : src/product.cpp.i
+
+src/product.s: src/product.cpp.s
+.PHONY : src/product.s
+
+# target to generate assembly for a file
+src/product.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.s
+.PHONY : src/product.cpp.s
+
+src/uilayoutwindow.obj: src/uilayoutwindow.cpp.obj
+.PHONY : src/uilayoutwindow.obj
+
+# target to build an object file
+src/uilayoutwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj
+.PHONY : src/uilayoutwindow.cpp.obj
+
+src/uilayoutwindow.i: src/uilayoutwindow.cpp.i
+.PHONY : src/uilayoutwindow.i
+
+# target to preprocess a source file
+src/uilayoutwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.i
+.PHONY : src/uilayoutwindow.cpp.i
+
+src/uilayoutwindow.s: src/uilayoutwindow.cpp.s
+.PHONY : src/uilayoutwindow.s
+
+# target to generate assembly for a file
+src/uilayoutwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.s
+.PHONY : src/uilayoutwindow.cpp.s
 
 # Help Target
 help:
@@ -382,27 +406,30 @@ help:
 	@echo ... software-editor_autogen
 	@echo ... software-editor_autogen_timestamp_deps
 	@echo ... software-editor
-	@echo ... editareawidget.obj
-	@echo ... editareawidget.i
-	@echo ... editareawidget.s
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
-	@echo ... mainwindow.obj
-	@echo ... mainwindow.i
-	@echo ... mainwindow.s
-	@echo ... previewwindow.obj
-	@echo ... previewwindow.i
-	@echo ... previewwindow.s
-	@echo ... product.obj
-	@echo ... product.i
-	@echo ... product.s
 	@echo ... software-editor_autogen/mocs_compilation.obj
 	@echo ... software-editor_autogen/mocs_compilation.i
 	@echo ... software-editor_autogen/mocs_compilation.s
-	@echo ... uilayoutwindow.obj
-	@echo ... uilayoutwindow.i
-	@echo ... uilayoutwindow.s
+	@echo ... src/customtreewidget.obj
+	@echo ... src/customtreewidget.i
+	@echo ... src/customtreewidget.s
+	@echo ... src/editareawidget.obj
+	@echo ... src/editareawidget.i
+	@echo ... src/editareawidget.s
+	@echo ... src/main.obj
+	@echo ... src/main.i
+	@echo ... src/main.s
+	@echo ... src/mainwindow.obj
+	@echo ... src/mainwindow.i
+	@echo ... src/mainwindow.s
+	@echo ... src/previewwindow.obj
+	@echo ... src/previewwindow.i
+	@echo ... src/previewwindow.s
+	@echo ... src/product.obj
+	@echo ... src/product.i
+	@echo ... src/product.s
+	@echo ... src/uilayoutwindow.obj
+	@echo ... src/uilayoutwindow.i
+	@echo ... src/uilayoutwindow.s
 .PHONY : help
 
 

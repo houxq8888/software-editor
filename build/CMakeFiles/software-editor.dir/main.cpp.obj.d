@@ -382,53 +382,12 @@ CMakeFiles/software-editor.dir/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qhash.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvarlengtharray.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qicon.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qendian.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qfontmetrics.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qfontinfo.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QTextStream \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
- D:\virtualMachine\github\software-editor\mainwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qabstractitemmodel.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qregularexpression.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractslider.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFileDialog \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfiledialog.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdirlisting.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QFile \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfiledevice.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/filesystem \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_fwd.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_path.h \
@@ -459,6 +418,51 @@ CMakeFiles/software-editor.dir/main.cpp.obj: \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/codecvt \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_dir.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_ops.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTextStream \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qicon.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qendian.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qfontmetrics.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qfontinfo.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
+ D:\virtualMachine\github\software-editor\mainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemview.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qabstractitemmodel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qregularexpression.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractslider.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFileDialog \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfiledialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdirlisting.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfileinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimezone.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
