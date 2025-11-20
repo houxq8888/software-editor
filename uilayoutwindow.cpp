@@ -153,6 +153,10 @@ UILayoutWindow::UILayoutWindow(QWidget *parent)
     setupEditArea();
     qDebug() << "UILayoutWindow: 编辑区域初始化完成";
 
+    // 连接EditAreaWidget的信号
+    connect(m_editAreaWidget, &EditAreaWidget::handleDragged, this, &UILayoutWindow::onHandleDragged);
+    connect(m_editAreaWidget, &EditAreaWidget::handleReleased, this, &UILayoutWindow::onHandleReleased);
+
     // 允许拖放
     setAcceptDrops(true);
     m_editAreaWidget->setAcceptDrops(true);
@@ -274,6 +278,10 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
         // 保存 LayoutItem
         m_layoutItems.append(layoutItem);
         m_widgetItemMap[widget] = layoutItem;
+
+        // 将最新添加的控件设为选中状态并显示控制点
+        m_selectedWidget = widget;
+        updateHandles(m_selectedWidget);
 
         m_editAreaWidget->repaint();
         event->acceptProposedAction();
@@ -460,21 +468,138 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
 {
     // 处理控件的双击事件
     if (event->type() == QEvent::MouseButtonDblClick) {
+        qDebug() << "双击事件触发，对象类型:" << obj->metaObject()->className();
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::LeftButton) {
             // 处理QLabel文本编辑
             QLabel *label = qobject_cast<QLabel*>(obj);
             if (label) {
+                qDebug() << "处理QLabel双击事件:" << label << "当前文本:" << label->text();
                 // 创建一个临时的QLineEdit来编辑文本
                 QLineEdit *edit = new QLineEdit(label);
                 edit->setText(label->text());
                 edit->setGeometry(label->rect());
                 edit->selectAll();
+                edit->setFocusPolicy(Qt::StrongFocus);
+                edit->setStyleSheet("border: 2px solid blue; background-color: white;");
+                edit->raise();
+                edit->show();
+                
+                // 确保获得焦点
+                edit->activateWindow();
                 edit->setFocus();
+                
+                qDebug() << "创建编辑框:" << edit << "位置:" << edit->geometry() << "焦点:" << edit->hasFocus() << "可见:" << edit->isVisible();
                 
                 // 连接信号槽，在编辑完成后更新QLabel的文本
                 connect(edit, &QLineEdit::editingFinished, [=]() {
                     label->setText(edit->text());
+                    qDebug() << "编辑完成，更新QLabel文本为:" << edit->text();
+                    delete edit;
+                });
+                
+                return true;
+            }
+            
+            // 处理QPushButton文本编辑
+            QPushButton *pushButton = qobject_cast<QPushButton*>(obj);
+            if (pushButton) {
+                // 创建一个临时的QLineEdit来编辑文本
+                QLineEdit *edit = new QLineEdit(pushButton);
+                edit->setText(pushButton->text());
+                edit->setGeometry(pushButton->rect().adjusted(4, 4, -4, -4));
+                edit->selectAll();
+                edit->setFocusPolicy(Qt::StrongFocus);
+                edit->setStyleSheet("border: 2px solid blue; background-color: white;");
+                edit->raise();
+                edit->show();
+                edit->activateWindow();
+                edit->setFocus();
+                
+                // 连接信号槽，在编辑完成后更新QPushButton的文本
+                connect(edit, &QLineEdit::editingFinished, [=]() {
+                    pushButton->setText(edit->text());
+                    delete edit;
+                });
+                
+                return true;
+            }
+            
+            // 处理QGroupBox标题编辑
+            QGroupBox *groupBox = qobject_cast<QGroupBox*>(obj);
+            if (groupBox) {
+                // 创建一个临时的QLineEdit来编辑标题
+                QLineEdit *edit = new QLineEdit(groupBox);
+                edit->setText(groupBox->title());
+                edit->setGeometry(8, 0, groupBox->width() - 16, 22);
+                edit->selectAll();
+                edit->setFocusPolicy(Qt::StrongFocus);
+                edit->setStyleSheet("border: 2px solid blue; background-color: white;");
+                edit->raise();
+                edit->show();
+                edit->activateWindow();
+                edit->setFocus();
+                
+                // 连接信号槽，在编辑完成后更新QGroupBox的标题
+                connect(edit, &QLineEdit::editingFinished, [=]() {
+                    groupBox->setTitle(edit->text());
+                    delete edit;
+                });
+                
+                return true;
+            }
+            
+            // 处理QRadioButton文本编辑
+            QRadioButton *radioButton = qobject_cast<QRadioButton*>(obj);
+            if (radioButton) {
+                // 创建一个临时的QLineEdit来编辑文本
+                QLineEdit *edit = new QLineEdit(radioButton);
+                edit->setText(radioButton->text());
+                edit->setGeometry(22, 0, radioButton->width() - 26, radioButton->height());
+                edit->selectAll();
+                edit->setFocus();
+                
+                // 连接信号槽，在编辑完成后更新QRadioButton的文本
+                connect(edit, &QLineEdit::editingFinished, [=]() {
+                    radioButton->setText(edit->text());
+                    delete edit;
+                });
+                
+                return true;
+            }
+            
+            // 处理QToolButton文本编辑
+            QToolButton *toolButton = qobject_cast<QToolButton*>(obj);
+            if (toolButton) {
+                // 创建一个临时的QLineEdit来编辑文本
+                QLineEdit *edit = new QLineEdit(toolButton);
+                edit->setText(toolButton->text());
+                edit->setGeometry(toolButton->rect().adjusted(4, 4, -4, -4));
+                edit->selectAll();
+                edit->setFocus();
+                
+                // 连接信号槽，在编辑完成后更新QToolButton的文本
+                connect(edit, &QLineEdit::editingFinished, [=]() {
+                    toolButton->setText(edit->text());
+                    delete edit;
+                });
+                
+                return true;
+            }
+            
+            // 处理QCommandLinkButton文本编辑
+            QCommandLinkButton *commandLinkButton = qobject_cast<QCommandLinkButton*>(obj);
+            if (commandLinkButton) {
+                // 创建一个临时的QLineEdit来编辑文本
+                QLineEdit *edit = new QLineEdit(commandLinkButton);
+                edit->setText(commandLinkButton->text());
+                edit->setGeometry(commandLinkButton->rect().adjusted(8, 8, -8, -8));
+                edit->selectAll();
+                edit->setFocus();
+                
+                // 连接信号槽，在编辑完成后更新QCommandLinkButton的文本
+                connect(edit, &QLineEdit::editingFinished, [=]() {
+                    commandLinkButton->setText(edit->text());
                     delete edit;
                 });
                 
@@ -690,4 +815,88 @@ void UILayoutWindow::loadPlugins()
 
 void UILayoutWindow::onLayoutItemDoubleClicked()
 {
+}
+
+// 处理控制点拖动
+void UILayoutWindow::onHandleDragged(int handleIndex, const QPoint &delta) {
+    if (!m_selectedWidget) {
+        return;
+    }
+
+    // 根据控制点索引调整控件大小
+    QRect newGeometry = m_selectedWidget->geometry();
+    int left = newGeometry.left();
+    int top = newGeometry.top();
+    int width = newGeometry.width();
+    int height = newGeometry.height();
+
+    // 定义最小宽高
+    const int MIN_WIDTH = 50;
+    const int MIN_HEIGHT = 20;
+
+    // 8个控制点的索引分别对应：
+    // 0: 顶部左, 1: 顶部中, 2: 顶部右
+    // 3: 中间左, 4: 中间右
+    // 5: 底部左, 6: 底部中, 7: 底部右
+
+    switch (handleIndex) {
+        case 0: // 顶部左
+            left += delta.x();
+            width -= delta.x();
+            top += delta.y();
+            height -= delta.y();
+            break;
+        case 1: // 顶部中
+            top += delta.y();
+            height -= delta.y();
+            break;
+        case 2: // 顶部右
+            width += delta.x();
+            top += delta.y();
+            height -= delta.y();
+            break;
+        case 3: // 中间左
+            left += delta.x();
+            width -= delta.x();
+            break;
+        case 4: // 中间右
+            width += delta.x();
+            break;
+        case 5: // 底部左
+            left += delta.x();
+            width -= delta.x();
+            height += delta.y();
+            break;
+        case 6: // 底部中
+            height += delta.y();
+            break;
+        case 7: // 底部右
+            width += delta.x();
+            height += delta.y();
+            break;
+        default:
+            return;
+    }
+
+    // 确保宽高不小于最小值
+    width = qMax(width, MIN_WIDTH);
+    height = qMax(height, MIN_HEIGHT);
+
+    // 更新控件几何形状
+    m_selectedWidget->setGeometry(left, top, width, height);
+
+    // 更新布局项
+    LayoutItem *item = m_widgetItemMap.value(m_selectedWidget);
+    if (item) {
+        item->setPos(m_selectedWidget->pos());
+        item->setSize(m_selectedWidget->size());
+    }
+
+    // 更新控制点位置
+    updateHandles(m_selectedWidget);
+}
+
+// 处理控制点释放
+void UILayoutWindow::onHandleReleased() {
+    // 可以在这里添加释放后的处理逻辑
 }

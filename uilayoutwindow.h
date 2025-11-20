@@ -16,6 +16,12 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <QToolButton>
+#include <QCommandLinkButton>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QTabWidget>
 #include "editareawidget.h"
 #include "previewwindow.h"
 
@@ -110,6 +116,8 @@ private slots:
     void on_actionNew_Layout_triggered();
     void on_actionPreview_triggered();
     void onActionPreviewTriggered();
+    void onHandleDragged(int handleIndex, const QPoint &delta);
+    void onHandleReleased();
 
 private:
     Ui::UILayoutWindow *ui;

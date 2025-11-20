@@ -2,7 +2,9 @@
 
 EditAreaWidget::EditAreaWidget(QWidget *parent)
     : QWidget{parent}
-{}
+{
+    setMouseTracking(true); // 启用鼠标跟踪
+}
 
 void EditAreaWidget::setHandles(const QList<QRect> &handles) {
     m_handles = handles;
@@ -20,4 +22,96 @@ void EditAreaWidget::paintEvent(QPaintEvent *event) {
     foreach (const QRect &handle, m_handles) {
         painter.drawRect(handle);
     }
+}
+
+void EditAreaWidget::mousePressEvent(QMouseEvent *event) {
+    // 检查鼠标是否点击在某个控制点上
+    for (int i = 0; i < m_handles.size(); ++i) {
+        if (m_handles[i].contains(event->pos())) {
+            m_draggingHandleIndex = i;
+            m_mousePressPos = event->pos();
+            return;
+        }
+    }
+    QWidget::mousePressEvent(event);
+}
+
+void EditAreaWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    // 如果事件为空，直接返回
+    if (!event) {
+        return;
+    }
+
+    if (m_draggingHandleIndex != -1) {
+        // 计算鼠标移动的偏移量
+        QPoint delta = event->pos() - m_mousePressPos;
+        emit handleDragged(m_draggingHandleIndex, delta);
+        m_mousePressPos = event->pos(); // 更新鼠标按下位置
+        return;
+    }
+
+    // 根据鼠标位置设置光标形状
+    Qt::CursorShape cursorShape = Qt::ArrowCursor;
+    for (int i = 0; i < m_handles.size(); ++i) {
+        if (m_handles[i].contains(event->pos())) {
+            switch (i) {
+            case 0: // 左上角
+                cursorShape = Qt::SizeFDiagCursor;
+                break;
+            case 1: // 上中
+                cursorShape = Qt::SizeVerCursor;
+                break;
+            case 2: // 右上角
+                cursorShape = Qt::SizeBDiagCursor;
+                break;
+            case 3: // 左中
+                cursorShape = Qt::SizeHorCursor;
+                break;
+            case 4: // 右中
+                cursorShape = Qt::SizeHorCursor;
+                break;
+            case 5: // 左下角
+                cursorShape = Qt::SizeBDiagCursor;
+                break;
+            case 6: // 下中
+                cursorShape = Qt::SizeVerCursor;
+                break;
+            case 7: // 右下角
+                cursorShape = Qt::SizeFDiagCursor;
+                break;
+            default:
+                cursorShape = Qt::ArrowCursor;
+                break;
+            }
+            break;
+        }
+    }
+    setCursor(cursorShape);
+
+    QWidget::mouseMoveEvent(event);
+}
+
+void EditAreaWidget::enterEvent(QEnterEvent *event)
+{
+    // 鼠标进入时检查光标位置
+    QWidget::enterEvent(event);
+    mouseMoveEvent(nullptr); // 触发一次鼠标移动事件来更新光标
+}
+
+void EditAreaWidget::leaveEvent(QEvent *event)
+{
+    // 鼠标离开时重置光标
+    setCursor(Qt::ArrowCursor);
+    QWidget::leaveEvent(event);
+}
+
+void EditAreaWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_draggingHandleIndex != -1) {
+        emit handleReleased();
+        m_draggingHandleIndex = -1;
+        return;
+    }
+    QWidget::mouseReleaseEvent(event);
 }

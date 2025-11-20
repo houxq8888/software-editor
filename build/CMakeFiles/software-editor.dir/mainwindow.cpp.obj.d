@@ -562,10 +562,22 @@ CMakeFiles/software-editor.dir/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCommandLinkButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
  D:\virtualMachine\github\software-editor\editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
  D:\virtualMachine\github\software-editor\previewwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h
