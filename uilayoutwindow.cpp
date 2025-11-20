@@ -64,12 +64,20 @@ void CustomListWidget::startDrag(Qt::DropActions supportedActions)
 }
 
 LayoutItem::LayoutItem(const QString &widgetType, const QString &text)
-    : m_widgetType(widgetType), m_text(text) {}
+    : m_widgetType(widgetType), m_text(text), m_pos(0, 0), m_size(200, 50) {}
 QString LayoutItem::widgetType() const { return m_widgetType; }
 
 QString LayoutItem::text() const { return m_text; }
 
 void LayoutItem::setText(const QString &newText) { m_text = newText; }
+
+QPoint LayoutItem::pos() const { return m_pos; }
+
+void LayoutItem::setPos(const QPoint &pos) { m_pos = pos; }
+
+QSize LayoutItem::size() const { return m_size; }
+
+void LayoutItem::setSize(const QSize &size) { m_size = size; }
 
 QWidget *LayoutItem::createWidget(QWidget *parent) const {
     QWidget *widget = nullptr;
@@ -175,14 +183,61 @@ void UILayoutWindow::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
+// 更新控制点位置
+void UILayoutWindow::updateHandles(QWidget *widget) {
+    if (!widget || !m_editAreaWidget) {
+        return;
+    }
+    
+    // 获取控件在编辑区中的本地位置
+    QPoint widgetLocalPos = widget->pos();  // 控件相对于编辑区的位置
+    QRect widgetRect(widgetLocalPos, widget->size());
+    
+    // 计算所有控制点
+    QList<QRect> handles;
+    
+    // 顶部左
+    handles.append(QRect(widgetRect.topLeft() - QPoint(HANDLE_SIZE/2, HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 顶部中
+    handles.append(QRect(QPoint(widgetRect.left() + widgetRect.width()/2 - HANDLE_SIZE/2, widgetRect.top() - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 顶部右
+    handles.append(QRect(QPoint(widgetRect.right() - HANDLE_SIZE/2, widgetRect.top() - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 中间左
+    handles.append(QRect(QPoint(widgetRect.left() - HANDLE_SIZE/2, widgetRect.top() + widgetRect.height()/2 - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 中间右
+    handles.append(QRect(QPoint(widgetRect.right() - HANDLE_SIZE/2, widgetRect.top() + widgetRect.height()/2 - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 底部左
+    handles.append(QRect(QPoint(widgetRect.left() - HANDLE_SIZE/2, widgetRect.bottom() - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 底部中
+    handles.append(QRect(QPoint(widgetRect.left() + widgetRect.width()/2 - HANDLE_SIZE/2, widgetRect.bottom() - HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    // 底部右
+    handles.append(QRect(widgetRect.bottomRight() - QPoint(HANDLE_SIZE/2, HANDLE_SIZE/2), QSize(HANDLE_SIZE, HANDLE_SIZE)));
+    
+    // 将控制点传递给EditAreaWidget
+    m_editAreaWidget->setHandles(handles);
+}
+
+// 绘制控制点 - 已转移到EditAreaWidget
+// 重写paintEvent来更新EditAreaWidget的绘制
+void UILayoutWindow::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);  // 确保不遗漏基类实现
+    if (m_selectedWidget && m_selectedWidget->isVisible() && m_editAreaWidget) {
+        // 通知EditAreaWidget更新绘制
+        m_editAreaWidget->update();
+    }
+}
+
+
+
+
 void UILayoutWindow::dragMoveEvent(QDragMoveEvent *event)
 {
     // 检查拖放位置是否在编辑区widget中，并且mimeData包含文本
     QPoint localPos = event->position().toPoint();
-    // Convert to global position relative to the edit area widget
-    QRect editAreaGeometry = m_editAreaWidget->geometry();
-    if (localPos.x() >= editAreaGeometry.left() && localPos.x() <= editAreaGeometry.right() &&
-        localPos.y() >= editAreaGeometry.top() && localPos.y() <= editAreaGeometry.bottom()) {
+    QPoint globalPos = mapToGlobal(localPos);
+    QPoint editAreaLocalPos = m_editAreaWidget->mapFromGlobal(globalPos);
+    
+    if (event->mimeData()->hasText() && m_editAreaWidget->rect().contains(editAreaLocalPos)) {
         event->acceptProposedAction();
     } else {
         event->ignore();
@@ -196,26 +251,31 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
         QString widgetType = event->mimeData()->text();
         qDebug() << "dropEvent: 拖放的控件类型:" << widgetType;
 
+        // 获取鼠标在编辑区中的局部位置
+        QPoint localPos = event->position().toPoint();
+        QPoint globalPos = mapToGlobal(localPos);
+        QPoint editAreaLocalPos = m_editAreaWidget->mapFromGlobal(globalPos);
+
         // 根据控件类型创建对应的 LayoutItem
-        LayoutItem *layoutItem = new LayoutItem(widgetType,widgetType);
+        LayoutItem *layoutItem = new LayoutItem(widgetType, widgetType);
+        layoutItem->setPos(editAreaLocalPos);
+        layoutItem->setSize(QSize(200, 50));
 
         // 创建相应的控件
         QWidget *widget = layoutItem->createWidget(m_editAreaWidget);  // 将控件添加到编辑区 QWidget 中
 
-        // 如果没有设置布局，手动设置布局
-        if (!m_editAreaWidget->layout()) {
-            qDebug() << "No layout set for m_previewWidget. Setting QVBoxLayout.";
-            QVBoxLayout *layout = new QVBoxLayout(m_editAreaWidget);
-            m_editAreaWidget->setLayout(layout);
-        }
-        widget->show();  // 显示控件
-        m_editAreaWidget->layout()->addWidget(widget);  // 将控件添加到布局中
-        
+        // 设置控件位置和大小
+        widget->move(layoutItem->pos());
+        widget->resize(layoutItem->size());
+        widget->show();
+
         // 为可编辑的控件安装事件过滤器
         widget->installEventFilter(this);
         // 保存 LayoutItem
         m_layoutItems.append(layoutItem);
+        m_widgetItemMap[widget] = layoutItem;
 
+        m_editAreaWidget->repaint();
         event->acceptProposedAction();
     } else {
         event->ignore();
@@ -224,6 +284,20 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
 
 
 
+
+void UILayoutWindow::on_actionPreview_triggered()
+{
+    // 创建预览窗口
+    if (!m_previewWindow) {
+        m_previewWindow = new PreviewWindow(this);
+    }
+    
+    // 设置布局项
+    m_previewWindow->setLayoutItems(m_layoutItems);
+    
+    // 显示预览窗口
+    m_previewWindow->show();
+}
 
 void UILayoutWindow::on_actionSave_Layout_triggered()
 {
@@ -296,12 +370,15 @@ void UILayoutWindow::onActionPreviewTriggered()
     m_previewWindow->activateWindow();
 }
 
+
+
 void UILayoutWindow::setupEditArea()
 {
-    // 创建编辑区域widget
-    m_editAreaWidget = new QWidget(this);
+    // 创建编辑区的 QWidget
+    m_editAreaWidget = new EditAreaWidget(this);
     m_editAreaWidget->setObjectName("editAreaWidget");
     m_editAreaWidget->setLayout(nullptr); // 移除布局，允许手动定位
+    m_editAreaWidget->setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;");
 
     // 替换splitter中的QGraphicsView为我们的编辑区widget
     int index = ui->splitter->indexOf(ui->graphicsView);
@@ -426,6 +503,177 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
                     return true;
                 }
             }
+        }
+    }
+    
+    // 处理鼠标按下事件
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            QWidget *widget = qobject_cast<QWidget*>(obj);
+            if (widget) {
+                // 检查是否在调整大小的边界
+                QRect widgetRect = widget->rect();
+                QPoint mousePos = mouseEvent->pos();
+                
+                // 重置调整大小状态
+                m_resizeLeft = false;
+                m_resizeRight = false;
+                m_resizeTop = false;
+                m_resizeBottom = false;
+                m_resizing = false;
+                m_moving = false;
+                
+                // 检查左侧边界
+                if (mousePos.x() <= RESIZE_MARGIN) {
+                    m_resizeLeft = true;
+                    m_resizing = true;
+                } 
+                // 检查右侧边界
+                else if (mousePos.x() >= widgetRect.width() - RESIZE_MARGIN) {
+                    m_resizeRight = true;
+                    m_resizing = true;
+                }
+                
+                // 检查顶部边界
+                if (mousePos.y() <= RESIZE_MARGIN) {
+                    m_resizeTop = true;
+                    m_resizing = true;
+                } 
+                // 检查底部边界
+                else if (mousePos.y() >= widgetRect.height() - RESIZE_MARGIN) {
+                    m_resizeBottom = true;
+                    m_resizing = true;
+                }
+                
+                // 如果不在调整大小边界，则准备移动
+                if (!m_resizing) {
+                    m_moving = true;
+                }
+                
+                // 选择该控件并更新控制点
+                m_selectedWidget = widget;
+                updateHandles(widget);
+                update(); // 重新绘制
+                
+                m_currentWidget = widget;
+                m_mousePressPos = mouseEvent->globalPos();
+                m_widgetPos = widget->pos();
+                
+                return true;
+            }
+        }
+    }
+    
+    // 处理鼠标移动事件
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QWidget *widget = qobject_cast<QWidget*>(obj);
+        if (widget) {
+            if (m_currentWidget == widget) {
+                if (m_resizing) {
+                    // 调整控件大小
+                    QPoint delta = mouseEvent->globalPos() - m_mousePressPos;
+                    QRect newRect = widget->geometry();
+                    
+                    if (m_resizeLeft) {
+                        newRect.setLeft(newRect.left() + delta.x());
+                    }
+                    if (m_resizeRight) {
+                        newRect.setWidth(newRect.width() + delta.x());
+                    }
+                    if (m_resizeTop) {
+                        newRect.setTop(newRect.top() + delta.y());
+                    }
+                    if (m_resizeBottom) {
+                        newRect.setHeight(newRect.height() + delta.y());
+                    }
+                    
+                    // 确保控件大小不小于最小尺寸
+                    if (newRect.width() < 50) {
+                        if (m_resizeLeft) {
+                            newRect.setLeft(newRect.right() - 50);
+                        } else {
+                            newRect.setWidth(50);
+                        }
+                    }
+                    if (newRect.height() < 20) {
+                        if (m_resizeTop) {
+                            newRect.setTop(newRect.bottom() - 20);
+                        } else {
+                            newRect.setHeight(20);
+                        }
+                    }
+                    
+                    widget->setGeometry(newRect);
+                    updateHandles(widget);
+                    update(); // 重新绘制
+                    
+                    // 更新LayoutItem的大小
+                    LayoutItem *item = m_widgetItemMap.value(widget);
+                    if (item) {
+                        item->setSize(widget->size());
+                    }
+                    m_mousePressPos = mouseEvent->globalPos();
+                    return true;
+                } else if (m_moving) {
+                    // 移动控件
+                    QPoint delta = mouseEvent->globalPos() - m_mousePressPos;
+                    QPoint newPos = m_widgetPos + delta;
+                    widget->move(newPos);
+                    updateHandles(widget);
+                    update(); // 重新绘制
+                    
+                    // 更新LayoutItem的位置
+                    LayoutItem *item = m_widgetItemMap.value(widget);
+                    if (item) {
+                        item->setPos(widget->pos());
+                    }
+                    return true;
+                }
+            } else {
+                // 检查鼠标位置以更新光标
+                QRect widgetRect = widget->rect();
+                QPoint mousePos = mouseEvent->pos();
+                
+                Qt::CursorShape cursorShape = Qt::ArrowCursor;
+                bool onEdge = false;
+                
+                // 检查左侧或右侧边界
+                if (mousePos.x() <= RESIZE_MARGIN || mousePos.x() >= widgetRect.width() - RESIZE_MARGIN) {
+                    cursorShape = Qt::SizeHorCursor;
+                    onEdge = true;
+                }
+                
+                // 检查顶部或底部边界
+                if (mousePos.y() <= RESIZE_MARGIN || mousePos.y() >= widgetRect.height() - RESIZE_MARGIN) {
+                    cursorShape = onEdge ? Qt::SizeFDiagCursor : Qt::SizeVerCursor;
+                    onEdge = true;
+                }
+                
+                widget->setCursor(cursorShape);
+            }
+        }
+    }
+    
+    // 处理鼠标释放事件
+    if (event->type() == QEvent::MouseButtonRelease) {
+        if (event->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::LeftButton) {
+                m_currentWidget = nullptr;
+                m_resizing = false;
+                m_moving = false;
+                return true;
+            }
+        }
+    }
+    
+    // 处理鼠标离开事件
+    if (event->type() == QEvent::Leave) {
+        QWidget *widget = qobject_cast<QWidget*>(obj);
+        if (widget) {
+            widget->unsetCursor();
         }
     }
     
