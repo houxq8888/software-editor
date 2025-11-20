@@ -32,6 +32,9 @@ signals:
     // 鼠标释放信号
     void handleReleased();
 
+    // 控制点应隐藏信号
+    void handlesShouldHide();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void enterEvent(QEnterEvent *event) override;

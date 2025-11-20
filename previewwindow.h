@@ -32,7 +32,6 @@ private:
 
 private:
     Ui::PreviewWindow *ui;
-    QWidget *m_previewWidget;
     QMap<LayoutItem *, QWidget *> m_widgetMap;
 };
 

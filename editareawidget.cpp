@@ -15,10 +15,24 @@ void EditAreaWidget::paintEvent(QPaintEvent *event) {
     QWidget::paintEvent(event); // 调用父类的paintEvent
     
     QPainter painter(this);
-    painter.setPen(QPen(Qt::blue, 1));
-    painter.setBrush(QBrush(Qt::blue));
+    
+    // 绘制点阵网格背景
+    painter.setPen(QPen(Qt::lightGray, 0)); // 使用细线绘制
+    painter.setBrush(QBrush(Qt::lightGray));
+    
+    int gridSize = 20; // 网格间距
+    int dotSize = 2;    // 点的大小
+    
+    // 绘制水平方向的点
+    for (int x = 0; x < width(); x += gridSize) {
+        for (int y = 0; y < height(); y += gridSize) {
+            painter.drawRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+        }
+    }
     
     // 绘制所有控制点
+    painter.setPen(QPen(Qt::blue, 1));
+    painter.setBrush(QBrush(Qt::blue));
     foreach (const QRect &handle, m_handles) {
         painter.drawRect(handle);
     }
@@ -33,6 +47,12 @@ void EditAreaWidget::mousePressEvent(QMouseEvent *event) {
             return;
         }
     }
+    // 点击空白处，让所有子控件失去焦点
+    if (focusWidget()) {
+        focusWidget()->clearFocus();
+    }
+    // 点击空白处，隐藏所有控制点
+    emit handlesShouldHide();
     QWidget::mousePressEvent(event);
 }
 
