@@ -58,11 +58,16 @@ public:
     
     QWidget *createWidget(QWidget *parent = nullptr) const; // 创建相应的控件
 
+    // 设置和获取控件所属的Tab页索引
+    void setTabIndex(int index);
+    int tabIndex() const;
+
 private:
     QString m_widgetType;
     QString m_text;
     QPoint m_pos;
     QSize m_size;
+    int m_tabIndex; // 控件所属的Tab页索引，-1表示不在任何Tab页中
 };
 
 // UILayoutWindow 类，用于管理布局编辑界面
@@ -122,6 +127,7 @@ private slots:
 private:
     Ui::UILayoutWindow *ui;
     EditAreaWidget *m_editAreaWidget; // 编辑区的 QWidget，替代 QGraphicsView
+    QPoint m_lastMousePos; // 记录鼠标位置
     QList<LayoutItem*> m_layoutItems; // 存储所有布局项
     QMap<QWidget*, LayoutItem*> m_widgetItemMap; // 控件到LayoutItem的映射
     PreviewWindow *m_previewWindow; // 预览窗口
