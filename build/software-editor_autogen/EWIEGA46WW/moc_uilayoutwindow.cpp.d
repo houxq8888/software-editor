@@ -1,5 +1,6 @@
 D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46WW/moc_uilayoutwindow.cpp: D:/virtualMachine/github/software-editor/uilayoutwindow.h \
   D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
@@ -31,6 +32,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayalgorithms.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearraylist.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qchar.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare_impl.h \
@@ -47,6 +49,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdatastream.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
@@ -131,6 +134,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtenvironmentvariables.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimezone.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtmetamacros.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtnoop.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtpreprocessorsupport.h \
@@ -148,22 +152,28 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/QSurfaceFormat \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qabstracttextdocumentlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qfontdatabase.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontinfo.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontmetrics.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qglyphrun.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qicon.h \
@@ -171,6 +181,8 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qopengl.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
@@ -180,14 +192,17 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpixmap.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpolygon.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qrawfont.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qregion.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgb.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qrgba64.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qsurfaceformat.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtextformat.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtgui-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
@@ -198,22 +213,49 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+  D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
+  D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
+  D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QColumnView \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCommandLinkButton \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDateEdit \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDateTimeEdit \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDial \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialogButtonBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDoubleSpinBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFontComboBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFormLayout \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QKeySequenceEdit \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLCDNumber \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLayout \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMdiArea \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPlainTextEdit \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QScrollArea \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QScrollBar \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSlider \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpacerItem \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpinBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStackedWidget \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextBrowser \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTimeEdit \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBox \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolButton \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QUndoView \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractbutton.h \
@@ -224,35 +266,62 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcolumnview.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdatetimeedit.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdial.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfontcombobox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qformlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qkeysequenceedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayoutitem.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlcdnumber.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
-  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmdiarea.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qplaintextedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qrubberband.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qspinbox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstackedwidget.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyle.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstyleoption.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextbrowser.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbutton.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreeview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreewidget.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreewidgetitemiterator.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qundoview.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/QDomDocument \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/QDomElement \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/QDomNodeList \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/qdom.h \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxml-config.h \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlexports.h \
+  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlglobal.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/algorithm \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/atomic \
@@ -429,6 +498,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
+  D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/GL/gl.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_mac.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_off_t.h \
@@ -464,5 +534,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/EWIEGA46W
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
+  D:/virtualMachine/github/software-editor/customtreewidget.h \
   D:/virtualMachine/github/software-editor/editareawidget.h \
   D:/virtualMachine/github/software-editor/previewwindow.h

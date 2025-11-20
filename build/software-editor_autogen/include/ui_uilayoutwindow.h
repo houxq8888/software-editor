@@ -12,17 +12,20 @@
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDockWidget>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <customtreewidget.h>
 #include "uilayoutwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +33,9 @@ QT_BEGIN_NAMESPACE
 class Ui_UILayoutWindow
 {
 public:
+    QAction *actionNew_Layout;
     QAction *actionSave_Layout;
+    QAction *actionSave_As_Layout;
     QAction *actionLoad_Layout;
     QAction *actionUndo;
     QAction *actionRedo;
@@ -38,12 +43,16 @@ public:
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout;
     QSplitter *splitter;
-    QDockWidget *dockWidget;
-    QWidget *dockWidgetContents;
+    QWidget *leftPanelWidget;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
-    CustomListWidget *widgetListWidget;
+    QLineEdit *searchLineEdit;
+    CustomTreeWidget *widgetListWidget;
     QWidget *graphicsView;
+    QWidget *rightPanelWidget;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *propertiesLabel;
+    QTreeWidget *propertiesTreeWidget;
     QMenuBar *menubar;
     QMenu *menu;
     QMenu *menu_2;
@@ -54,9 +63,13 @@ public:
     {
         if (UILayoutWindow->objectName().isEmpty())
             UILayoutWindow->setObjectName("UILayoutWindow");
-        UILayoutWindow->resize(1000, 700);
+        UILayoutWindow->resize(1200, 700);
+        actionNew_Layout = new QAction(UILayoutWindow);
+        actionNew_Layout->setObjectName("actionNew_Layout");
         actionSave_Layout = new QAction(UILayoutWindow);
         actionSave_Layout->setObjectName("actionSave_Layout");
+        actionSave_As_Layout = new QAction(UILayoutWindow);
+        actionSave_As_Layout->setObjectName("actionSave_As_Layout");
         actionLoad_Layout = new QAction(UILayoutWindow);
         actionLoad_Layout->setObjectName("actionLoad_Layout");
         actionUndo = new QAction(UILayoutWindow);
@@ -74,36 +87,55 @@ public:
         splitter->setOrientation(Qt::Orientation::Horizontal);
         splitter->setHandleWidth(8);
         splitter->setChildrenCollapsible(false);
-        dockWidget = new QDockWidget(splitter);
-        dockWidget->setObjectName("dockWidget");
-        dockWidgetContents = new QWidget();
-        dockWidgetContents->setObjectName("dockWidgetContents");
-        verticalLayout_2 = new QVBoxLayout(dockWidgetContents);
+        leftPanelWidget = new QWidget(splitter);
+        leftPanelWidget->setObjectName("leftPanelWidget");
+        verticalLayout_2 = new QVBoxLayout(leftPanelWidget);
         verticalLayout_2->setObjectName("verticalLayout_2");
-        label = new QLabel(dockWidgetContents);
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(leftPanelWidget);
         label->setObjectName("label");
 
         verticalLayout_2->addWidget(label);
 
-        widgetListWidget = new CustomListWidget(dockWidgetContents);
+        searchLineEdit = new QLineEdit(leftPanelWidget);
+        searchLineEdit->setObjectName("searchLineEdit");
+
+        verticalLayout_2->addWidget(searchLineEdit);
+
+        widgetListWidget = new CustomTreeWidget(leftPanelWidget);
         widgetListWidget->setObjectName("widgetListWidget");
         widgetListWidget->setDragEnabled(true);
 
         verticalLayout_2->addWidget(widgetListWidget);
 
-        dockWidget->setWidget(dockWidgetContents);
-        splitter->addWidget(dockWidget);
+        splitter->addWidget(leftPanelWidget);
         graphicsView = new QWidget(splitter);
         graphicsView->setObjectName("graphicsView");
         graphicsView->setAcceptDrops(true);
         splitter->addWidget(graphicsView);
+        rightPanelWidget = new QWidget(splitter);
+        rightPanelWidget->setObjectName("rightPanelWidget");
+        verticalLayout_3 = new QVBoxLayout(rightPanelWidget);
+        verticalLayout_3->setObjectName("verticalLayout_3");
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        propertiesLabel = new QLabel(rightPanelWidget);
+        propertiesLabel->setObjectName("propertiesLabel");
+
+        verticalLayout_3->addWidget(propertiesLabel);
+
+        propertiesTreeWidget = new QTreeWidget(rightPanelWidget);
+        propertiesTreeWidget->setObjectName("propertiesTreeWidget");
+
+        verticalLayout_3->addWidget(propertiesTreeWidget);
+
+        splitter->addWidget(rightPanelWidget);
 
         horizontalLayout->addWidget(splitter);
 
         UILayoutWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(UILayoutWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1000, 21));
+        menubar->setGeometry(QRect(0, 0, 1200, 21));
         menu = new QMenu(menubar);
         menu->setObjectName("menu");
         menu_2 = new QMenu(menubar);
@@ -118,11 +150,14 @@ public:
 
         menubar->addAction(menu->menuAction());
         menubar->addAction(menu_2->menuAction());
+        menu->addAction(actionNew_Layout);
         menu->addAction(actionSave_Layout);
+        menu->addAction(actionSave_As_Layout);
         menu->addAction(actionLoad_Layout);
         menu_2->addAction(actionUndo);
         menu_2->addAction(actionRedo);
         mainToolBar->addAction(actionPreview);
+        mainToolBar->addAction(actionNew_Layout);
 
         retranslateUi(UILayoutWindow);
 
@@ -132,12 +167,40 @@ public:
     void retranslateUi(QMainWindow *UILayoutWindow)
     {
         UILayoutWindow->setWindowTitle(QCoreApplication::translate("UILayoutWindow", "UI\345\270\203\345\261\200\347\274\226\350\276\221\345\231\250", nullptr));
-        actionSave_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\344\277\235\345\255\230\345\270\203\345\261\200", nullptr));
-        actionLoad_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\345\212\240\350\275\275\345\270\203\345\261\200", nullptr));
-        actionUndo->setText(QCoreApplication::translate("UILayoutWindow", "\346\222\244\351\224\200", nullptr));
-        actionRedo->setText(QCoreApplication::translate("UILayoutWindow", "\351\207\215\345\201\232", nullptr));
-        actionPreview->setText(QCoreApplication::translate("UILayoutWindow", "\351\242\204\350\247\210", nullptr));
-        label->setText(QCoreApplication::translate("UILayoutWindow", "\350\207\252\345\256\232\344\271\211\346\216\247\344\273\266\345\272\223", nullptr));
+        actionNew_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\346\226\260\345\273\272", nullptr));
+#if QT_CONFIG(shortcut)
+        actionNew_Layout->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+N", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionSave_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\344\277\235\345\255\230", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSave_Layout->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+S", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionSave_As_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\345\217\246\345\255\230\344\270\272", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSave_As_Layout->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+Shift+S", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionLoad_Layout->setText(QCoreApplication::translate("UILayoutWindow", "\345\212\240\350\275\275", nullptr));
+#if QT_CONFIG(shortcut)
+        actionLoad_Layout->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+O", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionUndo->setText(QCoreApplication::translate("UILayoutWindow", "\346\222\244\351\224\200(&Z)", nullptr));
+#if QT_CONFIG(shortcut)
+        actionUndo->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+Z", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionRedo->setText(QCoreApplication::translate("UILayoutWindow", "\346\201\242\345\244\215(&Y)", nullptr));
+#if QT_CONFIG(shortcut)
+        actionRedo->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+Y", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionPreview->setText(QCoreApplication::translate("UILayoutWindow", "\351\242\204\350\247\210(&P)", nullptr));
+#if QT_CONFIG(shortcut)
+        actionPreview->setShortcut(QCoreApplication::translate("UILayoutWindow", "Ctrl+P", nullptr));
+#endif // QT_CONFIG(shortcut)
+        label->setText(QCoreApplication::translate("UILayoutWindow", "\346\216\247\344\273\266\347\233\222\345\255\220", nullptr));
+        searchLineEdit->setPlaceholderText(QCoreApplication::translate("UILayoutWindow", "\346\220\234\347\264\242\346\216\247\344\273\266...", nullptr));
+        propertiesLabel->setText(QCoreApplication::translate("UILayoutWindow", "\345\261\236\346\200\247\347\274\226\350\276\221\345\231\250", nullptr));
+        propertiesTreeWidget->setHeaderLabels(QStringList{
+            QCoreApplication::translate("UILayoutWindow", "\345\261\236\346\200\247\345\220\215", nullptr),
+            QCoreApplication::translate("UILayoutWindow", "\345\261\236\346\200\247\345\200\274", nullptr)});
         menu->setTitle(QCoreApplication::translate("UILayoutWindow", "\346\226\207\344\273\266", nullptr));
         menu_2->setTitle(QCoreApplication::translate("UILayoutWindow", "\347\274\226\350\276\221", nullptr));
     } // retranslateUi
