@@ -22,6 +22,8 @@ add_executable(software-editor
     previewwindow.cpp
     previewwindow.h
     previewwindow.ui
+    editareawidget.cpp
+    editareawidget.h
 )
 
 target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)

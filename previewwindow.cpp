@@ -109,12 +109,12 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
     // 设置previewWidget为容器
     QWidget *containerWidget = m_previewWidget;
 
-    // 如果没有设置布局，手动设置布局
-    if (!containerWidget->layout()) {
-        qDebug() << "No layout set for m_previewWidget. Setting QVBoxLayout.";
-        QVBoxLayout *layout = new QVBoxLayout(containerWidget);
-        containerWidget->setLayout(layout);
+    // 确保预览容器没有布局，以便手动定位控件
+    if (containerWidget->layout()) {
+        delete containerWidget->layout();
+        containerWidget->setLayout(nullptr);
     }
+    
     // 遍历所有布局项并创建真实控件
     foreach (LayoutItem *item, items) {
         if (!item) continue;
@@ -129,10 +129,9 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
         }
 
         // 设置控件位置和大小
-        // widget->setGeometry(item->pos().x(), item->pos().y(), item->width(), item->height());
-
-        // 将控件加入到布局中
-        containerWidget->layout()->addWidget(widget);
+        widget->move(item->pos());
+        widget->resize(item->size());
+        widget->show();
 
         // 保存映射关系
         m_widgetMap[item] = widget;

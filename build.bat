@@ -1,4 +1,20 @@
 @echo off
+setlocal enabledelayedexpansion
+set "QT_DIR=D:\Qt\6.9.1\mingw_64"
+set "MINGW_DIR=D:\Qt\Tools\mingw1310_64"
+set "PATH=%MINGW_DIR%\bin;%PATH%"
+set "BUILD_DIR=build"
+if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+cd "%BUILD_DIR%"
+echo Running CMake...
+"D:\Qt\Tools\CMake_64\bin\cmake.exe" -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="%QT_DIR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+if %errorlevel% neq 0 exit /b 1
+echo Building project...
+mingw32-make
+if %errorlevel% neq 0 exit /b 1
+echo Build succeeded
+cd ..
+endlocal
 REM Qt Tools Build Script for Windows
 REM Dependencies: Qt 6.8.3, CMake 3.16+, Ninja, Visual Studio 2022
 
