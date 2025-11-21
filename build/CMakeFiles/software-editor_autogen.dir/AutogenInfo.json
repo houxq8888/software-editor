@@ -391,6 +391,24 @@
 			null
 		],
 		[
+			"D:/virtualMachine/github/software-editor/src/packageconfig.h",
+			"MU",
+			"UVLADIE3JM/moc_packageconfig.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/packagedialog.h",
+			"MU",
+			"UVLADIE3JM/moc_packagedialog.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/packagemanager.h",
+			"MU",
+			"UVLADIE3JM/moc_packagemanager.cpp",
+			null
+		],
+		[
 			"D:/virtualMachine/github/software-editor/src/previewwindow.h",
 			"MU",
 			"UVLADIE3JM/moc_previewwindow.cpp",
@@ -400,6 +418,24 @@
 			"D:/virtualMachine/github/software-editor/src/product.h",
 			"MU",
 			"UVLADIE3JM/moc_product.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/productconfigmanager.h",
+			"MU",
+			"UVLADIE3JM/moc_productconfigmanager.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/smartpackageconfig.h",
+			"MU",
+			"UVLADIE3JM/moc_smartpackageconfig.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.h",
+			"MU",
+			"UVLADIE3JM/moc_smartpackagedialog.cpp",
 			null
 		],
 		[
@@ -504,12 +540,42 @@
 			null
 		],
 		[
+			"D:/virtualMachine/github/software-editor/src/packageconfig.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/packagedialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/packagemanager.cpp",
+			"MU",
+			null
+		],
+		[
 			"D:/virtualMachine/github/software-editor/src/previewwindow.cpp",
 			"MU",
 			null
 		],
 		[
 			"D:/virtualMachine/github/software-editor/src/product.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp",
 			"MU",
 			null
 		],

@@ -5,6 +5,7 @@
 #include <QList>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QUuid>
 
 struct ProductFeature
 {
@@ -28,6 +29,15 @@ public:
     QString developer() const; void setDeveloper(const QString &developer);
     QString website() const;   void setWebsite(const QString &website);
 
+
+    
+    // Unique identifier for product distinction
+    QString uniqueId() const; void setUniqueId(const QString &uniqueId);
+    QString generateUniqueId(); // Generate a new unique Id
+
+    // UI layout file management
+    QString uiLayoutPath() const; void setUiLayoutPath(const QString &uiLayoutPath);
+
     QList<ProductFeature> features() const;
     void setFeatures(const QList<ProductFeature> &features);
     void addFeature(const ProductFeature &feature);
@@ -46,6 +56,8 @@ private:
     QString m_category;
     QString m_developer;
     QString m_website;
+    QString m_uniqueId;      // Unique identifier for product distinction
+    QString m_uiLayoutPath;  // UI layout file path
     QList<ProductFeature> m_features;
 };
 

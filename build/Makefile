@@ -319,6 +319,78 @@ src/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.s
 .PHONY : src/mainwindow.cpp.s
 
+src/packageconfig.obj: src/packageconfig.cpp.obj
+.PHONY : src/packageconfig.obj
+
+# target to build an object file
+src/packageconfig.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj
+.PHONY : src/packageconfig.cpp.obj
+
+src/packageconfig.i: src/packageconfig.cpp.i
+.PHONY : src/packageconfig.i
+
+# target to preprocess a source file
+src/packageconfig.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.i
+.PHONY : src/packageconfig.cpp.i
+
+src/packageconfig.s: src/packageconfig.cpp.s
+.PHONY : src/packageconfig.s
+
+# target to generate assembly for a file
+src/packageconfig.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.s
+.PHONY : src/packageconfig.cpp.s
+
+src/packagedialog.obj: src/packagedialog.cpp.obj
+.PHONY : src/packagedialog.obj
+
+# target to build an object file
+src/packagedialog.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj
+.PHONY : src/packagedialog.cpp.obj
+
+src/packagedialog.i: src/packagedialog.cpp.i
+.PHONY : src/packagedialog.i
+
+# target to preprocess a source file
+src/packagedialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.i
+.PHONY : src/packagedialog.cpp.i
+
+src/packagedialog.s: src/packagedialog.cpp.s
+.PHONY : src/packagedialog.s
+
+# target to generate assembly for a file
+src/packagedialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.s
+.PHONY : src/packagedialog.cpp.s
+
+src/packagemanager.obj: src/packagemanager.cpp.obj
+.PHONY : src/packagemanager.obj
+
+# target to build an object file
+src/packagemanager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj
+.PHONY : src/packagemanager.cpp.obj
+
+src/packagemanager.i: src/packagemanager.cpp.i
+.PHONY : src/packagemanager.i
+
+# target to preprocess a source file
+src/packagemanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.i
+.PHONY : src/packagemanager.cpp.i
+
+src/packagemanager.s: src/packagemanager.cpp.s
+.PHONY : src/packagemanager.s
+
+# target to generate assembly for a file
+src/packagemanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.s
+.PHONY : src/packagemanager.cpp.s
+
 src/previewwindow.obj: src/previewwindow.cpp.obj
 .PHONY : src/previewwindow.obj
 
@@ -366,6 +438,78 @@ src/product.s: src/product.cpp.s
 src/product.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.s
 .PHONY : src/product.cpp.s
+
+src/productconfigmanager.obj: src/productconfigmanager.cpp.obj
+.PHONY : src/productconfigmanager.obj
+
+# target to build an object file
+src/productconfigmanager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj
+.PHONY : src/productconfigmanager.cpp.obj
+
+src/productconfigmanager.i: src/productconfigmanager.cpp.i
+.PHONY : src/productconfigmanager.i
+
+# target to preprocess a source file
+src/productconfigmanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.i
+.PHONY : src/productconfigmanager.cpp.i
+
+src/productconfigmanager.s: src/productconfigmanager.cpp.s
+.PHONY : src/productconfigmanager.s
+
+# target to generate assembly for a file
+src/productconfigmanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.s
+.PHONY : src/productconfigmanager.cpp.s
+
+src/smartpackageconfig.obj: src/smartpackageconfig.cpp.obj
+.PHONY : src/smartpackageconfig.obj
+
+# target to build an object file
+src/smartpackageconfig.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj
+.PHONY : src/smartpackageconfig.cpp.obj
+
+src/smartpackageconfig.i: src/smartpackageconfig.cpp.i
+.PHONY : src/smartpackageconfig.i
+
+# target to preprocess a source file
+src/smartpackageconfig.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.i
+.PHONY : src/smartpackageconfig.cpp.i
+
+src/smartpackageconfig.s: src/smartpackageconfig.cpp.s
+.PHONY : src/smartpackageconfig.s
+
+# target to generate assembly for a file
+src/smartpackageconfig.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.s
+.PHONY : src/smartpackageconfig.cpp.s
+
+src/smartpackagedialog.obj: src/smartpackagedialog.cpp.obj
+.PHONY : src/smartpackagedialog.obj
+
+# target to build an object file
+src/smartpackagedialog.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj
+.PHONY : src/smartpackagedialog.cpp.obj
+
+src/smartpackagedialog.i: src/smartpackagedialog.cpp.i
+.PHONY : src/smartpackagedialog.i
+
+# target to preprocess a source file
+src/smartpackagedialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.i
+.PHONY : src/smartpackagedialog.cpp.i
+
+src/smartpackagedialog.s: src/smartpackagedialog.cpp.s
+.PHONY : src/smartpackagedialog.s
+
+# target to generate assembly for a file
+src/smartpackagedialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.s
+.PHONY : src/smartpackagedialog.cpp.s
 
 src/uilayoutwindow.obj: src/uilayoutwindow.cpp.obj
 .PHONY : src/uilayoutwindow.obj
@@ -421,12 +565,30 @@ help:
 	@echo ... src/mainwindow.obj
 	@echo ... src/mainwindow.i
 	@echo ... src/mainwindow.s
+	@echo ... src/packageconfig.obj
+	@echo ... src/packageconfig.i
+	@echo ... src/packageconfig.s
+	@echo ... src/packagedialog.obj
+	@echo ... src/packagedialog.i
+	@echo ... src/packagedialog.s
+	@echo ... src/packagemanager.obj
+	@echo ... src/packagemanager.i
+	@echo ... src/packagemanager.s
 	@echo ... src/previewwindow.obj
 	@echo ... src/previewwindow.i
 	@echo ... src/previewwindow.s
 	@echo ... src/product.obj
 	@echo ... src/product.i
 	@echo ... src/product.s
+	@echo ... src/productconfigmanager.obj
+	@echo ... src/productconfigmanager.i
+	@echo ... src/productconfigmanager.s
+	@echo ... src/smartpackageconfig.obj
+	@echo ... src/smartpackageconfig.i
+	@echo ... src/smartpackageconfig.s
+	@echo ... src/smartpackagedialog.obj
+	@echo ... src/smartpackagedialog.i
+	@echo ... src/smartpackagedialog.s
 	@echo ... src/uilayoutwindow.obj
 	@echo ... src/uilayoutwindow.i
 	@echo ... src/uilayoutwindow.s

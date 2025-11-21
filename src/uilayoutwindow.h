@@ -100,16 +100,24 @@ private:
 };
 
 // UILayoutWindow 类，用于管理布局编辑界面
+class ProductConfigManager;
+
 class UILayoutWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit UILayoutWindow(QWidget *parent = nullptr);
+    explicit UILayoutWindow(QWidget *parent = nullptr, bool isNewProduct = false, const QString &productFilePath = QString(), ProductConfigManager *configManager = nullptr);
     ~UILayoutWindow() override;
 
     // 获取当前布局项
     QList<LayoutItem*> getLayoutItems() const;
+    
+    // 从指定文件路径加载布局
+    bool loadLayout(const QString &filePath);
+    
+    // 获取当前UI文件路径
+    QString getCurrentLayoutPath() const;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -161,6 +169,7 @@ private slots:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::UILayoutWindow *ui;
@@ -174,6 +183,8 @@ private:
     QLineEdit *m_tabTitleEdit;
     QString m_currentLayoutPath; // 当前布局文件路径
     bool m_isModified; // 布局是否有修改
+    QString m_productFilePath; // 关联的产品配置文件路径
+    ProductConfigManager *m_configManager; // 产品配置管理器
 
     // 初始化自定义控件列表
     void initWidgetLibrary();
