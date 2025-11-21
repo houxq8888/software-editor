@@ -2,6 +2,8 @@
 
 Product::Product()
 {
+    // Generate a unique ID for new products
+    m_uniqueId = generateUniqueId();
 }
 
 QString Product::name() const { return m_name; }
@@ -28,6 +30,19 @@ void Product::setDeveloper(const QString &developer) { m_developer = developer; 
 QString Product::website() const { return m_website; }
 void Product::setWebsite(const QString &website) { m_website = website; }
 
+// Unique identifier management
+QString Product::uniqueId() const { return m_uniqueId; }
+void Product::setUniqueId(const QString &uniqueId) { m_uniqueId = uniqueId; }
+QString Product::generateUniqueId() {
+    return QUuid::createUuid().toString(QUuid::WithoutBraces);
+}
+
+// UI layout file management
+QString Product::uiLayoutPath() const { return m_uiLayoutPath; }
+void Product::setUiLayoutPath(const QString &uiLayoutPath) { 
+    // m_uiLayoutPath = uiLayoutPath; 
+}
+
 QList<ProductFeature> Product::features() const { return m_features; }
 void Product::setFeatures(const QList<ProductFeature> &features) { m_features = features; }
 
@@ -51,6 +66,8 @@ QJsonObject Product::toJson() const {
     json["category"] = m_category;
     json["developer"] = m_developer;
     json["website"] = m_website;
+    json["uniqueId"] = m_uniqueId;
+    json["uiLayoutPath"] = m_uiLayoutPath;
 
     QJsonArray featuresArray;
     for (const auto &feature : m_features) {
@@ -76,6 +93,13 @@ bool Product::fromJson(const QJsonObject &json) {
     m_category = json.value("category").toString();
     m_developer = json.value("developer").toString();
     m_website = json.value("website").toString();
+    m_uniqueId = json.value("uniqueId").toString();
+    m_uiLayoutPath = json.value("uiLayoutPath").toString();
+    
+    // If uniqueId is empty, generate a new one
+    if (m_uniqueId.isEmpty()) {
+        m_uniqueId = generateUniqueId();
+    }
 
     m_features.clear();
     if (json.contains("features") && json["features"].isArray()) {

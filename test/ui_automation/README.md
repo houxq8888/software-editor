@@ -3,7 +3,7 @@
 这是一个使用Python和pyautogui库编写的UI自动化测试框架，用于黑盒测试UI交互逻辑问题。
 
 ## 目录结构
-```
+```Tab
 ui_automation/
 ├── config.py          # 配置文件
 ├── utils.py           # 工具模块
@@ -96,7 +96,7 @@ def test_ok_button_click():
     
     # 拍摄截图
     take_screenshot("ok_button_click")
-    
+TabTab
     # 验证操作结果
     # ...
 ```

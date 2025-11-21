@@ -13,8 +13,14 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/virtualMachine/github/software-editor/src/editareawidget.cpp" "CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/main.cpp" "CMakeFiles/software-editor.dir/src/main.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/main.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/mainwindow.cpp" "CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/packageconfig.cpp" "CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/packagedialog.cpp" "CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/packagemanager.cpp" "CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/previewwindow.cpp" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/product.cpp" "CMakeFiles/software-editor.dir/src/product.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/product.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp" "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp" "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp" "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/uilayoutwindow.cpp" "CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj.d"
   )
 

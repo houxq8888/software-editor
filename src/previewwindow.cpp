@@ -22,12 +22,28 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QProgressBar>
+#include <QScreen>
+#include <QGuiApplication>
 
 PreviewWindow::PreviewWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PreviewWindow)
 {
     ui->setupUi(this);
+
+    // 限制窗口大小不超过屏幕分辨率
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->availableGeometry();
+    int maxWidth = screenGeometry.width() - 100; // 留出边距
+    int maxHeight = screenGeometry.height() - 100;
+    
+    // 设置窗口最大尺寸
+    setMaximumSize(maxWidth, maxHeight);
+    
+    // 如果当前尺寸超过屏幕，则调整到合适大小
+    if (width() > maxWidth || height() > maxHeight) {
+        resize(qMin(width(), maxWidth), qMin(height(), maxHeight));
+    }
 
     // 设置主窗口属性
     setWindowTitle("UI布局预览");

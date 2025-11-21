@@ -18,6 +18,8 @@ add_executable(software-editor
     src/mainwindow.ui
     src/product.cpp
     src/product.h
+    src/productconfigmanager.cpp
+    src/productconfigmanager.h
     src/uilayoutwindow.cpp
     src/uilayoutwindow.h
     src/uilayoutwindow.ui
@@ -28,6 +30,16 @@ add_executable(software-editor
     src/editareawidget.h
     src/customtreewidget.cpp
     src/customtreewidget.h
+    src/packagedialog.cpp
+    src/packagedialog.h
+    src/packageconfig.cpp
+    src/packageconfig.h
+    src/packagemanager.cpp
+    src/packagemanager.h
+    src/smartpackagedialog.cpp
+    src/smartpackagedialog.h
+    src/smartpackageconfig.cpp
+    src/smartpackageconfig.h
 )
 
 target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets)

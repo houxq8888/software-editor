@@ -1,6 +1,7 @@
 #include "uilayoutwindow.h"
 #include "ui_uilayoutwindow.h"
 #include "customtreewidget.h"
+#include "productconfigmanager.h"
 #include <QDockWidget>
 #include <QInputDialog>
 #include <QRegularExpression>
@@ -22,6 +23,10 @@
 #include <QDir>
 #include <QDebug>
 #include <QListWidgetItem>
+#include <QMessageBox>
+#include <QCloseEvent>
+#include <QScreen>
+#include <QGuiApplication>
 
 
 
@@ -238,10 +243,29 @@ QObject *LayoutItem::createWidget(QWidget *parent) const {
 }
 
 
-UILayoutWindow::UILayoutWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::UILayoutWindow), m_previewWindow(nullptr), m_editAreaWidget(nullptr), m_editingTabWidget(nullptr), m_tabTitleEdit(nullptr), m_currentLayoutPath(""), m_isModified(false)
+UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString &productFilePath, ProductConfigManager *configManager)
+    : QMainWindow(parent), ui(new Ui::UILayoutWindow), m_previewWindow(nullptr), m_editAreaWidget(nullptr), m_editingTabWidget(nullptr), m_tabTitleEdit(nullptr), m_currentLayoutPath(""), m_isModified(false), m_productFilePath(productFilePath), m_configManager(configManager)
 {
     ui->setupUi(this);
+    
+    // 限制窗口大小不超过屏幕分辨率
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->availableGeometry();
+    int maxWidth = screenGeometry.width() - 100; // 留出边距
+    int maxHeight = screenGeometry.height() - 100;
+    
+    // 设置窗口最大尺寸
+    setMaximumSize(maxWidth, maxHeight);
+    
+    // 如果当前尺寸超过屏幕，则调整到合适大小
+    if (width() > maxWidth || height() > maxHeight) {
+        resize(qMin(width(), maxWidth), qMin(height(), maxHeight));
+    }
+    
+    // 如果是新建产品，设置窗口标题为新建布局
+    if (isNewProduct) {
+        setWindowTitle("UI布局编辑器 - 新建布局");
+    }
 
     // 初始化splitter
     QList<int> sizes;
@@ -440,7 +464,7 @@ void UILayoutWindow::onPropertyItemChanged(QTreeWidgetItem *item, int column)
         }
     } else if (propertyName == "geometry") {
         // 解析geometry字符串: "x:100, y:200, width:300, height:400"
-        QRegularExpression rx("x:(\d+), y:(\d+), width:(\d+), height:(\d+)");
+        QRegularExpression rx("x:(\\d+), y:(\\d+), width:(\\d+), height:(\\d+)");
         QRegularExpressionMatch match = rx.match(propertyValue);
         if (match.hasMatch()) {
             int x = match.captured(1).toInt();
@@ -913,6 +937,139 @@ QList<LayoutItem*> UILayoutWindow::getLayoutItems() const
     return m_layoutItems;
 }
 
+bool UILayoutWindow::loadLayout(const QString &filePath)
+{
+    if (filePath.isEmpty()) {
+        return false;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+
+    QDomDocument doc;
+    if (!doc.setContent(&file)) {
+        file.close();
+        return false;
+    }
+    file.close();
+
+    // 保存当前状态
+    saveLayoutState();
+
+    // 清除现有项
+    for (QWidget *widget : m_widgetItemMap.keys()) {
+        delete widget;
+    }
+    m_layoutItems.clear();
+    m_widgetItemMap.clear();
+    
+    // 如果没有控件，重置选中的控件并隐藏控制点
+    if (m_layoutItems.isEmpty()) {
+        m_selectedWidget = nullptr;
+        m_editAreaWidget->setHandles(QList<QRect>());
+    }
+
+    // 加载新项
+    QDomElement root = doc.documentElement();
+    QDomElement widget = root.firstChildElement("widget");
+    QDomNodeList items = widget.childNodes();
+
+    qDebug() << "Loading layout items... Total items:" << items.size();
+
+    for (int i = 0; i < items.size(); ++i) {
+        QDomNode itemNode = items.at(i);
+        if (!itemNode.isElement()) {
+            qDebug() << "Item" << i << "is not an element, skipping...";
+            continue;
+        }
+
+        QDomElement widgetElem = itemNode.toElement();
+        if (widgetElem.isNull()) {
+            qDebug() << "Item" << i << "is null, skipping...";
+            continue;
+        }
+
+        QString widgetType = widgetElem.attribute("class");
+        QDomNodeList properties = widgetElem.childNodes();
+        QString text;
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        int tabIndex = 0;
+
+        for (int j = 0; j < properties.size(); ++j) {
+            QDomNode propNode = properties.at(j);
+            if (!propNode.isElement()) {
+                continue;
+            }
+
+            QDomElement propElem = propNode.toElement();
+            QString propName = propElem.attribute("name");
+
+            if (propName == "geometry") {
+                QDomElement rectElem = propElem.firstChildElement("rect");
+                if (!rectElem.isNull()) {
+                    x = rectElem.firstChildElement("x").text().toInt();
+                    y = rectElem.firstChildElement("y").text().toInt();
+                    width = rectElem.firstChildElement("width").text().toInt();
+                    height = rectElem.firstChildElement("height").text().toInt();
+                }
+            } else if (propName == "text") {
+                text = propElem.firstChildElement("string").text();
+            }
+        }
+
+        qDebug() << "Loading widget" << i << ":" << widgetType << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
+
+        // 创建 LayoutItem
+        LayoutItem *item = new LayoutItem(widgetType, text);
+        item->setPos(QPoint(x, y));
+        item->setSize(QSize(width, height));
+        item->setTabIndex(tabIndex);
+
+        // 确定控件的目标父窗口
+        QWidget *targetWidget = m_editAreaWidget;
+        if (tabIndex >= 0) {
+            // 找到TabWidget并添加到相应的Tab页
+            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+                QWidget *w = it.key();
+                if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
+                    // 确保Tab页存在
+                    while (tabWidget->count() <= tabIndex) {
+                        tabWidget->addTab(new QWidget(), QString("Tab页 %1").arg(tabWidget->count() + 1));
+                    }
+                    targetWidget = tabWidget->widget(tabIndex);
+                    break;
+                }
+            }
+        }
+
+        // 将控件添加到编辑区
+        addWidgetToEditArea(item, targetWidget);
+        qDebug() << "Widget" << i << "added to edit area";
+    }
+    qDebug() << "Layout loading completed. Total widgets loaded:" << m_widgetItemMap.size();
+    
+    // 设置当前布局路径并更新窗口标题
+    m_currentLayoutPath = filePath;
+    setWindowTitle(QString("UI布局编辑器 - %1").arg(QFileInfo(m_currentLayoutPath).fileName()));
+    
+    // 加载布局后重置修改状态
+    m_isModified = false;
+    
+    qDebug() << "Layout loaded from" << filePath;
+    
+    return true;
+}
+
+QString UILayoutWindow::getCurrentLayoutPath() const
+{
+    return m_currentLayoutPath;
+}
+
 void UILayoutWindow::on_actionSave_Layout_triggered()
 {
     QString filePath;
@@ -1028,6 +1185,12 @@ void UILayoutWindow::saveLayoutState()
     
     // 更新修改状态
     m_isModified = true;
+    
+    // 通知ProductConfigManager UI布局已修改
+    if (m_configManager) {
+        m_configManager->setUiLayoutModified(true);
+        qDebug() << "UILayoutWindow: UI布局修改，通知ProductConfigManager设置UI布局修改状态";
+    }
 
     // 清空重做栈
     m_redoStack.clear();
@@ -1135,124 +1298,14 @@ void UILayoutWindow::on_actionRedo_triggered()
 
 void UILayoutWindow::on_actionLoad_Layout_triggered()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "加载", "", "UI文件 (*.ui)");
+    QString filePath = QFileDialog::getOpenFileName(this, "加载UI布局", "", "UI文件 (*.ui)");
     if (filePath.isEmpty()) {
         return;
     }
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return;
+    if (!loadLayout(filePath)) {
+        QMessageBox::critical(this, "错误", "无法加载布局文件: " + filePath);
     }
-
-    QDomDocument doc;
-    if (!doc.setContent(&file)) {
-        file.close();
-        return;
-    }
-    file.close();
-
-    // 保存当前状态
-    saveLayoutState();
-
-    // 清除现有项
-    for (QWidget *widget : m_widgetItemMap.keys()) {
-        delete widget;
-    }
-    m_layoutItems.clear();
-    m_widgetItemMap.clear();
-    
-    // 如果没有控件，重置选中的控件并隐藏控制点
-    if (m_layoutItems.isEmpty()) {
-        m_selectedWidget = nullptr;
-        m_editAreaWidget->setHandles(QList<QRect>());
-    }
-
-    // 加载新项
-    QDomElement root = doc.documentElement();
-    QDomElement widget = root.firstChildElement("widget");
-    QDomNodeList items = widget.childNodes();
-
-    qDebug() << "Loading layout items... Total items:" << items.size();
-
-    for (int i = 0; i < items.size(); ++i) {
-        QDomNode itemNode = items.at(i);
-        if (!itemNode.isElement()) {
-            qDebug() << "Item" << i << "is not an element, skipping...";
-            continue;
-        }
-
-        QDomElement widgetElem = itemNode.toElement();
-        if (widgetElem.isNull()) {
-            qDebug() << "Item" << i << "is null, skipping...";
-            continue;
-        }
-
-        QString widgetType = widgetElem.attribute("class");
-        QDomNodeList properties = widgetElem.childNodes();
-        QString text;
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
-        int tabIndex = 0;
-
-        for (int j = 0; j < properties.size(); ++j) {
-            QDomNode propNode = properties.at(j);
-            if (!propNode.isElement()) {
-                continue;
-            }
-
-            QDomElement propElem = propNode.toElement();
-            QString propName = propElem.attribute("name");
-
-            if (propName == "geometry") {
-                QDomElement rectElem = propElem.firstChildElement("rect");
-                if (!rectElem.isNull()) {
-                    x = rectElem.firstChildElement("x").text().toInt();
-                    y = rectElem.firstChildElement("y").text().toInt();
-                    width = rectElem.firstChildElement("width").text().toInt();
-                    height = rectElem.firstChildElement("height").text().toInt();
-                }
-            } else if (propName == "text") {
-                text = propElem.firstChildElement("string").text();
-            }
-        }
-
-        qDebug() << "Loading widget" << i << ":" << widgetType << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
-
-        // 创建 LayoutItem
-        LayoutItem *item = new LayoutItem(widgetType, text);
-        item->setPos(QPoint(x, y));
-        item->setSize(QSize(width, height));
-        item->setTabIndex(tabIndex);
-
-        // 确定控件的目标父窗口
-        QWidget *targetWidget = m_editAreaWidget;
-        if (tabIndex >= 0) {
-            // 找到TabWidget并添加到相应的Tab页
-            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
-                QWidget *w = it.key();
-                if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
-                    // 确保Tab页存在
-                    while (tabWidget->count() <= tabIndex) {
-                        tabWidget->addTab(new QWidget(), QString("Tab页 %1").arg(tabWidget->count() + 1));
-                    }
-                    targetWidget = tabWidget->widget(tabIndex);
-                    break;
-                }
-            }
-        }
-
-        // 将控件添加到编辑区
-        addWidgetToEditArea(item, targetWidget);
-        qDebug() << "Widget" << i << "added to edit area";
-    }
-    qDebug() << "Layout loading completed. Total widgets loaded:" << m_widgetItemMap.size();
-    // 设置当前布局路径并更新窗口标题
-    m_currentLayoutPath = filePath;
-    setWindowTitle(QString("UI布局编辑器 - %1").arg(QFileInfo(m_currentLayoutPath).fileName()));
-    qDebug() << "Layout loaded from" << filePath;
 }
 
 
@@ -1351,9 +1404,10 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
                 QString currentText = tabWidget->tabText(tabIndex);
                 QString newText = QInputDialog::getText(this, tr("编辑Tab页标题"), tr("输入新的标题:"), QLineEdit::Normal, currentText, &ok);
                 if (ok && !newText.isEmpty()) {
-                    tabWidget->setTabText(tabIndex, newText);
-                    m_isModified = true;
-                }
+            tabWidget->setTabText(tabIndex, newText);
+            m_isModified = true;
+            qDebug() << "UILayoutWindow: Tab页标题修改，设置m_isModified = true";
+        }
             }
         }
         return;
@@ -2080,6 +2134,8 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
             if (item) {
                 item->setText(text);
             }
+            
+            qDebug() << "UILayoutWindow: QLabel文本修改，设置m_isModified = true";
         }
         return;
     }
@@ -2107,6 +2163,8 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
                     if (item) {
                         item->setText(text);
                     }
+                    
+                    qDebug() << "UILayoutWindow: Tab页标题修改，设置m_isModified = true";
                 }
             }
         }
@@ -2220,4 +2278,72 @@ void UILayoutWindow::onEditAreaDoubleClicked(const QPoint &pos) {
 // 处理控制点释放
 void UILayoutWindow::onHandleReleased() {
     // 可以在这里添加释放后的处理逻辑
+}
+
+// 处理窗口关闭事件
+void UILayoutWindow::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "UILayoutWindow::closeEvent - m_isModified:" << m_isModified;
+    
+    // 检查是否有未保存的修改
+    if (m_isModified) {
+        QMessageBox::StandardButton button = QMessageBox::question(this, 
+            "保存更改", 
+            "UI布局有未保存的更改。是否保存？",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        
+        if (button == QMessageBox::Save) {
+            // 保存UI布局文件
+            if (m_currentLayoutPath.isEmpty()) {
+                // 如果还没有保存过，弹出另存为对话框
+                QString fileName = QFileDialog::getSaveFileName(this, 
+                    "保存UI布局文件", 
+                    QDir::current().filePath("untitled.ui"), 
+                    "UI Files (*.ui)");
+                
+                if (fileName.isEmpty()) {
+                    // 用户取消了保存，取消关闭
+                    event->ignore();
+                    return;
+                }
+                
+                m_currentLayoutPath = fileName;
+            }
+            
+            // 保存UI布局文件
+            on_actionSave_Layout_triggered();
+            qDebug() << "UI布局文件已自动保存:" << m_currentLayoutPath;
+            
+            // 将UI布局路径写入产品JSON文件
+            if (!m_productFilePath.isEmpty() && !m_currentLayoutPath.isEmpty()) {
+                // 读取产品JSON文件
+                QFile productFile(m_productFilePath);
+                if (productFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                    QJsonDocument jsonDoc = QJsonDocument::fromJson(productFile.readAll());
+                    if (!jsonDoc.isNull()) {
+                        QJsonObject productObj = jsonDoc.object();
+                        // 更新uiLayoutPath字段
+                        productObj["uiLayoutPath"] = m_currentLayoutPath;
+                        
+                        // 写回文件
+                        productFile.resize(0); // 清空文件
+                        productFile.write(QJsonDocument(productObj).toJson(QJsonDocument::Indented));
+                        qDebug() << "UI布局路径已写入产品JSON文件:" << m_currentLayoutPath;
+                    }
+                    productFile.close();
+                }
+            }
+        } else if (button == QMessageBox::Cancel) {
+            // 取消关闭
+            event->ignore();
+            return;
+        }
+    } else {
+        // 只有在有UI布局路径且产品文件路径有效时，才写入路径信息
+        // 但仅在真正有修改时才需要写入，避免只是打开界面就触发保存
+        qDebug() << "UILayoutWindow: 没有修改，不执行保存操作";
+    }
+    
+    // 接受关闭事件
+    event->accept();
 }

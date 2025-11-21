@@ -41,6 +41,8 @@ public:
     QAction *actionExit;
     QAction *actionAbout;
     QAction *actionOpen_UI_Layout_Editor;
+    QAction *actionPackage_Software;
+    QAction *actionSmart_Package_Software;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -88,6 +90,7 @@ public:
     QMenuBar *menuBar;
     QMenu *menu;
     QMenu *menu_3;
+    QMenu *menu_4;
     QMenu *menu_2;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -111,6 +114,10 @@ public:
         actionAbout->setObjectName("actionAbout");
         actionOpen_UI_Layout_Editor = new QAction(MainWindow);
         actionOpen_UI_Layout_Editor->setObjectName("actionOpen_UI_Layout_Editor");
+        actionPackage_Software = new QAction(MainWindow);
+        actionPackage_Software->setObjectName("actionPackage_Software");
+        actionSmart_Package_Software = new QAction(MainWindow);
+        actionSmart_Package_Software->setObjectName("actionSmart_Package_Software");
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName("centralWidget");
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -309,6 +316,8 @@ public:
         menu->setObjectName("menu");
         menu_3 = new QMenu(menuBar);
         menu_3->setObjectName("menu_3");
+        menu_4 = new QMenu(menuBar);
+        menu_4->setObjectName("menu_4");
         menu_2 = new QMenu(menuBar);
         menu_2->setObjectName("menu_2");
         MainWindow->setMenuBar(menuBar);
@@ -321,6 +330,7 @@ public:
 
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_3->menuAction());
+        menuBar->addAction(menu_4->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menu->addAction(actionNew);
         menu->addAction(actionOpen);
@@ -328,6 +338,8 @@ public:
         menu->addAction(actionSave_As);
         menu->addAction(actionExit);
         menu_3->addAction(actionOpen_UI_Layout_Editor);
+        menu_4->addAction(actionPackage_Software);
+        menu_4->addAction(actionSmart_Package_Software);
         menu_2->addAction(actionAbout);
         mainToolBar->addAction(actionNew);
 
@@ -364,6 +376,14 @@ public:
 #if QT_CONFIG(shortcut)
         actionOpen_UI_Layout_Editor->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+L", nullptr));
 #endif // QT_CONFIG(shortcut)
+        actionPackage_Software->setText(QCoreApplication::translate("MainWindow", "\346\211\223\345\214\205\350\275\257\344\273\266", nullptr));
+#if QT_CONFIG(shortcut)
+        actionPackage_Software->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+P", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionSmart_Package_Software->setText(QCoreApplication::translate("MainWindow", "\346\231\272\350\203\275\346\211\223\345\214\205\350\275\257\344\273\266", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSmart_Package_Software->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+P", nullptr));
+#endif // QT_CONFIG(shortcut)
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "\344\272\247\345\223\201\345\237\272\346\234\254\344\277\241\346\201\257", nullptr));
         nameLabel->setText(QCoreApplication::translate("MainWindow", "\344\272\247\345\223\201\345\220\215\347\247\260\357\274\232", nullptr));
         nameLineEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "\350\276\223\345\205\245\344\272\247\345\223\201\345\220\215\347\247\260", nullptr));
@@ -399,6 +419,7 @@ public:
         exportButton->setText(QCoreApplication::translate("MainWindow", "\345\257\274\345\207\272", nullptr));
         menu->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menu_3->setTitle(QCoreApplication::translate("MainWindow", "UI\345\270\203\345\261\200", nullptr));
+        menu_4->setTitle(QCoreApplication::translate("MainWindow", "\346\211\223\345\214\205", nullptr));
         menu_2->setTitle(QCoreApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
     } // retranslateUi
 
