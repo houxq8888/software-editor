@@ -359,4 +359,6 @@ CMakeFiles/software-editor.dir/src/product.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h

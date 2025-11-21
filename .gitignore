@@ -1,0 +1,89 @@
+# Python pytest cache
+.pytest_cache/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Python virtual environments
+venv/
+env/
+.venv/
+
+# Build directories
+build/
+
+# Screenshots directory
+screenshots/
+
+# Test results
+test_results/
+*.testresult
+*.testreport
+
+# Package directories
+*packages/
+
+# Qt build artifacts
+*.pro.user
+*.pro.user.*
+*.autosave
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Qt Creator
+*.creator
+*.files
+*.includes
+*.config
+
+# Debug files
+debug.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

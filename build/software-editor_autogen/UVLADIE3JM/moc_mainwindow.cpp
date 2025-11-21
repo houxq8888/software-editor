@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../src/mainwindow.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -46,7 +47,10 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "on_actionSave_As_triggered",
         "on_actionExit_triggered",
         "on_actionAbout_triggered",
+        "on_actionPackage_Software_triggered",
+        "on_actionSmart_Package_Software_triggered",
         "on_actionOpen_UI_Layout_Editor_triggered",
+        "onUILayoutWindowClosed",
         "on_iconBrowseButton_clicked",
         "on_screenshotBrowseButton_clicked",
         "on_addFeatureButton_clicked",
@@ -56,7 +60,21 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "on_featuresListWidget_itemClicked",
         "QListWidgetItem*",
         "item",
-        "updateFeatureEditors"
+        "updateFeatureEditors",
+        "onPackageProgress",
+        "progress",
+        "message",
+        "onPackageFinished",
+        "success",
+        "onPackageError",
+        "error",
+        "startPackageProcess",
+        "Product",
+        "product",
+        "PackageConfig::PackageSettings",
+        "settings",
+        "startSmartPackageProcess",
+        "SmartPackageConfig::SmartPackageSettings"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -72,26 +90,52 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionAbout_triggered'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_actionOpen_UI_Layout_Editor_triggered'
+        // Slot 'on_actionPackage_Software_triggered'
         QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_iconBrowseButton_clicked'
+        // Slot 'on_actionSmart_Package_Software_triggered'
         QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_screenshotBrowseButton_clicked'
+        // Slot 'on_actionOpen_UI_Layout_Editor_triggered'
         QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_addFeatureButton_clicked'
+        // Slot 'onUILayoutWindowClosed'
         QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_saveButton_clicked'
+        // Slot 'on_iconBrowseButton_clicked'
         QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_loadButton_clicked'
+        // Slot 'on_screenshotBrowseButton_clicked'
         QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_removeFeatureButton_clicked'
+        // Slot 'on_addFeatureButton_clicked'
         QtMocHelpers::SlotData<void()>(14, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_saveButton_clicked'
+        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_loadButton_clicked'
+        QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_removeFeatureButton_clicked'
+        QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_featuresListWidget_itemClicked'
-        QtMocHelpers::SlotData<void(QListWidgetItem *)>(15, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 16, 17 },
+        QtMocHelpers::SlotData<void(QListWidgetItem *)>(18, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 19, 20 },
         }}),
         // Slot 'updateFeatureEditors'
-        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onPackageProgress'
+        QtMocHelpers::SlotData<void(int, const QString &)>(22, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 23 }, { QMetaType::QString, 24 },
+        }}),
+        // Slot 'onPackageFinished'
+        QtMocHelpers::SlotData<void(bool, const QString &)>(25, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Bool, 26 }, { QMetaType::QString, 24 },
+        }}),
+        // Slot 'onPackageError'
+        QtMocHelpers::SlotData<void(const QString &)>(27, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QString, 28 },
+        }}),
+        // Slot 'startPackageProcess'
+        QtMocHelpers::SlotData<void(const Product &, const PackageConfig::PackageSettings &)>(29, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 30, 31 }, { 0x80000000 | 32, 33 },
+        }}),
+        // Slot 'startSmartPackageProcess'
+        QtMocHelpers::SlotData<void(const Product &, const SmartPackageConfig::SmartPackageSettings &)>(34, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 30, 31 }, { 0x80000000 | 35, 33 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -121,15 +165,23 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->on_actionSave_As_triggered(); break;
         case 4: _t->on_actionExit_triggered(); break;
         case 5: _t->on_actionAbout_triggered(); break;
-        case 6: _t->on_actionOpen_UI_Layout_Editor_triggered(); break;
-        case 7: _t->on_iconBrowseButton_clicked(); break;
-        case 8: _t->on_screenshotBrowseButton_clicked(); break;
-        case 9: _t->on_addFeatureButton_clicked(); break;
-        case 10: _t->on_saveButton_clicked(); break;
-        case 11: _t->on_loadButton_clicked(); break;
-        case 12: _t->on_removeFeatureButton_clicked(); break;
-        case 13: _t->on_featuresListWidget_itemClicked((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
-        case 14: _t->updateFeatureEditors(); break;
+        case 6: _t->on_actionPackage_Software_triggered(); break;
+        case 7: _t->on_actionSmart_Package_Software_triggered(); break;
+        case 8: _t->on_actionOpen_UI_Layout_Editor_triggered(); break;
+        case 9: _t->onUILayoutWindowClosed(); break;
+        case 10: _t->on_iconBrowseButton_clicked(); break;
+        case 11: _t->on_screenshotBrowseButton_clicked(); break;
+        case 12: _t->on_addFeatureButton_clicked(); break;
+        case 13: _t->on_saveButton_clicked(); break;
+        case 14: _t->on_loadButton_clicked(); break;
+        case 15: _t->on_removeFeatureButton_clicked(); break;
+        case 16: _t->on_featuresListWidget_itemClicked((*reinterpret_cast< std::add_pointer_t<QListWidgetItem*>>(_a[1]))); break;
+        case 17: _t->updateFeatureEditors(); break;
+        case 18: _t->onPackageProgress((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 19: _t->onPackageFinished((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 20: _t->onPackageError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 21: _t->startPackageProcess((*reinterpret_cast< std::add_pointer_t<Product>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<PackageConfig::PackageSettings>>(_a[2]))); break;
+        case 22: _t->startSmartPackageProcess((*reinterpret_cast< std::add_pointer_t<Product>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<SmartPackageConfig::SmartPackageSettings>>(_a[2]))); break;
         default: ;
         }
     }
@@ -154,14 +206,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 23;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 23)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 15;
+        _id -= 23;
     }
     return _id;
 }

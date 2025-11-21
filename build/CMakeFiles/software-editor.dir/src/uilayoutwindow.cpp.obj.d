@@ -601,6 +601,25 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
  D:/virtualMachine/github/software-editor/src/customtreewidget.h \
  D:/virtualMachine/github/software-editor/src/uilayoutwindow.h \
+ D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
+ D:\virtualMachine\github\software-editor\src\product.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonvalue.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcborvalue.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcborcommon.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDockWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdockwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
@@ -655,16 +674,6 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfileinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonvalue.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcborvalue.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcborcommon.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QPluginLoader \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qpluginloader.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qlibrary.h \
@@ -675,4 +684,12 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDir \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QCloseEvent \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QScreen \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QGuiApplication \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h

@@ -595,4 +595,8 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDockWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdockwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbar.h
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QScreen \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QGuiApplication \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h
