@@ -59,10 +59,27 @@ template <> constexpr inline auto UILayoutWindow::qt_create_metaobjectdata<qt_me
         "delta",
         "onHandleReleased",
         "onEditAreaDoubleClicked",
+        "onBindFeatureButtonClicked",
+        "onUnbindFeatureButtonClicked",
+        "onSyncFeaturesButtonClicked",
+        "onFeaturesTreeWidgetItemDoubleClicked",
+        "updateStatusBarWithProductContext",
+        "suggestLayoutForFeatures",
+        "highlightRelevantWidgets",
+        "featureName",
+        "showFeatureContextMenu",
+        "onActionSuggestLayoutTriggered",
+        "onActionEventActionEditorTriggered",
         "updatePropertiesEditor",
         "QWidget*",
         "widget",
-        "onPropertyItemChanged"
+        "onPropertyItemChanged",
+        "onInterfaceComboBoxChanged",
+        "index",
+        "onAddInterfaceAction",
+        "onDeleteInterfaceAction",
+        "onRenameInterfaceAction",
+        "onCopyInterfaceAction"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -98,14 +115,52 @@ template <> constexpr inline auto UILayoutWindow::qt_create_metaobjectdata<qt_me
         QtMocHelpers::SlotData<void(const QPoint &)>(19, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::QPoint, 14 },
         }}),
-        // Slot 'updatePropertiesEditor'
-        QtMocHelpers::SlotData<void(QWidget *)>(20, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 21, 22 },
-        }}),
-        // Slot 'onPropertyItemChanged'
+        // Slot 'onBindFeatureButtonClicked'
+        QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onUnbindFeatureButtonClicked'
+        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onSyncFeaturesButtonClicked'
+        QtMocHelpers::SlotData<void()>(22, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onFeaturesTreeWidgetItemDoubleClicked'
         QtMocHelpers::SlotData<void(QTreeWidgetItem *, int)>(23, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 8, 9 }, { QMetaType::Int, 10 },
         }}),
+        // Slot 'updateStatusBarWithProductContext'
+        QtMocHelpers::SlotData<void()>(24, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'suggestLayoutForFeatures'
+        QtMocHelpers::SlotData<void()>(25, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'highlightRelevantWidgets'
+        QtMocHelpers::SlotData<void(const QString &)>(26, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QString, 27 },
+        }}),
+        // Slot 'showFeatureContextMenu'
+        QtMocHelpers::SlotData<void(const QPoint &)>(28, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QPoint, 14 },
+        }}),
+        // Slot 'onActionSuggestLayoutTriggered'
+        QtMocHelpers::SlotData<void()>(29, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onActionEventActionEditorTriggered'
+        QtMocHelpers::SlotData<void()>(30, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'updatePropertiesEditor'
+        QtMocHelpers::SlotData<void(QWidget *)>(31, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 32, 33 },
+        }}),
+        // Slot 'onPropertyItemChanged'
+        QtMocHelpers::SlotData<void(QTreeWidgetItem *, int)>(34, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 8, 9 }, { QMetaType::Int, 10 },
+        }}),
+        // Slot 'onInterfaceComboBoxChanged'
+        QtMocHelpers::SlotData<void(int)>(35, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 36 },
+        }}),
+        // Slot 'onAddInterfaceAction'
+        QtMocHelpers::SlotData<void()>(37, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onDeleteInterfaceAction'
+        QtMocHelpers::SlotData<void()>(38, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onRenameInterfaceAction'
+        QtMocHelpers::SlotData<void()>(39, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onCopyInterfaceAction'
+        QtMocHelpers::SlotData<void()>(40, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -141,15 +196,30 @@ void UILayoutWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 9: _t->onHandleDragged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[2]))); break;
         case 10: _t->onHandleReleased(); break;
         case 11: _t->onEditAreaDoubleClicked((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
-        case 12: _t->updatePropertiesEditor((*reinterpret_cast< std::add_pointer_t<QWidget*>>(_a[1]))); break;
-        case 13: _t->onPropertyItemChanged((*reinterpret_cast< std::add_pointer_t<QTreeWidgetItem*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 12: _t->onBindFeatureButtonClicked(); break;
+        case 13: _t->onUnbindFeatureButtonClicked(); break;
+        case 14: _t->onSyncFeaturesButtonClicked(); break;
+        case 15: _t->onFeaturesTreeWidgetItemDoubleClicked((*reinterpret_cast< std::add_pointer_t<QTreeWidgetItem*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 16: _t->updateStatusBarWithProductContext(); break;
+        case 17: _t->suggestLayoutForFeatures(); break;
+        case 18: _t->highlightRelevantWidgets((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 19: _t->showFeatureContextMenu((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
+        case 20: _t->onActionSuggestLayoutTriggered(); break;
+        case 21: _t->onActionEventActionEditorTriggered(); break;
+        case 22: _t->updatePropertiesEditor((*reinterpret_cast< std::add_pointer_t<QWidget*>>(_a[1]))); break;
+        case 23: _t->onPropertyItemChanged((*reinterpret_cast< std::add_pointer_t<QTreeWidgetItem*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 24: _t->onInterfaceComboBoxChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 25: _t->onAddInterfaceAction(); break;
+        case 26: _t->onDeleteInterfaceAction(); break;
+        case 27: _t->onRenameInterfaceAction(); break;
+        case 28: _t->onCopyInterfaceAction(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 12:
+        case 22:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -179,14 +249,14 @@ int UILayoutWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 29)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 29;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 29)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 29;
     }
     return _id;
 }

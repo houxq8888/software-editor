@@ -40,6 +40,15 @@ add_executable(software-editor
     src/smartpackagedialog.h
     src/smartpackageconfig.cpp
     src/smartpackageconfig.h
+    src/eventactioneditor.cpp
+    src/eventactioneditor.h
+    src/eventactionmodel.cpp
+    src/eventactionmodel.h
+    src/uiinterfacemanager.cpp
+    src/uiinterfacemanager.h
+    src/uiinterface.cpp
+    src/uiinterface.h
+    src/layoutitem.h
 )
 
 target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets)

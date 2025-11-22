@@ -48,56 +48,23 @@
 #include <QDomNodeList>
 #include <QOpenGLWidget>
 #include <QFrame>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QStringList>
+#include <algorithm>
 #include "editareawidget.h"
 #include "previewwindow.h"
 #include "customtreewidget.h"
+#include "product.h"
+#include "eventactioneditor.h"
+#include "uiinterfacemanager.h"
+#include "layoutitem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class UILayoutWindow;
 }
 QT_END_NAMESPACE
-
-
-
-// 用于表示布局控件的结构
-class LayoutItem {
-public:
-    explicit LayoutItem(const QString &widgetType, const QString &displayName = "");
-    ~LayoutItem() = default;
-    QString widgetType() const;
-    QString displayName() const;
-    QString text() const;
-    void setText(const QString &text);
-    QPoint pos() const;
-    void setPos(const QPoint &pos);
-    QSize size() const;
-    void setSize(const QSize &size);
-    int zIndex() const;
-    void setZIndex(int zIndex);
-    QObject *createWidget(QWidget *parent) const;
-    
-    // 设置和获取控件所属的Tab页索引
-    void setTabIndex(int index);
-    int tabIndex() const;
-    
-    // DockWidget相关属性
-    Qt::DockWidgetArea dockArea() const;
-    void setDockArea(Qt::DockWidgetArea area);
-    bool isFloating() const;
-    void setFloating(bool floating);
-
-private:
-    QString m_widgetType;
-    QString m_displayName;
-    QString m_text;
-    QPoint m_pos;
-    QSize m_size;
-    int m_zIndex;
-    int m_tabIndex; // 控件所属的Tab页索引，-1表示不在任何Tab页中
-    Qt::DockWidgetArea m_dockArea; // DockWidget的停靠区域
-    bool m_floating; // DockWidget是否浮动
-};
 
 // UILayoutWindow 类，用于管理布局编辑界面
 class ProductConfigManager;
@@ -162,10 +129,30 @@ private slots:
     void onHandleDragged(int handleIndex, const QPoint &delta);
     void onHandleReleased();
     void onEditAreaDoubleClicked(const QPoint &pos);
+    void onBindFeatureButtonClicked();
+    void onUnbindFeatureButtonClicked();
+    void onSyncFeaturesButtonClicked();
+    void onFeaturesTreeWidgetItemDoubleClicked(QTreeWidgetItem *item, int column);
+    // 产品上下文感知相关方法
+    void updateStatusBarWithProductContext();
+    void suggestLayoutForFeatures();
+    void highlightRelevantWidgets(const QString &featureName);
+    void showFeatureContextMenu(const QPoint &pos);
+    
+private slots:
+    void onActionSuggestLayoutTriggered();
+    // 事件-动作编辑器相关
+    void onActionEventActionEditorTriggered();
     // 更新属性编辑器
     void updatePropertiesEditor(QWidget *widget);
     // 属性项编辑完成
     void onPropertyItemChanged(QTreeWidgetItem *item, int column);
+    // 多界面管理相关槽函数
+    void onInterfaceComboBoxChanged(int index);
+    void onAddInterfaceAction();
+    void onDeleteInterfaceAction();
+    void onRenameInterfaceAction();
+    void onCopyInterfaceAction();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -178,6 +165,14 @@ private:
     QList<LayoutItem*> m_layoutItems; // 存储所有布局项
     QMap<QWidget*, LayoutItem*> m_widgetItemMap; // 控件到LayoutItem的映射
     PreviewWindow *m_previewWindow; // 预览窗口
+    UIInterfaceManager *m_interfaceManager; // 多界面管理器
+    
+    // 多界面管理相关方法
+    void setupInterfaceManagementUI();
+    void updateInterfaceList();
+    void switchToInterface(UIInterface *interface);
+    void saveCurrentInterfaceState();
+    void loadInterfaceState(UIInterface *interface);
     // Tab页标题编辑相关
     QTabWidget *m_editingTabWidget;
     QLineEdit *m_tabTitleEdit;
@@ -185,6 +180,11 @@ private:
     bool m_isModified; // 布局是否有修改
     QString m_productFilePath; // 关联的产品配置文件路径
     ProductConfigManager *m_configManager; // 产品配置管理器
+    QTabWidget *rightTabWidget;
+    QTreeWidget *featuresTreeWidget;
+    QPushButton *bindFeatureButton;
+    QPushButton *unbindFeatureButton;
+    QPushButton *syncFeaturesButton;
 
     // 初始化自定义控件列表
     void initWidgetLibrary();
@@ -198,12 +198,53 @@ private:
     
     // 撤销/重做功能相关
     void saveLayoutState(); // 保存当前布局状态
+    
+    // 产品配置集成功能
+    void updateProductContext(); // 更新产品上下文
+    void syncWithProductFeatures(); // 与产品功能特性同步
+    void applyLayoutTemplate(const QString &templateName); // 应用布局模板
+    
+    // 控件ID管理
+    QString generateWidgetId(const QString &widgetType) const;
+    void updateWidgetBindings(); // 更新控件绑定
     bool restoreLayoutState(QList<QByteArray> &stack); // 恢复布局状态
+    
+    // 智能布局建议相关方法
+    void suggestSimpleColumnLayout(); // 建议简单单列布局
+    void suggestTwoColumnLayout(); // 建议两列布局
+    void suggestTabbedLayout(); // 建议Tab页布局
+    QWidget* createWidgetForFeature(const ProductFeature &feature, const QString &widgetType); // 为功能特性创建控件
+    
+    // 智能模板管理相关方法
+    void saveCurrentLayoutAsTemplate(const QString &templateName); // 保存当前布局为模板
+    void showTemplateSelectionDialog(); // 显示模板选择对话框
+    void applySmartTemplate(); // 应用智能模板
+    
+    // 智能模板管理辅助方法
+    QString selectBestTemplateForFeatures(const QList<ProductFeature> &features);
+    double calculateTemplateMatchScore(const QString &templateName, int featureCount, int inputCount, int displayCount, int actionCount);
+    
+    // 辅助方法：根据功能特性建议控件类型
+    QString suggestWidgetTypeForFeature(const ProductFeature &feature);
+    
+    // 辅助方法：根据控件ID查找控件
+    QWidget* findWidgetById(const QString &widgetId);
+    
+    // 更新功能特性树控件
+    void updateFeaturesTreeWidget();
+    
+    // 清空布局
+    void clearLayout();
+    // 清空编辑区
+    void clearEditArea();
     
     // 操作历史记录
     QList<QByteArray> m_undoStack;
     QList<QByteArray> m_redoStack;
     int m_maxUndoSteps = 50; // 最大撤销步数
+    
+    // 事件-动作编辑器相关
+    EventActionEditor *m_eventActionEditor; // 事件-动作编辑器窗口
 };
 
 #endif // UILAYOUTWINDOW_H

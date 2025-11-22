@@ -559,6 +559,15 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
  D:\virtualMachine\github\software-editor\src\editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
@@ -573,41 +582,9 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
- D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_uilayoutwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHBoxLayout \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHeaderView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qheaderview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenubar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStatusBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstatusbar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
- D:/virtualMachine/github/software-editor/src/customtreewidget.h \
- D:/virtualMachine/github/software-editor/src/uilayoutwindow.h \
- D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:\virtualMachine\github\software-editor\src\product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
- D:\virtualMachine\github\software-editor\src\product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonvalue.h \
@@ -620,12 +597,61 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
+ D:\virtualMachine\github\software-editor\src\eventactioneditor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
+ D:\virtualMachine\github\software-editor\src\eventactionmodel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
+ D:\virtualMachine\github\software-editor\src\uiinterfacemanager.h \
+ D:\virtualMachine\github\software-editor\src\uiinterface.h \
+ D:\virtualMachine\github\software-editor\src\layoutitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
+ D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_uilayoutwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHBoxLayout \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHeaderView \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qheaderview.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenubar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSplitter \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsplitter.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStatusBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstatusbar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
+ D:/virtualMachine/github/software-editor/src/customtreewidget.h \
+ D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDockWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdockwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRegularExpression \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qregularexpression.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTableWidget \
@@ -685,9 +711,6 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidgetItem \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QCloseEvent \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QScreen \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
