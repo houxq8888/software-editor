@@ -248,6 +248,9 @@ UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString
 {
     ui->setupUi(this);
     
+    // 初始化多界面管理器
+    m_interfaceManager = new UIInterfaceManager(this);
+    
     // 限制窗口大小不超过屏幕分辨率
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->availableGeometry();
@@ -312,10 +315,22 @@ UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString
     // 连接搜索框信号
     connect(ui->searchLineEdit, &QLineEdit::textChanged, ui->widgetListWidget, &CustomTreeWidget::search);
 
+    // 连接功能特性相关信号槽
+    connect(ui->bindFeatureButton, &QPushButton::clicked, this, &UILayoutWindow::onBindFeatureButtonClicked);
+    connect(ui->unbindFeatureButton, &QPushButton::clicked, this, &UILayoutWindow::onUnbindFeatureButtonClicked);
+    connect(ui->syncFeaturesButton, &QPushButton::clicked, this, &UILayoutWindow::onSyncFeaturesButtonClicked);
+    connect(ui->featuresTreeWidget, &QTreeWidget::itemDoubleClicked, this, &UILayoutWindow::onFeaturesTreeWidgetItemDoubleClicked);
+
     // 加载插件
     loadPlugins();
 
     // UI文件中定义的动作已由moc自动连接，无需手动连接
+    
+    // 手动连接事件-动作编辑器按钮信号
+    connect(ui->actionEventActionEditor, &QAction::triggered, this, &UILayoutWindow::onActionEventActionEditorTriggered);
+    
+    // 设置多界面管理UI
+    setupInterfaceManagementUI();
 }
 
 UILayoutWindow::~UILayoutWindow()
@@ -928,8 +943,10 @@ void UILayoutWindow::on_actionPreview_triggered()
     // 设置布局项
     m_previewWindow->setLayoutItems(m_layoutItems);
     
-    // 显示预览窗口
+    // 显示预览窗口并确保它在最前端且可交互
     m_previewWindow->show();
+    m_previewWindow->raise();
+    m_previewWindow->activateWindow();
 }
 
 QList<LayoutItem*> UILayoutWindow::getLayoutItems() const
@@ -948,12 +965,24 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
         return false;
     }
 
+    QByteArray data = file.readAll();
+    file.close();
+
+    // 尝试解析为多界面JSON格式
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data, &parseError);
+    
+    if (parseError.error == QJsonParseError::NoError) {
+        // 是多界面JSON格式
+        if (!m_interfaceManager) return false;
+        return m_interfaceManager->fromJson(jsonDoc.object());
+    }
+
+    // 否则按原有DOM格式加载单个界面
     QDomDocument doc;
-    if (!doc.setContent(&file)) {
-        file.close();
+    if (!doc.setContent(data)) {
         return false;
     }
-    file.close();
 
     // 保存当前状态
     saveLayoutState();
@@ -1074,7 +1103,7 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
 {
     QString filePath;
     if (m_currentLayoutPath.isEmpty()) {
-        filePath = QFileDialog::getSaveFileName(this, "保存", "", "UI文件 (*.ui)");
+        filePath = QFileDialog::getSaveFileName(this, "保存", "", "UI文件 (*.ui);;多界面文件 (*.json)");
         if (filePath.isEmpty()) {
             return;
         }
@@ -1084,76 +1113,91 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
         filePath = m_currentLayoutPath;
     }
 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("ui");
-    root.setAttribute("version", "4.0");
-    doc.appendChild(root);
+    // 根据文件扩展名选择保存格式
+    if (filePath.endsWith(".json")) {
+        // 保存为多界面JSON格式
+        if (!m_interfaceManager) return;
+        QJsonDocument jsonDoc(m_interfaceManager->toJson());
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << jsonDoc.toJson(QJsonDocument::Indented);
+            file.close();
+            qDebug() << "多界面布局保存到" << filePath;
+            m_isModified = false;
+        }
+    } else {
+        // 保存为传统DOM格式（单个界面）
+        QDomDocument doc;
+        QDomElement root = doc.createElement("ui");
+        root.setAttribute("version", "4.0");
+        doc.appendChild(root);
 
-    QDomElement widget = doc.createElement("widget");
-    widget.setAttribute("class", "QWidget");
-    widget.setAttribute("name", "centralWidget");
-    root.appendChild(widget);
+        QDomElement widget = doc.createElement("widget");
+        widget.setAttribute("class", "QWidget");
+        widget.setAttribute("name", "centralWidget");
+        root.appendChild(widget);
 
-    const QList<LayoutItem*> layoutItems = getLayoutItems();
-    for (int i = 0; i < layoutItems.size(); ++i) {
-        LayoutItem* item = layoutItems[i];
-        QString widgetType = item->widgetType();
-        QString text = item->text();
-        QPoint pos = item->pos();
-        QSize size = item->size();
-        int tabIndex = item->tabIndex();
+        const QList<LayoutItem*> layoutItems = getLayoutItems();
+        for (int i = 0; i < layoutItems.size(); ++i) {
+            LayoutItem* item = layoutItems[i];
+            QString widgetType = item->widgetType();
+            QString text = item->text();
+            QPoint pos = item->pos();
+            QSize size = item->size();
+            int tabIndex = item->tabIndex();
 
-        QDomElement itemWidget = doc.createElement("widget");
-        itemWidget.setAttribute("class", widgetType);
-        itemWidget.setAttribute("name", widgetType.toLower() + QString::number(i));
+            QDomElement itemWidget = doc.createElement("widget");
+            itemWidget.setAttribute("class", widgetType);
+            itemWidget.setAttribute("name", widgetType.toLower() + QString::number(i));
 
-        QDomElement geometry = doc.createElement("property");
-        geometry.setAttribute("name", "geometry");
-        QDomElement rect = doc.createElement("rect");
-        QDomElement x = doc.createElement("x");
-        x.appendChild(doc.createTextNode(QString::number(pos.x())));
-        QDomElement y = doc.createElement("y");
-        y.appendChild(doc.createTextNode(QString::number(pos.y())));
-        QDomElement width = doc.createElement("width");
-        width.appendChild(doc.createTextNode(QString::number(size.width())));
-        QDomElement height = doc.createElement("height");
-        height.appendChild(doc.createTextNode(QString::number(size.height())));
-        rect.appendChild(x);
-        rect.appendChild(y);
-        rect.appendChild(width);
-        rect.appendChild(height);
-        geometry.appendChild(rect);
-        itemWidget.appendChild(geometry);
+            QDomElement geometry = doc.createElement("property");
+            geometry.setAttribute("name", "geometry");
+            QDomElement rect = doc.createElement("rect");
+            QDomElement x = doc.createElement("x");
+            x.appendChild(doc.createTextNode(QString::number(pos.x())));
+            QDomElement y = doc.createElement("y");
+            y.appendChild(doc.createTextNode(QString::number(pos.y())));
+            QDomElement width = doc.createElement("width");
+            width.appendChild(doc.createTextNode(QString::number(size.width())));
+            QDomElement height = doc.createElement("height");
+            height.appendChild(doc.createTextNode(QString::number(size.height())));
+            rect.appendChild(x);
+            rect.appendChild(y);
+            rect.appendChild(width);
+            rect.appendChild(height);
+            geometry.appendChild(rect);
+            itemWidget.appendChild(geometry);
 
-        if (!text.isEmpty()) {
-            QDomElement propertyText = doc.createElement("property");
-            propertyText.setAttribute("name", "text");
-            QDomElement string = doc.createElement("string");
-            string.appendChild(doc.createTextNode(text));
-            propertyText.appendChild(string);
-            itemWidget.appendChild(propertyText);
+            if (!text.isEmpty()) {
+                QDomElement propertyText = doc.createElement("property");
+                propertyText.setAttribute("name", "text");
+                QDomElement string = doc.createElement("string");
+                string.appendChild(doc.createTextNode(text));
+                propertyText.appendChild(string);
+                itemWidget.appendChild(propertyText);
+            }
+
+            widget.appendChild(itemWidget);
         }
 
-        widget.appendChild(itemWidget);
-    }
-
-    QFile file(filePath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        doc.save(out, 2); // 缩进2个空格
-        file.close();
-        qDebug() << "Layout saved to" << filePath;
-        m_isModified = false;
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            doc.save(out, 2); // 缩进2个空格
+            file.close();
+            qDebug() << "Layout saved to" << filePath;
+            m_isModified = false;
+        }
     }
 }
 
 void UILayoutWindow::on_actionSave_As_Layout_triggered()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "另存为", "", "UI文件 (*.ui)");
+    QString filePath = QFileDialog::getSaveFileName(this, "另存为", "", "UI文件 (*.ui);;多界面文件 (*.json)");
     if (filePath.isEmpty()) {
         return;
     }
-
     m_currentLayoutPath = filePath;
     setWindowTitle(QString("UI布局编辑器 - %1").arg(QFileInfo(m_currentLayoutPath).fileName()));
     on_actionSave_Layout_triggered();
@@ -1355,16 +1399,34 @@ void UILayoutWindow::setupEditArea()
     // 创建编辑区的 QWidget
     m_editAreaWidget = new EditAreaWidget(this);
     m_editAreaWidget->setObjectName("editAreaWidget");
-    // 移除布局管理器，允许手动定位控件
-    m_editAreaWidget->setLayout(nullptr);
+    // 设置一个简单的布局管理器，避免布局计算错误
+    QVBoxLayout *layout = new QVBoxLayout(m_editAreaWidget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    m_editAreaWidget->setLayout(layout);
     m_editAreaWidget->setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;");
 
-    // 替换splitter中的QGraphicsView为我们的编辑区widget
-    int index = ui->splitter->indexOf(ui->graphicsView);
-    if (index != -1) {
-        ui->splitter->replaceWidget(index, m_editAreaWidget);
-        delete ui->graphicsView;
-        ui->graphicsView = nullptr;
+    // 安全地替换splitter中的QGraphicsView为我们的编辑区widget
+    if (ui->graphicsView && ui->splitter) {
+        int index = ui->splitter->indexOf(ui->graphicsView);
+        if (index != -1) {
+            ui->splitter->replaceWidget(index, m_editAreaWidget);
+            // 安全删除，避免重复删除
+            ui->graphicsView->setParent(nullptr);
+            ui->graphicsView->deleteLater();
+            ui->graphicsView = nullptr;
+            qDebug() << "UILayoutWindow: 成功替换graphicsView为editAreaWidget";
+        } else {
+            qDebug() << "UILayoutWindow: graphicsView不在splitter中，直接添加到splitter";
+            ui->splitter->addWidget(m_editAreaWidget);
+        }
+    } else {
+        qDebug() << "UILayoutWindow: graphicsView或splitter为nullptr，直接添加到splitter";
+        if (ui->splitter) {
+            ui->splitter->addWidget(m_editAreaWidget);
+        } else {
+            qCritical() << "UILayoutWindow: splitter为nullptr，无法添加editAreaWidget";
+        }
     }
 
     // 连接双击事件信号
@@ -1379,19 +1441,43 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
     // 处理QLabel
     QLabel *label = qobject_cast<QLabel*>(widget);
     if (label) {
-        // 创建并显示编辑对话框
-        bool ok;
-        QString newText = QInputDialog::getText(this, tr("编辑文本"), tr("输入新的文本:"), QLineEdit::Normal, label->text(), &ok);
-        if (ok && !newText.isEmpty()) {
-            label->setText(newText);
-            m_isModified = true;
-        }
+        // 创建一个临时的QLineEdit来编辑文本
+        QLineEdit *edit = new QLineEdit(m_editAreaWidget);
+        edit->setText(label->text());
+        // 设置位置和大小与QLabel相同
+        QPoint globalPos = label->mapTo(m_editAreaWidget, QPoint(0, 0));
+        edit->setGeometry(globalPos.x(), globalPos.y(), label->width(), label->height());
+        edit->selectAll();
+        edit->setFocusPolicy(Qt::StrongFocus);
+        edit->setStyleSheet("border: 2px solid blue; background-color: white;");
+        edit->raise();
+        edit->show();
+        edit->activateWindow();
+        edit->setFocus();
+        
+        // 连接信号槽，在编辑完成后更新QLabel的文本
+        connect(edit, &QLineEdit::editingFinished, [=]() {
+            if (label) {
+                label->setText(edit->text());
+                m_isModified = true;
+                qDebug() << "编辑完成，更新QLabel文本为:" << edit->text();
+                // 更新对应的LayoutItem的文本属性
+                LayoutItem *item = m_widgetItemMap.value(label);
+                if (item) {
+                    item->setText(edit->text());
+                    qDebug() << "更新LayoutItem文本为:" << edit->text();
+                }
+                edit->deleteLater();
+            }
+        });
         return;
     }
 
     // 处理QTabWidget
     QTabWidget *tabWidget = qobject_cast<QTabWidget*>(widget);
     if (tabWidget) {
+        qDebug() << "处理QTabWidget双击事件:" << tabWidget;
+        
         // 找到点击的Tab页索引
         QPoint localPos = tabWidget->mapFromParent(pos);
         QRect tabBarRect = tabWidget->tabBar()->geometry();
@@ -1399,15 +1485,43 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
             QPoint tabBarPos = tabWidget->tabBar()->mapFromParent(localPos);
             int tabIndex = tabWidget->tabBar()->tabAt(tabBarPos);
             if (tabIndex != -1) {
-                // 创建并显示编辑对话框
-                bool ok;
-                QString currentText = tabWidget->tabText(tabIndex);
-                QString newText = QInputDialog::getText(this, tr("编辑Tab页标题"), tr("输入新的标题:"), QLineEdit::Normal, currentText, &ok);
-                if (ok && !newText.isEmpty()) {
-            tabWidget->setTabText(tabIndex, newText);
-            m_isModified = true;
-            qDebug() << "UILayoutWindow: Tab页标题修改，设置m_isModified = true";
-        }
+                qDebug() << "双击Tab页索引:" << tabIndex << "当前标题:" << tabWidget->tabText(tabIndex);
+                
+                // 创建临时QLineEdit用于编辑标题
+                m_tabTitleEdit = new QLineEdit(m_editAreaWidget);
+                m_tabTitleEdit->setText(tabWidget->tabText(tabIndex));
+                // 设置位置和大小
+                QPoint globalTabPos = tabWidget->tabBar()->mapTo(m_editAreaWidget, QPoint());
+                QRect tabRect = tabWidget->tabBar()->tabRect(tabIndex);
+                m_tabTitleEdit->setGeometry(globalTabPos.x() + tabRect.x(), globalTabPos.y() + tabRect.y(), tabRect.width(), tabRect.height());
+                m_tabTitleEdit->selectAll();
+                m_tabTitleEdit->setFocusPolicy(Qt::StrongFocus);
+                m_tabTitleEdit->setStyleSheet("border: 2px solid blue; background-color: white; padding: 0;");
+                m_tabTitleEdit->raise();
+                m_tabTitleEdit->show();
+                
+                // 确保获得焦点
+                m_tabTitleEdit->activateWindow();
+                m_tabTitleEdit->setFocus();
+                
+                // 记录当前正在编辑的TabWidget和索引
+                m_editingTabWidget = tabWidget;
+                
+                // 连接信号槽，在编辑完成后更新Tab页标题
+                connect(m_tabTitleEdit, &QLineEdit::editingFinished, [=]() {
+                    if (m_editingTabWidget && m_tabTitleEdit) {
+                        // 更新Tab页标题
+                        m_editingTabWidget->setTabText(tabIndex, m_tabTitleEdit->text());
+                        m_isModified = true;
+                        qDebug() << "编辑完成，更新Tab页标题为:" << m_tabTitleEdit->text();
+                        
+                        // 清理
+                        m_tabTitleEdit->deleteLater();
+                        m_tabTitleEdit = nullptr;
+                        m_editingTabWidget = nullptr;
+                    }
+                });
+                return;
             }
         }
         return;
@@ -1428,14 +1542,40 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
                 QPoint tabBarPos = tabWidget->tabBar()->mapFromParent(localPos);
                 int tabIndex = tabWidget->tabBar()->tabAt(tabBarPos);
                 if (tabIndex != -1) {
-                    // 创建并显示编辑对话框
-                    bool ok;
-                    QString currentText = tabWidget->tabText(tabIndex);
-                    QString newText = QInputDialog::getText(this, tr("编辑Tab页标题"), tr("输入新的标题:"), QLineEdit::Normal, currentText, &ok);
-                    if (ok && !newText.isEmpty()) {
-                        tabWidget->setTabText(tabIndex, newText);
-                        m_isModified = true;
-                    }
+                    // 创建临时QLineEdit用于编辑标题
+                    m_tabTitleEdit = new QLineEdit(m_editAreaWidget);
+                    m_tabTitleEdit->setText(tabWidget->tabText(tabIndex));
+                    // 设置位置和大小
+                    QPoint globalTabPos = tabWidget->tabBar()->mapTo(m_editAreaWidget, QPoint());
+                    QRect tabRect = tabWidget->tabBar()->tabRect(tabIndex);
+                    m_tabTitleEdit->setGeometry(globalTabPos.x() + tabRect.x(), globalTabPos.y() + tabRect.y(), tabRect.width(), tabRect.height());
+                    m_tabTitleEdit->selectAll();
+                    m_tabTitleEdit->setFocusPolicy(Qt::StrongFocus);
+                    m_tabTitleEdit->setStyleSheet("border: 2px solid blue; background-color: white; padding: 0;");
+                    m_tabTitleEdit->raise();
+                    m_tabTitleEdit->show();
+                    
+                    // 确保获得焦点
+                    m_tabTitleEdit->activateWindow();
+                    m_tabTitleEdit->setFocus();
+                    
+                    // 记录当前正在编辑的TabWidget和索引
+                    m_editingTabWidget = tabWidget;
+                    
+                    // 连接信号槽，在编辑完成后更新Tab页标题
+                    connect(m_tabTitleEdit, &QLineEdit::editingFinished, [=]() {
+                        if (m_editingTabWidget && m_tabTitleEdit) {
+                            // 更新Tab页标题
+                            m_editingTabWidget->setTabText(tabIndex, m_tabTitleEdit->text());
+                            m_isModified = true;
+                            qDebug() << "编辑完成，更新Tab页标题为:" << m_tabTitleEdit->text();
+                            
+                            // 清理
+                            m_tabTitleEdit->deleteLater();
+                            m_tabTitleEdit = nullptr;
+                            m_editingTabWidget = nullptr;
+                        }
+                    });
                 }
             }
             return;
@@ -2346,4 +2486,1335 @@ void UILayoutWindow::closeEvent(QCloseEvent *event)
     
     // 接受关闭事件
     event->accept();
+}
+
+// 产品配置集成功能实现
+void UILayoutWindow::updateProductContext()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    // 获取产品功能特性
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    // 更新UI以反映产品上下文
+    // 例如：在控件库中高亮显示与产品功能相关的控件
+    // 或者根据产品类型调整可用的控件类型
+    
+    qDebug() << "UILayoutWindow: 更新产品上下文，产品功能数量:" << features.size();
+}
+
+void UILayoutWindow::syncWithProductFeatures()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    // 获取产品功能特性
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    // 获取现有的控件绑定
+    QMap<QString, QString> bindings = m_configManager->getFeatureWidgetBindings();
+    
+    // 同步功能特性与UI控件
+    for (const ProductFeature &feature : features) {
+        QString featureName = feature.name;
+        QString widgetId = bindings.value(featureName);
+        
+        if (!widgetId.isEmpty()) {
+            // 查找对应的控件
+            for (QWidget *widget : m_widgetItemMap.keys()) {
+                QString currentWidgetId = widget->objectName();
+                if (currentWidgetId == widgetId) {
+                    // 更新控件文本以匹配功能特性
+                    if (QLabel *label = qobject_cast<QLabel*>(widget)) {
+                        label->setText(featureName);
+                    } else if (QPushButton *button = qobject_cast<QPushButton*>(widget)) {
+                        button->setText(featureName);
+                    }
+                    
+                    // 更新LayoutItem
+                    LayoutItem *item = m_widgetItemMap.value(widget);
+                    if (item) {
+                        item->setText(featureName);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    qDebug() << "UILayoutWindow: 与产品功能特性同步完成";
+}
+
+void UILayoutWindow::applyLayoutTemplate(const QString &templateName)
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    QString templatePath = m_configManager->getLayoutTemplate(templateName);
+    if (!templatePath.isEmpty()) {
+        // 加载模板布局
+        if (loadLayout(templatePath)) {
+            qDebug() << "UILayoutWindow: 应用布局模板:" << templateName;
+        }
+    }
+}
+
+void UILayoutWindow::suggestLayoutForFeatures()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    if (features.isEmpty()) {
+        return;
+    }
+    
+    // 根据功能特性数量和建议布局
+    int featureCount = features.size();
+    
+    if (featureCount <= 3) {
+        // 简单布局建议：单列
+        suggestSimpleColumnLayout();
+    } else if (featureCount <= 6) {
+        // 中等布局建议：两列
+        suggestTwoColumnLayout();
+    } else {
+        // 复杂布局建议：Tab页或网格
+        suggestTabbedLayout();
+    }
+}
+
+void UILayoutWindow::suggestSimpleColumnLayout()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    // 清空当前布局
+    clearLayout();
+    
+    // 创建垂直布局
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->setSpacing(10);
+    layout->setContentsMargins(20, 20, 20, 20);
+    
+    // 为每个功能特性创建对应的控件
+    for (const ProductFeature &feature : features) {
+        QString widgetType = suggestWidgetTypeForFeature(feature);
+        
+        // 创建控件
+        QWidget *widget = createWidgetForFeature(feature, widgetType);
+        if (widget) {
+            layout->addWidget(widget);
+        }
+    }
+    
+    // 添加弹性空间
+    layout->addStretch();
+    
+    // 应用布局到中央控件
+    QWidget *centralWidget = ui->graphicsView;
+    if (centralWidget) {
+        centralWidget->setLayout(layout);
+    }
+    
+    QMessageBox::information(this, "布局建议", "已应用简单单列布局建议");
+}
+
+void UILayoutWindow::suggestTwoColumnLayout()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    // 清空当前布局
+    clearLayout();
+    
+    // 创建水平布局作为主布局
+    QHBoxLayout *mainLayout = new QHBoxLayout();
+    mainLayout->setSpacing(15);
+    mainLayout->setContentsMargins(20, 20, 20, 20);
+    
+    // 创建两列垂直布局
+    QVBoxLayout *leftColumn = new QVBoxLayout();
+    QVBoxLayout *rightColumn = new QVBoxLayout();
+    
+    leftColumn->setSpacing(10);
+    rightColumn->setSpacing(10);
+    
+    // 将功能特性分配到两列
+    int halfCount = features.size() / 2;
+    
+    for (int i = 0; i < features.size(); ++i) {
+        const ProductFeature &feature = features[i];
+        QString widgetType = suggestWidgetTypeForFeature(feature);
+        QWidget *widget = createWidgetForFeature(feature, widgetType);
+        
+        if (widget) {
+            if (i < halfCount) {
+                leftColumn->addWidget(widget);
+            } else {
+                rightColumn->addWidget(widget);
+            }
+        }
+    }
+    
+    // 添加弹性空间
+    leftColumn->addStretch();
+    rightColumn->addStretch();
+    
+    // 将两列添加到主布局
+    mainLayout->addLayout(leftColumn);
+    mainLayout->addLayout(rightColumn);
+    
+    // 设置两列的比例
+    mainLayout->setStretchFactor(leftColumn, 1);
+    mainLayout->setStretchFactor(rightColumn, 1);
+    
+    // 应用布局到中央控件
+    QWidget *centralWidget = ui->graphicsView;
+    if (centralWidget) {
+        centralWidget->setLayout(mainLayout);
+    }
+    
+    QMessageBox::information(this, "布局建议", "已应用两列布局建议");
+}
+
+void UILayoutWindow::suggestTabbedLayout()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    // 清空当前布局
+    clearLayout();
+    
+    // 创建Tab控件
+    QTabWidget *tabWidget = new QTabWidget();
+    
+    // 根据功能特性分组创建Tab页
+    QMap<QString, QList<ProductFeature>> featureGroups;
+    
+    // 按功能特性名称的第一个字符分组（简单分组策略）
+    for (const ProductFeature &feature : features) {
+        QString groupKey = feature.name.left(1).toUpper();
+        featureGroups[groupKey].append(feature);
+    }
+    
+    // 如果分组太多，合并为更少的组
+    if (featureGroups.size() > 5) {
+        QMap<QString, QList<ProductFeature>> mergedGroups;
+        int groupIndex = 0;
+        int featuresPerGroup = features.size() / 3 + 1;
+        
+        QList<ProductFeature> currentGroup;
+        for (const ProductFeature &feature : features) {
+            currentGroup.append(feature);
+            if (currentGroup.size() >= featuresPerGroup) {
+                mergedGroups[QString("组%1").arg(groupIndex + 1)] = currentGroup;
+                currentGroup.clear();
+                groupIndex++;
+            }
+        }
+        
+        if (!currentGroup.isEmpty()) {
+            mergedGroups[QString("组%1").arg(groupIndex + 1)] = currentGroup;
+        }
+        
+        featureGroups = mergedGroups;
+    }
+    
+    // 为每个分组创建Tab页
+    for (auto it = featureGroups.begin(); it != featureGroups.end(); ++it) {
+        QString groupName = it.key();
+        QList<ProductFeature> groupFeatures = it.value();
+        
+        // 创建Tab页内容控件
+        QWidget *tabPage = new QWidget();
+        QVBoxLayout *tabLayout = new QVBoxLayout(tabPage);
+        tabLayout->setSpacing(10);
+        tabLayout->setContentsMargins(15, 15, 15, 15);
+        
+        // 为分组中的每个功能特性创建控件
+        for (const ProductFeature &feature : groupFeatures) {
+            QString widgetType = suggestWidgetTypeForFeature(feature);
+            QWidget *widget = createWidgetForFeature(feature, widgetType);
+            if (widget) {
+                tabLayout->addWidget(widget);
+            }
+        }
+        
+        tabLayout->addStretch();
+        
+        // 添加Tab页
+        tabWidget->addTab(tabPage, groupName);
+    }
+    
+    // 应用布局到中央控件
+    QWidget *centralWidget = ui->graphicsView;
+    if (centralWidget) {
+        QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+        mainLayout->addWidget(tabWidget);
+    }
+    
+    QMessageBox::information(this, "布局建议", "已应用Tab页布局建议");
+}
+
+QWidget* UILayoutWindow::createWidgetForFeature(const ProductFeature &feature, const QString &widgetType)
+{
+    QWidget *widget = nullptr;
+    
+    // 根据控件类型创建对应的控件
+    if (widgetType == "QLabel") {
+        QLabel *label = new QLabel(feature.name);
+        label->setTextInteractionFlags(Qt::TextEditorInteraction); // 允许编辑文本
+        widget = label;
+    } else if (widgetType == "QLineEdit") {
+        QLineEdit *lineEdit = new QLineEdit();
+        lineEdit->setPlaceholderText(feature.name);
+        widget = lineEdit;
+    } else if (widgetType == "QTextEdit") {
+        QTextEdit *textEdit = new QTextEdit();
+        textEdit->setPlaceholderText(feature.description);
+        widget = textEdit;
+    } else if (widgetType == "QPushButton") {
+        QPushButton *button = new QPushButton(feature.name);
+        widget = button;
+    } else if (widgetType == "QCheckBox") {
+        QCheckBox *checkBox = new QCheckBox(feature.name);
+        widget = checkBox;
+    } else if (widgetType == "QRadioButton") {
+        QRadioButton *radioButton = new QRadioButton(feature.name);
+        widget = radioButton;
+    } else if (widgetType == "QComboBox") {
+        QComboBox *comboBox = new QComboBox();
+        comboBox->addItem(feature.name);
+        widget = comboBox;
+    } else if (widgetType == "QSpinBox") {
+        QSpinBox *spinBox = new QSpinBox();
+        widget = spinBox;
+    } else if (widgetType == "QSlider") {
+        QSlider *slider = new QSlider(Qt::Horizontal);
+        widget = slider;
+    } else if (widgetType == "QProgressBar") {
+        QProgressBar *progressBar = new QProgressBar();
+        widget = progressBar;
+    } else if (widgetType == "QTabWidget") {
+        QTabWidget *tabWidget = new QTabWidget();
+        // 为TabWidget添加一个默认的Tab页
+        QWidget *tabPage = new QWidget();
+        tabWidget->addTab(tabPage, feature.name);
+        widget = tabWidget;
+    } else {
+        // 默认使用QLabel
+        QLabel *label = new QLabel(feature.name);
+        label->setTextInteractionFlags(Qt::TextEditorInteraction);
+        widget = label;
+    }
+    
+    if (widget) {
+        // 设置控件属性
+        widget->setObjectName(generateWidgetId(widgetType));
+        widget->setMinimumSize(100, 30);
+        
+        // 为控件添加样式，使其更容易识别
+        widget->setStyleSheet("border: 1px solid #ccc; padding: 5px; background-color: #f9f9f9;");
+        
+        // 绑定功能特性
+        if (m_configManager) {
+            m_configManager->bindProductFeatureToWidget(feature.name, widget->objectName());
+        }
+    }
+    
+    return widget;
+}
+
+void UILayoutWindow::clearLayout()
+{
+    // 获取中央控件
+    QWidget *centralWidget = ui->graphicsView;
+    if (!centralWidget) {
+        return;
+    }
+    
+    // 删除所有子控件
+    QLayout *layout = centralWidget->layout();
+    if (layout) {
+        QLayoutItem *item;
+        while ((item = layout->takeAt(0)) != nullptr) {
+            if (item->widget()) {
+                item->widget()->deleteLater();
+            }
+            delete item;
+        }
+        delete layout;
+    }
+    
+    // 清空控件映射
+    m_widgetItemMap.clear();
+    
+    // 清空布局项列表
+    qDeleteAll(m_layoutItems);
+    m_layoutItems.clear();
+}
+
+void UILayoutWindow::saveCurrentLayoutAsTemplate(const QString &templateName)
+{
+    if (!m_configManager) {
+        QMessageBox::warning(this, "错误", "产品配置管理器未初始化");
+        return;
+    }
+    
+    if (templateName.isEmpty()) {
+        QMessageBox::warning(this, "错误", "模板名称不能为空");
+        return;
+    }
+    
+    // 获取当前布局路径
+    QString currentLayoutPath = getCurrentLayoutPath();
+    if (currentLayoutPath.isEmpty()) {
+        // 如果没有保存的布局，先保存当前布局
+        on_actionSave_Layout_triggered();
+        currentLayoutPath = getCurrentLayoutPath();
+        
+        if (currentLayoutPath.isEmpty()) {
+            QMessageBox::warning(this, "错误", "请先保存当前布局");
+            return;
+        }
+    }
+    
+    // 保存为模板
+    m_configManager->saveLayoutTemplate(templateName, currentLayoutPath);
+    
+    QMessageBox::information(this, "成功", QString("布局已保存为模板: %1").arg(templateName));
+}
+
+void UILayoutWindow::showTemplateSelectionDialog()
+{
+    if (!m_configManager) {
+        QMessageBox::warning(this, "错误", "产品配置管理器未初始化");
+        return;
+    }
+    
+    // 获取可用的模板列表
+    QStringList templates = m_configManager->getAvailableLayoutTemplates();
+    
+    if (templates.isEmpty()) {
+        QMessageBox::information(this, "提示", "没有可用的布局模板");
+        return;
+    }
+    
+    // 显示模板选择对话框
+    bool ok;
+    QString selectedTemplate = QInputDialog::getItem(this, "选择布局模板", 
+                                                     "请选择要应用的布局模板:", 
+                                                     templates, 0, false, &ok);
+    
+    if (ok && !selectedTemplate.isEmpty()) {
+        applyLayoutTemplate(selectedTemplate);
+    }
+}
+
+void UILayoutWindow::applySmartTemplate()
+{
+    if (!m_configManager) {
+        QMessageBox::warning(this, "错误", "产品配置管理器未初始化");
+        return;
+    }
+    
+    // 获取产品功能特性
+    Product product = m_configManager->getProduct();
+    QList<ProductFeature> features = product.features();
+    
+    if (features.isEmpty()) {
+        QMessageBox::information(this, "提示", "当前产品没有定义功能特性");
+        return;
+    }
+    
+    // 分析功能特性，选择最合适的模板
+    QString bestTemplate = selectBestTemplateForFeatures(features);
+    
+    if (!bestTemplate.isEmpty()) {
+        // 应用选定的模板
+        applyLayoutTemplate(bestTemplate);
+        QMessageBox::information(this, "智能模板", QString("已应用智能模板: %1").arg(bestTemplate));
+    } else {
+        // 没有合适的模板，使用智能布局建议
+        suggestLayoutForFeatures();
+        QMessageBox::information(this, "智能模板", "已根据功能特性生成智能布局");
+    }
+}
+
+QString UILayoutWindow::selectBestTemplateForFeatures(const QList<ProductFeature> &features)
+{
+    if (!m_configManager) {
+        return QString();
+    }
+    
+    // 获取可用的模板
+    QStringList templates = m_configManager->getAvailableLayoutTemplates();
+    
+    if (templates.isEmpty()) {
+        return QString();
+    }
+    
+    // 简单的模板匹配算法
+    // 根据功能特性数量选择最合适的模板
+    int featureCount = features.size();
+    
+    // 分析功能特性的类型分布
+    int inputCount = 0, displayCount = 0, actionCount = 0;
+    for (const ProductFeature &feature : features) {
+        QString widgetType = suggestWidgetTypeForFeature(feature);
+        if (widgetType == "QLineEdit" || widgetType == "QTextEdit" || widgetType == "QSpinBox" || 
+            widgetType == "QSlider" || widgetType == "QComboBox") {
+            inputCount++;
+        } else if (widgetType == "QLabel" || widgetType == "QTextBrowser" || widgetType == "QProgressBar") {
+            displayCount++;
+        } else if (widgetType == "QPushButton" || widgetType == "QCheckBox" || widgetType == "QRadioButton") {
+            actionCount++;
+        }
+    }
+    
+    // 根据模板名称和功能特性匹配度选择最佳模板
+    QString bestTemplate;
+    double bestScore = 0.0;
+    
+    for (const QString &templateName : templates) {
+        double score = calculateTemplateMatchScore(templateName, featureCount, inputCount, displayCount, actionCount);
+        
+        if (score > bestScore) {
+            bestScore = score;
+            bestTemplate = templateName;
+        }
+    }
+    
+    // 如果匹配度高于阈值，则使用该模板
+    if (bestScore > 0.6) {
+        return bestTemplate;
+    }
+    
+    return QString();
+}
+
+double UILayoutWindow::calculateTemplateMatchScore(const QString &templateName, int featureCount, int inputCount, int displayCount, int actionCount)
+{
+    double score = 0.0;
+    
+    // 简单的模板名称匹配算法
+    QString lowerName = templateName.toLower();
+    
+    // 根据模板名称中的关键词计算匹配度
+    if (lowerName.contains("simple") || lowerName.contains("basic")) {
+        // 简单模板适合少量功能特性
+        if (featureCount <= 3) {
+            score += 0.8;
+        } else if (featureCount <= 6) {
+            score += 0.5;
+        }
+    } else if (lowerName.contains("two") || lowerName.contains("column")) {
+        // 两列模板适合中等数量的功能特性
+        if (featureCount > 3 && featureCount <= 8) {
+            score += 0.8;
+        } else if (featureCount <= 12) {
+            score += 0.6;
+        }
+    } else if (lowerName.contains("tab") || lowerName.contains("page")) {
+        // Tab页模板适合大量功能特性
+        if (featureCount > 8) {
+            score += 0.9;
+        } else if (featureCount > 5) {
+            score += 0.7;
+        }
+    } else if (lowerName.contains("form") || lowerName.contains("input")) {
+        // 表单模板适合输入型功能特性
+        if (inputCount > displayCount + actionCount) {
+            score += 0.8;
+        }
+    } else if (lowerName.contains("dashboard") || lowerName.contains("display")) {
+        // 仪表板模板适合显示型功能特性
+        if (displayCount > inputCount + actionCount) {
+            score += 0.8;
+        }
+    } else if (lowerName.contains("control") || lowerName.contains("action")) {
+        // 控制面板模板适合操作型功能特性
+        if (actionCount > inputCount + displayCount) {
+            score += 0.8;
+        }
+    }
+    
+    // 根据功能特性数量调整分数
+    if (featureCount <= 3) {
+        score *= 1.2; // 少量功能特性，简单模板更合适
+    } else if (featureCount >= 10) {
+        score *= 1.1; // 大量功能特性，复杂模板更合适
+    }
+    
+    return qMin(score, 1.0); // 确保分数不超过1.0
+}
+
+QString UILayoutWindow::generateWidgetId(const QString &widgetType) const
+{
+    // 生成唯一的控件ID
+    QString baseId = widgetType;
+    baseId.remove("Q"); // 移除Q前缀
+    QString uniqueId = QUuid::createUuid().toString();
+    uniqueId.remove("{").remove("}").remove("-");
+    
+    return QString("%1_%2").arg(baseId).arg(uniqueId.left(8));
+}
+
+void UILayoutWindow::updateWidgetBindings()
+{
+    if (!m_configManager) {
+        return;
+    }
+    
+    // 更新所有控件的绑定信息
+    for (QWidget *widget : m_widgetItemMap.keys()) {
+        QString widgetId = widget->objectName();
+        if (widgetId.isEmpty()) {
+            // 为控件生成唯一ID
+            LayoutItem *item = m_widgetItemMap.value(widget);
+            if (item) {
+                widgetId = generateWidgetId(item->widgetType());
+                widget->setObjectName(widgetId);
+            }
+        }
+        
+        // 检查是否有功能特性绑定
+        QString featureName = m_configManager->getFeatureForWidget(widgetId);
+        if (!featureName.isEmpty()) {
+            // 更新控件显示以反映绑定
+            qDebug() << "UILayoutWindow: 控件" << widgetId << "绑定到功能特性:" << featureName;
+        }
+    }
+}
+
+// 功能特性关联映射相关实现
+void UILayoutWindow::onBindFeatureButtonClicked()
+{
+    // 获取当前选中的控件
+    QWidget *selectedWidget = m_selectedWidget;
+    if (!selectedWidget) {
+        QMessageBox::information(this, "提示", "请先选择一个控件");
+        return;
+    }
+    
+    // 获取产品功能特性列表
+    if (!m_configManager) {
+        QMessageBox::warning(this, "警告", "产品配置管理器未初始化");
+        return;
+    }
+    
+    Product product = m_configManager->getProduct();
+    if (product.name().isEmpty()) {
+        QMessageBox::warning(this, "警告", "未加载产品信息");
+        return;
+    }
+    
+    QList<ProductFeature> features = product.features();
+    if (features.isEmpty()) {
+        QMessageBox::information(this, "提示", "当前产品没有定义功能特性");
+        return;
+    }
+    
+    // 提取功能特性名称列表
+    QStringList featureNames;
+    for (const ProductFeature &feature : features) {
+        featureNames << feature.name;
+    }
+    
+    // 显示功能特性选择对话框
+    bool ok;
+    QString feature = QInputDialog::getItem(this, "选择功能特性", 
+                                           "请选择要绑定的功能特性:", 
+                                           featureNames, 0, false, &ok);
+    
+    if (ok && !feature.isEmpty()) {
+        // 绑定功能特性到控件
+        QString widgetId = selectedWidget->objectName();
+        if (widgetId.isEmpty()) {
+            // 为控件生成唯一ID
+            LayoutItem *item = m_widgetItemMap.value(selectedWidget);
+            if (item) {
+                widgetId = generateWidgetId(item->widgetType());
+                selectedWidget->setObjectName(widgetId);
+            } else {
+                widgetId = generateWidgetId("QWidget");
+                selectedWidget->setObjectName(widgetId);
+            }
+        }
+        
+        // 保存绑定关系
+        m_configManager->bindProductFeatureToWidget(feature, widgetId);
+            QMessageBox::information(this, "成功", QString("功能特性 '%1' 已绑定到控件").arg(feature));
+            updateFeaturesTreeWidget();
+        } else {
+            QMessageBox::warning(this, "失败", "绑定功能特性失败");
+        }
+    }
+
+void UILayoutWindow::onUnbindFeatureButtonClicked()
+{
+    // 获取当前选中的功能特性项
+    QTreeWidgetItem *selectedItem = ui->featuresTreeWidget->currentItem();
+    if (!selectedItem) {
+        QMessageBox::information(this, "提示", "请先选择一个功能特性项");
+        return;
+    }
+    
+    QString feature = selectedItem->text(0);
+    QString widgetId = selectedItem->data(0, Qt::UserRole).toString();
+    
+    if (feature.isEmpty() || widgetId.isEmpty()) {
+        QMessageBox::warning(this, "错误", "无效的功能特性项");
+        return;
+    }
+    
+    // 确认解绑
+    int result = QMessageBox::question(this, "确认解绑", 
+                                      QString("确定要解绑功能特性 '%1' 吗?").arg(feature),
+                                      QMessageBox::Yes | QMessageBox::No);
+    
+    if (result == QMessageBox::Yes) {
+        // 解绑功能特性
+        m_configManager->unbindProductFeatureFromWidget(feature, widgetId);
+        QMessageBox::information(this, "成功", QString("功能特性 '%1' 已解绑").arg(feature));
+        updateFeaturesTreeWidget();
+    }
+}
+
+void UILayoutWindow::onSyncFeaturesButtonClicked()
+{
+    if (!m_configManager) {
+        QMessageBox::warning(this, "警告", "产品配置管理器未初始化");
+        return;
+    }
+    
+    // 同步产品功能特性
+    Product product = m_configManager->getProduct();
+    if (product.name().isEmpty()) {
+        QMessageBox::warning(this, "警告", "未加载产品信息");
+        return;
+    }
+    
+    QList<ProductFeature> features = product.features();
+    
+    // 获取当前绑定的功能特性
+    QMap<QString, QString> bindings = m_configManager->getFeatureWidgetBindings();
+    
+    // 更新功能特性树控件
+    updateFeaturesTreeWidget();
+    
+    QMessageBox::information(this, "同步完成", 
+                           QString("已同步 %1 个功能特性，当前绑定 %2 个控件").arg(features.size()).arg(bindings.size()));
+}
+
+void UILayoutWindow::onFeaturesTreeWidgetItemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    if (column == 1) { // 关联控件列
+        QString widgetId = item->data(0, Qt::UserRole).toString();
+        if (!widgetId.isEmpty()) {
+            // 查找并选中对应的控件
+            QWidget *widget = findWidgetById(widgetId);
+            if (widget) {
+                // 选中控件
+                m_selectedWidget = widget;
+                updatePropertiesEditor(widget);
+                updateHandles(widget);
+                
+                // 滚动到控件位置
+                QPoint widgetPos = widget->mapTo(m_editAreaWidget, QPoint(0, 0));
+                // 确保控件可见（注释掉不兼容的代码）
+                // ui->graphicsView->ensureVisible(QRect(widgetPos, widget->size()));
+            }
+        }
+    }
+}
+
+void UILayoutWindow::updateFeaturesTreeWidget()
+{
+    if (!m_configManager) return;
+    
+    ui->featuresTreeWidget->clear();
+    
+    // 设置功能特性树状视图的列标题
+    ui->featuresTreeWidget->setHeaderLabels(QStringList() << "功能特性" << "关联控件" << "状态" << "优先级" << "描述");
+    
+    // 获取产品功能特性
+    Product product = m_configManager->getProduct();
+    if (product.name().isEmpty()) return;
+    
+    QList<ProductFeature> features = product.features();
+    QMap<QString, QString> bindings = m_configManager->getFeatureWidgetBindings();
+    
+    // 按优先级排序功能特性
+    std::sort(features.begin(), features.end(), [](const ProductFeature &a, const ProductFeature &b) {
+        return a.priority > b.priority; // 优先级高的在前
+    });
+    
+    for (const ProductFeature &feature : features) {
+        QString featureName = feature.name;
+        QTreeWidgetItem *item = new QTreeWidgetItem(ui->featuresTreeWidget);
+        item->setText(0, featureName);
+        item->setText(3, QString::number(feature.priority)); // 优先级
+        item->setText(4, feature.description); // 描述
+        
+        // 设置工具提示，显示完整的功能特性信息
+        QString tooltip = QString("功能特性: %1\n优先级: %2\n描述: %3")
+                         .arg(featureName)
+                         .arg(feature.priority)
+                         .arg(feature.description);
+        item->setToolTip(0, tooltip);
+        
+        // 检查是否有绑定
+        if (bindings.contains(featureName)) {
+            QString widgetId = bindings.value(featureName);
+            QString widgetName = m_configManager->getWidgetIdForFeature(featureName);
+            
+            item->setText(1, widgetName.isEmpty() ? "已绑定" : widgetName);
+            item->setText(2, "已绑定");
+            item->setData(0, Qt::UserRole, widgetId);
+            item->setForeground(2, QBrush(Qt::darkGreen));
+            
+            // 为已绑定的功能特性添加图标
+            item->setIcon(0, QIcon(":/icons/bound.png"));
+        } else {
+            item->setText(1, "未绑定");
+            item->setText(2, "未绑定");
+            item->setForeground(2, QBrush(Qt::darkRed));
+            
+            // 为未绑定的功能特性添加图标
+            item->setIcon(0, QIcon(":/icons/unbound.png"));
+            
+            // 根据优先级设置不同的背景色
+            if (feature.priority >= 8) {
+                item->setBackground(0, QBrush(QColor(255, 240, 240))); // 高优先级
+            } else if (feature.priority >= 5) {
+                item->setBackground(0, QBrush(QColor(255, 255, 240))); // 中优先级
+            }
+        }
+    }
+    
+    // 自动调整列宽
+    for (int i = 0; i < ui->featuresTreeWidget->columnCount(); ++i) {
+        ui->featuresTreeWidget->resizeColumnToContents(i);
+    }
+    
+    // 更新状态栏显示产品上下文信息
+    updateStatusBarWithProductContext();
+    
+    // 添加上下文菜单支持
+    ui->featuresTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->featuresTreeWidget, &QTreeWidget::customContextMenuRequested,
+            this, &UILayoutWindow::showFeatureContextMenu);
+}
+
+// 产品上下文感知相关方法实现
+void UILayoutWindow::updateStatusBarWithProductContext()
+{
+    if (!m_configManager) return;
+    
+    Product product = m_configManager->getProduct();
+    if (product.name().isEmpty()) return;
+    
+    // 获取产品信息
+    QString productName = product.name();
+    QString productVersion = product.version();
+    QList<ProductFeature> features = product.features();
+    QMap<QString, QString> bindings = m_configManager->getFeatureWidgetBindings();
+    
+    // 计算统计信息
+    int totalFeatures = features.size();
+    int boundFeatures = bindings.size();
+    int unboundFeatures = totalFeatures - boundFeatures;
+    
+    // 计算高优先级未绑定功能特性数量
+    int highPriorityUnbound = 0;
+    for (const ProductFeature &feature : features) {
+        if (feature.priority >= 8 && !bindings.contains(feature.name)) {
+            highPriorityUnbound++;
+        }
+    }
+    
+    // 更新状态栏显示
+    QString statusText = QString("产品: %1 v%2 | 功能特性: %3/%4 已绑定 | 高优先级未绑定: %5")
+                        .arg(productName)
+                        .arg(productVersion)
+                        .arg(boundFeatures)
+                        .arg(totalFeatures)
+                        .arg(highPriorityUnbound);
+    
+    // 根据绑定状态设置不同的颜色
+    if (highPriorityUnbound > 0) {
+        statusText += " ⚠"; // 警告图标
+        ui->statusbar->setStyleSheet("color: #d35400;"); // 橙色警告色
+    } else if (unboundFeatures > 0) {
+        ui->statusbar->setStyleSheet("color: #f39c12;"); // 黄色提示色
+    } else {
+        ui->statusbar->setStyleSheet("color: #27ae60;"); // 绿色成功色
+    }
+    
+    ui->statusbar->showMessage(statusText);
+}
+
+
+
+void UILayoutWindow::highlightRelevantWidgets(const QString &featureName)
+{
+    if (!m_configManager) return;
+    
+    // 清除之前的高亮
+    for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+        QWidget *widget = it.key();
+        widget->setStyleSheet(""); // 清除样式
+    }
+    
+    // 高亮与指定功能特性相关的控件
+    QMap<QString, QString> bindings = m_configManager->getFeatureWidgetBindings();
+    
+    if (bindings.contains(featureName)) {
+        QString widgetId = bindings.value(featureName);
+        QWidget *widget = findWidgetById(widgetId);
+        if (widget) {
+            // 高亮显示已绑定的控件
+            widget->setStyleSheet("border: 3px solid #27ae60; background-color: #d5f5e3;");
+        }
+    } else {
+        // 高亮显示可能相关的控件类型
+        Product product = m_configManager->getProduct();
+        ProductFeature feature;
+        for (const ProductFeature &f : product.features()) {
+            if (f.name == featureName) {
+                feature = f;
+                break;
+            }
+        }
+        
+        if (!feature.name.isEmpty()) {
+            QString suggestedType = suggestWidgetTypeForFeature(feature);
+            
+            // 高亮显示建议的控件类型
+            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+                QWidget *widget = it.key();
+                LayoutItem *item = it.value();
+                
+                if (item->widgetType() == suggestedType) {
+                    widget->setStyleSheet("border: 3px solid #f39c12; background-color: #fef9e7;");
+                }
+            }
+        }
+    }
+}
+
+void UILayoutWindow::showFeatureContextMenu(const QPoint &pos)
+{
+    QTreeWidgetItem *item = ui->featuresTreeWidget->itemAt(pos);
+    if (!item) return;
+    
+    QString featureName = item->text(0);
+    
+    QMenu contextMenu(this);
+    
+    // 添加上下文菜单项
+    QAction *bindAction = contextMenu.addAction("绑定到控件");
+    QAction *highlightAction = contextMenu.addAction("高亮相关控件");
+    QAction *suggestAction = contextMenu.addAction("获取布局建议");
+    contextMenu.addSeparator();
+    QAction *infoAction = contextMenu.addAction("查看功能特性详情");
+    
+    // 执行菜单操作
+    QAction *selectedAction = contextMenu.exec(ui->featuresTreeWidget->viewport()->mapToGlobal(pos));
+    
+    if (selectedAction == bindAction) {
+        // 绑定功能特性
+        onBindFeatureButtonClicked();
+    } else if (selectedAction == highlightAction) {
+        // 高亮相关控件
+        highlightRelevantWidgets(featureName);
+    } else if (selectedAction == suggestAction) {
+        // 获取布局建议
+        suggestLayoutForFeatures();
+    } else if (selectedAction == infoAction) {
+        // 显示功能特性详情
+        Product product = m_configManager->getProduct();
+        for (const ProductFeature &feature : product.features()) {
+            if (feature.name == featureName) {
+                QString info = QString("功能特性详情:\n\n"
+                                      "名称: %1\n"
+                                      "优先级: %2\n"
+                                      "描述: %3\n"
+                                      "建议控件类型: %4")
+                              .arg(feature.name)
+                              .arg(feature.priority)
+                              .arg(feature.description)
+                              .arg(suggestWidgetTypeForFeature(feature));
+                
+                QMessageBox::information(this, "功能特性详情", info);
+                break;
+            }
+        }
+    }
+}
+
+// 辅助方法：根据功能特性建议控件类型
+QString UILayoutWindow::suggestWidgetTypeForFeature(const ProductFeature &feature)
+{
+    QString description = feature.description.toLower();
+    QString name = feature.name.toLower();
+    
+    // 根据功能特性描述和名称推断合适的控件类型
+    if (description.contains("按钮") || name.contains("button") || name.contains("btn")) {
+        return "QPushButton";
+    } else if (description.contains("标签") || name.contains("label") || name.contains("lbl")) {
+        return "QLabel";
+    } else if (description.contains("输入") || name.contains("input") || name.contains("edit")) {
+        return "QLineEdit";
+    } else if (description.contains("文本") || name.contains("text")) {
+        return "QTextEdit";
+    } else if (description.contains("选择") || name.contains("select") || name.contains("combo")) {
+        return "QComboBox";
+    } else if (description.contains("列表") || name.contains("list")) {
+        return "QListWidget";
+    } else if (description.contains("树") || name.contains("tree")) {
+        return "QTreeWidget";
+    } else if (description.contains("表格") || name.contains("table")) {
+        return "QTableWidget";
+    } else if (description.contains("进度") || name.contains("progress")) {
+        return "QProgressBar";
+    } else if (description.contains("滑动") || name.contains("slider")) {
+        return "QSlider";
+    } else if (description.contains("复选框") || name.contains("check") || name.contains("checkbox")) {
+        return "QCheckBox";
+    } else if (description.contains("单选") || name.contains("radio")) {
+        return "QRadioButton";
+    } else if (description.contains("分组") || name.contains("group")) {
+        return "QGroupBox";
+    } else if (description.contains("标签页") || name.contains("tab")) {
+        return "QTabWidget";
+    }
+    
+    // 默认返回通用控件
+    return "QWidget";
+}
+
+QWidget* UILayoutWindow::findWidgetById(const QString &widgetId)
+{
+    // 遍历所有控件查找匹配的widgetId
+    for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+        QWidget *widget = it.key();
+        QString id = widget->objectName();
+        if (id == widgetId) {
+            return widget;
+        }
+    }
+    return nullptr;
+}
+
+void UILayoutWindow::onActionSuggestLayoutTriggered()
+{
+    // 调用布局建议功能
+    suggestLayoutForFeatures();
+}
+
+void UILayoutWindow::onActionEventActionEditorTriggered()
+{
+    // 创建或显示事件-动作编辑器窗口
+    if (!m_eventActionEditor) {
+        m_eventActionEditor = new EventActionEditor(this);
+        m_eventActionEditor->setWindowTitle("事件-动作编辑器");
+        m_eventActionEditor->resize(800, 600);
+        
+        // 设置窗口标志，使其为模态对话框
+        m_eventActionEditor->setWindowFlags(Qt::Dialog);
+        m_eventActionEditor->setWindowModality(Qt::ApplicationModal);
+    }
+    
+    // 显示事件-动作编辑器
+    m_eventActionEditor->show();
+    m_eventActionEditor->raise();
+    m_eventActionEditor->activateWindow();
+}
+
+// 多界面管理相关方法实现
+void UILayoutWindow::setupInterfaceManagementUI()
+{
+    // 创建界面管理工具栏
+    QToolBar *interfaceToolBar = new QToolBar("界面管理", this);
+    interfaceToolBar->setMovable(false);
+    
+    // 添加界面列表下拉框
+    QComboBox *interfaceComboBox = new QComboBox(interfaceToolBar);
+    interfaceComboBox->setObjectName("interfaceComboBox");
+    interfaceComboBox->setMinimumWidth(150);
+    interfaceComboBox->setToolTip("选择要编辑的界面");
+    
+    // 添加界面管理按钮
+    QAction *addInterfaceAction = new QAction("新建界面", this);
+    QAction *deleteInterfaceAction = new QAction("删除界面", this);
+    QAction *renameInterfaceAction = new QAction("重命名界面", this);
+    QAction *copyInterfaceAction = new QAction("复制界面", this);
+    
+    interfaceToolBar->addWidget(new QLabel("界面:"));
+    interfaceToolBar->addWidget(interfaceComboBox);
+    interfaceToolBar->addSeparator();
+    interfaceToolBar->addAction(addInterfaceAction);
+    interfaceToolBar->addAction(deleteInterfaceAction);
+    interfaceToolBar->addAction(renameInterfaceAction);
+    interfaceToolBar->addAction(copyInterfaceAction);
+    
+    // 将工具栏添加到主窗口
+    addToolBar(Qt::TopToolBarArea, interfaceToolBar);
+    
+    // 连接信号槽
+    connect(interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
+            this, &UILayoutWindow::onInterfaceComboBoxChanged);
+    connect(addInterfaceAction, &QAction::triggered, this, &UILayoutWindow::onAddInterfaceAction);
+    connect(deleteInterfaceAction, &QAction::triggered, this, &UILayoutWindow::onDeleteInterfaceAction);
+    connect(renameInterfaceAction, &QAction::triggered, this, &UILayoutWindow::onRenameInterfaceAction);
+    connect(copyInterfaceAction, &QAction::triggered, this, &UILayoutWindow::onCopyInterfaceAction);
+    
+    // 更新界面列表
+    updateInterfaceList();
+}
+
+void UILayoutWindow::updateInterfaceList()
+{
+    // 检查界面管理器是否有效
+    if (!m_interfaceManager) {
+        qCritical() << "UILayoutWindow: m_interfaceManager is nullptr, cannot update interface list";
+        return;
+    }
+    
+    // 查找界面管理工具栏中的下拉框
+    QComboBox *interfaceComboBox = findChild<QComboBox*>("interfaceComboBox");
+    if (!interfaceComboBox) return;
+    
+    // 保存当前选中的界面
+    QString currentInterfaceName = interfaceComboBox->currentText();
+    
+    // 清空下拉框
+    interfaceComboBox->clear();
+    
+    // 添加所有界面到下拉框
+    QList<UIInterface*> interfaces = m_interfaceManager->interfaces();
+    for (UIInterface *interface : interfaces) {
+        interfaceComboBox->addItem(interface->name(), QVariant::fromValue(interface));
+    }
+    
+    // 恢复选中的界面
+    int index = interfaceComboBox->findText(currentInterfaceName);
+    if (index >= 0) {
+        interfaceComboBox->setCurrentIndex(index);
+    } else if (interfaceComboBox->count() > 0) {
+        interfaceComboBox->setCurrentIndex(0);
+    }
+    
+    // 更新窗口标题显示当前界面
+    if (m_interfaceManager->currentInterface()) {
+        setWindowTitle(QString("UI布局编辑器 - %1").arg(m_interfaceManager->currentInterface()->name()));
+    }
+}
+
+void UILayoutWindow::switchToInterface(UIInterface *interface)
+{
+    if (!interface || !m_interfaceManager) return;
+    
+    // 保存当前界面状态
+    saveCurrentInterfaceState();
+    
+    // 切换到新界面
+    m_interfaceManager->setCurrentInterface(interface);
+    
+    // 加载新界面状态
+    loadInterfaceState(interface);
+    
+    // 更新窗口标题显示当前界面
+    if (m_interfaceManager->currentInterface()) {
+        setWindowTitle(QString("UI布局编辑器 - %1").arg(m_interfaceManager->currentInterface()->name()));
+    }
+}
+
+void UILayoutWindow::saveCurrentInterfaceState()
+{
+    if (!m_interfaceManager || !m_interfaceManager->currentInterface()) return;
+    
+    // 获取当前界面
+    UIInterface *currentInterface = m_interfaceManager->currentInterface();
+    
+    // 清空当前界面的布局项
+    currentInterface->clearLayoutItems();
+    
+    // 保存所有布局项到当前界面
+    for (LayoutItem *item : m_layoutItems) {
+        currentInterface->addLayoutItem(item);
+    }
+}
+
+void UILayoutWindow::loadInterfaceState(UIInterface *interface)
+{
+    if (!interface) return;
+    
+    // 清空当前编辑区的所有控件
+    clearEditArea();
+    
+    // 加载界面中的布局项
+    QList<LayoutItem*> layoutItems = interface->layoutItems();
+    for (LayoutItem *item : layoutItems) {
+        // 创建控件并添加到编辑区
+        QWidget *widget = qobject_cast<QWidget*>(item->createWidget(m_editAreaWidget));
+        if (widget) {
+            widget->setGeometry(QRect(item->pos(), item->size()));
+            widget->show();
+            
+            // 添加到映射关系
+            m_widgetItemMap[widget] = item;
+            m_layoutItems.append(item);
+        }
+    }
+    
+    // 更新属性编辑器
+    updatePropertiesEditor(nullptr);
+}
+
+// 界面管理相关的槽函数
+void UILayoutWindow::onInterfaceComboBoxChanged(int index)
+{
+    QComboBox *comboBox = qobject_cast<QComboBox*>(sender());
+    if (!comboBox) return;
+    
+    // 防止递归调用：如果当前界面已经是目标界面，则不进行切换
+    if (m_interfaceManager && m_interfaceManager->currentInterface()) {
+        UIInterface *currentInterface = m_interfaceManager->currentInterface();
+        if (index >= 0) {
+            UIInterface *targetInterface = comboBox->itemData(index).value<UIInterface*>();
+            if (targetInterface && targetInterface == currentInterface) {
+                return; // 已经是当前界面，不需要切换
+            }
+        }
+    }
+    
+    if (index >= 0) {
+        UIInterface *interface = comboBox->itemData(index).value<UIInterface*>();
+        if (interface) {
+            switchToInterface(interface);
+        }
+    }
+}
+
+void UILayoutWindow::onAddInterfaceAction()
+{
+    if (!m_interfaceManager) return;
+    
+    bool ok;
+    QString interfaceName = QInputDialog::getText(this, "新建界面", "请输入界面名称:", 
+                                                 QLineEdit::Normal, "新界面", &ok);
+    if (ok && !interfaceName.isEmpty()) {
+        UIInterface *newInterface = m_interfaceManager->createInterface(interfaceName);
+        if (newInterface) {
+            updateInterfaceList();
+            
+            // 切换到新创建的界面
+            switchToInterface(newInterface);
+        }
+    }
+}
+
+void UILayoutWindow::onDeleteInterfaceAction()
+{
+    if (!m_interfaceManager) return;
+    
+    UIInterface *currentInterface = m_interfaceManager->currentInterface();
+    if (!currentInterface) return;
+    
+    if (m_interfaceManager->interfaces().count() <= 1) {
+        QMessageBox::warning(this, "删除界面", "至少需要保留一个界面！");
+        return;
+    }
+    
+    int result = QMessageBox::question(this, "删除界面", 
+                                       QString("确定要删除界面 '%1' 吗？").arg(currentInterface->name()),
+                                       QMessageBox::Yes | QMessageBox::No);
+    
+    if (result == QMessageBox::Yes) {
+        m_interfaceManager->removeInterface(currentInterface);
+        updateInterfaceList();
+    }
+}
+
+void UILayoutWindow::onRenameInterfaceAction()
+{
+    if (!m_interfaceManager) return;
+    
+    UIInterface *currentInterface = m_interfaceManager->currentInterface();
+    if (!currentInterface) return;
+    
+    bool ok;
+    QString newName = QInputDialog::getText(this, "重命名界面", "请输入新名称:", 
+                                           QLineEdit::Normal, currentInterface->name(), &ok);
+    if (ok && !newName.isEmpty()) {
+        m_interfaceManager->renameInterface(currentInterface, newName);
+        updateInterfaceList();
+    }
+}
+
+void UILayoutWindow::onCopyInterfaceAction()
+{
+    if (!m_interfaceManager) return;
+    
+    UIInterface *currentInterface = m_interfaceManager->currentInterface();
+    if (!currentInterface) return;
+    
+    bool ok;
+    QString newName = QInputDialog::getText(this, "复制界面", "请输入新界面名称:", 
+                                           QLineEdit::Normal, 
+                                           QString("%1_副本").arg(currentInterface->name()), &ok);
+    if (ok && !newName.isEmpty()) {
+        UIInterface *copiedInterface = m_interfaceManager->cloneInterface(currentInterface, newName);
+        if (copiedInterface) {
+            updateInterfaceList();
+            
+            // 切换到新复制的界面
+            switchToInterface(copiedInterface);
+        }
+    }
+}
+
+void UILayoutWindow::clearEditArea()
+{
+    // 删除所有控件
+    for (QWidget *widget : m_widgetItemMap.keys()) {
+        delete widget;
+    }
+    
+    // 清空映射关系
+    m_widgetItemMap.clear();
+    m_layoutItems.clear();
+    
+    // 重置选中的控件
+    m_selectedWidget = nullptr;
+    
+    // 隐藏控制点
+    if (m_editAreaWidget) {
+        m_editAreaWidget->setHandles(QList<QRect>());
+    }
 }

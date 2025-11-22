@@ -10,14 +10,18 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QProcess \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QStandardPaths \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QThread \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h \
@@ -159,6 +163,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qthread.h \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qtimezone.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qtmetamacros.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qtnoop.h \
@@ -178,6 +183,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
@@ -185,6 +191,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QSurfaceFormat \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qabstracttextdocumentlayout.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
@@ -211,6 +218,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
@@ -234,6 +242,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+	D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
@@ -258,9 +267,12 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFontComboBox \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFormLayout \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHBoxLayout \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QKeySequenceEdit \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLCDNumber \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
@@ -269,6 +281,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMdiArea \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPlainTextEdit \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
@@ -310,10 +323,12 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfontcombobox.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qformlayout.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qkeysequenceedit.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
@@ -324,6 +339,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmdiarea.h \
+	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qplaintextedit.h \
 	D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
@@ -888,6 +904,11 @@ software-editor_autogen/timestamp: \
 	D:/virtualMachine/github/software-editor/src/customtreewidget.h \
 	D:/virtualMachine/github/software-editor/src/editareawidget.cpp \
 	D:/virtualMachine/github/software-editor/src/editareawidget.h \
+	D:/virtualMachine/github/software-editor/src/eventactioneditor.cpp \
+	D:/virtualMachine/github/software-editor/src/eventactioneditor.h \
+	D:/virtualMachine/github/software-editor/src/eventactionmodel.cpp \
+	D:/virtualMachine/github/software-editor/src/eventactionmodel.h \
+	D:/virtualMachine/github/software-editor/src/layoutitem.h \
 	D:/virtualMachine/github/software-editor/src/main.cpp \
 	D:/virtualMachine/github/software-editor/src/mainwindow.cpp \
 	D:/virtualMachine/github/software-editor/src/mainwindow.h \
@@ -907,6 +928,10 @@ software-editor_autogen/timestamp: \
 	D:/virtualMachine/github/software-editor/src/smartpackageconfig.h \
 	D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp \
 	D:/virtualMachine/github/software-editor/src/smartpackagedialog.h \
+	D:/virtualMachine/github/software-editor/src/uiinterface.cpp \
+	D:/virtualMachine/github/software-editor/src/uiinterface.h \
+	D:/virtualMachine/github/software-editor/src/uiinterfacemanager.cpp \
+	D:/virtualMachine/github/software-editor/src/uiinterfacemanager.h \
 	D:/virtualMachine/github/software-editor/src/uilayoutwindow.cpp \
 	D:/virtualMachine/github/software-editor/src/uilayoutwindow.h \
 	D:/virtualMachine/github/software-editor/src/mainwindow.ui \

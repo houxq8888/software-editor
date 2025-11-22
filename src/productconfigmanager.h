@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
+#include <QTimer>
 #include "product.h"
 
 class ProductConfigManager : public QObject
@@ -49,12 +50,43 @@ public:
     // 绑定操作
     void bindUiLayout(const QString &uiLayoutPath);
     
+    // 双向绑定机制
+    void bindProductFeatureToWidget(const QString &featureName, const QString &widgetId);
+    void unbindProductFeatureFromWidget(const QString &featureName, const QString &widgetId);
+    QMap<QString, QString> getFeatureWidgetBindings() const;
+    QString getWidgetIdForFeature(const QString &featureName) const;
+    QString getFeatureForWidget(const QString &widgetId) const;
+    
+    // 布局模板管理
+    void saveLayoutTemplate(const QString &templateName, const QString &uiLayoutPath);
+    QStringList getAvailableLayoutTemplates() const;
+    QString getLayoutTemplate(const QString &templateName) const;
+    
     // 验证状态
     bool isValid() const;
     bool hasUiLayout() const;
     
     // 获取状态描述
     QString getStatusDescription() const;
+    
+    // 实时同步和冲突解决机制
+    void startRealTimeSync();
+    void stopRealTimeSync();
+    bool isRealTimeSyncActive() const;
+    
+    // 冲突检测和解决
+    bool hasConflicts() const;
+    QStringList getConflictList() const;
+    void resolveConflict(const QString &conflictId, bool useProductVersion);
+    void resolveAllConflicts(bool useProductVersion);
+    
+    // 自动同步功能
+    void enableAutoSync(bool enable);
+    bool isAutoSyncEnabled() const;
+    
+    // 同步状态检查
+    bool isSynced() const;
+    QString getSyncStatus() const;
 
 signals:
     void productModifiedChanged(bool modified);
@@ -62,6 +94,14 @@ signals:
     void uiLayoutChanged(bool changed);
     void needsSaveChanged(bool needsSave);
     void needsUiBindingChanged(bool needsBinding);
+    
+    // 实时同步相关信号
+    void realTimeSyncStarted();
+    void realTimeSyncStopped();
+    void syncStatusChanged(const QString &status);
+    void conflictDetected(const QString &conflictId, const QString &description);
+    void conflictResolved(const QString &conflictId);
+    void autoSyncToggled(bool enabled);
 
 private:
     Product m_product;
@@ -76,6 +116,18 @@ private:
     QDateTime m_productLastModified;
     QDateTime m_uiLayoutLastModified;
     QDateTime m_lastUiLayoutChange;
+    
+    // 实时同步相关成员
+    bool m_realTimeSyncActive;
+    bool m_autoSyncEnabled;
+    QTimer *m_syncTimer;
+    QMap<QString, QDateTime> m_conflicts;
+    
+    // 同步检查方法
+    void checkForConflicts();
+    void performSync();
+    void detectFeatureWidgetConflicts();
+    void detectLayoutTemplateConflicts();
 };
 
 #endif // PRODUCTCONFIGMANAGER_H

@@ -80,13 +80,16 @@ void loadApplicationConfig() {
 }
 
 int main(int argc, char *argv[]) { 
-    // 加载应用程序配置
+    QApplication app(argc, argv);
+    
+    // 设置应用程序属性
     QCoreApplication::setApplicationName("软件编辑器");
     QCoreApplication::setApplicationVersion("1.0.0");
     QCoreApplication::setOrganizationName("软件工作室");
     
     // 将日志输出到文件
-    QFile *logFile = new QFile("debug.log");
+    QString logPath = QCoreApplication::applicationDirPath() + "/debug.log";
+    QFile *logFile = new QFile(logPath);
     if (logFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) { 
         QTextStream *logStream = new QTextStream(logFile);
         qInstallMessageHandler([](QtMsgType type, const QMessageLogContext &context, const QString &msg) { 
@@ -94,9 +97,11 @@ int main(int argc, char *argv[]) {
             // 输出到控制台
             QTextStream(stdout) << logEntry << endl;
         });
+    } else {
+        // 如果日志文件打开失败，清理资源
+        delete logFile;
+        qDebug() << "无法打开日志文件:" << logPath;
     }
-
-    QApplication app(argc, argv);
     
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
