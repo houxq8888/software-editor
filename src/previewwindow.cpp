@@ -24,6 +24,10 @@
 #include <QProgressBar>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QInputDialog>
+#include <QMouseEvent>
+#include <QTabBar>
+#include <QMessageBox>
 
 PreviewWindow::PreviewWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -58,6 +62,7 @@ PreviewWindow::~PreviewWindow()
     delete ui;
     qDeleteAll(m_widgetMap.values());
     m_widgetMap.clear();
+    m_widgetToItemMap.clear();
 }
 QWidget* PreviewWindow::createWidgetFromType(const QString &widgetType, QWidget *parent) {
     qDebug() << "Creating widget of type:" << widgetType;
@@ -111,7 +116,8 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
 
                 // 保存映射关系
                 m_widgetMap[item] = tabWidget;
-                qDebug() << "PreviewWindow::setLayoutItems: Added user-dragged QTabWidget to m_widgetMap" << tabWidget;
+                m_widgetToItemMap[tabWidget] = item; // 建立反向映射
+                qDebug() << "PreviewWindow::setLayoutItems: Added user-dragged QTabWidget to m_widgetMap and m_widgetToItemMap" << tabWidget;
 
                 // 获取TabWidget的Tab页
                 if (tabWidget->count() >= 2) {
@@ -209,10 +215,123 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
 
         // 保存映射关系
         m_widgetMap[item] = widget;
-        qDebug() << "PreviewWindow::setLayoutItems: Added widget to m_widgetMap" << widget;
+        m_widgetToItemMap[widget] = item; // 建立反向映射
+        qDebug() << "PreviewWindow::setLayoutItems: Added widget to m_widgetMap and m_widgetToItemMap" << widget;
     }
 
     // 更新预览
     ui->previewWidget->update();
     qDebug() << "PreviewWindow::setLayoutItems: Updated ui->previewWidget" << ui->previewWidget;
+}
+
+// 鼠标双击事件处理
+void PreviewWindow::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        QPoint pos = event->pos();
+        qDebug() << "PreviewWindow::mouseDoubleClickEvent: 双击位置:" << pos;
+        
+        // 遍历所有控件，找到被双击的控件
+        for (QWidget *widget : m_widgetToItemMap.keys()) {
+            if (widget->isVisible() && widget->geometry().contains(pos)) {
+                qDebug() << "PreviewWindow::mouseDoubleClickEvent: 找到被双击的控件:" << widget;
+                
+                LayoutItem *item = m_widgetToItemMap.value(widget);
+                if (!item) {
+                    qDebug() << "PreviewWindow::mouseDoubleClickEvent: 无法找到对应的LayoutItem";
+                    continue;
+                }
+                
+                // 处理QLabel双击编辑
+                QLabel *label = qobject_cast<QLabel*>(widget);
+                if (label) {
+                    qDebug() << "PreviewWindow::mouseDoubleClickEvent: 处理QLabel双击编辑";
+                    handleLabelDoubleClick(label, item);
+                    return;
+                }
+                
+                // 处理QTabWidget双击编辑
+                QTabWidget *tabWidget = qobject_cast<QTabWidget*>(widget);
+                if (tabWidget) {
+                    qDebug() << "PreviewWindow::mouseDoubleClickEvent: 处理QTabWidget双击编辑";
+                    handleTabWidgetDoubleClick(tabWidget, pos, item);
+                    return;
+                }
+                
+                qDebug() << "PreviewWindow::mouseDoubleClickEvent: 控件类型不支持双击编辑:" << widget->metaObject()->className();
+                break;
+            }
+        }
+    }
+    
+    // 调用基类处理
+    QMainWindow::mouseDoubleClickEvent(event);
+}
+
+// 处理QLabel双击编辑
+void PreviewWindow::handleLabelDoubleClick(QWidget *label, LayoutItem *item) {
+    if (!label || !item) {
+        qDebug() << "PreviewWindow::handleLabelDoubleClick: 参数为空";
+        return;
+    }
+    
+    QLabel *qlabel = qobject_cast<QLabel*>(label);
+    if (!qlabel) {
+        qDebug() << "PreviewWindow::handleLabelDoubleClick: 控件不是QLabel类型";
+        return;
+    }
+    
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("编辑文本"), tr("文本:"), QLineEdit::Normal, qlabel->text(), &ok);
+    if (ok && !text.isEmpty()) {
+        // 更新Label文本
+        qlabel->setText(text);
+        
+        // 更新LayoutItem的文本
+        item->setText(text);
+        
+        qDebug() << "PreviewWindow::handleLabelDoubleClick: QLabel文本已修改为:" << text;
+        
+        // 显示成功消息
+        QMessageBox::information(this, tr("编辑成功"), tr("文本已成功修改"));
+    }
+}
+
+// 处理QTabWidget双击编辑
+void PreviewWindow::handleTabWidgetDoubleClick(QWidget *tabWidget, const QPoint &pos, LayoutItem *item) {
+    if (!tabWidget || !item) {
+        qDebug() << "PreviewWindow::handleTabWidgetDoubleClick: 参数为空";
+        return;
+    }
+    
+    QTabWidget *qtabWidget = qobject_cast<QTabWidget*>(tabWidget);
+    if (!qtabWidget) {
+        qDebug() << "PreviewWindow::handleTabWidgetDoubleClick: 控件不是QTabWidget类型";
+        return;
+    }
+    
+    // 转换为QTabWidget的本地坐标
+    QPoint tabWidgetLocalPos = qtabWidget->mapFromGlobal(pos);
+    
+    // 获取Tab栏的区域
+    QRect tabBarRect = qtabWidget->tabBar()->geometry();
+    if (tabBarRect.contains(tabWidgetLocalPos)) {
+        // 计算用户点击的是哪个Tab页
+        int tabIndex = qtabWidget->tabBar()->tabAt(tabWidgetLocalPos);
+        if (tabIndex != -1) {
+            bool ok;
+            QString text = QInputDialog::getText(this, tr("编辑Tab标题"), tr("标题:"), QLineEdit::Normal, qtabWidget->tabText(tabIndex), &ok);
+            if (ok && !text.isEmpty()) {
+                // 更新Tab页标题
+                qtabWidget->setTabText(tabIndex, text);
+                
+                // 更新LayoutItem的文本
+                item->setText(text);
+                
+                qDebug() << "PreviewWindow::handleTabWidgetDoubleClick: Tab页标题已修改为:" << text;
+                
+                // 显示成功消息
+                QMessageBox::information(this, tr("编辑成功"), tr("Tab页标题已成功修改"));
+            }
+        }
+    }
 }

@@ -552,4 +552,6 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QButtonGroup \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qbuttongroup.h \
- D:\virtualMachine\github\software-editor\src\productconfigmanager.h
+ D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h

@@ -13,6 +13,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/QStandardPaths \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QThread \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h \
@@ -21,6 +22,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20type_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20utility.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q23utility.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qabstractitemmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qalgorithms.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qanystringview.h \
@@ -31,6 +33,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qatomic_cxx11.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbasicatomic.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbindingstorage.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearray.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayalgorithms.h \
@@ -59,6 +62,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qdirlisting.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qendian.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qexceptionhandling.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qfiledevice.h \
@@ -147,6 +151,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qthread.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtimezone.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtmetamacros.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtnoop.h \

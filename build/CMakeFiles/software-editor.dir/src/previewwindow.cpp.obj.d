@@ -387,24 +387,46 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
- D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_previewwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
+ D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_previewwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenuBar \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenubar.h \
@@ -445,9 +467,7 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
@@ -462,24 +482,6 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qabstracttextdocumentlayout.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextlayout.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qglyphrun.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qrawfont.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfontdatabase.h \
@@ -535,7 +537,6 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDial \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdial.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
@@ -574,17 +575,61 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
  D:\virtualMachine\github\software-editor\src\editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
  D:\virtualMachine\github\software-editor\src\customtreewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
+ D:\virtualMachine\github\software-editor\src\product.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonvalue.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcborvalue.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcborcommon.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
+ D:\virtualMachine\github\software-editor\src\eventactioneditor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
+ D:\virtualMachine\github\software-editor\src\eventactionmodel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
+ D:\virtualMachine\github\software-editor\src\uiinterfacemanager.h \
+ D:\virtualMachine\github\software-editor\src\uiinterface.h \
+ D:\virtualMachine\github\software-editor\src\layoutitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCalendarWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcalendarwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTableWidget \
@@ -599,4 +644,6 @@ CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QScreen \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QGuiApplication \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabbar.h

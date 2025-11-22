@@ -532,6 +532,11 @@ CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj: \
  D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
  D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
@@ -541,9 +546,6 @@ CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
@@ -682,6 +684,11 @@ CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
  D:\virtualMachine\github\software-editor\src\editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
@@ -693,6 +700,24 @@ CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj: \
  D:\virtualMachine\github\software-editor\src\customtreewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
+ D:\virtualMachine\github\software-editor\src\eventactioneditor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
+ D:\virtualMachine\github\software-editor\src\eventactionmodel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
+ D:\virtualMachine\github\software-editor\src\uiinterfacemanager.h \
+ D:\virtualMachine\github\software-editor\src\uiinterface.h \
+ D:\virtualMachine\github\software-editor\src\layoutitem.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QCloseEvent \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QScreen \

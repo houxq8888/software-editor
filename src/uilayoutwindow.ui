@@ -59,20 +59,84 @@
         <widget class="QWidget" name="rightPanelWidget">
          <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QLabel" name="propertiesLabel">
-             <property name="text">
-              <string>属性编辑器</string>
+            <widget class="QTabWidget" name="rightTabWidget">
+             <property name="currentIndex">
+              <number>0</number>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTreeWidget" name="propertiesTreeWidget">
-             <property name="headerLabels">
-              <stringlist>
-               <string>属性名</string>
-               <string>属性值</string>
-              </stringlist>
-             </property>
+             <widget class="QWidget" name="propertiesTab">
+              <attribute name="title">
+               <string>属性编辑器</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <widget class="QLabel" name="propertiesLabel">
+                  <property name="text">
+                   <string>属性编辑器</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeWidget" name="propertiesTreeWidget">
+                  <property name="headerLabels">
+                   <stringlist>
+                    <string>属性名</string>
+                    <string>属性值</string>
+                   </stringlist>
+                  </property>
+                 </widget>
+                </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="featuresTab">
+              <attribute name="title">
+               <string>功能特性</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QLabel" name="featuresLabel">
+                  <property name="text">
+                   <string>功能特性关联</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeWidget" name="featuresTreeWidget">
+                  <property name="headerLabels">
+                   <stringlist>
+                    <string>功能特性</string>
+                    <string>关联控件</string>
+                    <string>状态</string>
+                   </stringlist>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="bindFeatureButton">
+                    <property name="text">
+                     <string>绑定特性</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="unbindFeatureButton">
+                    <property name="text">
+                     <string>解绑特性</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="syncFeaturesButton">
+                  <property name="text">
+                   <string>同步功能特性</string>
+                  </property>
+                 </widget>
+                </item>
+              </layout>
+             </widget>
             </widget>
            </item>
          </layout>
@@ -106,8 +170,15 @@
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>交互</string>
+    </property>
+    <addaction name="actionEventActionEditor"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -118,6 +189,8 @@
    </attribute>
    <addaction name="actionPreview"/>
    <addaction name="actionNew_Layout"/>
+   <addaction name="actionSuggestLayout"/>
+   <addaction name="actionEventActionEditor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew_Layout">
@@ -176,12 +249,34 @@
     <string>Ctrl+P</string>
    </property>
   </action>
+  <action name="actionSuggestLayout">
+   <property name="text">
+    <string>布局建议(&amp;L)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+   <property name="toolTip">
+    <string>获取基于产品功能特性的布局建议</string>
+   </property>
+  </action>
+  <action name="actionEventActionEditor">
+   <property name="text">
+    <string>事件-动作编辑器(&amp;E)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+   <property name="toolTip">
+    <string>打开事件-动作编辑器，配置控件间交互关系</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CustomListWidget</class>
-   <extends>QListWidget</extends>
-   <header>uilayoutwindow.h</header>
+   <class>CustomTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>customtreewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

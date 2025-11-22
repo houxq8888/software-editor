@@ -385,6 +385,24 @@
 			null
 		],
 		[
+			"D:/virtualMachine/github/software-editor/src/eventactioneditor.h",
+			"MU",
+			"UVLADIE3JM/moc_eventactioneditor.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/eventactionmodel.h",
+			"MU",
+			"UVLADIE3JM/moc_eventactionmodel.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/layoutitem.h",
+			"MU",
+			"UVLADIE3JM/moc_layoutitem.cpp",
+			null
+		],
+		[
 			"D:/virtualMachine/github/software-editor/src/mainwindow.h",
 			"MU",
 			"UVLADIE3JM/moc_mainwindow.cpp",
@@ -436,6 +454,18 @@
 			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.h",
 			"MU",
 			"UVLADIE3JM/moc_smartpackagedialog.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uiinterface.h",
+			"MU",
+			"UVLADIE3JM/moc_uiinterface.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uiinterfacemanager.h",
+			"MU",
+			"UVLADIE3JM/moc_uiinterfacemanager.cpp",
 			null
 		],
 		[
@@ -533,6 +563,16 @@
 			"MU",
 			null
 		],
+		[
+			"D:/virtualMachine/github/software-editor/src/eventactioneditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/eventactionmodel.cpp",
+			"MU",
+			null
+		],
 		[ "D:/virtualMachine/github/software-editor/src/main.cpp", "MU", null ],
 		[
 			"D:/virtualMachine/github/software-editor/src/mainwindow.cpp",
@@ -576,6 +616,16 @@
 		],
 		[
 			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uiinterface.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uiinterfacemanager.cpp",
 			"MU",
 			null
 		],

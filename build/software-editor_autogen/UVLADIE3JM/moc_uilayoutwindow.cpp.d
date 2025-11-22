@@ -1,13 +1,20 @@
 D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3JM/moc_uilayoutwindow.cpp: D:/virtualMachine/github/software-editor/src/uilayoutwindow.h \
   D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonArray \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
   D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q17memory.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20functional.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h \
@@ -33,6 +40,8 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearraylist.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearrayview.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qcborcommon.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qcborvalue.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qchar.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare_impl.h \
@@ -71,6 +80,11 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterable.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qiterator.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonobject.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonparseerror.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonvalue.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qlatin1stringview.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qline.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
@@ -147,11 +161,13 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtCore/qtypes.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qurl.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qutf8stringview.h \
+  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qvarlengtharray.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
   D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
@@ -159,6 +175,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QSurfaceFormat \
   D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qabstracttextdocumentlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
@@ -185,6 +202,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
@@ -208,6 +226,7 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+  D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qvalidator.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
   D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
@@ -229,8 +248,11 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFontComboBox \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFormLayout \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QKeySequenceEdit \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLCDNumber \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
@@ -238,6 +260,8 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMdiArea \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPlainTextEdit \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
@@ -271,14 +295,17 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdatetimeedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdial.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfontcombobox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qformlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qkeysequenceedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
@@ -288,6 +315,8 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmdiarea.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
+  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qplaintextedit.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
   D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
@@ -536,4 +565,10 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
   D:/virtualMachine/github/software-editor/src/customtreewidget.h \
   D:/virtualMachine/github/software-editor/src/editareawidget.h \
-  D:/virtualMachine/github/software-editor/src/previewwindow.h
+  D:/virtualMachine/github/software-editor/src/eventactioneditor.h \
+  D:/virtualMachine/github/software-editor/src/eventactionmodel.h \
+  D:/virtualMachine/github/software-editor/src/layoutitem.h \
+  D:/virtualMachine/github/software-editor/src/previewwindow.h \
+  D:/virtualMachine/github/software-editor/src/product.h \
+  D:/virtualMachine/github/software-editor/src/uiinterface.h \
+  D:/virtualMachine/github/software-editor/src/uiinterfacemanager.h

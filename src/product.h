@@ -11,6 +11,7 @@ struct ProductFeature
 {
     QString name;
     QString description;
+    int priority = 5; // 默认优先级为5
 };
 
 class Product
