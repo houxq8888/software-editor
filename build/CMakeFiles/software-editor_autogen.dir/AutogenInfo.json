@@ -445,6 +445,12 @@
 			null
 		],
 		[
+			"D:/virtualMachine/github/software-editor/src/productstate.h",
+			"MU",
+			"UVLADIE3JM/moc_productstate.cpp",
+			null
+		],
+		[
 			"D:/virtualMachine/github/software-editor/src/smartpackageconfig.h",
 			"MU",
 			"UVLADIE3JM/moc_smartpackageconfig.cpp",
@@ -606,6 +612,11 @@
 		],
 		[
 			"D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/productstate.cpp",
 			"MU",
 			null
 		],

@@ -25,6 +25,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/software-editor.dir/src/product.cpp.obj.d"
   "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj"
   "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj.d"
+  "CMakeFiles/software-editor.dir/src/productstate.cpp.obj"
+  "CMakeFiles/software-editor.dir/src/productstate.cpp.obj.d"
   "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj"
   "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj.d"
   "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj"

@@ -21,6 +21,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/virtualMachine/github/software-editor/src/previewwindow.cpp" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/product.cpp" "CMakeFiles/software-editor.dir/src/product.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/product.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp" "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj.d"
+  "D:/virtualMachine/github/software-editor/src/productstate.cpp" "CMakeFiles/software-editor.dir/src/productstate.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/productstate.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp" "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp" "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/uiinterface.cpp" "CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj.d"

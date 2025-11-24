@@ -554,4 +554,5 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qbuttongroup.h \
  D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
+ D:\virtualMachine\github\software-editor\src\productstate.h

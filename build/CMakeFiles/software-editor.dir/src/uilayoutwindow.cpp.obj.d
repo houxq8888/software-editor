@@ -650,6 +650,7 @@ CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
+ D:\virtualMachine\github\software-editor\src\productstate.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDockWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdockwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRegularExpression \

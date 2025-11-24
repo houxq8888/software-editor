@@ -8,6 +8,7 @@
 
 ProductConfigManager::ProductConfigManager(QObject *parent)
     : QObject(parent)
+    , m_productState(new ProductState(this))
     , m_productModified(false)
     , m_uiLayoutModified(false)
     , m_uiLayoutChanged(false)
@@ -18,6 +19,20 @@ ProductConfigManager::ProductConfigManager(QObject *parent)
     m_uiLayoutLastModified = QDateTime::currentDateTime();
     m_lastUiLayoutChange = QDateTime::currentDateTime();
     
+    // 连接ProductState的信号
+    connect(m_productState, &ProductState::stateChanged, this, [this]() {
+        emit needsSaveChanged(needsSave());
+        emit needsUiBindingChanged(needsUiBinding());
+    });
+    
+    connect(m_productState, &ProductState::productModifiedChanged, this, &ProductConfigManager::productModifiedChanged);
+    connect(m_productState, &ProductState::uiLayoutModifiedChanged, this, &ProductConfigManager::uiLayoutModifiedChanged);
+    connect(m_productState, &ProductState::uiLayoutChanged, this, &ProductConfigManager::uiLayoutChanged);
+    connect(m_productState, &ProductState::uiBindingChanged, this, [this](bool changed) {
+        emit uiLayoutChanged(changed);
+        emit needsUiBindingChanged(needsUiBinding());
+    });
+    
     // 初始化同步定时器
     m_syncTimer = new QTimer(this);
     m_syncTimer->setInterval(5000); // 5秒检查一次
@@ -26,107 +41,159 @@ ProductConfigManager::ProductConfigManager(QObject *parent)
 
 void ProductConfigManager::setProduct(const Product &product)
 {
-    if (m_product.toJson() != product.toJson()) {
-        m_product = product;
-        m_productLastModified = QDateTime::currentDateTime();
+    // 使用ProductState进行状态管理
+    if (m_productState->getWorkingProduct().toJson() != product.toJson()) {
+        // 设置产品副本
+        m_productState->setWorkingProduct(product);
         
         // 检查UI布局路径是否发生变化
-        QString oldUiLayoutPath = m_currentUiLayoutPath;
+        QString oldUiLayoutPath = m_productState->getWorkingUiLayoutPath();
         QString newUiLayoutPath = product.uiLayoutPath();
+        
+        if (oldUiLayoutPath != newUiLayoutPath) {
+            m_productState->setWorkingUiLayoutPath(newUiLayoutPath);
+            m_productState->setWorkingUiLayoutChanged(true);
+        }
+        
+        // 兼容旧代码
+        m_product = product;
+        m_productLastModified = QDateTime::currentDateTime();
         
         if (oldUiLayoutPath != newUiLayoutPath) {
             m_currentUiLayoutPath = newUiLayoutPath;
             m_uiLayoutChanged = true;
             m_lastUiLayoutChange = QDateTime::currentDateTime();
-            emit uiLayoutChanged(true);
-            emit needsUiBindingChanged(needsUiBinding());
         }
-        
-        emit productModifiedChanged(m_productModified);
-        emit needsSaveChanged(needsSave());
     }
 }
 
 Product ProductConfigManager::getProduct() const
 {
-    return m_product;
+    // 优先使用ProductState
+    return m_productState->getWorkingProduct();
 }
 
 void ProductConfigManager::setUiLayoutPath(const QString &uiLayoutPath)
 {
-    if (m_currentUiLayoutPath != uiLayoutPath) {
-        QString oldPath = m_currentUiLayoutPath;
-        m_currentUiLayoutPath = uiLayoutPath;
+    // 使用ProductState进行状态管理
+    if (m_productState->getWorkingUiLayoutPath() != uiLayoutPath) {
+        QString oldPath = m_productState->getWorkingUiLayoutPath();
+        
+        // 更新ProductState中的UI布局路径
+        m_productState->setWorkingUiLayoutPath(uiLayoutPath);
         
         // 更新产品中的UI布局路径
-        if (m_product.uiLayoutPath() != uiLayoutPath) {
-            m_product.setUiLayoutPath(uiLayoutPath);
-            m_productModified = true;
-            emit productModifiedChanged(true);
+        Product workingProduct = m_productState->getWorkingProduct();
+        if (workingProduct.uiLayoutPath() != uiLayoutPath) {
+            workingProduct.setUiLayoutPath(uiLayoutPath);
+            m_productState->setWorkingProduct(workingProduct);
         }
         
         // 标记UI布局已改变
+        m_productState->setWorkingUiLayoutChanged(true);
+        
+        // 兼容旧代码
+        m_currentUiLayoutPath = uiLayoutPath;
         m_uiLayoutChanged = true;
         m_lastUiLayoutChange = QDateTime::currentDateTime();
-        emit uiLayoutChanged(true);
-        emit needsUiBindingChanged(needsUiBinding());
-        emit needsSaveChanged(needsSave());
     }
 }
 
 QString ProductConfigManager::getUiLayoutPath() const
 {
-    return m_currentUiLayoutPath;
+    // 优先使用ProductState
+    return m_productState->getWorkingUiLayoutPath();
 }
 
 bool ProductConfigManager::isProductModified() const
 {
-    return m_productModified;
+    // 使用ProductState的统一接口
+    return m_productState->isProductModified();
 }
 
 bool ProductConfigManager::isUiLayoutModified() const
 {
-    return m_uiLayoutModified;
+    // 使用ProductState的统一接口
+    return m_productState->isUiLayoutModified();
 }
 
 bool ProductConfigManager::isUiLayoutChanged() const
 {
-    return m_uiLayoutChanged;
+    // 使用ProductState的统一接口
+    return m_productState->isUiLayoutChanged();
+}
+
+bool ProductConfigManager::isFeaturesModified() const
+{
+    // 检查功能特性是否被修改
+    // 通过比较正本和副本的功能特性列表来判断
+    Product originalProduct = m_productState->getOriginalProduct();
+    Product workingProduct = m_productState->getWorkingProduct();
+    
+    QList<ProductFeature> originalFeatures = originalProduct.features();
+    QList<ProductFeature> workingFeatures = workingProduct.features();
+    
+    // 如果功能特性数量不同，说明有修改
+    if (originalFeatures.size() != workingFeatures.size()) {
+        return true;
+    }
+    
+    // 逐个比较功能特性
+    for (int i = 0; i < originalFeatures.size(); ++i) {
+        if (originalFeatures[i].name != workingFeatures[i].name || 
+            originalFeatures[i].description != workingFeatures[i].description) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 void ProductConfigManager::setProductModified(bool modified)
 {
-    if (m_productModified != modified) {
+    // 使用ProductState进行状态管理
+    if (m_productState->isProductModified() != modified) {
+        // 通过修改产品副本来触发状态变化
+        if (modified) {
+            // 标记产品已修改
+            Product workingProduct = m_productState->getWorkingProduct();
+            workingProduct.setName(workingProduct.name() + " "); // 微小修改
+            m_productState->setWorkingProduct(workingProduct);
+        }
+        
+        // 兼容旧代码
         m_productModified = modified;
         if (modified) {
             m_productLastModified = QDateTime::currentDateTime();
         }
-        emit productModifiedChanged(modified);
-        emit needsSaveChanged(needsSave());
     }
 }
 
 void ProductConfigManager::setUiLayoutModified(bool modified)
 {
-    if (m_uiLayoutModified != modified) {
+    // 使用ProductState进行状态管理
+    if (m_productState->isUiLayoutModified() != modified) {
+        m_productState->setWorkingUiLayoutModified(modified);
+        
+        // 兼容旧代码
         m_uiLayoutModified = modified;
         if (modified) {
             m_uiLayoutLastModified = QDateTime::currentDateTime();
         }
-        emit uiLayoutModifiedChanged(modified);
-        emit needsSaveChanged(needsSave());
     }
 }
 
 void ProductConfigManager::setUiLayoutChanged(bool changed)
 {
-    if (m_uiLayoutChanged != changed) {
+    // 使用ProductState进行状态管理
+    if (m_productState->isUiLayoutChanged() != changed) {
+        m_productState->setWorkingUiLayoutChanged(changed);
+        
+        // 兼容旧代码
         m_uiLayoutChanged = changed;
         if (changed) {
             m_lastUiLayoutChange = QDateTime::currentDateTime();
         }
-        emit uiLayoutChanged(changed);
-        emit needsUiBindingChanged(needsUiBinding());
     }
 }
 
@@ -139,18 +206,14 @@ void ProductConfigManager::resetAllModifiedStates()
 
 bool ProductConfigManager::needsSave() const
 {
-    return m_productModified || m_uiLayoutModified;
+    // 使用ProductState的统一接口
+    return m_productState->needsSave();
 }
 
 bool ProductConfigManager::needsUiBinding() const
 {
-    // 需要UI绑定的条件：
-    // 1. 有UI布局改变
-    // 2. 当前UI布局路径与产品绑定的UI布局路径不同
-    // 3. 当前UI布局路径不为空
-    return m_uiLayoutChanged && 
-           m_currentUiLayoutPath != m_product.uiLayoutPath() && 
-           !m_currentUiLayoutPath.isEmpty();
+    // 使用ProductState的统一接口
+    return m_productState->needsUiBinding();
 }
 
 QDateTime ProductConfigManager::getProductLastModified() const
@@ -165,27 +228,58 @@ QDateTime ProductConfigManager::getUiLayoutLastModified() const
 
 void ProductConfigManager::markProductSaved()
 {
+    // 使用ProductState进行状态管理
+    m_productState->markSaved();
+    
+    // 兼容旧代码
     setProductModified(false);
     m_productLastModified = QDateTime::currentDateTime();
 }
 
 void ProductConfigManager::markUiLayoutSaved()
 {
+    // 使用ProductState进行状态管理
+    m_productState->markUiLayoutSaved();
+    
+    // 同步产品中的UI布局路径
+    Product workingProduct = m_productState->getWorkingProduct();
+    QString workingUiLayoutPath = m_productState->getWorkingUiLayoutPath();
+    if (workingProduct.uiLayoutPath() != workingUiLayoutPath) {
+        workingProduct.setUiLayoutPath(workingUiLayoutPath);
+        m_productState->setWorkingProduct(workingProduct);
+    }
+    
+    // 兼容旧代码
     setUiLayoutModified(false);
+    setUiLayoutChanged(false);
     m_uiLayoutLastModified = QDateTime::currentDateTime();
 }
 
 void ProductConfigManager::bindUiLayout(const QString &uiLayoutPath)
 {
     if (!uiLayoutPath.isEmpty()) {
-        // 绑定UI布局
-        m_product.setUiLayoutPath(uiLayoutPath);
-        m_currentUiLayoutPath = uiLayoutPath;
+        // 使用ProductState进行状态管理
+        
+        // 更新产品中的UI布局路径
+        Product workingProduct = m_productState->getWorkingProduct();
+        workingProduct.setUiLayoutPath(uiLayoutPath);
+        m_productState->setWorkingProduct(workingProduct);
+        
+        // 更新UI布局路径
+        m_productState->setWorkingUiLayoutPath(uiLayoutPath);
         
         // 重置UI布局改变状态
-        setUiLayoutChanged(false);
+        m_productState->setWorkingUiLayoutChanged(false);
         
         // 标记产品已修改（因为UI布局路径已更新）
+        // 通过修改产品副本来触发状态变化
+        workingProduct.setName(workingProduct.name() + " "); // 微小修改
+        m_productState->setWorkingProduct(workingProduct);
+        
+        // 兼容旧代码
+        m_product.setUiLayoutPath(uiLayoutPath);
+        m_currentUiLayoutPath = uiLayoutPath;
+        setUiLayoutChanged(false);
         setProductModified(true);
         
         qDebug() << "UI布局已绑定:" << uiLayoutPath;
@@ -200,7 +294,9 @@ void ProductConfigManager::bindProductFeatureToWidget(const QString &featureName
     settings.setValue(featureName, widgetId);
     settings.endGroup();
     
-    emit productModifiedChanged(true);
+    // UI绑定修改应该触发UI布局修改状态，而不是产品信息修改状态
+    setUiLayoutModified(true);
+    qDebug() << "ProductConfigManager: 功能特性绑定，设置UI布局修改状态";
 }
 
 void ProductConfigManager::unbindProductFeatureFromWidget(const QString &featureName, const QString &widgetId)
@@ -210,7 +306,9 @@ void ProductConfigManager::unbindProductFeatureFromWidget(const QString &feature
     settings.remove(featureName);
     settings.endGroup();
     
-    emit productModifiedChanged(true);
+    // UI绑定修改应该触发UI布局修改状态，而不是产品信息修改状态
+    setUiLayoutModified(true);
+    qDebug() << "ProductConfigManager: 功能特性解绑，设置UI布局修改状态";
 }
 
 QMap<QString, QString> ProductConfigManager::getFeatureWidgetBindings() const
@@ -294,21 +392,22 @@ QString ProductConfigManager::getStatusDescription() const
 {
     QString status;
     
-    if (m_productModified) {
+    // 使用ProductState的统一接口
+    if (m_productState->isProductModified()) {
         status += "产品信息已修改";
     }
     
-    if (m_uiLayoutModified) {
+    if (m_productState->isUiLayoutModified()) {
         if (!status.isEmpty()) status += ", ";
         status += "UI布局已修改";
     }
     
-    if (m_uiLayoutChanged) {
+    if (m_productState->isUiLayoutChanged()) {
         if (!status.isEmpty()) status += ", ";
         status += "UI布局已改变";
     }
     
-    if (needsUiBinding()) {
+    if (m_productState->needsUiBinding()) {
         if (!status.isEmpty()) status += ", ";
         status += "需要绑定UI布局";
     }

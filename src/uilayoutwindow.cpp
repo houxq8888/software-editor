@@ -244,7 +244,7 @@ QObject *LayoutItem::createWidget(QWidget *parent) const {
 
 
 UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString &productFilePath, ProductConfigManager *configManager)
-    : QMainWindow(parent), ui(new Ui::UILayoutWindow), m_previewWindow(nullptr), m_editAreaWidget(nullptr), m_editingTabWidget(nullptr), m_tabTitleEdit(nullptr), m_currentLayoutPath(""), m_isModified(false), m_productFilePath(productFilePath), m_configManager(configManager)
+    : QMainWindow(parent), ui(new Ui::UILayoutWindow), m_previewWindow(nullptr), m_editAreaWidget(nullptr), m_editingTabWidget(nullptr), m_tabTitleEdit(nullptr), m_currentLayoutPath(""), m_productFilePath(productFilePath), m_configManager(configManager)
 {
     ui->setupUi(this);
     
@@ -444,6 +444,9 @@ void UILayoutWindow::updatePropertiesEditor(QWidget *widget)
     ui->propertiesTreeWidget->resizeColumnToContents(0);
 }
 
+// 更新综合修改状态
+
+
 void UILayoutWindow::onPropertyItemChanged(QTreeWidgetItem *item, int column)
 {
     if (column != 1) {
@@ -517,6 +520,7 @@ void UILayoutWindow::onPropertyItemChanged(QTreeWidgetItem *item, int column)
     }
     
     // 更新布局状态
+    qDebug()<<"onPropertyItemChanged: propertyName:"<<propertyName<<",propertyValue:"<<propertyValue;
     saveLayoutState();
 }
 
@@ -525,6 +529,7 @@ void UILayoutWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Delete && m_selectedWidget != nullptr) {
         // 删除选中的控件
+        qDebug()<<"delete selected widget:"<<m_selectedWidget->objectName();
         saveLayoutState();
         
         // 找到对应的LayoutItem
@@ -543,8 +548,7 @@ void UILayoutWindow::keyPressEvent(QKeyEvent *event)
             m_editAreaWidget->setHandles(QList<QRect>());
             m_editAreaWidget->repaint();
             
-            // 更新修改状态
-            m_isModified = true;
+
         }
     } else {
         QMainWindow::keyPressEvent(event);
@@ -705,6 +709,7 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
         QPoint editAreaLocalPos = m_editAreaWidget->mapFromGlobal(globalPos);
 
         // 保存当前状态
+        qDebug()<<"dropEvent: 鼠标在编辑区中的局部位置:" << localPos << ", 全局位置:" << globalPos << ", 编辑区局部位置:" << editAreaLocalPos;
         saveLayoutState();
         
         // 根据控件类型创建对应的 LayoutItem
@@ -829,7 +834,7 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
                 if (item) {
                     item->setDockArea(area);
                     item->setFloating(dockWidget->isFloating());
-                    m_isModified = true;
+
                 }
             });
             
@@ -848,7 +853,7 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
                             item->setDockArea(area);
                         }
                     }
-                    m_isModified = true;
+
                 }
             });
             
@@ -984,8 +989,13 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
         return false;
     }
 
-    // 保存当前状态
-    saveLayoutState();
+    // 注意：加载布局时不应该保存状态到撤销栈，因为这会错误标记为已修改
+    // 我们直接清除撤销栈和重做栈，并设置修改状态为false
+    qDebug()<<"loadLayout: filePath:"<<filePath;
+    
+    // 清空撤销栈和重做栈
+    m_undoStack.clear();
+    m_redoStack.clear();
 
     // 清除现有项
     for (QWidget *widget : m_widgetItemMap.keys()) {
@@ -1086,8 +1096,17 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
     m_currentLayoutPath = filePath;
     setWindowTitle(QString("UI布局编辑器 - %1").arg(QFileInfo(m_currentLayoutPath).fileName()));
     
-    // 加载布局后重置修改状态
-    m_isModified = false;
+    // 临时更新ProductConfigManager中的UI布局路径，用于UI绑定检查
+    // 如果用户选择丢弃，将在closeEvent中重置
+    if (m_configManager) {
+        m_configManager->setUiLayoutPath(filePath);
+        qDebug() << "UI布局路径已临时更新到ProductConfigManager:" << filePath;
+    }
+    
+    // 加载布局后重置修改状态 - 通过ProductConfigManager管理
+    if (m_configManager) {
+        m_configManager->setUiLayoutModified(false);
+    }
     
     qDebug() << "Layout loaded from" << filePath;
     
@@ -1124,7 +1143,12 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
             out << jsonDoc.toJson(QJsonDocument::Indented);
             file.close();
             qDebug() << "多界面布局保存到" << filePath;
-            m_isModified = false;
+            // 保存后重置修改状态并更新UI布局路径 - 通过ProductConfigManager管理
+            if (m_configManager) {
+                m_configManager->setUiLayoutPath(filePath);
+                m_configManager->setUiLayoutModified(false);
+                qDebug() << "UI布局路径已更新到ProductConfigManager:" << filePath;
+            }
         }
     } else {
         // 保存为传统DOM格式（单个界面）
@@ -1187,7 +1211,12 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
             doc.save(out, 2); // 缩进2个空格
             file.close();
             qDebug() << "Layout saved to" << filePath;
-            m_isModified = false;
+            // 保存后重置修改状态并更新UI布局路径 - 通过ProductConfigManager管理
+            if (m_configManager) {
+                m_configManager->setUiLayoutPath(filePath);
+                m_configManager->setUiLayoutModified(false);
+                qDebug() << "UI布局路径已更新到ProductConfigManager:" << filePath;
+            }
         }
     }
 }
@@ -1226,9 +1255,6 @@ void UILayoutWindow::saveLayoutState()
         m_undoStack.removeFirst();
     }
     m_undoStack.append(stateData);
-    
-    // 更新修改状态
-    m_isModified = true;
     
     // 通知ProductConfigManager UI布局已修改
     if (m_configManager) {
@@ -1357,6 +1383,7 @@ void UILayoutWindow::on_actionLoad_Layout_triggered()
 void UILayoutWindow::on_actionNew_Layout_triggered()
 {
     // 保存当前状态到撤销栈
+    qDebug()<<"on_actionNew_Layout_triggered: 保存当前状态到撤销栈";
     saveLayoutState();
     
     // 清除当前场景
@@ -1459,7 +1486,6 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
         connect(edit, &QLineEdit::editingFinished, [=]() {
             if (label) {
                 label->setText(edit->text());
-                m_isModified = true;
                 qDebug() << "编辑完成，更新QLabel文本为:" << edit->text();
                 // 更新对应的LayoutItem的文本属性
                 LayoutItem *item = m_widgetItemMap.value(label);
@@ -1512,7 +1538,6 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
                     if (m_editingTabWidget && m_tabTitleEdit) {
                         // 更新Tab页标题
                         m_editingTabWidget->setTabText(tabIndex, m_tabTitleEdit->text());
-                        m_isModified = true;
                         qDebug() << "编辑完成，更新Tab页标题为:" << m_tabTitleEdit->text();
                         
                         // 清理
@@ -1567,7 +1592,6 @@ void UILayoutWindow::handleDoubleClick(const QPoint &pos)
                         if (m_editingTabWidget && m_tabTitleEdit) {
                             // 更新Tab页标题
                             m_editingTabWidget->setTabText(tabIndex, m_tabTitleEdit->text());
-                            m_isModified = true;
                             qDebug() << "编辑完成，更新Tab页标题为:" << m_tabTitleEdit->text();
                             
                             // 清理
@@ -1761,7 +1785,6 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
                 }
                 item->setDockArea(area);
                 item->setFloating(dockWidget->isFloating());
-                m_isModified = true;
             }
         }
     }
@@ -2066,7 +2089,8 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
                 
                 // 检查该控件是否是由布局管理器管理的控件
                 if (m_widgetItemMap.contains(widget)) {
-                    // 保存当前状态
+                    // 保存当前状态到撤销栈
+                    qDebug()<<"onMousePress: 保存当前状态到撤销栈";
                     saveLayoutState();
                     
                     // 选择该控件并更新控制点
@@ -2102,7 +2126,6 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
                     if (item) {
                         item->setText(newText);
                     }
-                    m_isModified = true;
                 }
             } else if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(widget)) {
                 // 编辑当前选中的Tab页标题
@@ -2114,7 +2137,6 @@ bool UILayoutWindow::eventFilter(QObject *obj, QEvent *event)
                     if (ok && !newText.isEmpty()) {
                         tabWidget->setTabText(currentIndex, newText);
                         // 注意：Tab页标题不会保存在LayoutItem中，因为LayoutItem主要保存控件的基本属性
-                        m_isModified = true;
                     }
                 }
             }
@@ -2265,7 +2287,8 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
         bool ok;
         QString text = QInputDialog::getText(this, tr("编辑文本"), tr("文本:"), QLineEdit::Normal, label->text(), &ok);
         if (ok && !text.isEmpty()) {
-            // 保存当前状态
+            // 保存当前状态到撤销栈
+            qDebug()<<"onLayoutItemDoubleClicked: 保存当前状态到撤销栈";
             saveLayoutState();
             label->setText(text);
             
@@ -2274,8 +2297,6 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
             if (item) {
                 item->setText(text);
             }
-            
-            qDebug() << "UILayoutWindow: QLabel文本修改，设置m_isModified = true";
         }
         return;
     }
@@ -2294,7 +2315,8 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
                 bool ok;
                 QString text = QInputDialog::getText(this, tr("编辑Tab标题"), tr("标题:"), QLineEdit::Normal, tabWidget->tabText(tabIndex), &ok);
                 if (ok && !text.isEmpty()) {
-                    // 保存当前状态
+                    // 保存当前状态到撤销栈
+                    qDebug()<<"onLayoutItemDoubleClicked: 保存当前状态到撤销栈";
                     saveLayoutState();
                     tabWidget->setTabText(tabIndex, text);
                     
@@ -2303,8 +2325,6 @@ void UILayoutWindow::onLayoutItemDoubleClicked()
                     if (item) {
                         item->setText(text);
                     }
-                    
-                    qDebug() << "UILayoutWindow: Tab页标题修改，设置m_isModified = true";
                 }
             }
         }
@@ -2399,7 +2419,8 @@ void UILayoutWindow::onEditAreaDoubleClicked(const QPoint &pos) {
     // 遍历所有控件，找到被双击的控件
     for (QWidget *widget : m_widgetItemMap.keys()) {
         if (widget->geometry().contains(localPos)) {
-            // 保存当前状态
+            // 保存当前状态到撤销栈
+            qDebug()<<"onEditAreaDoubleClicked: 保存当前状态到撤销栈";
             saveLayoutState();
             
             // 选择该控件并更新控制点
@@ -2423,10 +2444,11 @@ void UILayoutWindow::onHandleReleased() {
 // 处理窗口关闭事件
 void UILayoutWindow::closeEvent(QCloseEvent *event)
 {
-    qDebug() << "UILayoutWindow::closeEvent - m_isModified:" << m_isModified;
+    // 检查是否有未保存的修改 - 通过ProductConfigManager管理
+    bool isModified = m_configManager ? m_configManager->isUiLayoutModified() : false;
+    qDebug() << "UILayoutWindow::closeEvent - isUiLayoutModified:" << isModified;
     
-    // 检查是否有未保存的修改
-    if (m_isModified) {
+    if (isModified) {
         QMessageBox::StandardButton button = QMessageBox::question(this, 
             "保存更改", 
             "UI布局有未保存的更改。是否保存？",
@@ -2454,6 +2476,12 @@ void UILayoutWindow::closeEvent(QCloseEvent *event)
             on_actionSave_Layout_triggered();
             qDebug() << "UI布局文件已自动保存:" << m_currentLayoutPath;
             
+            // 更新ProductConfigManager中的UI布局路径
+            if (m_configManager) {
+                m_configManager->setUiLayoutPath(m_currentLayoutPath);
+                qDebug() << "UI布局路径已更新到ProductConfigManager:" << m_currentLayoutPath;
+            }
+            
             // 将UI布局路径写入产品JSON文件
             if (!m_productFilePath.isEmpty() && !m_currentLayoutPath.isEmpty()) {
                 // 读取产品JSON文件
@@ -2472,6 +2500,13 @@ void UILayoutWindow::closeEvent(QCloseEvent *event)
                     }
                     productFile.close();
                 }
+            }
+        } else if (button == QMessageBox::Discard) {
+            // 用户选择丢弃保存，重置修改状态 - 通过ProductConfigManager管理
+            if (m_configManager) {
+                m_configManager->setUiLayoutModified(false);
+                m_configManager->setUiLayoutChanged(false);
+                qDebug() << "UILayoutWindow: 用户选择丢弃保存，重置UI布局修改状态和路径改变状态";
             }
         } else if (button == QMessageBox::Cancel) {
             // 取消关闭
@@ -3166,12 +3201,13 @@ void UILayoutWindow::onBindFeatureButtonClicked()
         
         // 保存绑定关系
         m_configManager->bindProductFeatureToWidget(feature, widgetId);
-            QMessageBox::information(this, "成功", QString("功能特性 '%1' 已绑定到控件").arg(feature));
-            updateFeaturesTreeWidget();
-        } else {
-            QMessageBox::warning(this, "失败", "绑定功能特性失败");
-        }
+        
+        QMessageBox::information(this, "成功", QString("功能特性 '%1' 已绑定到控件").arg(feature));
+        updateFeaturesTreeWidget();
+    } else {
+        QMessageBox::warning(this, "失败", "绑定功能特性失败");
     }
+}
 
 void UILayoutWindow::onUnbindFeatureButtonClicked()
 {
@@ -3198,6 +3234,7 @@ void UILayoutWindow::onUnbindFeatureButtonClicked()
     if (result == QMessageBox::Yes) {
         // 解绑功能特性
         m_configManager->unbindProductFeatureFromWidget(feature, widgetId);
+        
         QMessageBox::information(this, "成功", QString("功能特性 '%1' 已解绑").arg(feature));
         updateFeaturesTreeWidget();
     }

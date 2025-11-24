@@ -537,6 +537,7 @@ CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
+ D:\virtualMachine\github\software-editor\src\productstate.h \
  D:/virtualMachine/github/software-editor/build/software-editor_autogen/include/ui_mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
