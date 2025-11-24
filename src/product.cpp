@@ -40,7 +40,7 @@ QString Product::generateUniqueId() {
 // UI layout file management
 QString Product::uiLayoutPath() const { return m_uiLayoutPath; }
 void Product::setUiLayoutPath(const QString &uiLayoutPath) { 
-    // m_uiLayoutPath = uiLayoutPath; 
+    m_uiLayoutPath = uiLayoutPath; 
 }
 
 QList<ProductFeature> Product::features() const { return m_features; }

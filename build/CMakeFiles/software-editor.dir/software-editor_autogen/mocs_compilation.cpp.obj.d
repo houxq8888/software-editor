@@ -609,6 +609,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
+ D:/virtualMachine/github/software-editor/src/productstate.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_packageconfig.cpp \
  D:/virtualMachine/github/software-editor/src/packageconfig.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_packagedialog.cpp \
@@ -619,6 +620,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/virtualMachine/github/software-editor/src/previewwindow.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_productconfigmanager.cpp \
  D:/virtualMachine/github/software-editor/src/productconfigmanager.h \
+ D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_productstate.cpp \
+ D:/virtualMachine/github/software-editor/src/productstate.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_smartpackageconfig.cpp \
  D:/virtualMachine/github/software-editor/src/smartpackageconfig.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_smartpackagedialog.cpp \

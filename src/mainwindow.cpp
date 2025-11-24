@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_currentFile("")
-    , m_isModified(false)
     , m_packageManager(nullptr)
     , m_packageDialog(nullptr)
     , m_configManager(new ProductConfigManager(this))
@@ -60,10 +59,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(m_configManager, &ProductConfigManager::needsSaveChanged, this, [this](bool needsSave) {
         // 需要保存状态变化
-        updateStatusBar();
-    });
-    connect(m_configManager, &ProductConfigManager::needsUiBindingChanged, this, [this](bool needsBinding) {
-        // 需要UI绑定状态变化
         updateStatusBar();
     });
     
@@ -139,7 +134,7 @@ void MainWindow::on_actionSave_As_triggered()
 void MainWindow::on_saveButton_clicked()
 {
     // 检查是否有未保存的修改
-    if (m_isModified) {
+    if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, 
             "保存更改", 
             "产品数据有未保存的更改。是否保存？",
@@ -308,45 +303,7 @@ void MainWindow::saveProductData()
     m_product.setScreenshotPath(ui->screenshotPathLineEdit->text());
     m_product.setDescription(ui->descriptionTextEdit->toPlainText());
 
-    // 使用配置管理器检查UI绑定状态
-    if (m_configManager->needsUiBinding()) {
-        // 查找当前打开的UI布局窗口
-        QWidgetList topLevelWidgets = QApplication::topLevelWidgets();
-        QString currentUiLayoutPath;
-        
-        for (QWidget *widget : topLevelWidgets) {
-            UILayoutWindow *layoutWindow = qobject_cast<UILayoutWindow*>(widget);
-            if (layoutWindow) {
-                currentUiLayoutPath = layoutWindow->getCurrentLayoutPath();
-                if (!currentUiLayoutPath.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        
-        if (!currentUiLayoutPath.isEmpty()) {
-            // 弹出提示框询问用户是否要绑定UI
-            QMessageBox::StandardButton reply = QMessageBox::question(
-                this,
-                "绑定UI布局",
-                QString("检测到UI布局文件：%1\n是否要为当前产品绑定这个UI布局？").arg(QFileInfo(currentUiLayoutPath).fileName()),
-                QMessageBox::Yes | QMessageBox::No,
-                QMessageBox::Yes
-            );
-            
-            if (reply == QMessageBox::Yes) {
-                // 用户选择绑定
-                m_configManager->bindUiLayout(currentUiLayoutPath);
-                // 只有在产品没有UI布局路径或用户明确要更新时才设置
-                if (m_product.uiLayoutPath().isEmpty()) {
-                    m_product.setUiLayoutPath(currentUiLayoutPath);
-                    qDebug() << "已将UI布局文件绑定到产品:" << currentUiLayoutPath;
-                } else {
-                    qDebug() << "产品已有UI布局路径，保持原有路径:" << m_product.uiLayoutPath();
-                }
-            }
-        }
-    }
+    // UI绑定相关的修改只在关闭UI编辑器时询问用户，这里不再检查
 
     // Write to file
     QFile file(m_currentFile);
@@ -362,7 +319,6 @@ void MainWindow::saveProductData()
 
 void MainWindow::setModified(bool modified)
 {
-    m_isModified = modified;
     m_configManager->setProductModified(modified);
     
     QString windowTitle = m_currentFile.isEmpty() ? "产品编辑器 - 新建" : QString("产品编辑器 - %1").arg(QFileInfo(m_currentFile).fileName());
@@ -376,7 +332,7 @@ void MainWindow::setModified(bool modified)
 
 bool MainWindow::saveChanges()
 {
-    if (m_isModified) {
+    if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "是否保存当前编辑的产品信息？");
         if (button == QMessageBox::Save) {
             on_actionSave_triggered();
@@ -465,78 +421,43 @@ void MainWindow::onUILayoutWindowClosed()
         return;
     }
     
-    // 检查产品目录下是否有UI布局文件
-    QDir productDir = QFileInfo(productFilePath).dir();
+    // 检查是否是UI绑定相关的修改（新文件加载）
+    // 关键逻辑：只有当UI布局路径发生变化时，才认为是新文件加载，需要触发UI绑定询问
+    QString currentUiLayoutPath = m_configManager->getUiLayoutPath();
+    QString productUiLayoutPath = m_product.uiLayoutPath();
     
-    // 查找产品目录下所有的.ui文件
-    QStringList uiFiles = productDir.entryList(QStringList() << "*.ui", QDir::Files);
+    qDebug() << "当前UI布局路径:" << currentUiLayoutPath;
+    qDebug() << "产品UI布局路径:" << productUiLayoutPath;
     
-    if (!uiFiles.isEmpty()) {
-        // 如果有多个UI文件，选择最近修改的一个
-        QString latestUiFile;
-        QDateTime latestModified;
-        
-        for (const QString &uiFile : uiFiles) {
-            QString uiFilePath = productDir.filePath(uiFile);
-            QFileInfo fileInfo(uiFilePath);
-            if (!latestModified.isValid() || fileInfo.lastModified() > latestModified) {
-                latestModified = fileInfo.lastModified();
-                latestUiFile = uiFilePath;
-            }
-        }
-        
-        // 更新配置管理器中的UI布局路径
-        m_configManager->setUiLayoutPath(latestUiFile);
-        
-        // 检查是否需要UI绑定
-        if (m_configManager->needsUiBinding()) {
-            // 弹出提示框询问用户是否要绑定UI
-            QMessageBox::StandardButton reply = QMessageBox::question(
-                this,
-                "绑定UI布局",
-                QString("检测到UI布局文件：%1\n是否要为当前产品绑定这个UI布局？").arg(QFileInfo(latestUiFile).fileName()),
-                QMessageBox::Yes | QMessageBox::No,
-                QMessageBox::Yes
-            );
+    // 检查UI布局路径是否发生变化
+    if (!currentUiLayoutPath.isEmpty() && currentUiLayoutPath != productUiLayoutPath) {
+        // 检查UI布局内容是否被修改过
+            qDebug() << "检测到UI布局内容被修改，触发UI绑定询问";
+            
+            // 询问用户是否要绑定UI布局
+            QMessageBox::StandardButton reply = QMessageBox::question(this,
+                "UI布局绑定",
+                QString("检测到新的UI布局文件：%1\n是否要为当前产品绑定这个UI布局？").arg(QFileInfo(currentUiLayoutPath).fileName()),
+                QMessageBox::Yes | QMessageBox::No);
             
             if (reply == QMessageBox::Yes) {
-                // 用户选择绑定
-                m_configManager->bindUiLayout(latestUiFile);
-                // 只有在产品没有UI布局路径或用户明确要更新时才设置
-                if (m_product.uiLayoutPath().isEmpty()) {
-                    m_product.setUiLayoutPath(latestUiFile);
-                    qDebug() << "已将UI布局文件绑定到产品:" << latestUiFile;
-                } else {
-                    qDebug() << "产品已有UI布局路径，保持原有路径:" << m_product.uiLayoutPath();
-                }
+                // 绑定UI布局
+                m_configManager->bindUiLayout(currentUiLayoutPath);
                 
-                // 只有在UI布局编辑器有实际修改时才自动保存产品数据
-                if (m_configManager->isUiLayoutModified()) {
-                    // 自动保存产品数据以保存绑定关系
-                    saveProductData();
-                    qDebug() << "产品数据已保存，UI布局绑定完成";
-                    
-                    // 显示成功提示
-                    QMessageBox::information(this, "绑定成功", "UI布局已成功绑定到当前产品！");
-                } else {
-                    // UI布局编辑器没有修改，只绑定但不自动保存
-                    qDebug() << "UI布局编辑器没有修改，只绑定但不自动保存";
-                    
-                    // 重置产品修改状态，因为只是绑定操作，没有实际修改
-                    m_configManager->setProductModified(false);
-                }
+                // 更新产品的UI布局路径
+                m_product.setUiLayoutPath(currentUiLayoutPath);
+                qDebug() << "已将UI布局文件绑定到产品:" << currentUiLayoutPath;
+                
+                // 标记产品已修改
+                setModified(true);
             } else {
-                // 用户选择不绑定
-                qDebug() << "用户选择不绑定UI布局文件";
-                
-                // 重置UI布局改变状态
-                m_configManager->setUiLayoutChanged(false);
+                // 用户选择不绑定，将UI布局路径改回原来的路径
+                m_configManager->setUiLayoutPath(productUiLayoutPath);
+                qDebug() << "用户选择不绑定UI布局，已将UI布局路径改回:" << productUiLayoutPath;
             }
-        } else {
-            qDebug() << "UI布局文件未改变，跳过绑定提示";
-        }
     } else {
-        qDebug() << "产品目录下未找到UI布局文件，跳过绑定";
+        // UI绑定和UI内容都没有修改
+        qDebug() << "UI绑定没有修改";
     }
 }
 
@@ -549,7 +470,7 @@ void MainWindow::on_actionPackage_Software_triggered()
     }
 
     // 保存当前编辑的数据
-    if (m_isModified) {
+    if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "打包前需要保存当前的产品信息。是否保存？");
         if (button == QMessageBox::Save) {
             on_actionSave_triggered();
@@ -580,7 +501,7 @@ void MainWindow::on_actionSmart_Package_Software_triggered()
     }
 
     // 保存当前编辑的数据
-    if (m_isModified) {
+    if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "打包前需要保存当前的产品信息。是否保存？");
         if (button == QMessageBox::Save) {
             on_actionSave_triggered();
@@ -667,27 +588,56 @@ void MainWindow::onPackageError(const QString &error)
     }
 }
 
+// 检查基本信息TAB页是否被修改
+bool MainWindow::isBasicInfoModified() const
+{
+    // 通过ProductConfigManager的统一接口来判断产品基本信息是否被修改
+    if (!m_configManager) {
+        return false;
+    }
+    
+    // 使用ProductConfigManager的isProductModified()方法，该方法内部通过ProductState的正副本比较实现
+    return m_configManager->isProductModified();
+}
+
+// 检查功能特性TAB页是否被修改
+bool MainWindow::isFeaturesTabModified() const
+{
+    // 通过ProductConfigManager的统一接口来判断产品功能特性是否被修改
+    if (!m_configManager) {
+        return false;
+    }
+    
+    // 直接检查功能特性是否被修改，而不是整个产品的修改状态
+    // 这样可以避免UI布局路径改变时误报功能特性修改
+    return m_configManager->isFeaturesModified();
+}
+
 // 处理主窗口关闭事件
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    // 检查是否有未保存的修改（包括产品数据和UI布局）
-    bool hasUnsavedChanges = m_isModified || (m_configManager && m_configManager->needsSave());
+    // 检查是否有未保存的修改，正确区分不同类型的修改
+    bool hasUnsavedChanges = false;
+    QString message = "检测到未保存的更改：\n";
+    
+    // 检查产品基本信息修改（只检查基本信息TAB页）
+    bool basicInfoModified = isBasicInfoModified();
+    if (basicInfoModified) {
+        hasUnsavedChanges = true;
+        message += "• 产品基本信息已修改\n";
+    }
+    
+    // 检查产品功能特性修改（只检查功能特性TAB页）
+    bool featuresTabModified = isFeaturesTabModified();
+    if (featuresTabModified) {
+        hasUnsavedChanges = true;
+        message += "• 产品功能特性已修改\n";
+    }
+    
+    qDebug()<<"关闭事件检查 - 产品基本信息修改:"<<basicInfoModified
+            <<", 产品功能特性修改:"<<featuresTabModified;
     
     if (hasUnsavedChanges) {
-        QString message = "检测到未保存的更改：\n";
-        
-        if (m_isModified) {
-            message += "• 产品信息已修改\n";
-        }
-        
-        if (m_configManager && m_configManager->isProductModified()) {
-            message += "• 产品配置已修改\n";
-        }
-        
-        if (m_configManager && m_configManager->isUiLayoutModified()) {
-            message += "• UI布局已修改\n";
-        }
-        
         message += "\n是否保存这些更改？";
         
         QMessageBox::StandardButton button = QMessageBox::question(this, 
@@ -696,13 +646,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         
         if (button == QMessageBox::Save) {
-            // 保存产品数据
-            saveProductData();
+            // 保存产品基本信息（如果基本信息TAB页已修改）
+            if (basicInfoModified) {
+                saveProductData();
+            }
             
-            // 如果UI布局已修改，也需要保存UI布局文件
-            if (m_configManager && m_configManager->isUiLayoutModified()) {
-                // 这里可以添加保存UI布局文件的逻辑
-                qDebug() << "UI布局修改需要保存，但当前实现中UI布局文件在关闭UI布局窗口时已自动保存";
+            // 保存产品功能特性修改、UI布局修改和UI绑定修改
+            if (m_configManager) {
+                // 保存产品功能特性修改
+                if (featuresTabModified) {
+                    // 这里可以添加保存产品功能特性的逻辑
+                    qDebug() << "产品功能特性修改已保存";
+                }
             }
             
             event->accept(); // 接受关闭事件

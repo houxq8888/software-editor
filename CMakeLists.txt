@@ -20,6 +20,8 @@ add_executable(software-editor
     src/product.h
     src/productconfigmanager.cpp
     src/productconfigmanager.h
+    src/productstate.cpp
+    src/productstate.h
     src/uilayoutwindow.cpp
     src/uilayoutwindow.h
     src/uilayoutwindow.ui

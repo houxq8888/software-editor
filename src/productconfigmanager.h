@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include "product.h"
+#include "productstate.h"
 
 class ProductConfigManager : public QObject
 {
@@ -26,6 +27,7 @@ public:
     bool isProductModified() const;
     bool isUiLayoutModified() const;
     bool isUiLayoutChanged() const;
+    bool isFeaturesModified() const;
     
     // 修改状态管理
     void setProductModified(bool modified);
@@ -104,15 +106,16 @@ signals:
     void autoSyncToggled(bool enabled);
 
 private:
-    Product m_product;
-    QString m_currentUiLayoutPath;
+    ProductState *m_productState;  // 产品状态管理器
+    Product m_product;             // 当前产品（兼容旧代码）
+    QString m_currentUiLayoutPath; // 当前UI布局路径（兼容旧代码）
     
-    // 状态标志
+    // 状态标志（兼容旧代码）
     bool m_productModified;
     bool m_uiLayoutModified;
     bool m_uiLayoutChanged;
     
-    // 时间戳
+    // 时间戳（兼容旧代码）
     QDateTime m_productLastModified;
     QDateTime m_uiLayoutLastModified;
     QDateTime m_lastUiLayoutChange;

@@ -924,6 +924,8 @@ software-editor_autogen/timestamp: \
 	D:/virtualMachine/github/software-editor/src/product.h \
 	D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp \
 	D:/virtualMachine/github/software-editor/src/productconfigmanager.h \
+	D:/virtualMachine/github/software-editor/src/productstate.cpp \
+	D:/virtualMachine/github/software-editor/src/productstate.h \
 	D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp \
 	D:/virtualMachine/github/software-editor/src/smartpackageconfig.h \
 	D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp \

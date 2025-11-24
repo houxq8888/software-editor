@@ -177,7 +177,6 @@ private:
     QTabWidget *m_editingTabWidget;
     QLineEdit *m_tabTitleEdit;
     QString m_currentLayoutPath; // 当前布局文件路径
-    bool m_isModified; // 布局是否有修改
     QString m_productFilePath; // 关联的产品配置文件路径
     ProductConfigManager *m_configManager; // 产品配置管理器
     QTabWidget *rightTabWidget;
