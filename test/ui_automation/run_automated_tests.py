@@ -45,50 +45,94 @@ def execute_automated_testing():
     # 初始化测试管理器
     manager = TestManager()
     
-    # 定义测试用例
+    # 定义测试用例 - 基于实际创建的测试文件
     test_cases = [
         {
-            "name": "产品信息保存功能测试",
-            "module": "产品信息编辑",
-            "test_module": "test_product_info.py",
-            "test_function": "test_product_info_save_flow",
+            "name": "产品配置编辑功能测试",
+            "module": "产品配置编辑",
+            "test_module": "test_product_config.py",
+            "test_function": "test_product_basic_info",
             "steps": [
                 "启动软件产品编辑器",
-                "点击产品信息编辑按钮",
-                "填写产品名称、版本、描述等信息",
-                "点击保存按钮",
-                "验证产品信息文件是否正确生成"
+                "打开产品配置编辑界面",
+                "编辑产品基本信息（名称、版本、描述）",
+                "管理功能特性（添加、编辑、删除）",
+                "保存产品配置",
+                "验证配置文件的正确性"
             ],
             "expected": [
                 "软件正常启动",
-                "产品信息编辑界面正常显示",
-                "产品信息能够正常输入",
-                "保存操作成功执行",
-                "生成包含所有产品信息的JSON文件"
+                "产品配置编辑界面正常显示",
+                "产品基本信息能够正常编辑",
+                "功能特性管理功能正常工作",
+                "配置保存操作成功执行",
+                "生成包含所有配置信息的JSON文件"
             ]
         },
         {
-            "name": "UI布局拖拽编辑功能测试", 
+            "name": "UI布局编辑器功能测试", 
             "module": "UI布局编辑",
-            "test_module": "test_ui_layout.py",
-            "test_function": "test_ui_layout_drag_and_edit",
+            "test_module": "test_ui_layout_editor.py",
+            "test_function": "test_open_ui_layout_editor",
             "steps": [
                 "启动软件产品编辑器",
-                "点击UI布局编辑按钮",
-                "从控件库拖拽QLabel到编辑区",
-                "双击QLabel编辑文本内容",
-                "从控件库拖拽QTabWidget到编辑区",
-                "双击Tab页标题编辑文本",
-                "点击预览按钮验证交互功能"
+                "打开UI布局编辑器",
+                "验证控件库和编辑区的布局",
+                "测试分隔条的自适应调整功能",
+                "验证控件拖拽功能",
+                "测试属性编辑功能"
             ],
             "expected": [
                 "软件正常启动",
-                "UI布局编辑界面正常显示",
+                "UI布局编辑器正常打开",
+                "左侧控件库和右侧编辑区正常显示",
+                "分隔条能够自适应调整窗口大小",
                 "控件能够正常拖拽到编辑区",
-                "文本编辑功能正常工作",
-                "Tab控件能够正常添加",
-                "Tab页标题能够正常编辑",
-                "预览窗口能够正常交互"
+                "属性编辑功能正常工作"
+            ]
+        },
+        {
+            "name": "智能打包功能测试",
+            "module": "智能打包",
+            "test_module": "test_packaging.py",
+            "test_function": "test_packaging_interface",
+            "steps": [
+                "启动软件产品编辑器",
+                "打开智能打包界面",
+                "配置打包参数",
+                "生成CMake项目文件",
+                "执行自动编译构建",
+                "验证可执行文件生成"
+            ],
+            "expected": [
+                "软件正常启动",
+                "智能打包界面正常显示",
+                "打包参数能够正常配置",
+                "CMake项目文件正确生成",
+                "编译构建过程成功执行",
+                "可执行文件正确生成"
+            ]
+        },
+        {
+            "name": "预览功能测试",
+            "module": "预览功能",
+            "test_module": "test_preview.py",
+            "test_function": "test_preview_button",
+            "steps": [
+                "启动软件产品编辑器",
+                "在UI布局编辑器中添加控件",
+                "点击预览按钮",
+                "验证预览窗口的显示",
+                "测试预览窗口的交互功能",
+                "验证实时预览效果"
+            ],
+            "expected": [
+                "软件正常启动",
+                "UI布局编辑器正常工作",
+                "预览按钮能够正常点击",
+                "预览窗口正常弹出并显示",
+                "预览窗口支持交互操作",
+                "实时预览效果符合预期"
             ]
         }
     ]
@@ -238,11 +282,11 @@ def main():
     try:
         test_case_file, test_report_file, detailed_results_file = execute_automated_testing()
         
-        print("\n✅ 自动化测试流程执行成功!")
+        print("\n[SUCCESS] 自动化测试流程执行成功!")
         print("所有文件已按模板格式生成并保存到相应目录。")
         
     except Exception as e:
-        print(f"❌ 自动化测试流程执行失败: {e}")
+        print(f"[ERROR] 自动化测试流程执行失败: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

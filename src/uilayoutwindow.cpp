@@ -3538,8 +3538,23 @@ void UILayoutWindow::onActionSuggestLayoutTriggered()
 
 void UILayoutWindow::onActionEventActionEditorTriggered()
 {
+    // 检查界面管理器是否有效
+    if (!m_interfaceManager) {
+        qCritical() << "UILayoutWindow: m_interfaceManager is nullptr, cannot open event-action editor";
+        QMessageBox::warning(this, "错误", "界面管理器未初始化，无法打开事件-动作编辑器");
+        return;
+    }
+    
+    // 检查当前界面是否有效
+    if (!m_interfaceManager->currentInterface()) {
+        qCritical() << "UILayoutWindow: current interface is nullptr, cannot open event-action editor";
+        QMessageBox::warning(this, "错误", "当前界面未设置，无法打开事件-动作编辑器");
+        return;
+    }
+    qDebug()<<"current interface name:"<<m_interfaceManager->currentInterface()->name();
     // 创建或显示事件-动作编辑器窗口
     if (!m_eventActionEditor) {
+        qDebug()<<"create EventActionEditor";
         m_eventActionEditor = new EventActionEditor(this);
         m_eventActionEditor->setWindowTitle("事件-动作编辑器");
         m_eventActionEditor->resize(800, 600);

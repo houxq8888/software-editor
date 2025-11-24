@@ -6,7 +6,7 @@
 import pandas as pd
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import shutil
 from pathlib import Path
 
@@ -201,6 +201,264 @@ class TestManager:
         
         print(f"测试报告已保存到: {output_file}")
         return output_file
+    
+    def run_automated_tests(self, test_files=None, generate_report=True):
+        """运行自动化测试并生成报告"""
+        import subprocess
+        import sys
+        
+        if test_files is None:
+            # 运行所有测试文件
+            test_dir = os.path.join(self.project_root, "test", "ui_automation")
+            test_files = [os.path.join(test_dir, f) for f in os.listdir(test_dir) 
+                         if f.startswith("test_") and f.endswith(".py")]
+        
+        test_results = []
+        
+        for test_file in test_files:
+            print(f"\n=== 运行测试文件: {os.path.basename(test_file)} ===")
+            
+            try:
+                # 运行单个测试文件
+                result = subprocess.run([sys.executable, test_file], 
+                                      capture_output=True, text=True, timeout=300)
+                
+                # 解析测试结果
+                test_result = {
+                    '测试文件': os.path.basename(test_file),
+                    '执行时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    '退出码': result.returncode,
+                    '标准输出': result.stdout,
+                    '错误输出': result.stderr
+                }
+                
+                # 判断测试结果
+                if result.returncode == 0:
+                    test_result['状态'] = '通过'
+                    test_result['详细信息'] = '测试执行成功'
+                else:
+                    test_result['状态'] = '失败'
+                    test_result['详细信息'] = '测试执行失败'
+                
+                test_results.append(test_result)
+                
+                print(f"测试结果: {test_result['状态']}")
+                
+            except subprocess.TimeoutExpired:
+                test_result = {
+                    '测试文件': os.path.basename(test_file),
+                    '执行时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    '退出码': -1,
+                    '状态': '超时',
+                    '详细信息': '测试执行超时（5分钟）'
+                }
+                test_results.append(test_result)
+                print("测试结果: 超时")
+            
+            except Exception as e:
+                test_result = {
+                    '测试文件': os.path.basename(test_file),
+                    '执行时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    '退出码': -1,
+                    '状态': '异常',
+                    '详细信息': f'测试执行异常: {str(e)}'
+                }
+                test_results.append(test_result)
+                print(f"测试结果: 异常 - {e}")
+        
+        if generate_report:
+            # 生成测试报告
+            test_report = self.generate_test_report(test_results, len(test_files))
+            report_file = self.save_test_report_to_excel(test_report, test_results)
+            
+            # 生成开发反馈报告
+            self._generate_development_feedback(test_results, report_file)
+        
+        return test_results
+    
+    def _generate_development_feedback(self, test_results, report_file):
+        """生成开发反馈报告"""
+        failed_tests = [result for result in test_results if result.get('状态') in ['失败', '超时', '异常']]
+        
+        if not failed_tests:
+            print("🎉 所有测试通过，无需开发反馈")
+            return
+        
+        feedback_file = report_file.replace("测试报告", "开发反馈")
+        
+        feedback_data = {
+            '反馈编号': f"FB-{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            '生成时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            '失败测试数量': len(failed_tests),
+            '失败测试文件': ', '.join([result['测试文件'] for result in failed_tests]),
+            '建议修复优先级': '高' if len(failed_tests) > 3 else '中',
+            '反馈内容': self._generate_feedback_content(failed_tests)
+        }
+        
+        # 保存反馈报告
+        feedback_df = pd.DataFrame([feedback_data])
+        feedback_df.to_excel(feedback_file, index=False)
+        
+        print(f"📋 开发反馈报告已生成: {feedback_file}")
+        
+        # 生成修复建议
+        self._generate_fix_suggestions(failed_tests, feedback_file.replace('.xlsx', '_修复建议.txt'))
+    
+    def _generate_feedback_content(self, failed_tests):
+        """生成反馈内容"""
+        content = "本次测试发现以下问题需要开发修复：\n\n"
+        
+        for i, test in enumerate(failed_tests, 1):
+            content += f"{i}. 测试文件: {test['测试文件']}\n"
+            content += f"   状态: {test['状态']}\n"
+            content += f"   详细信息: {test.get('详细信息', '无')}\n"
+            
+            # 分析可能的失败原因
+            if '超时' in test['状态']:
+                content += "   可能原因: 应用程序启动超时或界面响应缓慢\n"
+            elif '异常' in test['状态']:
+                content += "   可能原因: 测试脚本执行异常或环境配置问题\n"
+            else:
+                content += "   可能原因: 功能实现不完整或界面控件变更\n"
+            
+            content += "\n"
+        
+        content += "建议：\n"
+        content += "1. 检查相关功能模块的实现\n"
+        content += "2. 验证界面控件的标识符和布局\n"
+        content += "3. 测试通过后重新运行自动化测试\n"
+        
+        return content
+    
+    def _generate_fix_suggestions(self, failed_tests, output_file):
+        """生成修复建议"""
+        suggestions = "# 自动化测试失败修复建议\n\n"
+        
+        for test in failed_tests:
+            test_file = test['测试文件']
+            
+            suggestions += f"## {test_file} 修复建议\n\n"
+            
+            # 根据测试文件类型提供具体建议
+            if 'product' in test_file.lower():
+                suggestions += "**涉及模块**: 产品配置编辑功能\n"
+                suggestions += "**建议检查**:\n"
+                suggestions += "- 产品基本信息编辑界面\n"
+                suggestions += "- 功能特性管理界面\n"
+                suggestions += "- 配置保存加载功能\n"
+            elif 'layout' in test_file.lower():
+                suggestions += "**涉及模块**: UI布局编辑器\n"
+                suggestions += "**建议检查**:\n"
+                suggestions += "- 控件拖拽功能\n"
+                suggestions += "- 属性编辑面板\n"
+                suggestions += "- 实时预览功能\n"
+            elif 'packaging' in test_file.lower():
+                suggestions += "**涉及模块**: 智能打包功能\n"
+                suggestions += "**建议检查**:\n"
+                suggestions += "- CMake项目生成\n"
+                suggestions += "- 自动编译构建\n"
+                suggestions += "- 可执行文件生成\n"
+            elif 'preview' in test_file.lower():
+                suggestions += "**涉及模块**: 预览功能\n"
+                suggestions += "**建议检查**:\n"
+                suggestions += "- 预览窗口管理\n"
+                suggestions += "- 实时预览更新\n"
+                suggestions += "- 交互式预览功能\n"
+            
+            suggestions += "\n**具体修复步骤**:\n"
+            suggestions += "1. 运行失败的测试用例，观察失败现象\n"
+            suggestions += "2. 检查相关代码实现是否完整\n"
+            suggestions += "3. 修复问题后，重新运行测试验证\n"
+            suggestions += "\n"
+        
+        # 保存修复建议
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(suggestions)
+        
+        print(f"💡 修复建议已生成: {output_file}")
+    
+    def monitor_development_progress(self):
+        """监控开发进度，检测代码变更"""
+        import git
+        
+        try:
+            repo = git.Repo(self.project_root)
+            
+            # 获取最近的提交
+            commits = list(repo.iter_commits('main', max_count=10))
+            
+            print("📊 最近开发活动监控:")
+            
+            # 转换为可序列化的字典格式
+            serializable_commits = []
+            for commit in commits:
+                serializable_commits.append({
+                    "hash": commit.hexsha,
+                    "message": commit.message.strip(),
+                    "author": str(commit.author),
+                    "committed_datetime": commit.committed_datetime.isoformat(),
+                    "summary": commit.summary
+                })
+                print(f"- {commit.committed_datetime}: {commit.message.strip()}")
+            
+            # 检查是否有新的测试失败
+            recent_failures = self._check_recent_test_failures()
+            
+            if recent_failures:
+                print(f"\n⚠️ 发现近期测试失败: {len(recent_failures)} 个")
+                for failure in recent_failures:
+                    print(f"   - {failure['测试文件']} ({failure['执行时间']})")
+            else:
+                print("\n✅ 近期无测试失败记录")
+            
+            return {
+                "commits": serializable_commits,
+                "recent_failures": recent_failures,
+                "monitoring_time": datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            print(f"❌ 开发进度监控失败: {e}")
+            return {
+                "commits": [],
+                "recent_failures": [],
+                "monitoring_time": datetime.now().isoformat(),
+                "error": str(e)
+            }
+    
+    def _check_recent_test_failures(self, days=7):
+        """检查最近几天的测试失败记录"""
+        import glob
+        
+        recent_failures = []
+        
+        # 查找最近几天的测试报告
+        for i in range(days):
+            date_str = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
+            date_dir = os.path.join(self.test_results_dir, date_str)
+            
+            if os.path.exists(date_dir):
+                report_files = glob.glob(os.path.join(date_dir, "测试报告_*.xlsx"))
+                
+                for report_file in report_files:
+                    try:
+                        # 读取测试报告
+                        df = pd.read_excel(report_file, sheet_name='Sheet2')
+                        
+                        # 查找失败的测试
+                        failed_tests = df[df['状态'].isin(['失败', '超时', '异常'])]
+                        
+                        for _, test in failed_tests.iterrows():
+                            recent_failures.append({
+                                '测试文件': test.get('测试文件', ''),
+                                '执行时间': test.get('执行时间', ''),
+                                '状态': test.get('状态', '')
+                            })
+                            
+                    except Exception as e:
+                        print(f"读取测试报告失败: {report_file}, 错误: {e}")
+        
+        return recent_failures
     
     def run_automated_tests(self):
         """运行自动化测试并生成报告"""
