@@ -511,6 +511,30 @@ src/productconfigmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.s
 .PHONY : src/productconfigmanager.cpp.s
 
+src/productstate.obj: src/productstate.cpp.obj
+.PHONY : src/productstate.obj
+
+# target to build an object file
+src/productstate.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.obj
+.PHONY : src/productstate.cpp.obj
+
+src/productstate.i: src/productstate.cpp.i
+.PHONY : src/productstate.i
+
+# target to preprocess a source file
+src/productstate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.i
+.PHONY : src/productstate.cpp.i
+
+src/productstate.s: src/productstate.cpp.s
+.PHONY : src/productstate.s
+
+# target to generate assembly for a file
+src/productstate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.s
+.PHONY : src/productstate.cpp.s
+
 src/smartpackageconfig.obj: src/smartpackageconfig.cpp.obj
 .PHONY : src/smartpackageconfig.obj
 
@@ -685,6 +709,9 @@ help:
 	@echo ... src/productconfigmanager.obj
 	@echo ... src/productconfigmanager.i
 	@echo ... src/productconfigmanager.s
+	@echo ... src/productstate.obj
+	@echo ... src/productstate.i
+	@echo ... src/productstate.s
 	@echo ... src/smartpackageconfig.obj
 	@echo ... src/smartpackageconfig.i
 	@echo ... src/smartpackageconfig.s

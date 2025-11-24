@@ -61,7 +61,6 @@ private:
     Ui::MainWindow *ui;
     Product m_product;
     QString m_currentFile;
-    bool m_isModified;
     PackageManager *m_packageManager;
     PackageDialog *m_packageDialog;
     SmartPackageDialog *m_smartPackageDialog;
@@ -78,6 +77,12 @@ private:
     
     // 窗口关闭事件处理
     void closeEvent(QCloseEvent *event) override;
+    
+    // 检查基本信息TAB页是否被修改
+    bool isBasicInfoModified() const;
+    
+    // 检查功能特性TAB页是否被修改
+    bool isFeaturesTabModified() const;
 };
 
 #endif // MAINWINDOW_H

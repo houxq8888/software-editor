@@ -511,5 +511,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/virtualMachine/github/software-editor/src/packagemanager.h \
   D:/virtualMachine/github/software-editor/src/product.h \
   D:/virtualMachine/github/software-editor/src/productconfigmanager.h \
+  D:/virtualMachine/github/software-editor/src/productstate.h \
   D:/virtualMachine/github/software-editor/src/smartpackageconfig.h \
   D:/virtualMachine/github/software-editor/src/smartpackagedialog.h

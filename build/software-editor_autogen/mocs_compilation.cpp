@@ -9,6 +9,7 @@
 #include "UVLADIE3JM/moc_packagemanager.cpp"
 #include "UVLADIE3JM/moc_previewwindow.cpp"
 #include "UVLADIE3JM/moc_productconfigmanager.cpp"
+#include "UVLADIE3JM/moc_productstate.cpp"
 #include "UVLADIE3JM/moc_smartpackageconfig.cpp"
 #include "UVLADIE3JM/moc_smartpackagedialog.cpp"
 #include "UVLADIE3JM/moc_uiinterfacemanager.cpp"
