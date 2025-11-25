@@ -10,43 +10,54 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt6 COMPONENTS Core Gui Widgets Xml Test OpenGLWidgets REQUIRED)
 
 include_directories(src)
+include_directories(src/product)
+include_directories(src/uilayout)
+include_directories(src/package)
 
 add_executable(software-editor
     src/main.cpp
-    src/mainwindow.cpp
-    src/mainwindow.h
-    src/mainwindow.ui
-    src/product.cpp
-    src/product.h
-    src/productconfigmanager.cpp
-    src/productconfigmanager.h
-    src/productstate.cpp
-    src/productstate.h
-    src/uilayoutwindow.cpp
-    src/uilayoutwindow.h
-    src/uilayoutwindow.ui
-    src/previewwindow.cpp
-    src/previewwindow.h
-    src/previewwindow.ui
-    src/editareawidget.cpp
-    src/editareawidget.h
-    src/customtreewidget.cpp
-    src/customtreewidget.h
-    src/packagemanager.cpp
-    src/packagemanager.h
-    src/smartpackagedialog.cpp
-    src/smartpackagedialog.h
-    src/smartpackageconfig.cpp
-    src/smartpackageconfig.h
-    src/eventactioneditor.cpp
-    src/eventactioneditor.h
-    src/eventactionmodel.cpp
-    src/eventactionmodel.h
-    src/uiinterfacemanager.cpp
-    src/uiinterfacemanager.h
-    src/uiinterface.cpp
-    src/uiinterface.h
-    src/layoutitem.h
+    
+    # 产品配置编辑模块
+    src/product/mainwindow.cpp
+    src/product/mainwindow.h
+    src/product/mainwindow.ui
+    src/product/product.cpp
+    src/product/product.h
+    src/product/productconfigmanager.cpp
+    src/product/productconfigmanager.h
+    src/product/productstate.cpp
+    src/product/productstate.h
+    src/product/template.json
+    
+    # UI布局编辑器模块
+    src/uilayout/uilayoutwindow.cpp
+    src/uilayout/uilayoutwindow.h
+    src/uilayout/uilayoutwindow.ui
+    src/uilayout/previewwindow.cpp
+    src/uilayout/previewwindow.h
+    src/uilayout/previewwindow.ui
+    src/uilayout/editareawidget.cpp
+    src/uilayout/editareawidget.h
+    src/uilayout/customtreewidget.cpp
+    src/uilayout/customtreewidget.h
+    src/uilayout/eventactioneditor.cpp
+    src/uilayout/eventactioneditor.h
+    src/uilayout/eventactionmodel.cpp
+    src/uilayout/eventactionmodel.h
+    src/uilayout/uiinterfacemanager.cpp
+    src/uilayout/uiinterfacemanager.h
+    src/uilayout/uiinterface.cpp
+    src/uilayout/uiinterface.h
+    src/uilayout/layoutitem.h
+    
+    # 智能打包模块
+    src/package/packagemanager.cpp
+    src/package/packagemanager.h
+    src/package/packageservice.cpp
+    src/package/packageservice.h
+    src/package/ipackageservice.h
+    src/package/packageconfig.cpp
+    src/package/packageconfig.h
 )
 
 target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets)
