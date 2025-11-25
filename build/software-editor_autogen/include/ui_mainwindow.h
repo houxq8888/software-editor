@@ -41,7 +41,6 @@ public:
     QAction *actionExit;
     QAction *actionAbout;
     QAction *actionOpen_UI_Layout_Editor;
-    QAction *actionPackage_Software;
     QAction *actionSmart_Package_Software;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
@@ -114,8 +113,6 @@ public:
         actionAbout->setObjectName("actionAbout");
         actionOpen_UI_Layout_Editor = new QAction(MainWindow);
         actionOpen_UI_Layout_Editor->setObjectName("actionOpen_UI_Layout_Editor");
-        actionPackage_Software = new QAction(MainWindow);
-        actionPackage_Software->setObjectName("actionPackage_Software");
         actionSmart_Package_Software = new QAction(MainWindow);
         actionSmart_Package_Software->setObjectName("actionSmart_Package_Software");
         centralWidget = new QWidget(MainWindow);
@@ -338,7 +335,6 @@ public:
         menu->addAction(actionSave_As);
         menu->addAction(actionExit);
         menu_3->addAction(actionOpen_UI_Layout_Editor);
-        menu_4->addAction(actionPackage_Software);
         menu_4->addAction(actionSmart_Package_Software);
         menu_2->addAction(actionAbout);
         mainToolBar->addAction(actionNew);
@@ -375,10 +371,6 @@ public:
         actionOpen_UI_Layout_Editor->setText(QCoreApplication::translate("MainWindow", "\346\211\223\345\274\200UI\345\270\203\345\261\200\347\274\226\350\276\221\345\231\250", nullptr));
 #if QT_CONFIG(shortcut)
         actionOpen_UI_Layout_Editor->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+L", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionPackage_Software->setText(QCoreApplication::translate("MainWindow", "\346\211\223\345\214\205\350\275\257\344\273\266", nullptr));
-#if QT_CONFIG(shortcut)
-        actionPackage_Software->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+P", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionSmart_Package_Software->setText(QCoreApplication::translate("MainWindow", "\346\231\272\350\203\275\346\211\223\345\214\205\350\275\257\344\273\266", nullptr));
 #if QT_CONFIG(shortcut)

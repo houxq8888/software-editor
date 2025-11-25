@@ -912,10 +912,6 @@ software-editor_autogen/timestamp: \
 	D:/virtualMachine/github/software-editor/src/main.cpp \
 	D:/virtualMachine/github/software-editor/src/mainwindow.cpp \
 	D:/virtualMachine/github/software-editor/src/mainwindow.h \
-	D:/virtualMachine/github/software-editor/src/packageconfig.cpp \
-	D:/virtualMachine/github/software-editor/src/packageconfig.h \
-	D:/virtualMachine/github/software-editor/src/packagedialog.cpp \
-	D:/virtualMachine/github/software-editor/src/packagedialog.h \
 	D:/virtualMachine/github/software-editor/src/packagemanager.cpp \
 	D:/virtualMachine/github/software-editor/src/packagemanager.h \
 	D:/virtualMachine/github/software-editor/src/previewwindow.cpp \

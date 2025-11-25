@@ -4,8 +4,6 @@
 #include "UVLADIE3JM/moc_eventactioneditor.cpp"
 #include "UVLADIE3JM/moc_eventactionmodel.cpp"
 #include "UVLADIE3JM/moc_mainwindow.cpp"
-#include "UVLADIE3JM/moc_packageconfig.cpp"
-#include "UVLADIE3JM/moc_packagedialog.cpp"
 #include "UVLADIE3JM/moc_packagemanager.cpp"
 #include "UVLADIE3JM/moc_previewwindow.cpp"
 #include "UVLADIE3JM/moc_productconfigmanager.cpp"

@@ -19,11 +19,13 @@ public:
     // 智能打包配置结构
     struct SmartPackageSettings {
         QString name;                   // 软件名称
+        QString uniqueId;               // 唯一标识符，用于生成文件名（避免中文问题）
         QString version;               // 版本号
         QString developer;             // 开发者
         QString description;           // 描述
         QString iconPath;              // 图标路径
         QString outputDir;            // 输出目录
+        QString uiLayoutPath;          // UI布局文件路径
         bool createInstaller;          // 是否创建安装包
         bool includeDependencies;      // 是否包含依赖
         
@@ -35,11 +37,13 @@ public:
         
         SmartPackageSettings() {
             name = "软件编辑器";
+            uniqueId = "software_editor"; // 默认uniqueId
             version = "1.0.0";
             developer = "软件工作室";
             description = "专业的软件UI布局编辑器";
             iconPath = "";
             outputDir = QDir::currentPath() + "/packages/";
+            uiLayoutPath = "";
             createInstaller = false;
             includeDependencies = true;
             qtDir = "";
@@ -63,6 +67,9 @@ public:
     
     // 生成智能main.cpp内容
     QString generateSmartMainCpp(const SmartPackageSettings &settings) const;
+    
+    // 根据UI布局文件生成main.cpp内容
+    QString generateMainCppFromUILayout(const SmartPackageSettings &settings) const;
     
     // 生成构建批处理文件
     QString generateBuildBat(const SmartPackageSettings &settings) const;
@@ -91,6 +98,9 @@ public:
     // 智能CMake配置
     QStringList detectAvailableCmakeGenerators() const;
     bool testCmakeGenerator(const QString &generator) const;
+    
+    // NSIS安装包生成功能（公开给packagemanager使用）
+    bool createNsisInstaller(const SmartPackageSettings &settings, const QString &exePath) const;
 
 signals:
     void progressChanged(int progress, const QString &message);
@@ -115,6 +125,17 @@ private:
     
     // 设置应用程序图标
     bool setApplicationIcon(const QString &exePath, const QString &iconPath) const;
+    
+    QString createNsisScript(const SmartPackageSettings &settings, const QString &exePath) const;
+    
+    // NSIS工具查找和安装包路径生成公共函数
+    QString findNsisTool() const;
+    QString generateInstallerPath(const SmartPackageSettings &settings) const;
+    
+    // 统一日志函数
+    void logError(const QString &message, bool isCritical = false) const;
+    void logInfo(const QString &message) const;
+    void logProgress(const QString &message) const;
 };
 
 #endif // SMARTPACKAGECONFIG_H

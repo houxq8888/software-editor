@@ -506,8 +506,6 @@ D:/virtualMachine/github/software-editor/build/software-editor_autogen/UVLADIE3J
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wctype.h \
-  D:/virtualMachine/github/software-editor/src/packageconfig.h \
-  D:/virtualMachine/github/software-editor/src/packagedialog.h \
   D:/virtualMachine/github/software-editor/src/packagemanager.h \
   D:/virtualMachine/github/software-editor/src/product.h \
   D:/virtualMachine/github/software-editor/src/productconfigmanager.h \

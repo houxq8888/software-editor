@@ -14,7 +14,6 @@
 #include <QFileDialog>
 #include <QRadioButton>
 #include <QButtonGroup>
-#include "packageconfig.h"
 #include "smartpackageconfig.h"
 #include "packagemanager.h"
 #include "product.h"
@@ -61,6 +60,9 @@ private:
     void updateUIState(bool packaging);
     void updateSmartPackageInfo();
     bool validateManualPaths();
+    
+    // 窗口事件处理
+    void resizeEvent(QResizeEvent *event) override;
     
     // UI组件
     QLineEdit *m_nameEdit;
