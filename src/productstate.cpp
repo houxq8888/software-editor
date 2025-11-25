@@ -123,6 +123,7 @@ bool ProductState::isWorkingUiLayoutChanged() const
 
 bool ProductState::isProductModified() const
 {
+    qDebug()<<"isProductModified";
     // 比较产品基本信息是否相同
     if (!isProductInfoEqual(m_originalProduct, m_workingProduct)) {
         return true;
@@ -156,13 +157,19 @@ bool ProductState::isUiBindingChanged() const
 
 bool ProductState::hasChanges() const
 {
-    return isProductModified() || isUiLayoutModified() || isUiLayoutChanged();
+    // 直接检查各个修改状态，避免递归调用
+    bool productModified = !isProductInfoEqual(m_originalProduct, m_workingProduct) || 
+                          !isFeaturesEqual(m_originalProduct.features(), m_workingProduct.features());
+    return productModified || isUiLayoutModified() || isUiLayoutChanged();
 }
 
 bool ProductState::needsSave() const
 {
     // 需要保存的条件：产品信息改变或UI布局内容改变
-    return isProductModified() || isUiLayoutModified();
+    // 直接检查各个修改状态，避免递归调用
+    bool productModified = !isProductInfoEqual(m_originalProduct, m_workingProduct) || 
+                          !isFeaturesEqual(m_originalProduct.features(), m_workingProduct.features());
+    return productModified || isUiLayoutModified();
 }
 
 bool ProductState::needsUiBinding() const
@@ -228,7 +235,10 @@ QString ProductState::getStatusDescription() const
 {
     QStringList statuses;
     
-    if (isProductModified()) {
+    // 直接检查产品修改状态，避免递归调用
+    bool productModified = !isProductInfoEqual(m_originalProduct, m_workingProduct) || 
+                          !isFeaturesEqual(m_originalProduct.features(), m_workingProduct.features());
+    if (productModified) {
         statuses.append("产品信息已修改");
     }
     
@@ -249,6 +259,17 @@ QString ProductState::getStatusDescription() const
 
 bool ProductState::isProductInfoEqual(const Product &p1, const Product &p2) const
 {
+    // qDebug()<<"name:"<<p1.name()<<","<<p2.name();
+    // qDebug()<<"version:"<<p1.version()<<","<<p2.version();
+    // qDebug()<<"description:"<<p1.description()<<","<<p2.description();
+    // qDebug()<<"iconPath:"<<p1.iconPath()<<","<<p2.iconPath();
+    // qDebug()<<"screenshotPath:"<<p1.screenshotPath()<<","<<p2.screenshotPath();
+    // qDebug()<<"category:"<<p1.category()<<","<<p2.category();
+    // qDebug()<<"developer:"<<p1.developer()<<","<<p2.developer();
+    // qDebug()<<"website:"<<p1.website()<<","<<p2.website();
+    // qDebug()<<"uniqueId:"<<p1.uniqueId()<<","<<p2.uniqueId();
+    // qDebug()<<"uiLayoutPath:"<<p1.uiLayoutPath()<<","<<p2.uiLayoutPath();
+
     return p1.name() == p2.name() &&
            p1.version() == p2.version() &&
            p1.description() == p2.description() &&

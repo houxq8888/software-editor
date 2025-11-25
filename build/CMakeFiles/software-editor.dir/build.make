@@ -218,41 +218,11 @@ CMakeFiles/software-editor.dir/src/customtreewidget.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/software-editor.dir/src/customtreewidget.cpp.s"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\virtualMachine\github\software-editor\src\customtreewidget.cpp -o CMakeFiles\software-editor.dir\src\customtreewidget.cpp.s
 
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj: CMakeFiles/software-editor.dir/flags.make
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj: D:/virtualMachine/github/software-editor/src/packagedialog.cpp
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj -MF CMakeFiles\software-editor.dir\src\packagedialog.cpp.obj.d -o CMakeFiles\software-editor.dir\src\packagedialog.cpp.obj -c D:\virtualMachine\github\software-editor\src\packagedialog.cpp
-
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/software-editor.dir/src/packagedialog.cpp.i"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\virtualMachine\github\software-editor\src\packagedialog.cpp > CMakeFiles\software-editor.dir\src\packagedialog.cpp.i
-
-CMakeFiles/software-editor.dir/src/packagedialog.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/software-editor.dir/src/packagedialog.cpp.s"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\virtualMachine\github\software-editor\src\packagedialog.cpp -o CMakeFiles\software-editor.dir\src\packagedialog.cpp.s
-
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj: CMakeFiles/software-editor.dir/flags.make
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj: D:/virtualMachine/github/software-editor/src/packageconfig.cpp
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj -MF CMakeFiles\software-editor.dir\src\packageconfig.cpp.obj.d -o CMakeFiles\software-editor.dir\src\packageconfig.cpp.obj -c D:\virtualMachine\github\software-editor\src\packageconfig.cpp
-
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/software-editor.dir/src/packageconfig.cpp.i"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\virtualMachine\github\software-editor\src\packageconfig.cpp > CMakeFiles\software-editor.dir\src\packageconfig.cpp.i
-
-CMakeFiles/software-editor.dir/src/packageconfig.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/software-editor.dir/src/packageconfig.cpp.s"
-	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\virtualMachine\github\software-editor\src\packageconfig.cpp -o CMakeFiles\software-editor.dir\src\packageconfig.cpp.s
-
 CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj: CMakeFiles/software-editor.dir/flags.make
 CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj: D:/virtualMachine/github/software-editor/src/packagemanager.cpp
 CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj -MF CMakeFiles\software-editor.dir\src\packagemanager.cpp.obj.d -o CMakeFiles\software-editor.dir\src\packagemanager.cpp.obj -c D:\virtualMachine\github\software-editor\src\packagemanager.cpp
 
 CMakeFiles/software-editor.dir/src/packagemanager.cpp.i: cmake_force
@@ -267,7 +237,7 @@ CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj: CMakeFiles/softwa
 CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj: D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp
 CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj -MF CMakeFiles\software-editor.dir\src\smartpackagedialog.cpp.obj.d -o CMakeFiles\software-editor.dir\src\smartpackagedialog.cpp.obj -c D:\virtualMachine\github\software-editor\src\smartpackagedialog.cpp
 
 CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.i: cmake_force
@@ -282,7 +252,7 @@ CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj: CMakeFiles/softwa
 CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj: D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp
 CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj -MF CMakeFiles\software-editor.dir\src\smartpackageconfig.cpp.obj.d -o CMakeFiles\software-editor.dir\src\smartpackageconfig.cpp.obj -c D:\virtualMachine\github\software-editor\src\smartpackageconfig.cpp
 
 CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.i: cmake_force
@@ -297,7 +267,7 @@ CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj: CMakeFiles/softwar
 CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj: D:/virtualMachine/github/software-editor/src/eventactioneditor.cpp
 CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj -MF CMakeFiles\software-editor.dir\src\eventactioneditor.cpp.obj.d -o CMakeFiles\software-editor.dir\src\eventactioneditor.cpp.obj -c D:\virtualMachine\github\software-editor\src\eventactioneditor.cpp
 
 CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.i: cmake_force
@@ -312,7 +282,7 @@ CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj: CMakeFiles/software
 CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj: D:/virtualMachine/github/software-editor/src/eventactionmodel.cpp
 CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj -MF CMakeFiles\software-editor.dir\src\eventactionmodel.cpp.obj.d -o CMakeFiles\software-editor.dir\src\eventactionmodel.cpp.obj -c D:\virtualMachine\github\software-editor\src\eventactionmodel.cpp
 
 CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.i: cmake_force
@@ -327,7 +297,7 @@ CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj: CMakeFiles/softwa
 CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj: D:/virtualMachine/github/software-editor/src/uiinterfacemanager.cpp
 CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj -MF CMakeFiles\software-editor.dir\src\uiinterfacemanager.cpp.obj.d -o CMakeFiles\software-editor.dir\src\uiinterfacemanager.cpp.obj -c D:\virtualMachine\github\software-editor\src\uiinterfacemanager.cpp
 
 CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.i: cmake_force
@@ -342,7 +312,7 @@ CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj: CMakeFiles/software-edit
 CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj: CMakeFiles/software-editor.dir/includes_CXX.rsp
 CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj: D:/virtualMachine/github/software-editor/src/uiinterface.cpp
 CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj: CMakeFiles/software-editor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj"
 	D:\Qt\Tools\mingw1310_64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj -MF CMakeFiles\software-editor.dir\src\uiinterface.cpp.obj.d -o CMakeFiles\software-editor.dir\src\uiinterface.cpp.obj -c D:\virtualMachine\github\software-editor\src\uiinterface.cpp
 
 CMakeFiles/software-editor.dir/src/uiinterface.cpp.i: cmake_force
@@ -365,8 +335,6 @@ software__editor_OBJECTS = \
 "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj" \
 "CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj" \
 "CMakeFiles/software-editor.dir/src/customtreewidget.cpp.obj" \
-"CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj" \
-"CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj" \
 "CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj" \
 "CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj" \
 "CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj" \
@@ -388,8 +356,6 @@ software-editor.exe: CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/customtreewidget.cpp.obj
-software-editor.exe: CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj
-software-editor.exe: CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj
 software-editor.exe: CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj
@@ -407,7 +373,7 @@ software-editor.exe: D:/Qt/6.9.1/mingw_64/lib/libQt6Core.a
 software-editor.exe: CMakeFiles/software-editor.dir/linkLibs.rsp
 software-editor.exe: CMakeFiles/software-editor.dir/objects1.rsp
 software-editor.exe: CMakeFiles/software-editor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable software-editor.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX executable software-editor.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\software-editor.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

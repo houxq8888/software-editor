@@ -9,7 +9,6 @@
 #include <QMessageBox>
 #include "product.h"
 #include "packagemanager.h"
-#include "packagedialog.h"
 #include "smartpackagedialog.h"
 #include "productconfigmanager.h"
 
@@ -34,7 +33,6 @@ private slots:
     void on_actionSave_As_triggered();
     void on_actionExit_triggered();
     void on_actionAbout_triggered();
-    void on_actionPackage_Software_triggered();
     void on_actionSmart_Package_Software_triggered();
     void on_actionOpen_UI_Layout_Editor_triggered();
     
@@ -54,7 +52,6 @@ private slots:
     void onPackageError(const QString &error);
 
 private slots:
-    void startPackageProcess(const Product &product, const PackageConfig::PackageSettings &settings);
     void startSmartPackageProcess(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings);
 
 private:
@@ -62,7 +59,6 @@ private:
     Product m_product;
     QString m_currentFile;
     PackageManager *m_packageManager;
-    PackageDialog *m_packageDialog;
     SmartPackageDialog *m_smartPackageDialog;
     ProductConfigManager *m_configManager;
 

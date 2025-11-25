@@ -367,54 +367,6 @@ src/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.s
 .PHONY : src/mainwindow.cpp.s
 
-src/packageconfig.obj: src/packageconfig.cpp.obj
-.PHONY : src/packageconfig.obj
-
-# target to build an object file
-src/packageconfig.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj
-.PHONY : src/packageconfig.cpp.obj
-
-src/packageconfig.i: src/packageconfig.cpp.i
-.PHONY : src/packageconfig.i
-
-# target to preprocess a source file
-src/packageconfig.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.i
-.PHONY : src/packageconfig.cpp.i
-
-src/packageconfig.s: src/packageconfig.cpp.s
-.PHONY : src/packageconfig.s
-
-# target to generate assembly for a file
-src/packageconfig.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packageconfig.cpp.s
-.PHONY : src/packageconfig.cpp.s
-
-src/packagedialog.obj: src/packagedialog.cpp.obj
-.PHONY : src/packagedialog.obj
-
-# target to build an object file
-src/packagedialog.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj
-.PHONY : src/packagedialog.cpp.obj
-
-src/packagedialog.i: src/packagedialog.cpp.i
-.PHONY : src/packagedialog.i
-
-# target to preprocess a source file
-src/packagedialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.i
-.PHONY : src/packagedialog.cpp.i
-
-src/packagedialog.s: src/packagedialog.cpp.s
-.PHONY : src/packagedialog.s
-
-# target to generate assembly for a file
-src/packagedialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagedialog.cpp.s
-.PHONY : src/packagedialog.cpp.s
-
 src/packagemanager.obj: src/packagemanager.cpp.obj
 .PHONY : src/packagemanager.obj
 
@@ -691,12 +643,6 @@ help:
 	@echo ... src/mainwindow.obj
 	@echo ... src/mainwindow.i
 	@echo ... src/mainwindow.s
-	@echo ... src/packageconfig.obj
-	@echo ... src/packageconfig.i
-	@echo ... src/packageconfig.s
-	@echo ... src/packagedialog.obj
-	@echo ... src/packagedialog.i
-	@echo ... src/packagedialog.s
 	@echo ... src/packagemanager.obj
 	@echo ... src/packagemanager.i
 	@echo ... src/packagemanager.s
