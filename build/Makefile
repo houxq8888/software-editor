@@ -223,102 +223,6 @@ software-editor_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.s
 .PHONY : software-editor_autogen/mocs_compilation.cpp.s
 
-src/customtreewidget.obj: src/customtreewidget.cpp.obj
-.PHONY : src/customtreewidget.obj
-
-# target to build an object file
-src/customtreewidget.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.obj
-.PHONY : src/customtreewidget.cpp.obj
-
-src/customtreewidget.i: src/customtreewidget.cpp.i
-.PHONY : src/customtreewidget.i
-
-# target to preprocess a source file
-src/customtreewidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.i
-.PHONY : src/customtreewidget.cpp.i
-
-src/customtreewidget.s: src/customtreewidget.cpp.s
-.PHONY : src/customtreewidget.s
-
-# target to generate assembly for a file
-src/customtreewidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/customtreewidget.cpp.s
-.PHONY : src/customtreewidget.cpp.s
-
-src/editareawidget.obj: src/editareawidget.cpp.obj
-.PHONY : src/editareawidget.obj
-
-# target to build an object file
-src/editareawidget.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.obj
-.PHONY : src/editareawidget.cpp.obj
-
-src/editareawidget.i: src/editareawidget.cpp.i
-.PHONY : src/editareawidget.i
-
-# target to preprocess a source file
-src/editareawidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.i
-.PHONY : src/editareawidget.cpp.i
-
-src/editareawidget.s: src/editareawidget.cpp.s
-.PHONY : src/editareawidget.s
-
-# target to generate assembly for a file
-src/editareawidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/editareawidget.cpp.s
-.PHONY : src/editareawidget.cpp.s
-
-src/eventactioneditor.obj: src/eventactioneditor.cpp.obj
-.PHONY : src/eventactioneditor.obj
-
-# target to build an object file
-src/eventactioneditor.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.obj
-.PHONY : src/eventactioneditor.cpp.obj
-
-src/eventactioneditor.i: src/eventactioneditor.cpp.i
-.PHONY : src/eventactioneditor.i
-
-# target to preprocess a source file
-src/eventactioneditor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.i
-.PHONY : src/eventactioneditor.cpp.i
-
-src/eventactioneditor.s: src/eventactioneditor.cpp.s
-.PHONY : src/eventactioneditor.s
-
-# target to generate assembly for a file
-src/eventactioneditor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactioneditor.cpp.s
-.PHONY : src/eventactioneditor.cpp.s
-
-src/eventactionmodel.obj: src/eventactionmodel.cpp.obj
-.PHONY : src/eventactionmodel.obj
-
-# target to build an object file
-src/eventactionmodel.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj
-.PHONY : src/eventactionmodel.cpp.obj
-
-src/eventactionmodel.i: src/eventactionmodel.cpp.i
-.PHONY : src/eventactionmodel.i
-
-# target to preprocess a source file
-src/eventactionmodel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.i
-.PHONY : src/eventactionmodel.cpp.i
-
-src/eventactionmodel.s: src/eventactionmodel.cpp.s
-.PHONY : src/eventactionmodel.s
-
-# target to generate assembly for a file
-src/eventactionmodel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.s
-.PHONY : src/eventactionmodel.cpp.s
-
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -343,269 +247,365 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/mainwindow.obj: src/mainwindow.cpp.obj
-.PHONY : src/mainwindow.obj
+src/package/packageconfig.obj: src/package/packageconfig.cpp.obj
+.PHONY : src/package/packageconfig.obj
 
 # target to build an object file
-src/mainwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj
-.PHONY : src/mainwindow.cpp.obj
+src/package/packageconfig.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageconfig.cpp.obj
+.PHONY : src/package/packageconfig.cpp.obj
 
-src/mainwindow.i: src/mainwindow.cpp.i
-.PHONY : src/mainwindow.i
+src/package/packageconfig.i: src/package/packageconfig.cpp.i
+.PHONY : src/package/packageconfig.i
 
 # target to preprocess a source file
-src/mainwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.i
-.PHONY : src/mainwindow.cpp.i
+src/package/packageconfig.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageconfig.cpp.i
+.PHONY : src/package/packageconfig.cpp.i
 
-src/mainwindow.s: src/mainwindow.cpp.s
-.PHONY : src/mainwindow.s
+src/package/packageconfig.s: src/package/packageconfig.cpp.s
+.PHONY : src/package/packageconfig.s
 
 # target to generate assembly for a file
-src/mainwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/mainwindow.cpp.s
-.PHONY : src/mainwindow.cpp.s
+src/package/packageconfig.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageconfig.cpp.s
+.PHONY : src/package/packageconfig.cpp.s
 
-src/packagemanager.obj: src/packagemanager.cpp.obj
-.PHONY : src/packagemanager.obj
+src/package/packagemanager.obj: src/package/packagemanager.cpp.obj
+.PHONY : src/package/packagemanager.obj
 
 # target to build an object file
-src/packagemanager.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj
-.PHONY : src/packagemanager.cpp.obj
+src/package/packagemanager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packagemanager.cpp.obj
+.PHONY : src/package/packagemanager.cpp.obj
 
-src/packagemanager.i: src/packagemanager.cpp.i
-.PHONY : src/packagemanager.i
+src/package/packagemanager.i: src/package/packagemanager.cpp.i
+.PHONY : src/package/packagemanager.i
 
 # target to preprocess a source file
-src/packagemanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.i
-.PHONY : src/packagemanager.cpp.i
+src/package/packagemanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packagemanager.cpp.i
+.PHONY : src/package/packagemanager.cpp.i
 
-src/packagemanager.s: src/packagemanager.cpp.s
-.PHONY : src/packagemanager.s
+src/package/packagemanager.s: src/package/packagemanager.cpp.s
+.PHONY : src/package/packagemanager.s
 
 # target to generate assembly for a file
-src/packagemanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/packagemanager.cpp.s
-.PHONY : src/packagemanager.cpp.s
+src/package/packagemanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packagemanager.cpp.s
+.PHONY : src/package/packagemanager.cpp.s
 
-src/previewwindow.obj: src/previewwindow.cpp.obj
-.PHONY : src/previewwindow.obj
+src/package/packageservice.obj: src/package/packageservice.cpp.obj
+.PHONY : src/package/packageservice.obj
 
 # target to build an object file
-src/previewwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj
-.PHONY : src/previewwindow.cpp.obj
+src/package/packageservice.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageservice.cpp.obj
+.PHONY : src/package/packageservice.cpp.obj
 
-src/previewwindow.i: src/previewwindow.cpp.i
-.PHONY : src/previewwindow.i
+src/package/packageservice.i: src/package/packageservice.cpp.i
+.PHONY : src/package/packageservice.i
 
 # target to preprocess a source file
-src/previewwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.i
-.PHONY : src/previewwindow.cpp.i
+src/package/packageservice.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageservice.cpp.i
+.PHONY : src/package/packageservice.cpp.i
 
-src/previewwindow.s: src/previewwindow.cpp.s
-.PHONY : src/previewwindow.s
+src/package/packageservice.s: src/package/packageservice.cpp.s
+.PHONY : src/package/packageservice.s
 
 # target to generate assembly for a file
-src/previewwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/previewwindow.cpp.s
-.PHONY : src/previewwindow.cpp.s
+src/package/packageservice.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/package/packageservice.cpp.s
+.PHONY : src/package/packageservice.cpp.s
 
-src/product.obj: src/product.cpp.obj
-.PHONY : src/product.obj
+src/product/mainwindow.obj: src/product/mainwindow.cpp.obj
+.PHONY : src/product/mainwindow.obj
 
 # target to build an object file
-src/product.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.obj
-.PHONY : src/product.cpp.obj
+src/product/mainwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/mainwindow.cpp.obj
+.PHONY : src/product/mainwindow.cpp.obj
 
-src/product.i: src/product.cpp.i
-.PHONY : src/product.i
+src/product/mainwindow.i: src/product/mainwindow.cpp.i
+.PHONY : src/product/mainwindow.i
 
 # target to preprocess a source file
-src/product.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.i
-.PHONY : src/product.cpp.i
+src/product/mainwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/mainwindow.cpp.i
+.PHONY : src/product/mainwindow.cpp.i
 
-src/product.s: src/product.cpp.s
-.PHONY : src/product.s
+src/product/mainwindow.s: src/product/mainwindow.cpp.s
+.PHONY : src/product/mainwindow.s
 
 # target to generate assembly for a file
-src/product.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product.cpp.s
-.PHONY : src/product.cpp.s
+src/product/mainwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/mainwindow.cpp.s
+.PHONY : src/product/mainwindow.cpp.s
 
-src/productconfigmanager.obj: src/productconfigmanager.cpp.obj
-.PHONY : src/productconfigmanager.obj
+src/product/product.obj: src/product/product.cpp.obj
+.PHONY : src/product/product.obj
 
 # target to build an object file
-src/productconfigmanager.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.obj
-.PHONY : src/productconfigmanager.cpp.obj
+src/product/product.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/product.cpp.obj
+.PHONY : src/product/product.cpp.obj
 
-src/productconfigmanager.i: src/productconfigmanager.cpp.i
-.PHONY : src/productconfigmanager.i
+src/product/product.i: src/product/product.cpp.i
+.PHONY : src/product/product.i
 
 # target to preprocess a source file
-src/productconfigmanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.i
-.PHONY : src/productconfigmanager.cpp.i
+src/product/product.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/product.cpp.i
+.PHONY : src/product/product.cpp.i
 
-src/productconfigmanager.s: src/productconfigmanager.cpp.s
-.PHONY : src/productconfigmanager.s
+src/product/product.s: src/product/product.cpp.s
+.PHONY : src/product/product.s
 
 # target to generate assembly for a file
-src/productconfigmanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productconfigmanager.cpp.s
-.PHONY : src/productconfigmanager.cpp.s
+src/product/product.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/product.cpp.s
+.PHONY : src/product/product.cpp.s
 
-src/productstate.obj: src/productstate.cpp.obj
-.PHONY : src/productstate.obj
+src/product/productconfigmanager.obj: src/product/productconfigmanager.cpp.obj
+.PHONY : src/product/productconfigmanager.obj
 
 # target to build an object file
-src/productstate.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.obj
-.PHONY : src/productstate.cpp.obj
+src/product/productconfigmanager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productconfigmanager.cpp.obj
+.PHONY : src/product/productconfigmanager.cpp.obj
 
-src/productstate.i: src/productstate.cpp.i
-.PHONY : src/productstate.i
+src/product/productconfigmanager.i: src/product/productconfigmanager.cpp.i
+.PHONY : src/product/productconfigmanager.i
 
 # target to preprocess a source file
-src/productstate.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.i
-.PHONY : src/productstate.cpp.i
+src/product/productconfigmanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productconfigmanager.cpp.i
+.PHONY : src/product/productconfigmanager.cpp.i
 
-src/productstate.s: src/productstate.cpp.s
-.PHONY : src/productstate.s
+src/product/productconfigmanager.s: src/product/productconfigmanager.cpp.s
+.PHONY : src/product/productconfigmanager.s
 
 # target to generate assembly for a file
-src/productstate.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/productstate.cpp.s
-.PHONY : src/productstate.cpp.s
+src/product/productconfigmanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productconfigmanager.cpp.s
+.PHONY : src/product/productconfigmanager.cpp.s
 
-src/smartpackageconfig.obj: src/smartpackageconfig.cpp.obj
-.PHONY : src/smartpackageconfig.obj
+src/product/productstate.obj: src/product/productstate.cpp.obj
+.PHONY : src/product/productstate.obj
 
 # target to build an object file
-src/smartpackageconfig.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.obj
-.PHONY : src/smartpackageconfig.cpp.obj
+src/product/productstate.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productstate.cpp.obj
+.PHONY : src/product/productstate.cpp.obj
 
-src/smartpackageconfig.i: src/smartpackageconfig.cpp.i
-.PHONY : src/smartpackageconfig.i
+src/product/productstate.i: src/product/productstate.cpp.i
+.PHONY : src/product/productstate.i
 
 # target to preprocess a source file
-src/smartpackageconfig.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.i
-.PHONY : src/smartpackageconfig.cpp.i
+src/product/productstate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productstate.cpp.i
+.PHONY : src/product/productstate.cpp.i
 
-src/smartpackageconfig.s: src/smartpackageconfig.cpp.s
-.PHONY : src/smartpackageconfig.s
+src/product/productstate.s: src/product/productstate.cpp.s
+.PHONY : src/product/productstate.s
 
 # target to generate assembly for a file
-src/smartpackageconfig.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackageconfig.cpp.s
-.PHONY : src/smartpackageconfig.cpp.s
+src/product/productstate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/product/productstate.cpp.s
+.PHONY : src/product/productstate.cpp.s
 
-src/smartpackagedialog.obj: src/smartpackagedialog.cpp.obj
-.PHONY : src/smartpackagedialog.obj
+src/uilayout/customtreewidget.obj: src/uilayout/customtreewidget.cpp.obj
+.PHONY : src/uilayout/customtreewidget.obj
 
 # target to build an object file
-src/smartpackagedialog.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.obj
-.PHONY : src/smartpackagedialog.cpp.obj
+src/uilayout/customtreewidget.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/customtreewidget.cpp.obj
+.PHONY : src/uilayout/customtreewidget.cpp.obj
 
-src/smartpackagedialog.i: src/smartpackagedialog.cpp.i
-.PHONY : src/smartpackagedialog.i
+src/uilayout/customtreewidget.i: src/uilayout/customtreewidget.cpp.i
+.PHONY : src/uilayout/customtreewidget.i
 
 # target to preprocess a source file
-src/smartpackagedialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.i
-.PHONY : src/smartpackagedialog.cpp.i
+src/uilayout/customtreewidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/customtreewidget.cpp.i
+.PHONY : src/uilayout/customtreewidget.cpp.i
 
-src/smartpackagedialog.s: src/smartpackagedialog.cpp.s
-.PHONY : src/smartpackagedialog.s
+src/uilayout/customtreewidget.s: src/uilayout/customtreewidget.cpp.s
+.PHONY : src/uilayout/customtreewidget.s
 
 # target to generate assembly for a file
-src/smartpackagedialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/smartpackagedialog.cpp.s
-.PHONY : src/smartpackagedialog.cpp.s
+src/uilayout/customtreewidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/customtreewidget.cpp.s
+.PHONY : src/uilayout/customtreewidget.cpp.s
 
-src/uiinterface.obj: src/uiinterface.cpp.obj
-.PHONY : src/uiinterface.obj
+src/uilayout/editareawidget.obj: src/uilayout/editareawidget.cpp.obj
+.PHONY : src/uilayout/editareawidget.obj
 
 # target to build an object file
-src/uiinterface.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterface.cpp.obj
-.PHONY : src/uiinterface.cpp.obj
+src/uilayout/editareawidget.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/editareawidget.cpp.obj
+.PHONY : src/uilayout/editareawidget.cpp.obj
 
-src/uiinterface.i: src/uiinterface.cpp.i
-.PHONY : src/uiinterface.i
+src/uilayout/editareawidget.i: src/uilayout/editareawidget.cpp.i
+.PHONY : src/uilayout/editareawidget.i
 
 # target to preprocess a source file
-src/uiinterface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterface.cpp.i
-.PHONY : src/uiinterface.cpp.i
+src/uilayout/editareawidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/editareawidget.cpp.i
+.PHONY : src/uilayout/editareawidget.cpp.i
 
-src/uiinterface.s: src/uiinterface.cpp.s
-.PHONY : src/uiinterface.s
+src/uilayout/editareawidget.s: src/uilayout/editareawidget.cpp.s
+.PHONY : src/uilayout/editareawidget.s
 
 # target to generate assembly for a file
-src/uiinterface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterface.cpp.s
-.PHONY : src/uiinterface.cpp.s
+src/uilayout/editareawidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/editareawidget.cpp.s
+.PHONY : src/uilayout/editareawidget.cpp.s
 
-src/uiinterfacemanager.obj: src/uiinterfacemanager.cpp.obj
-.PHONY : src/uiinterfacemanager.obj
+src/uilayout/eventactioneditor.obj: src/uilayout/eventactioneditor.cpp.obj
+.PHONY : src/uilayout/eventactioneditor.obj
 
 # target to build an object file
-src/uiinterfacemanager.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.obj
-.PHONY : src/uiinterfacemanager.cpp.obj
+src/uilayout/eventactioneditor.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactioneditor.cpp.obj
+.PHONY : src/uilayout/eventactioneditor.cpp.obj
 
-src/uiinterfacemanager.i: src/uiinterfacemanager.cpp.i
-.PHONY : src/uiinterfacemanager.i
+src/uilayout/eventactioneditor.i: src/uilayout/eventactioneditor.cpp.i
+.PHONY : src/uilayout/eventactioneditor.i
 
 # target to preprocess a source file
-src/uiinterfacemanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.i
-.PHONY : src/uiinterfacemanager.cpp.i
+src/uilayout/eventactioneditor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactioneditor.cpp.i
+.PHONY : src/uilayout/eventactioneditor.cpp.i
 
-src/uiinterfacemanager.s: src/uiinterfacemanager.cpp.s
-.PHONY : src/uiinterfacemanager.s
+src/uilayout/eventactioneditor.s: src/uilayout/eventactioneditor.cpp.s
+.PHONY : src/uilayout/eventactioneditor.s
 
 # target to generate assembly for a file
-src/uiinterfacemanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uiinterfacemanager.cpp.s
-.PHONY : src/uiinterfacemanager.cpp.s
+src/uilayout/eventactioneditor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactioneditor.cpp.s
+.PHONY : src/uilayout/eventactioneditor.cpp.s
 
-src/uilayoutwindow.obj: src/uilayoutwindow.cpp.obj
-.PHONY : src/uilayoutwindow.obj
+src/uilayout/eventactionmodel.obj: src/uilayout/eventactionmodel.cpp.obj
+.PHONY : src/uilayout/eventactionmodel.obj
 
 # target to build an object file
-src/uilayoutwindow.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.obj
-.PHONY : src/uilayoutwindow.cpp.obj
+src/uilayout/eventactionmodel.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactionmodel.cpp.obj
+.PHONY : src/uilayout/eventactionmodel.cpp.obj
 
-src/uilayoutwindow.i: src/uilayoutwindow.cpp.i
-.PHONY : src/uilayoutwindow.i
+src/uilayout/eventactionmodel.i: src/uilayout/eventactionmodel.cpp.i
+.PHONY : src/uilayout/eventactionmodel.i
 
 # target to preprocess a source file
-src/uilayoutwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.i
-.PHONY : src/uilayoutwindow.cpp.i
+src/uilayout/eventactionmodel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactionmodel.cpp.i
+.PHONY : src/uilayout/eventactionmodel.cpp.i
 
-src/uilayoutwindow.s: src/uilayoutwindow.cpp.s
-.PHONY : src/uilayoutwindow.s
+src/uilayout/eventactionmodel.s: src/uilayout/eventactionmodel.cpp.s
+.PHONY : src/uilayout/eventactionmodel.s
 
 # target to generate assembly for a file
-src/uilayoutwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayoutwindow.cpp.s
-.PHONY : src/uilayoutwindow.cpp.s
+src/uilayout/eventactionmodel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/eventactionmodel.cpp.s
+.PHONY : src/uilayout/eventactionmodel.cpp.s
+
+src/uilayout/previewwindow.obj: src/uilayout/previewwindow.cpp.obj
+.PHONY : src/uilayout/previewwindow.obj
+
+# target to build an object file
+src/uilayout/previewwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/previewwindow.cpp.obj
+.PHONY : src/uilayout/previewwindow.cpp.obj
+
+src/uilayout/previewwindow.i: src/uilayout/previewwindow.cpp.i
+.PHONY : src/uilayout/previewwindow.i
+
+# target to preprocess a source file
+src/uilayout/previewwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/previewwindow.cpp.i
+.PHONY : src/uilayout/previewwindow.cpp.i
+
+src/uilayout/previewwindow.s: src/uilayout/previewwindow.cpp.s
+.PHONY : src/uilayout/previewwindow.s
+
+# target to generate assembly for a file
+src/uilayout/previewwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/previewwindow.cpp.s
+.PHONY : src/uilayout/previewwindow.cpp.s
+
+src/uilayout/uiinterface.obj: src/uilayout/uiinterface.cpp.obj
+.PHONY : src/uilayout/uiinterface.obj
+
+# target to build an object file
+src/uilayout/uiinterface.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterface.cpp.obj
+.PHONY : src/uilayout/uiinterface.cpp.obj
+
+src/uilayout/uiinterface.i: src/uilayout/uiinterface.cpp.i
+.PHONY : src/uilayout/uiinterface.i
+
+# target to preprocess a source file
+src/uilayout/uiinterface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterface.cpp.i
+.PHONY : src/uilayout/uiinterface.cpp.i
+
+src/uilayout/uiinterface.s: src/uilayout/uiinterface.cpp.s
+.PHONY : src/uilayout/uiinterface.s
+
+# target to generate assembly for a file
+src/uilayout/uiinterface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterface.cpp.s
+.PHONY : src/uilayout/uiinterface.cpp.s
+
+src/uilayout/uiinterfacemanager.obj: src/uilayout/uiinterfacemanager.cpp.obj
+.PHONY : src/uilayout/uiinterfacemanager.obj
+
+# target to build an object file
+src/uilayout/uiinterfacemanager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterfacemanager.cpp.obj
+.PHONY : src/uilayout/uiinterfacemanager.cpp.obj
+
+src/uilayout/uiinterfacemanager.i: src/uilayout/uiinterfacemanager.cpp.i
+.PHONY : src/uilayout/uiinterfacemanager.i
+
+# target to preprocess a source file
+src/uilayout/uiinterfacemanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterfacemanager.cpp.i
+.PHONY : src/uilayout/uiinterfacemanager.cpp.i
+
+src/uilayout/uiinterfacemanager.s: src/uilayout/uiinterfacemanager.cpp.s
+.PHONY : src/uilayout/uiinterfacemanager.s
+
+# target to generate assembly for a file
+src/uilayout/uiinterfacemanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uiinterfacemanager.cpp.s
+.PHONY : src/uilayout/uiinterfacemanager.cpp.s
+
+src/uilayout/uilayoutwindow.obj: src/uilayout/uilayoutwindow.cpp.obj
+.PHONY : src/uilayout/uilayoutwindow.obj
+
+# target to build an object file
+src/uilayout/uilayoutwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uilayoutwindow.cpp.obj
+.PHONY : src/uilayout/uilayoutwindow.cpp.obj
+
+src/uilayout/uilayoutwindow.i: src/uilayout/uilayoutwindow.cpp.i
+.PHONY : src/uilayout/uilayoutwindow.i
+
+# target to preprocess a source file
+src/uilayout/uilayoutwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uilayoutwindow.cpp.i
+.PHONY : src/uilayout/uilayoutwindow.cpp.i
+
+src/uilayout/uilayoutwindow.s: src/uilayout/uilayoutwindow.cpp.s
+.PHONY : src/uilayout/uilayoutwindow.s
+
+# target to generate assembly for a file
+src/uilayout/uilayoutwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/uilayout/uilayoutwindow.cpp.s
+.PHONY : src/uilayout/uilayoutwindow.cpp.s
 
 # Help Target
 help:
@@ -625,54 +625,54 @@ help:
 	@echo ... software-editor_autogen/mocs_compilation.obj
 	@echo ... software-editor_autogen/mocs_compilation.i
 	@echo ... software-editor_autogen/mocs_compilation.s
-	@echo ... src/customtreewidget.obj
-	@echo ... src/customtreewidget.i
-	@echo ... src/customtreewidget.s
-	@echo ... src/editareawidget.obj
-	@echo ... src/editareawidget.i
-	@echo ... src/editareawidget.s
-	@echo ... src/eventactioneditor.obj
-	@echo ... src/eventactioneditor.i
-	@echo ... src/eventactioneditor.s
-	@echo ... src/eventactionmodel.obj
-	@echo ... src/eventactionmodel.i
-	@echo ... src/eventactionmodel.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
-	@echo ... src/mainwindow.obj
-	@echo ... src/mainwindow.i
-	@echo ... src/mainwindow.s
-	@echo ... src/packagemanager.obj
-	@echo ... src/packagemanager.i
-	@echo ... src/packagemanager.s
-	@echo ... src/previewwindow.obj
-	@echo ... src/previewwindow.i
-	@echo ... src/previewwindow.s
-	@echo ... src/product.obj
-	@echo ... src/product.i
-	@echo ... src/product.s
-	@echo ... src/productconfigmanager.obj
-	@echo ... src/productconfigmanager.i
-	@echo ... src/productconfigmanager.s
-	@echo ... src/productstate.obj
-	@echo ... src/productstate.i
-	@echo ... src/productstate.s
-	@echo ... src/smartpackageconfig.obj
-	@echo ... src/smartpackageconfig.i
-	@echo ... src/smartpackageconfig.s
-	@echo ... src/smartpackagedialog.obj
-	@echo ... src/smartpackagedialog.i
-	@echo ... src/smartpackagedialog.s
-	@echo ... src/uiinterface.obj
-	@echo ... src/uiinterface.i
-	@echo ... src/uiinterface.s
-	@echo ... src/uiinterfacemanager.obj
-	@echo ... src/uiinterfacemanager.i
-	@echo ... src/uiinterfacemanager.s
-	@echo ... src/uilayoutwindow.obj
-	@echo ... src/uilayoutwindow.i
-	@echo ... src/uilayoutwindow.s
+	@echo ... src/package/packageconfig.obj
+	@echo ... src/package/packageconfig.i
+	@echo ... src/package/packageconfig.s
+	@echo ... src/package/packagemanager.obj
+	@echo ... src/package/packagemanager.i
+	@echo ... src/package/packagemanager.s
+	@echo ... src/package/packageservice.obj
+	@echo ... src/package/packageservice.i
+	@echo ... src/package/packageservice.s
+	@echo ... src/product/mainwindow.obj
+	@echo ... src/product/mainwindow.i
+	@echo ... src/product/mainwindow.s
+	@echo ... src/product/product.obj
+	@echo ... src/product/product.i
+	@echo ... src/product/product.s
+	@echo ... src/product/productconfigmanager.obj
+	@echo ... src/product/productconfigmanager.i
+	@echo ... src/product/productconfigmanager.s
+	@echo ... src/product/productstate.obj
+	@echo ... src/product/productstate.i
+	@echo ... src/product/productstate.s
+	@echo ... src/uilayout/customtreewidget.obj
+	@echo ... src/uilayout/customtreewidget.i
+	@echo ... src/uilayout/customtreewidget.s
+	@echo ... src/uilayout/editareawidget.obj
+	@echo ... src/uilayout/editareawidget.i
+	@echo ... src/uilayout/editareawidget.s
+	@echo ... src/uilayout/eventactioneditor.obj
+	@echo ... src/uilayout/eventactioneditor.i
+	@echo ... src/uilayout/eventactioneditor.s
+	@echo ... src/uilayout/eventactionmodel.obj
+	@echo ... src/uilayout/eventactionmodel.i
+	@echo ... src/uilayout/eventactionmodel.s
+	@echo ... src/uilayout/previewwindow.obj
+	@echo ... src/uilayout/previewwindow.i
+	@echo ... src/uilayout/previewwindow.s
+	@echo ... src/uilayout/uiinterface.obj
+	@echo ... src/uilayout/uiinterface.i
+	@echo ... src/uilayout/uiinterface.s
+	@echo ... src/uilayout/uiinterfacemanager.obj
+	@echo ... src/uilayout/uiinterfacemanager.i
+	@echo ... src/uilayout/uiinterfacemanager.s
+	@echo ... src/uilayout/uilayoutwindow.obj
+	@echo ... src/uilayout/uilayoutwindow.i
+	@echo ... src/uilayout/uilayoutwindow.s
 .PHONY : help
 
 

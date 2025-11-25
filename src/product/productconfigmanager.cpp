@@ -153,7 +153,6 @@ bool ProductConfigManager::isFeaturesModified() const
 
 void ProductConfigManager::setProductModified(bool modified)
 {
-    qDebug()<<"setProductModified"<<modified;
     // 使用ProductState进行状态管理
     if (m_productState->isProductModified() != modified) {
         // 通过修改产品副本来触发状态变化
@@ -393,7 +392,6 @@ bool ProductConfigManager::hasUiLayout() const
 
 QString ProductConfigManager::getStatusDescription() const
 {
-    qDebug()<<"getStatusDescription";
     QString status;
     
     // 使用ProductState的统一接口

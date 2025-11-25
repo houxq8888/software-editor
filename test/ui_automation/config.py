@@ -2,6 +2,7 @@
 
 # 应用程序信息
 APP_INFO = {
+    "path": "d:/virtualMachine/github/software-editor/build/software-editor.exe",
     "executable_path": "d:/virtualMachine/github/software-editor/build/software-editor.exe",
     "window_title": "UI布局编辑器",
     "load_time": 5  # 应用程序加载时间（秒）

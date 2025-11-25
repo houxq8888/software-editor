@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_currentFile("")
     , m_packageManager(nullptr)
     , m_configManager(new ProductConfigManager(this))
+    , m_logTimer(nullptr)
 {
     ui->setupUi(this);
     
@@ -61,17 +62,23 @@ MainWindow::MainWindow(QWidget *parent)
         updateStatusBar();
     });
     
+    // 设置日志捕获
+    setupLogCapture();
+    
     clearProductData();
 
     ui->mainToolBar->setIconSize(QSize(24, 24));
     ui->statusBar->showMessage("就绪");
-    
-    // 初始化智能打包对话框为nullptr
-    m_smartPackageDialog = nullptr;
 }
 
 MainWindow::~MainWindow()
 {
+    // 先删除PackageManager对象，确保在UI删除前断开所有信号连接
+    if (m_packageManager) {
+        delete m_packageManager;
+        m_packageManager = nullptr;
+    }
+    
     delete ui;
 }
 
@@ -357,8 +364,8 @@ void MainWindow::updateFeaturesList()
 
 void MainWindow::updateStatusBar()
 {
-    QString status = m_configManager->getStatusDescription();
-    ui->statusBar->showMessage(status);
+    // 调用带日志显示的状态栏更新方法
+    updateStatusBarWithLogs();
 }
 
 ProductFeature MainWindow::getCurrentFeatureFromEditors() const
@@ -473,7 +480,6 @@ void MainWindow::on_actionSmart_Package_Software_triggered()
     }
 
     // 保存当前编辑的数据 - 只有当产品名称不为空且确实有修改时才提示保存
-    qDebug()<<"on_actionSmart_Package_Software_triggered";
     if (!m_product.name().isEmpty() && m_configManager->isProductModified()) {
         qDebug()<<"产品名称:"<<m_product.name();
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "打包前需要保存当前的产品信息。是否保存？");
@@ -484,34 +490,36 @@ void MainWindow::on_actionSmart_Package_Software_triggered()
         }
     }
 
-    // 创建智能打包对话框
-    if (!m_smartPackageDialog) {
-        m_smartPackageDialog = new SmartPackageDialog(this);
-        connect(m_smartPackageDialog, &SmartPackageDialog::smartPackageRequested, this, &MainWindow::startSmartPackageProcess);
-    }
-
-    // 设置产品信息到智能打包对话框
-    m_smartPackageDialog->setProductInfo(m_product);
-    
-    // 显示智能打包对话框
-    m_smartPackageDialog->exec();
-}
-
-
-
-void MainWindow::startSmartPackageProcess(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings)
-{
-    // 创建打包管理器
+    // 创建PackageManager对话框
     if (!m_packageManager) {
         m_packageManager = new PackageManager(this);
+        // 连接PackageManager的信号
         connect(m_packageManager, &PackageManager::progressChanged, this, &MainWindow::onPackageProgress);
         connect(m_packageManager, &PackageManager::packageFinished, this, &MainWindow::onPackageFinished);
         connect(m_packageManager, &PackageManager::errorOccurred, this, &MainWindow::onPackageError);
     }
 
-    // 开始智能打包过程 - 使用传递的Product对象
-    m_packageManager->startSmartPackage(product, settings);
+    // 创建默认的PackageConfig
+    PackageConfig config;
+    config.name = m_product.name();
+    config.version = m_product.version();
+    config.developer = m_product.developer();
+    config.uniqueId = m_product.uniqueId();
+    config.outputDir = QDir::currentPath() + "/packages/" + m_product.uniqueId();
+    config.uiLayoutPath = m_product.uiLayoutPath();
+    config.createInstaller = true;
+    
+    // 设置配置到PackageManager，但不立即开始打包
+    // 打包过程将在用户点击"开始打包"按钮时启动
+    m_packageManager->setConfiguration(m_product, config);
+    
+    // 显示PackageManager对话框
+    m_packageManager->show();
 }
+
+
+
+
 
 void MainWindow::onPackageProgress(int progress, const QString &message)
 {
@@ -620,5 +628,128 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         // 没有修改，直接关闭
         event->accept(); // 接受关闭事件
+    }
+}
+
+// 日志捕获相关函数实现
+void MainWindow::setupLogCapture()
+{
+    // 安装自定义消息处理器来捕获qDebug等日志输出
+    qInstallMessageHandler(customMessageHandler);
+    
+    // 创建定时器用于定期更新状态栏中的日志显示
+    m_logTimer = new QTimer(this);
+    connect(m_logTimer, &QTimer::timeout, this, &MainWindow::updateStatusBarWithLogs);
+    m_logTimer->start(1000); // 每秒更新一次
+    
+    // 连接Qt日志信号到自定义槽函数
+    connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanupLogCapture);
+}
+
+void MainWindow::addLogMessage(const QString &message)
+{
+    // 添加时间戳
+    QString timestamp = QDateTime::currentDateTime().toString("[hh:mm:ss]");
+    QString logMessage = timestamp + " " + message;
+    
+    // 添加到日志列表
+    m_logMessages.append(logMessage);
+    
+    // 限制日志数量
+    if (m_logMessages.size() > MAX_LOG_MESSAGES) {
+        m_logMessages.removeFirst();
+    }
+}
+
+void MainWindow::updateStatusBarWithLogs()
+{
+    if (m_logMessages.isEmpty()) {
+        // 如果没有日志，显示默认状态
+        QString status = m_configManager->getStatusDescription();
+        
+        // 添加uniqueId显示到状态栏
+        if (!m_product.uniqueId().isEmpty()) {
+            status += QString(" | 产品ID: %1").arg(m_product.uniqueId());
+        }
+        
+        ui->statusBar->showMessage(status);
+        return;
+    }
+    
+    // 获取最新的日志消息
+    QString latestLog = m_logMessages.last();
+    
+    // 构建状态栏显示文本
+    QString status = m_configManager->getStatusDescription();
+    
+    // 添加uniqueId显示到状态栏
+    if (!m_product.uniqueId().isEmpty()) {
+        status += QString(" | 产品ID: %1").arg(m_product.uniqueId());
+    }
+    
+    // 添加日志显示
+    status += " | 日志: " + latestLog;
+    
+    ui->statusBar->showMessage(status);
+}
+
+void MainWindow::cleanupLogCapture()
+{
+    // 清理日志捕获资源
+    if (m_logTimer) {
+        m_logTimer->stop();
+        delete m_logTimer;
+        m_logTimer = nullptr;
+    }
+    
+    // 恢复默认的消息处理器
+    qInstallMessageHandler(nullptr);
+}
+
+// 静态消息处理器函数
+void MainWindow::customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    // 根据消息类型添加前缀
+    QString level;
+    switch (type) {
+    case QtDebugMsg:
+        level = "[DEBUG]";
+        break;
+    case QtInfoMsg:
+        level = "[INFO]";
+        break;
+    case QtWarningMsg:
+        level = "[WARNING]";
+        break;
+    case QtCriticalMsg:
+        level = "[CRITICAL]";
+        break;
+    case QtFatalMsg:
+        level = "[FATAL]";
+        break;
+    default:
+        level = "[UNKNOWN]";
+        break;
+    }
+    
+    // 构建完整的日志消息（包含时间戳用于控制台输出）
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
+    QString formattedMessage = QString("%1 %2 %3").arg(timestamp, level, msg);
+    
+    // 输出到标准输出（保持原有行为）
+    QByteArray localMsg = formattedMessage.toLocal8Bit();
+    fprintf(stdout, "%s\n", localMsg.constData());
+    fflush(stdout);
+    
+    // 查找主窗口实例并转发日志
+    QWidgetList topLevelWidgets = QApplication::topLevelWidgets();
+    for (QWidget *widget : topLevelWidgets) {
+        MainWindow *mainWindow = qobject_cast<MainWindow*>(widget);
+        if (mainWindow) {
+            // 转发到主窗口的状态栏显示（不包含时间戳，因为状态栏已有时间戳）
+            QString statusBarMessage = QString("%1 %2").arg(level, msg);
+            mainWindow->addLogMessage(statusBarMessage);
+            break;
+        }
     }
 }

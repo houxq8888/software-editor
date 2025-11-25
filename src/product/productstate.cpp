@@ -123,7 +123,6 @@ bool ProductState::isWorkingUiLayoutChanged() const
 
 bool ProductState::isProductModified() const
 {
-    qDebug()<<"isProductModified";
     // 比较产品基本信息是否相同
     if (!isProductInfoEqual(m_originalProduct, m_workingProduct)) {
         return true;

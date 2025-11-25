@@ -452,7 +452,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcess \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qprocess.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcessEnvironment \
- D:\virtualMachine\github\software-editor\src\mainwindow.h \
+ D:/virtualMachine/github/software-editor/src/product/mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
@@ -489,7 +489,9 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMessageBox \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmessagebox.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
- D:\virtualMachine\github\software-editor\src\product.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
+ D:/virtualMachine/github/software-editor/src/product/product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
@@ -498,35 +500,11 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
- D:\virtualMachine\github\software-editor\src\packagemanager.h \
+ D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QThread \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qthread.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/future \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/mutex \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_mutex.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_lock.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/condition_variable \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/atomic_futex.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_thread.h \
- D:\virtualMachine\github\software-editor\src\smartpackageconfig.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QFileInfo \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qfileinfo.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QStandardPaths \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qstandardpaths.h \
- D:\virtualMachine\github\software-editor\src\smartpackagedialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialog \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractbutton.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QVBoxLayout \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
@@ -534,23 +512,31 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qboxlayout.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgridlayout.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QHBoxLayout \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLabel \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlabel.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpicture.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtextdocument.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLineEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextcursor.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextformat.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpen.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qtextoption.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPushButton \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qabstractbutton.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qprogressbar.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QButtonGroup \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qbuttongroup.h \
- D:\virtualMachine\github\software-editor\src\productconfigmanager.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
- D:\virtualMachine\github\software-editor\src\productstate.h
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGroupBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgroupbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCheckBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
+ D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
+ D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
+ D:/virtualMachine/github/software-editor/src/product/product.h \
+ D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
+ D:/virtualMachine/github/software-editor/src/product/productstate.h

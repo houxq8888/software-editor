@@ -7,9 +7,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QTimer>
+#include <QDateTime>
 #include "product.h"
 #include "packagemanager.h"
-#include "smartpackagedialog.h"
 #include "productconfigmanager.h"
 
 QT_BEGIN_NAMESPACE
@@ -51,16 +52,17 @@ private slots:
     void onPackageFinished(bool success, const QString &message);
     void onPackageError(const QString &error);
 
-private slots:
-    void startSmartPackageProcess(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings);
-
 private:
     Ui::MainWindow *ui;
     Product m_product;
     QString m_currentFile;
     PackageManager *m_packageManager;
-    SmartPackageDialog *m_smartPackageDialog;
     ProductConfigManager *m_configManager;
+    
+    // 日志捕获相关成员
+    QStringList m_logMessages;
+    QTimer *m_logTimer;
+    static const int MAX_LOG_MESSAGES = 10; // 最大显示日志数量
 
     void clearProductData();
     void loadProductData(const Product &product);
@@ -79,6 +81,13 @@ private:
     
     // 检查功能特性TAB页是否被修改
     bool isFeaturesTabModified() const;
+    
+    // 日志捕获相关函数
+    void setupLogCapture();
+    void addLogMessage(const QString &message);
+    void updateStatusBarWithLogs();
+    void cleanupLogCapture();
+    static void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 };
 
 #endif // MAINWINDOW_H
