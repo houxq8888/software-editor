@@ -373,99 +373,105 @@
 	"HEADERS" : 
 	[
 		[
-			"D:/virtualMachine/github/software-editor/src/customtreewidget.h",
+			"D:/virtualMachine/github/software-editor/src/package/ipackageservice.h",
 			"MU",
-			"UVLADIE3JM/moc_customtreewidget.cpp",
+			"S6CCOCQX7P/moc_ipackageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/editareawidget.h",
+			"D:/virtualMachine/github/software-editor/src/package/packageconfig.h",
 			"MU",
-			"UVLADIE3JM/moc_editareawidget.cpp",
+			"S6CCOCQX7P/moc_packageconfig.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/eventactioneditor.h",
+			"D:/virtualMachine/github/software-editor/src/package/packagemanager.h",
 			"MU",
-			"UVLADIE3JM/moc_eventactioneditor.cpp",
+			"S6CCOCQX7P/moc_packagemanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/eventactionmodel.h",
+			"D:/virtualMachine/github/software-editor/src/package/packageservice.h",
 			"MU",
-			"UVLADIE3JM/moc_eventactionmodel.cpp",
+			"S6CCOCQX7P/moc_packageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/layoutitem.h",
+			"D:/virtualMachine/github/software-editor/src/product/mainwindow.h",
 			"MU",
-			"UVLADIE3JM/moc_layoutitem.cpp",
+			"SL43BO5AMI/moc_mainwindow.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/mainwindow.h",
+			"D:/virtualMachine/github/software-editor/src/product/product.h",
 			"MU",
-			"UVLADIE3JM/moc_mainwindow.cpp",
+			"SL43BO5AMI/moc_product.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/packagemanager.h",
+			"D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h",
 			"MU",
-			"UVLADIE3JM/moc_packagemanager.cpp",
+			"SL43BO5AMI/moc_productconfigmanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/previewwindow.h",
+			"D:/virtualMachine/github/software-editor/src/product/productstate.h",
 			"MU",
-			"UVLADIE3JM/moc_previewwindow.cpp",
+			"SL43BO5AMI/moc_productstate.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h",
 			"MU",
-			"UVLADIE3JM/moc_product.cpp",
+			"ETQFUQNEGR/moc_customtreewidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/productconfigmanager.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h",
 			"MU",
-			"UVLADIE3JM/moc_productconfigmanager.cpp",
+			"ETQFUQNEGR/moc_editareawidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/productstate.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h",
 			"MU",
-			"UVLADIE3JM/moc_productstate.cpp",
+			"ETQFUQNEGR/moc_eventactioneditor.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/smartpackageconfig.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h",
 			"MU",
-			"UVLADIE3JM/moc_smartpackageconfig.cpp",
+			"ETQFUQNEGR/moc_eventactionmodel.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h",
 			"MU",
-			"UVLADIE3JM/moc_smartpackagedialog.cpp",
+			"ETQFUQNEGR/moc_layoutitem.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uiinterface.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h",
 			"MU",
-			"UVLADIE3JM/moc_uiinterface.cpp",
+			"ETQFUQNEGR/moc_previewwindow.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uiinterfacemanager.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h",
 			"MU",
-			"UVLADIE3JM/moc_uiinterfacemanager.cpp",
+			"ETQFUQNEGR/moc_uiinterface.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayoutwindow.h",
+			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h",
 			"MU",
-			"UVLADIE3JM/moc_uilayoutwindow.cpp",
+			"ETQFUQNEGR/moc_uiinterfacemanager.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h",
+			"MU",
+			"ETQFUQNEGR/moc_uilayoutwindow.cpp",
 			null
 		]
 	],
@@ -500,6 +506,9 @@
 		"D:/virtualMachine/github/software-editor/build",
 		"D:/virtualMachine/github/software-editor",
 		"D:/virtualMachine/github/software-editor/src",
+		"D:/virtualMachine/github/software-editor/src/product",
+		"D:/virtualMachine/github/software-editor/src/uilayout",
+		"D:/virtualMachine/github/software-editor/src/package",
 		"D:/Qt/6.9.1/mingw_64/include/QtCore",
 		"D:/Qt/6.9.1/mingw_64/include",
 		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
@@ -547,79 +556,79 @@
 	"SETTINGS_FILE" : "D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
-		[
-			"D:/virtualMachine/github/software-editor/src/customtreewidget.cpp",
-			"MU",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/editareawidget.cpp",
-			"MU",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/eventactioneditor.cpp",
-			"MU",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/eventactionmodel.cpp",
-			"MU",
-			null
-		],
 		[ "D:/virtualMachine/github/software-editor/src/main.cpp", "MU", null ],
 		[
-			"D:/virtualMachine/github/software-editor/src/mainwindow.cpp",
+			"D:/virtualMachine/github/software-editor/src/package/packageconfig.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/packagemanager.cpp",
+			"D:/virtualMachine/github/software-editor/src/package/packagemanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/previewwindow.cpp",
+			"D:/virtualMachine/github/software-editor/src/package/packageservice.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product.cpp",
+			"D:/virtualMachine/github/software-editor/src/product/mainwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/productconfigmanager.cpp",
+			"D:/virtualMachine/github/software-editor/src/product/product.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/productstate.cpp",
+			"D:/virtualMachine/github/software-editor/src/product/productconfigmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/smartpackageconfig.cpp",
+			"D:/virtualMachine/github/software-editor/src/product/productstate.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/smartpackagedialog.cpp",
+			"D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uiinterface.cpp",
+			"D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uiinterfacemanager.cpp",
+			"D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayoutwindow.cpp",
+			"D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.cpp",
 			"MU",
 			null
 		]
