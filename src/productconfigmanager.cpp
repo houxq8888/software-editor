@@ -43,7 +43,8 @@ void ProductConfigManager::setProduct(const Product &product)
 {
     // 使用ProductState进行状态管理
     if (m_productState->getWorkingProduct().toJson() != product.toJson()) {
-        // 设置产品副本
+        // 同时设置原始产品和工作产品，确保打开新产品时两者一致
+        m_productState->setOriginalProduct(product);
         m_productState->setWorkingProduct(product);
         
         // 检查UI布局路径是否发生变化
@@ -51,6 +52,7 @@ void ProductConfigManager::setProduct(const Product &product)
         QString newUiLayoutPath = product.uiLayoutPath();
         
         if (oldUiLayoutPath != newUiLayoutPath) {
+            m_productState->setOriginalUiLayoutPath(newUiLayoutPath);
             m_productState->setWorkingUiLayoutPath(newUiLayoutPath);
             m_productState->setWorkingUiLayoutChanged(true);
         }
@@ -151,6 +153,7 @@ bool ProductConfigManager::isFeaturesModified() const
 
 void ProductConfigManager::setProductModified(bool modified)
 {
+    qDebug()<<"setProductModified"<<modified;
     // 使用ProductState进行状态管理
     if (m_productState->isProductModified() != modified) {
         // 通过修改产品副本来触发状态变化
@@ -390,6 +393,7 @@ bool ProductConfigManager::hasUiLayout() const
 
 QString ProductConfigManager::getStatusDescription() const
 {
+    qDebug()<<"getStatusDescription";
     QString status;
     
     // 使用ProductState的统一接口

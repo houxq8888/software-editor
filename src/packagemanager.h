@@ -5,7 +5,6 @@
 #include <QProcess>
 #include <QThread>
 #include <QJsonObject>
-#include "packageconfig.h"
 #include "smartpackageconfig.h"
 #include "product.h"
 
@@ -17,8 +16,6 @@ public:
     explicit PackageWorker(QObject *parent = nullptr);
 
 public slots:
-    void packageSoftware(const PackageConfig::PackageSettings &settings);
-    void packageSoftware(const Product &product, const PackageConfig::PackageSettings &settings);
     void smartPackageSoftware(const SmartPackageConfig::SmartPackageSettings &settings);
     void smartPackageSoftware(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings);
 
@@ -27,14 +24,20 @@ signals:
     void finished(bool success, const QString &resultPath);
     void errorOccurred(const QString &error);
 
-private:
-    QString generateCppCodeFromUILayout(const QString &uiLayoutPath, const PackageConfig::PackageSettings &settings);
-    void generateCppProjectFiles(const PackageConfig::PackageSettings &settings, const QString &cppCode, const QString &outputDir);
-    QString generateCmakeLists(const PackageConfig::PackageSettings &settings);
-    void copyDependencies(const QString &exePath, const QString &outputDir);
-    void createInstaller(const PackageConfig::PackageSettings &settings, const QString &exePath);
+public:
+    bool copyDependencies(const QString &exePath, const QString &outputDir);
     void setApplicationIcon(const QString &exePath, const QString &iconPath);
-    QString createSimpleNsisScript(const PackageConfig::PackageSettings &settings, const QString &exePath);
+
+private:
+    bool executeSmartPackageLogic(const SmartPackageConfig::SmartPackageSettings &settings, const QString &uiLayoutPath);
+    QString generateCppCodeFromUILayout(const QString &uiLayoutPath, const SmartPackageConfig::SmartPackageSettings &settings);
+    void generateCppProjectFiles(const SmartPackageConfig::SmartPackageSettings &settings, const QString &cppCode, const QString &outputDir);
+    QString generateCmakeLists(const SmartPackageConfig::SmartPackageSettings &settings);
+    void createInstaller(const SmartPackageConfig::SmartPackageSettings &settings, const QString &exePath);
+    bool copyDirectory(const QString &sourceDir, const QString &destinationDir);
+    QString generateDependencyReport(const QString &exePath, const QString &outputDir);
+    QString findMingwBinDir();
+    QString findQtPluginsDir();
 };
 
 class PackageManager : public QObject
@@ -46,8 +49,8 @@ public:
     ~PackageManager();
     
     // 开始打包
-    void startPackage(const PackageConfig::PackageSettings &settings);
-    void startPackage(const Product &product, const PackageConfig::PackageSettings &settings);
+    void startPackage(const SmartPackageConfig::SmartPackageSettings &settings);
+    void startPackage(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings);
     void startSmartPackage(const SmartPackageConfig::SmartPackageSettings &settings);
     void startSmartPackage(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings);
     

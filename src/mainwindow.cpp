@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_currentFile("")
     , m_packageManager(nullptr)
-    , m_packageDialog(nullptr)
     , m_configManager(new ProductConfigManager(this))
 {
     ui->setupUi(this);
@@ -133,6 +132,7 @@ void MainWindow::on_actionSave_As_triggered()
 
 void MainWindow::on_saveButton_clicked()
 {
+    qDebug()<<"on_saveButton_clicked";
     // 检查是否有未保存的修改
     if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, 
@@ -332,6 +332,7 @@ void MainWindow::setModified(bool modified)
 
 bool MainWindow::saveChanges()
 {
+    qDebug()<<"saveChanges";
     if (m_configManager->isProductModified()) {
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "是否保存当前编辑的产品信息？");
         if (button == QMessageBox::Save) {
@@ -461,36 +462,7 @@ void MainWindow::onUILayoutWindowClosed()
     }
 }
 
-void MainWindow::on_actionPackage_Software_triggered()
-{
-    // 检查是否有有效的产品数据
-    if (m_product.name().isEmpty()) {
-        QMessageBox::warning(this, "打包软件", "请先创建或加载一个产品项目。");
-        return;
-    }
 
-    // 保存当前编辑的数据
-    if (m_configManager->isProductModified()) {
-        QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "打包前需要保存当前的产品信息。是否保存？");
-        if (button == QMessageBox::Save) {
-            on_actionSave_triggered();
-        } else if (button == QMessageBox::Cancel) {
-            return;
-        }
-    }
-
-    // 创建打包对话框
-    if (!m_packageDialog) {
-        m_packageDialog = new PackageDialog(this);
-        connect(m_packageDialog, &PackageDialog::packageRequested, this, &MainWindow::startPackageProcess);
-    }
-
-    // 设置产品信息到打包对话框
-    m_packageDialog->setProductInfo(m_product);
-    
-    // 显示打包对话框
-    m_packageDialog->exec();
-}
 
 void MainWindow::on_actionSmart_Package_Software_triggered()
 {
@@ -500,8 +472,10 @@ void MainWindow::on_actionSmart_Package_Software_triggered()
         return;
     }
 
-    // 保存当前编辑的数据
-    if (m_configManager->isProductModified()) {
+    // 保存当前编辑的数据 - 只有当产品名称不为空且确实有修改时才提示保存
+    qDebug()<<"on_actionSmart_Package_Software_triggered";
+    if (!m_product.name().isEmpty() && m_configManager->isProductModified()) {
+        qDebug()<<"产品名称:"<<m_product.name();
         QMessageBox::StandardButton button = QMessageBox::question(this, "保存更改", "打包前需要保存当前的产品信息。是否保存？");
         if (button == QMessageBox::Save) {
             on_actionSave_triggered();
@@ -523,19 +497,7 @@ void MainWindow::on_actionSmart_Package_Software_triggered()
     m_smartPackageDialog->exec();
 }
 
-void MainWindow::startPackageProcess(const Product &product, const PackageConfig::PackageSettings &settings)
-{
-    // 创建打包管理器
-    if (!m_packageManager) {
-        m_packageManager = new PackageManager(this);
-        connect(m_packageManager, &PackageManager::progressChanged, this, &MainWindow::onPackageProgress);
-        connect(m_packageManager, &PackageManager::packageFinished, this, &MainWindow::onPackageFinished);
-        connect(m_packageManager, &PackageManager::errorOccurred, this, &MainWindow::onPackageError);
-    }
 
-    // 开始打包过程 - 使用传递的Product对象
-    m_packageManager->startPackage(product, settings);
-}
 
 void MainWindow::startSmartPackageProcess(const Product &product, const SmartPackageConfig::SmartPackageSettings &settings)
 {
@@ -554,11 +516,6 @@ void MainWindow::startSmartPackageProcess(const Product &product, const SmartPac
 void MainWindow::onPackageProgress(int progress, const QString &message)
 {
     ui->statusBar->showMessage(message);
-    
-    // 如果打包对话框存在，更新进度
-    if (m_packageDialog) {
-        m_packageDialog->updateProgress(progress, message);
-    }
 }
 
 void MainWindow::onPackageFinished(bool success, const QString &message)
@@ -570,22 +527,12 @@ void MainWindow::onPackageFinished(bool success, const QString &message)
     } else {
         QMessageBox::warning(this, "打包失败", message);
     }
-    
-    // 关闭打包对话框
-    if (m_packageDialog) {
-        m_packageDialog->packageFinished();
-    }
 }
 
 void MainWindow::onPackageError(const QString &error)
 {
     ui->statusBar->showMessage("打包错误: " + error);
     QMessageBox::critical(this, "打包错误", error);
-    
-    // 关闭打包对话框
-    if (m_packageDialog) {
-        m_packageDialog->packageFinished();
-    }
 }
 
 // 检查基本信息TAB页是否被修改
@@ -597,6 +544,7 @@ bool MainWindow::isBasicInfoModified() const
     }
     
     // 使用ProductConfigManager的isProductModified()方法，该方法内部通过ProductState的正副本比较实现
+    qDebug()<<"isBasicInfoModified";
     return m_configManager->isProductModified();
 }
 

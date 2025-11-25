@@ -409,18 +409,6 @@
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/packageconfig.h",
-			"MU",
-			"UVLADIE3JM/moc_packageconfig.cpp",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/packagedialog.h",
-			"MU",
-			"UVLADIE3JM/moc_packagedialog.cpp",
-			null
-		],
-		[
 			"D:/virtualMachine/github/software-editor/src/packagemanager.h",
 			"MU",
 			"UVLADIE3JM/moc_packagemanager.cpp",
@@ -582,16 +570,6 @@
 		[ "D:/virtualMachine/github/software-editor/src/main.cpp", "MU", null ],
 		[
 			"D:/virtualMachine/github/software-editor/src/mainwindow.cpp",
-			"MU",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/packageconfig.cpp",
-			"MU",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor/src/packagedialog.cpp",
 			"MU",
 			null
 		],

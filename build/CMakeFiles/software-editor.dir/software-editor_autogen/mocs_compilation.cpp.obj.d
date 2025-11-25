@@ -562,7 +562,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/condition_variable \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/atomic_futex.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_thread.h \
- D:/virtualMachine/github/software-editor/src/packageconfig.h \
  D:/virtualMachine/github/software-editor/src/smartpackageconfig.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDir \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
@@ -570,7 +569,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfileinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QStandardPaths \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstandardpaths.h \
- D:/virtualMachine/github/software-editor/src/packagedialog.h \
+ D:/virtualMachine/github/software-editor/src/smartpackagedialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialog \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QProgressBar \
@@ -599,7 +598,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
- D:/virtualMachine/github/software-editor/src/smartpackagedialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QButtonGroup \
@@ -610,10 +608,6 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
  D:/virtualMachine/github/software-editor/src/productstate.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_packageconfig.cpp \
- D:/virtualMachine/github/software-editor/src/packageconfig.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_packagedialog.cpp \
- D:/virtualMachine/github/software-editor/src/packagedialog.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_packagemanager.cpp \
  D:/virtualMachine/github/software-editor/src/packagemanager.h \
  D:\virtualMachine\github\software-editor\build\software-editor_autogen\UVLADIE3JM/moc_previewwindow.cpp \

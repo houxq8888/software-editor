@@ -301,7 +301,6 @@
    <property name="title">
     <string>打包</string>
    </property>
-   <addaction name="actionPackage_Software"/>
    <addaction name="actionSmart_Package_Software"/>
   </widget>
   <widget class="QMenu" name="menu_2">
@@ -373,14 +372,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
-   </property>
-  </action>
-  <action name="actionPackage_Software">
-   <property name="text">
-    <string>打包软件</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionSmart_Package_Software">

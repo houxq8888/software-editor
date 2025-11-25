@@ -15,8 +15,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/virtualMachine/github/software-editor/src/eventactionmodel.cpp" "CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/eventactionmodel.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/main.cpp" "CMakeFiles/software-editor.dir/src/main.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/main.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/mainwindow.cpp" "CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/mainwindow.cpp.obj.d"
-  "D:/virtualMachine/github/software-editor/src/packageconfig.cpp" "CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packageconfig.cpp.obj.d"
-  "D:/virtualMachine/github/software-editor/src/packagedialog.cpp" "CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packagedialog.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/packagemanager.cpp" "CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/packagemanager.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/previewwindow.cpp" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/previewwindow.cpp.obj.d"
   "D:/virtualMachine/github/software-editor/src/product.cpp" "CMakeFiles/software-editor.dir/src/product.cpp.obj" "gcc" "CMakeFiles/software-editor.dir/src/product.cpp.obj.d"

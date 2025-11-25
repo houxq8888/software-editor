@@ -11,16 +11,49 @@
 #include <QUrl>
 #include <QDebug>
 #include <QButtonGroup>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QWindow>
+#include <QResizeEvent>
 
 SmartPackageDialog::SmartPackageDialog(QWidget *parent)
     : QDialog(parent)
     , m_packageManager(new PackageManager(this))
     , m_smartPackageConfig(new SmartPackageConfig(this))
 {
+    // 设置窗口标志，减少拖动时的闪烁
+    setWindowFlags(windowFlags() | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    
+    // 优化窗口属性，减少重绘但保持背景正常显示
+    setAttribute(Qt::WA_StaticContents);
+    
     setupUI();
     setupConnections();
     setWindowTitle("智能软件打包");
-    setMinimumSize(600, 500);
+    
+    // 设置最大尺寸限制，避免超过显示器分辨率
+    QScreen *screen = QGuiApplication::primaryScreen();
+    if (screen) {
+        QRect screenGeometry = screen->availableGeometry();
+        int maxWidth = screenGeometry.width() * 0.8;  // 屏幕宽度的80%
+        int maxHeight = screenGeometry.height() * 0.6; // 屏幕高度的80%
+        
+        // setMaximumSize(maxWidth, maxHeight);
+    } else {
+        // 备用方案：设置合理的最大尺寸
+        // setMaximumSize(1200, 950); // 确保高度足够容纳布局
+    }
+    
+    // 设置窗口背景色，确保正常显示
+    setStyleSheet("QDialog { background-color: palette(window); }");
+    
+    // 连接窗口标题变化信号，用于调试
+    connect(this, &QDialog::windowTitleChanged, this, [this](const QString &title) {
+        qDebug() << "窗口标题变化:" << title << "当前大小:" << size();
+    });
+    
+    // 记录初始窗口大小
+    qDebug() << "智能打包对话框创建，初始大小:" << size();
     
     // 设置默认MinGW路径为D:\Qt\Tools\mingw1310_64
     QString defaultMingwPath = "D:/Qt/Tools/mingw1310_64";
@@ -66,8 +99,8 @@ void SmartPackageDialog::setProductInfo(const Product &product)
     settings.description = product.description();
     settings.iconPath = product.iconPath();
     
-    // 设置默认输出目录
-    QString defaultOutputDir = QDir::currentPath() + "/smart_packages/" + product.name();
+    // 设置默认输出目录 - 使用uniqueId而不是产品名称，避免中文路径问题
+    QString defaultOutputDir = QDir::currentPath() + "/smart_packages/" + product.uniqueId();
     settings.outputDir = defaultOutputDir;
     
     // 默认启用依赖包含和安装包创建
@@ -93,11 +126,16 @@ SmartPackageConfig::SmartPackageSettings SmartPackageDialog::getSmartPackageSett
 {
     SmartPackageConfig::SmartPackageSettings settings;
     
-    settings.name = m_nameEdit->text();
-    settings.version = m_versionEdit->text();
-    settings.developer = m_developerEdit->text();
-    settings.description = m_descriptionEdit->toPlainText();
-    settings.iconPath = m_iconPathEdit->text();
+    // 从当前产品信息中获取配置，确保uniqueId等关键信息正确
+    settings.name = m_product.name();
+    settings.version = m_product.version();
+    settings.developer = m_product.developer();
+    settings.description = m_product.description();
+    settings.iconPath = m_product.iconPath();
+    settings.uniqueId = m_product.uniqueId(); // 关键：从产品信息获取uniqueId
+    settings.uiLayoutPath = m_product.uiLayoutPath(); // 关键：从产品信息获取UI布局文件路径
+    
+    // 从UI获取用户设置的路径和选项
     settings.outputDir = m_outputDirEdit->text();
     settings.createInstaller = m_createInstallerCheck->isChecked();
     settings.includeDependencies = m_includeDepsCheck->isChecked();
@@ -131,9 +169,15 @@ void SmartPackageDialog::setupUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     
+    // 设置布局间距和边距，避免信息堆叠
+    mainLayout->setSpacing(10);
+    mainLayout->setContentsMargins(15, 15, 15, 15);
+    
     // 基本信息组
     QGroupBox *infoGroup = new QGroupBox("软件信息", this);
     QFormLayout *infoLayout = new QFormLayout(infoGroup);
+    infoLayout->setSpacing(8);
+    infoLayout->setContentsMargins(10, 10, 10, 10);
     
     m_nameEdit = new QLineEdit(this);
     m_versionEdit = new QLineEdit(this);
@@ -149,6 +193,8 @@ void SmartPackageDialog::setupUI()
     // 打包模式选择
     QGroupBox *modeGroup = new QGroupBox("打包模式", this);
     QVBoxLayout *modeLayout = new QVBoxLayout(modeGroup);
+    modeLayout->setSpacing(8);
+    modeLayout->setContentsMargins(10, 10, 10, 10);
     
     m_normalPackageRadio = new QRadioButton("标准打包模式", this);
     m_smartPackageRadio = new QRadioButton("智能打包模式（推荐）", this);
@@ -159,28 +205,30 @@ void SmartPackageDialog::setupUI()
     // 智能打包选项组
     m_smartPackageGroup = new QGroupBox("智能打包配置", this);
     QFormLayout *smartLayout = new QFormLayout(m_smartPackageGroup);
+    smartLayout->setSpacing(8);
+    smartLayout->setContentsMargins(10, 10, 10, 10);
     
     // Qt路径设置
-    QLabel *qtLabel = new QLabel("Qt路径:", this);
     m_qtPathEdit = new QLineEdit(this);
     QPushButton *qtBrowseButton = new QPushButton("浏览...", this);
     QHBoxLayout *qtLayout = new QHBoxLayout();
+    qtLayout->setSpacing(5);
     qtLayout->addWidget(m_qtPathEdit);
     qtLayout->addWidget(qtBrowseButton);
     
     // MinGW路径设置
-    QLabel *mingwLabel = new QLabel("MinGW路径:", this);
     m_mingwPathEdit = new QLineEdit(this);
     QPushButton *mingwBrowseButton = new QPushButton("浏览...", this);
     QHBoxLayout *mingwLayout = new QHBoxLayout();
+    mingwLayout->setSpacing(5);
     mingwLayout->addWidget(m_mingwPathEdit);
     mingwLayout->addWidget(mingwBrowseButton);
     
     // CMake路径设置
-    QLabel *cmakeLabel = new QLabel("CMake路径:", this);
     m_cmakePathEdit = new QLineEdit(this);
     QPushButton *cmakeBrowseButton = new QPushButton("浏览...", this);
     QHBoxLayout *cmakeLayout = new QHBoxLayout();
+    cmakeLayout->setSpacing(5);
     cmakeLayout->addWidget(m_cmakePathEdit);
     cmakeLayout->addWidget(cmakeBrowseButton);
     
@@ -200,16 +248,20 @@ void SmartPackageDialog::setupUI()
     // 打包选项组
     QGroupBox *optionsGroup = new QGroupBox("打包选项", this);
     QFormLayout *optionsLayout = new QFormLayout(optionsGroup);
+    optionsLayout->setSpacing(8);
+    optionsLayout->setContentsMargins(10, 10, 10, 10);
     
     m_iconPathEdit = new QLineEdit(this);
     QPushButton *iconBrowseButton = new QPushButton("浏览...", this);
     QHBoxLayout *iconLayout = new QHBoxLayout();
+    iconLayout->setSpacing(5);
     iconLayout->addWidget(m_iconPathEdit);
     iconLayout->addWidget(iconBrowseButton);
     
     m_outputDirEdit = new QLineEdit(this);
     QPushButton *outputBrowseButton = new QPushButton("浏览...", this);
     QHBoxLayout *outputLayout = new QHBoxLayout();
+    outputLayout->setSpacing(5);
     outputLayout->addWidget(m_outputDirEdit);
     outputLayout->addWidget(outputBrowseButton);
     
@@ -224,11 +276,14 @@ void SmartPackageDialog::setupUI()
     // 智能打包信息
     m_smartPackageInfoLabel = new QLabel("智能打包模式将自动检测开发工具路径，解决CMake配置错误问题。", this);
     m_smartPackageInfoLabel->setWordWrap(true);
-    m_smartPackageInfoLabel->setStyleSheet("QLabel { color: #2E8B57; font-weight: bold; }");
+    m_smartPackageInfoLabel->setStyleSheet("QLabel { color: #2E8B57; font-weight: bold; margin: 5px; }");
+    m_smartPackageInfoLabel->setContentsMargins(10, 5, 10, 5);
     
     // 进度显示
     QGroupBox *progressGroup = new QGroupBox("打包进度", this);
     QVBoxLayout *progressLayout = new QVBoxLayout(progressGroup);
+    progressLayout->setSpacing(8);
+    progressLayout->setContentsMargins(10, 10, 10, 10);
     
     m_progressBar = new QProgressBar(this);
     m_progressBar->setRange(0, 100);
@@ -241,6 +296,7 @@ void SmartPackageDialog::setupUI()
     
     // 按钮组
     QHBoxLayout *buttonLayout = new QHBoxLayout();
+    buttonLayout->setSpacing(10);
     
     m_startButton = new QPushButton("开始打包", this);
     m_cancelButton = new QPushButton("取消", this);
@@ -406,7 +462,7 @@ void SmartPackageDialog::onStartPackage()
         m_packageManager->startSmartPackage(m_product, settings);
     } else {
         // 标准打包模式
-        PackageConfig::PackageSettings normalSettings;
+        SmartPackageConfig::SmartPackageSettings normalSettings;
         normalSettings.name = settings.name;
         normalSettings.version = settings.version;
         normalSettings.developer = settings.developer;
@@ -430,8 +486,46 @@ void SmartPackageDialog::onCancelPackage()
 
 void SmartPackageDialog::onPackageProgress(int progress, const QString &message)
 {
+    updateProgress(progress, message);
+}
+
+void SmartPackageDialog::updateProgress(int progress, const QString &message)
+{
     m_progressBar->setValue(progress);
-    m_statusLabel->setText(message);
+    
+    // 优先使用传入的详细消息，如果没有则根据进度值显示默认步骤信息
+    QString stepInfo = message;
+    if (message.isEmpty()) {
+        if (progress <= 10) {
+            stepInfo = "正在准备打包环境...";
+        } else if (progress <= 20) {
+            stepInfo = "正在验证开发工具路径...";
+        } else if (progress <= 30) {
+            stepInfo = "正在创建输出目录...";
+        } else if (progress <= 40) {
+            stepInfo = "正在生成CMake项目文件...";
+        } else if (progress <= 50) {
+            stepInfo = "正在生成主程序代码...";
+        } else if (progress <= 60) {
+            stepInfo = "正在生成构建脚本...";
+        } else if (progress <= 70) {
+            stepInfo = "正在执行CMake配置...";
+        } else if (progress <= 80) {
+            stepInfo = "正在编译项目...";
+        } else if (progress <= 85) {
+            stepInfo = "正在检查可执行文件生成...";
+        } else if (progress <= 90) {
+            stepInfo = "正在复制依赖文件...";
+        } else if (progress <= 95) {
+            stepInfo = "正在设置应用程序图标...";
+        } else if (progress <= 99) {
+            stepInfo = "正在创建安装包...";
+        } else {
+            stepInfo = "打包完成！";
+        }
+    }
+    
+    m_statusLabel->setText(QString("%1 (%2%)").arg(stepInfo).arg(progress));
 }
 
 void SmartPackageDialog::onPackageFinished(bool success, const QString &resultPath)
@@ -439,16 +533,84 @@ void SmartPackageDialog::onPackageFinished(bool success, const QString &resultPa
     updateUIState(false);
     
     if (success) {
+        m_statusLabel->setText("打包完成");
         m_progressBar->setValue(100);
-        m_statusLabel->setText("打包完成！");
         
-        QMessageBox::information(this, "打包成功", 
-                                QString("软件打包完成！\n输出目录: %1").arg(resultPath));
+        // resultPath 可能是EXE文件或安装包的完整路径
+        QString filePath = resultPath;
+        QString outputDir = QFileInfo(filePath).absolutePath();
+        qDebug()<<"filePath:"<<filePath;
+        qDebug()<<"outputDir:"<<outputDir;
+        QString successMessage;
         
-        // 打开输出目录
-        QDesktopServices::openUrl(QUrl::fromLocalFile(resultPath));
+        // 检查是否生成了NSIS安装包
+        bool installerGenerated = filePath.endsWith("_Setup.exe");
+        
+        if (installerGenerated) {
+            // NSIS安装包生成成功
+            successMessage = QString(
+                "智能打包完成！\n"
+                "软件名称: %1\n"
+                "版本号: %2\n"
+                "输出目录: %3\n"
+                "安装包文件: %4\n"
+                "\n生成的文件包括:\n"
+                "• NSIS安装包 (.exe)\n"
+                "• 可执行文件 (.exe)\n"
+                "• CMakeLists.txt (项目配置文件)\n"
+                "• main.cpp (主程序文件)\n"
+                "• build.bat (构建脚本)\n"
+                "• 完整的项目源代码"
+            ).arg(m_nameEdit->text(), m_versionEdit->text(), outputDir, filePath);
+        } else if (QFile::exists(filePath) && filePath.endsWith(".exe")) {
+            // 智能打包成功生成了可执行文件，但没有生成安装包
+            successMessage = QString(
+                "智能打包完成！\n"
+                "软件名称: %1\n"
+                "版本号: %2\n"
+                "输出目录: %3\n"
+                "可执行文件: %4\n"
+                "\n生成的文件包括:\n"
+                "• 可执行文件 (.exe)\n"
+                "• CMakeLists.txt (项目配置文件)\n"
+                "• main.cpp (主程序文件)\n"
+                "• build.bat (构建脚本)\n"
+                "• 完整的项目源代码"
+            ).arg(m_nameEdit->text(), m_versionEdit->text(), outputDir, filePath);
+        } else {
+            // 智能打包生成了项目文件，但EXE文件不存在，这是正常情况
+            // 智能打包只负责生成项目文件，不包含自动构建流程
+            successMessage = QString(
+                "智能打包项目生成完成！\n"
+                "软件名称: %1\n"
+                "版本号: %2\n"
+                "输出目录: %3\n"
+                "\n生成的项目文件包括:\n"
+                "• CMakeLists.txt (项目配置文件)\n"
+                "• main.cpp (主程序文件)\n"
+                "• build.bat (构建脚本)\n"
+                "• 完整的项目源代码"
+            ).arg(m_nameEdit->text(), m_versionEdit->text(), outputDir);
+        }
+        
+        QMessageBox::information(this, "智能打包完成", successMessage);
+        
+        // 询问是否打开输出目录
+        QMessageBox::StandardButton openDirReply = QMessageBox::question(this, "打开输出目录", 
+            "是否打开输出目录查看生成的文件?");
+        
+        if (openDirReply == QMessageBox::Yes) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(outputDir));
+        }
     } else {
-        m_statusLabel->setText("打包失败");
+        QMessageBox::critical(this, "智能打包失败", 
+            "智能打包过程中出现错误。\n"
+            "请检查以下可能的问题:\n"
+            "• 开发工具路径配置是否正确\n"
+            "• Qt、MinGW、CMake是否已正确安装\n"
+            "• 磁盘空间是否充足\n"
+            "• 项目名称是否包含特殊字符\n"
+            "• NSIS安装包生成是否失败（如果启用了安装包生成）");
     }
 }
 
@@ -456,7 +618,42 @@ void SmartPackageDialog::onPackageError(const QString &error)
 {
     updateUIState(false);
     m_statusLabel->setText("打包错误");
-    QMessageBox::critical(this, "打包错误", error);
+    
+    // 分析错误信息，确定当前卡在哪个步骤
+    QString stepInfo = "未知步骤";
+    QString detailedError = error;
+    
+    if (error.contains("CMake")) {
+        stepInfo = "CMake项目生成阶段";
+    } else if (error.contains("main.cpp")) {
+        stepInfo = "主程序文件生成阶段";
+    } else if (error.contains("build.bat")) {
+        stepInfo = "构建脚本生成阶段";
+    } else if (error.contains("UI布局")) {
+        stepInfo = "UI布局文件处理阶段";
+    } else if (error.contains("输出目录")) {
+        stepInfo = "输出目录创建阶段";
+    } else if (error.contains("依赖")) {
+        stepInfo = "依赖文件处理阶段";
+    } else if (error.contains("图标")) {
+        stepInfo = "应用程序图标设置阶段";
+    }
+    
+    // 显示详细的错误信息
+    QString errorMessage = QString(
+        "智能打包过程中出现错误！\n"
+        "当前卡在: %1\n"
+        "\n错误详情:\n"
+        "%2\n"
+        "\n建议的解决方案:\n"
+        "• 检查开发工具路径配置\n"
+        "• 验证Qt、MinGW、CMake安装\n"
+        "• 确保磁盘空间充足\n"
+        "• 检查项目名称是否包含特殊字符\n"
+        "• 查看详细构建日志"
+    ).arg(stepInfo, detailedError);
+    
+    QMessageBox::critical(this, "智能打包错误", errorMessage);
 }
 
 void SmartPackageDialog::onDetectTools()
@@ -628,12 +825,29 @@ bool SmartPackageDialog::validateManualPaths()
     return true;
 }
 
-void SmartPackageDialog::updateProgress(int progress, const QString &message)
-{
-    onPackageProgress(progress, message);
-}
+
 
 void SmartPackageDialog::packageFinished()
 {
     onPackageFinished(true, m_outputDirEdit->text());
+}
+
+void SmartPackageDialog::resizeEvent(QResizeEvent *event)
+{
+    QDialog::resizeEvent(event);
+    
+    // 记录窗口大小变化
+    qDebug() << "窗口大小变化事件触发:";
+    qDebug() << "  旧大小:" << event->oldSize();
+    qDebug() << "  新大小:" << event->size();
+    qDebug() << "  最小大小:" << minimumSize();
+    qDebug() << "  最大大小:" << maximumSize();
+    qDebug() << "  实际大小:" << size();
+    
+    // 检查是否有布局变化
+    if (layout()) {
+        qDebug() << "  布局大小提示:" << layout()->sizeHint();
+        qDebug() << "  布局最小大小:" << layout()->minimumSize();
+        qDebug() << "  布局最大大小:" << layout()->maximumSize();
+    }
 }

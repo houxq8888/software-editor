@@ -32,10 +32,6 @@ add_executable(software-editor
     src/editareawidget.h
     src/customtreewidget.cpp
     src/customtreewidget.h
-    src/packagedialog.cpp
-    src/packagedialog.h
-    src/packageconfig.cpp
-    src/packageconfig.h
     src/packagemanager.cpp
     src/packagemanager.h
     src/smartpackagedialog.cpp
