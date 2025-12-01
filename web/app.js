@@ -158,10 +158,10 @@ class ProgressDashboard {
     }
 
     renderDashboard() {
-        if (!this.data) return;
+        if (!this.progressData) return;
 
         // 更新总体进度
-        const overallProgress = this.data.overall_progress || 0;
+        const overallProgress = this.progressData.overall_progress || 0;
         document.getElementById('overallProgress').textContent = overallProgress.toFixed(1) + '%';
         
         // 更新环形图
@@ -182,7 +182,7 @@ class ProgressDashboard {
     }
 
     updateStatsCards() {
-        const tasks = this.data.tasks || [];
+        const tasks = this.progressData.tasks || [];
         
         const totalTasks = tasks.length;
         const completedTasks = tasks.filter(task => task.status === 'completed').length;
@@ -203,7 +203,7 @@ class ProgressDashboard {
 
     updateCharts() {
         // 更新每周进度趋势图
-        const weeklyProgress = this.data.weekly_progress || {};
+        const weeklyProgress = this.progressData.weekly_progress || {};
         const weeks = Object.keys(weeklyProgress).sort();
         const progressData = weeks.map(week => weeklyProgress[week]);
         
@@ -214,7 +214,7 @@ class ProgressDashboard {
 
     renderTaskList() {
         const taskList = document.getElementById('taskList');
-        const tasks = this.data.tasks || [];
+        const tasks = this.progressData.tasks || [];
         
         // 按周分组
         const tasksByWeek = this.groupTasksByWeek(tasks);
@@ -301,7 +301,7 @@ class ProgressDashboard {
 
     renderAcceptanceResults() {
         const container = document.getElementById('acceptanceResults');
-        const results = this.data.acceptance_results || [];
+        const results = this.acceptanceData.acceptance_results || [];
         
         if (results.length === 0) {
             container.innerHTML = '<p class="text-muted">暂无验收检查结果</p>';
@@ -427,15 +427,17 @@ class ProgressDashboard {
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
         
-        const container = document.querySelector('.container');
-        container.insertBefore(alertDiv, container.firstChild);
-        
-        // 3秒后自动消失
-        setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.remove();
-            }
-        }, 3000);
+        const container = document.querySelector('.container-fluid');
+        if (container) {
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        }
     }
 
     setupEventListeners() {
@@ -480,19 +482,77 @@ function refreshData() {
     }
 }
 
-function generateReport() {
+async function generateReport(format = 'json') {
     // 生成报告功能
-    if (window.dashboard && window.dashboard.data) {
-        const dataStr = JSON.stringify(window.dashboard.data, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `progress_report_${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+    if (window.dashboard && window.dashboard.progressData && window.dashboard.acceptanceData) {
+        const reportData = {
+            timestamp: new Date().toISOString(),
+            progress: window.dashboard.progressData,
+            acceptance: window.dashboard.acceptanceData,
+            summary: {
+                overall_progress: window.dashboard.progressData.overall_progress || 0,
+                current_week: window.dashboard.progressData.current_week || 3,
+                total_tasks: window.dashboard.progressData.total_tasks || 0,
+                completed_tasks: window.dashboard.progressData.completed_tasks || 0,
+                in_progress_tasks: window.dashboard.progressData.in_progress_tasks || 0,
+                pending_tasks: window.dashboard.progressData.pending_tasks || 0,
+                acceptance_score: window.dashboard.acceptanceData.overall_score || 0,
+                passed_tasks: window.dashboard.acceptanceData.passed_tasks || 0,
+                total_acceptance_tasks: window.dashboard.acceptanceData.total_tasks || 0
+            }
+        };
         
-        window.dashboard.showToast('报告已生成', 'success');
+        if (format === 'json') {
+            // JSON格式报告
+            const dataStr = JSON.stringify(reportData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `progress_report_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            window.dashboard.showToast('JSON报告已生成', 'success');
+        } else if (format === 'word') {
+            // Word格式报告
+            try {
+                window.dashboard.showLoading();
+                const response = await fetch(`${window.dashboard.apiBaseUrl}/generate-word-report`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                if (result.success && result.download_url) {
+                    // 下载Word文档
+                    const a = document.createElement('a');
+                    a.href = result.download_url;
+                    a.download = `progress_report_${new Date().toISOString().split('T')[0]}.docx`;
+                    a.click();
+                    
+                    window.dashboard.showToast('Word报告已生成', 'success');
+                } else {
+                    throw new Error(result.error || '生成Word报告失败');
+                }
+            } catch (error) {
+                console.error('生成Word报告失败:', error);
+                window.dashboard.showError('生成Word报告失败');
+            } finally {
+                window.dashboard.hideLoading();
+            }
+        }
+    } else {
+        if (window.dashboard) {
+            window.dashboard.showError('无法生成报告：数据未加载完成');
+        }
     }
 }
 

@@ -172,9 +172,15 @@
                     <button class="btn btn-outline-light me-2" onclick="refreshData()">
                         <i class="fas fa-sync-alt me-1"></i>刷新数据
                     </button>
-                    <button class="btn btn-primary" onclick="generateReport()">
-                        <i class="fas fa-download me-1"></i>生成报告
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-download me-1"></i>生成报告
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="generateReport('json')">JSON格式</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="generateReport('word')">Word格式</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
