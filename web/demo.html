@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Editor - 综合演示平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .demo-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin: 20px 0;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .doc-content {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .doc-content h1, .doc-content h2, .doc-content h3 {
+            color: var(--dark-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .doc-content ul, .doc-content ol {
+            padding-left: 20px;
+        }
+        
+        .doc-content li {
+            margin-bottom: 5px;
+        }
+        
+        .launch-btn {
+            background: var(--success-color);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .launch-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+        
+        .doc-nav {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .doc-nav .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 2px;
+        }
+        
+        .doc-nav .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .status-ready {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-building {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .status-error {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+        }
+        
+        .demo-section h3 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .demo-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .demo-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-color);
+        }
+        
+        .demo-marker {
+            position: relative;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .demo-marker::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tech-item {
+            background: var(--light-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- 消息区域 -->
+        <div id="message-area"></div>
+        
+        <!-- 加载状态 -->
+        <div id="loading" class="text-center mb-3" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <span class="ms-2">数据加载中...</span>
+        </div>
+
+        <!-- 顶部导航 -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-3 mt-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-laptop-code me-2"></i>
+                    Software Editor - 综合演示平台
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <button class="btn btn-outline-light me-2" onclick="refreshData()">
+                        <i class="fas fa-sync-alt me-1"></i>刷新状态
+                    </button>
+                    <button class="btn btn-primary" onclick="openSoftware()">
+                        <i class="fas fa-play me-1"></i>启动软件
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 演示头部 -->
+        <div class="demo-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold text-dark mb-2">Software Editor 综合演示</h1>
+                    <p class="text-muted mb-3">专为产品工程师设计的可视化软件开发工具 - 让非技术人员也能快速创建软件产品</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Qt 5.15+</span>
+                        <span class="tech-item">C++17</span>
+                        <span class="tech-item">CMake</span>
+                        <span class="tech-item">模块化架构</span>
+                        <span class="tech-item">可视化编程</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="me-4">
+                            <small class="text-muted">软件状态</small>
+                            <div id="softwareStatus" class="status-badge status-ready">就绪</div>
+                        </div>
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心功能展示 -->
+        <div class="demo-section">
+            <h3><i class="fas fa-cubes me-2"></i>核心功能模块</h3>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="demo-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h5>产品配置编辑</h5>
+                        <p class="text-muted">完整的产品信息管理、配置模板支持、功能特性管理</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>基本信息编辑</li>
+                            <li><i class="fas fa-check text-success me-2"></i>功能特性管理</li>
+                            <li><i class="fas fa-check text-success me-2"></i>配置模板支持</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="demo-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h5>UI布局设计</h5>
+                        <p class="text-muted">可视化设计、控件拖拽、属性编辑、实时预览</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>控件拖拽布局</li>
+                            <li><i class="fas fa-check text-success me-2"></i>属性实时编辑</li>
+                            <li><i class="fas fa-check text-success me-2"></i>实时预览功能</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="demo-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <h5>智能打包</h5>
+                        <p class="text-muted">NSIS安装包生成、依赖库管理、多平台支持</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>自动安装包生成</li>
+                            <li><i class="fas fa-check text-success me-2"></i>依赖库管理</li>
+                            <li><i class="fas fa-check text-success me-2"></i>多平台支持</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文档展示区域 -->
+        <div class="demo-section">
+            <h3><i class="fas fa-file-alt me-2"></i>项目文档</h3>
+            <div class="doc-nav">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showDoc('dev-plan')">开发计划</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showDoc('detailed-plan')">详细实施计划</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showDoc('architecture')">代码架构</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="doc-content" id="docContent">
+                <!-- 文档内容将通过JavaScript动态加载 -->
+                <p class="text-center text-muted">请选择左侧文档标签查看内容</p>
+            </div>
+        </div>
+
+        <!-- 开发进度时间线 -->
+        <div class="demo-section">
+            <h3><i class="fas fa-road me-2"></i>开发进度时间线</h3>
+            <div class="demo-timeline" id="progressTimeline">
+                <!-- 进度时间线将通过JavaScript动态生成 -->
+                <div class="demo-marker">
+                    <h6>第一阶段：核心功能完善（1-2个月）</h6>
+                    <p class="text-muted mb-2">产品配置与UI布局集成、可视化打包流程优化、UI交互逻辑可视化编辑</p>
+                    <span class="status-badge status-ready">进行中</span>
+                </div>
+                <div class="demo-marker">
+                    <h6>第二阶段：高级功能开发</h6>
+                    <p class="text-muted mb-2">智能打包功能增强、用户体验优化、多平台安装包支持</p>
+                    <span class="status-badge status-building">规划中</span>
+                </div>
+                <div class="demo-marker">
+                    <h6>第三阶段：扩展功能</h6>
+                    <p class="text-muted mb-2">数据库集成配置、网络通信配置、插件系统开发</p>
+                    <span class="status-badge status-building">规划中</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 软件启动区域 -->
+        <div class="demo-section">
+            <h3><i class="fas fa-play-circle me-2"></i>软件演示</h3>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="demo-card">
+                        <h5><i class="fas fa-desktop me-2"></i>启动软件编辑器</h5>
+                        <p class="text-muted">点击下方按钮启动Software Editor，体验完整的可视化软件开发流程</p>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <button class="launch-btn" onclick="openSoftware()">
+                                    <i class="fas fa-play me-2"></i>启动软件
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-outline-primary w-100" onclick="showDemoGuide()">
+                                    <i class="fas fa-book me-2"></i>查看演示指南
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                软件位置: <code id="exePath">build/software-editor.exe</code>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="demo-card">
+                        <h5><i class="fas fa-cogs me-2"></i>系统状态</h5>
+                        <div class="mb-3">
+                            <small class="text-muted">可执行文件状态</small>
+                            <div id="exeStatus" class="status-badge status-ready">存在</div>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">文件大小</small>
+                            <div id="exeSize" class="fw-bold">-- MB</div>
+                        </div>
+                        <div>
+                            <small class="text-muted">最后修改时间</small>
+                            <div id="exeModified" class="text-muted">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术架构展示 -->
+        <div class="demo-section">
+            <h3><i class="fas fa-sitemap me-2"></i>技术架构</h3>
+            <div class="demo-card">
+                <h5>模块化架构设计</h5>
+                <pre class="bg-dark text-light p-3 rounded">
+software-editor/
+├── src/
+│   ├── product/          # 产品配置编辑模块
+│   ├── uilayout/         # UI布局编辑器模块  
+│   ├── package/          # 智能打包模块
+│   └── main.cpp          # 应用程序入口
+├── build/                # 构建输出目录
+├── docs/                 # 项目文档
+└── test/                 # 测试脚本
+                </pre>
+                <p class="text-muted mt-3">
+                    <strong>架构优势：</strong>高内聚低耦合的模块化设计、清晰的模块边界和职责划分、易于维护和扩展的代码结构
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
