@@ -293,6 +293,8 @@ UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString
     });
     // 连接双击事件用于编辑控件文本
     connect(m_editAreaWidget, &EditAreaWidget::doubleClicked, this, &UILayoutWindow::onEditAreaDoubleClicked);
+    // 连接控件拖放事件
+    connect(m_editAreaWidget, &EditAreaWidget::widgetDropped, this, &UILayoutWindow::onWidgetDropped);
     
     // 初始化属性编辑器
     ui->propertiesTreeWidget->setColumnCount(2);
@@ -875,6 +877,173 @@ void UILayoutWindow::dropEvent(QDropEvent *event)
     } else {
         event->ignore();
     }
+}
+
+void UILayoutWindow::onWidgetDropped(const QString &widgetType, const QPoint &pos)
+{
+    qDebug() << "onWidgetDropped: 拖放的控件类型:" << widgetType << "位置:" << pos;
+
+    // 保存当前状态
+    saveLayoutState();
+    
+    // 根据控件类型创建对应的 LayoutItem
+    // 需要将 "Label" 转换为 "QLabel" 等带Q前缀的格式
+    QString qtWidgetType = widgetType;
+    // Buttons包含Push Button,Tool Button,Radio Button,Check Box,Command Link Button,Dialog Button Box.
+    if (widgetType == "Push Button") qtWidgetType = "QPushButton";
+    else if (widgetType == "Tool Button") qtWidgetType = "QToolButton";
+    else if (widgetType == "Radio Button") qtWidgetType = "QRadioButton";
+    else if (widgetType == "Check Box") qtWidgetType = "QCheckBox";
+    else if (widgetType == "Command Link Button") qtWidgetType = "QCommandLinkButton";
+    else if (widgetType == "Dialog Button Box") qtWidgetType = "QDialogButtonBox";
+    // Display Widgets 
+    else if (widgetType == "Label") qtWidgetType = "QLabel";
+    else if (widgetType == "Text Browser") qtWidgetType = "QTextBrowser";
+    else if (widgetType == "Graphics View") qtWidgetType = "QGraphicsView";
+    else if (widgetType == "Calendar Widget") qtWidgetType = "QCalendarWidget";
+    else if (widgetType == "LCD Number") qtWidgetType = "QLCDNumber";
+    else if (widgetType == "Progress Bar") qtWidgetType = "QProgressBar";
+    else if (widgetType == "Horizontal Line") qtWidgetType = "QFrame";
+    else if (widgetType == "Vertical Line") qtWidgetType = "QFrame";
+    else if (widgetType == "OpenGL Widget") qtWidgetType = "QOpenGLWidget";
+    else if (widgetType == "QQuickWidget") qtWidgetType = "QQuickWidget";
+    // Input Widgets
+    else if (widgetType == "Combo Box") qtWidgetType = "QComboBox";
+    else if (widgetType == "Font Combo Box") qtWidgetType = "QFontComboBox";
+    else if (widgetType == "Line Edit") qtWidgetType = "QLineEdit";
+    else if (widgetType == "Text Edit") qtWidgetType = "QTextEdit";
+    else if (widgetType == "Plain Text Edit") qtWidgetType = "QPlainTextEdit";
+    else if (widgetType == "Spin Box") qtWidgetType = "QSpinBox";
+    else if (widgetType == "Double Spin Box") qtWidgetType = "QDoubleSpinBox";
+    else if (widgetType == "Time Edit") qtWidgetType = "QTimeEdit";
+    else if (widgetType == "Date Edit") qtWidgetType = "QDateEdit";
+    else if (widgetType == "Date/Time Edit") qtWidgetType = "QDateTimeEdit";
+    else if (widgetType == "Dial") qtWidgetType = "QDial";
+    else if (widgetType == "Horizontal Scroll Bar") qtWidgetType = "QScrollBar";
+    else if (widgetType == "Vertical Scroll Bar") qtWidgetType = "QScrollBar";
+    else if (widgetType == "Horizontal Slider") qtWidgetType = "QSlider";
+    else if (widgetType == "Vertical Slider") qtWidgetType = "QSlider";
+    else if (widgetType == "Key Sequence Edit") qtWidgetType = "QKeySequenceEdit";
+    // Layouts
+    else if (widgetType == "Vertical Layout") qtWidgetType = "QVBoxLayout";
+    else if (widgetType == "Horizontal Layout") qtWidgetType = "QHBoxLayout";
+    else if (widgetType == "Grid Layout") qtWidgetType = "QGridLayout";
+    else if (widgetType == "Form Layout") qtWidgetType = "QFormLayout";
+    // Spacers
+    else if (widgetType == "Horizontal Spacer") qtWidgetType = "QSpacerItem";
+    else if (widgetType == "Vertical Spacer") qtWidgetType = "QSpacerItem";
+    // Item Views(Model-Based)
+    else if (widgetType == "List View") qtWidgetType = "QListView";
+    else if (widgetType == "Tree View") qtWidgetType = "QTreeView";
+    else if (widgetType == "Table View") qtWidgetType = "QTableView";
+    else if (widgetType == "Column View") qtWidgetType = "QColumnView";
+    else if (widgetType == "Undo View") qtWidgetType = "QUndoView";
+    // Item Widgets(Item-Based)
+    else if (widgetType == "List Widget") qtWidgetType = "QListWidget";
+    else if (widgetType == "Tree Widget") qtWidgetType = "QTreeWidget";
+    else if (widgetType == "Table Widget") qtWidgetType = "QTableWidget";
+    // Containers
+    else if (widgetType == "Group Box") qtWidgetType = "QGroupBox";
+    else if (widgetType == "Scroll Area") qtWidgetType = "QScrollArea";
+    else if (widgetType == "Tool Box") qtWidgetType = "QToolBox";
+    else if (widgetType == "Tab Widget") qtWidgetType = "QTabWidget";
+    else if (widgetType == "Stacked Widget") qtWidgetType = "QStackedWidget";
+    else if (widgetType == "Frame") qtWidgetType = "QFrame";
+    else if (widgetType == "Widget") qtWidgetType = "QWidget";
+    else if (widgetType == "MDI Area") qtWidgetType = "QMdiArea";
+    else if (widgetType == "Dock Widget") qtWidgetType = "QDockWidget";
+    else if (widgetType == "QAxWidget") qtWidgetType = "QAxWidget";
+
+    LayoutItem *layoutItem = new LayoutItem(qtWidgetType, widgetType);
+    layoutItem->setPos(pos);
+    layoutItem->setSize(QSize(200, 50));
+
+    // 检查鼠标位置是否在某个 Tab 页上
+    QWidget *targetWidget = m_editAreaWidget; // 默认添加到编辑区
+    QPoint editAreaGlobalPos = m_editAreaWidget->mapToGlobal(pos);
+    for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+        QWidget *w = it.key();
+        if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
+            // 检查鼠标是否在 TabWidget 上
+            if (tabWidget->geometry().contains(m_editAreaWidget->mapFromGlobal(editAreaGlobalPos))) {
+                // 获取当前选中的 Tab 页
+                QWidget *currentTabPage = tabWidget->currentWidget();
+                if (currentTabPage) {
+                    // 计算鼠标在当前 Tab 页中的位置
+                    QPoint tabPageLocalPos = currentTabPage->mapFromGlobal(editAreaGlobalPos);
+                    // 将控件添加到当前 Tab 页
+                    targetWidget = currentTabPage;
+                    // 更新控件位置到 Tab 页坐标
+                    QPoint newPos = m_editAreaWidget->mapFromGlobal(currentTabPage->mapToGlobal(tabPageLocalPos));
+                    layoutItem->setPos(newPos);
+                    // 设置控件所属的 Tab 页索引
+                    int tabIndex = tabWidget->currentIndex();
+                    layoutItem->setTabIndex(tabIndex);
+                    qDebug() << "控件拖放到 Tab 页" << tabIndex + 1;
+                }
+            }
+        }
+    }
+    // 特殊处理QDockWidget，需要添加到主窗口
+    if (qtWidgetType == "QDockWidget") {
+        // 创建QDockWidget
+        QDockWidget *dockWidget = new QDockWidget(widgetType, this);
+        dockWidget->setWidget(new QWidget());
+        
+        // 添加到主窗口
+        addDockWidget(Qt::LeftDockWidgetArea, dockWidget);
+        
+        // 保存位置信息到LayoutItem
+        layoutItem->setDockArea(Qt::LeftDockWidgetArea);
+        layoutItem->setFloating(false);
+        
+        // 为QDockWidget安装事件过滤器
+        dockWidget->installEventFilter(this);
+        
+        // 连接QDockWidget的位置变化信号
+        connect(dockWidget, &QDockWidget::dockLocationChanged, this, [=](Qt::DockWidgetArea area) {
+            // 更新对应的LayoutItem
+            LayoutItem *item = m_widgetItemMap.value(dockWidget);
+            if (item) {
+                item->setDockArea(area);
+                item->setFloating(dockWidget->isFloating());
+
+            }
+        });
+        
+        // 连接QDockWidget的浮动状态变化信号
+        connect(dockWidget, &QDockWidget::topLevelChanged, this, [=](bool floating) {
+            // 更新对应的LayoutItem
+            LayoutItem *item = m_widgetItemMap.value(dockWidget);
+            if (item) {
+                item->setFloating(floating);
+                // 如果是浮动状态，获取停靠区域
+                if (!floating) {
+                    Qt::DockWidgetArea area = Qt::NoDockWidgetArea;
+                    QMainWindow *mainWindow = qobject_cast<QMainWindow*>(dockWidget->parentWidget());
+                    if (mainWindow) {
+                        area = mainWindow->dockWidgetArea(dockWidget);
+                        item->setDockArea(area);
+                    }
+                }
+
+            }
+        });
+        
+        // 保存LayoutItem
+        m_layoutItems.append(layoutItem);
+        m_widgetItemMap[dockWidget] = layoutItem;
+        
+        // 将最新添加的控件设为选中状态
+        m_selectedWidget = dockWidget;
+        updatePropertiesEditor(m_selectedWidget);
+        updateHandles(m_selectedWidget);
+    } else {
+        // 其他控件添加到编辑区
+        addWidgetToEditArea(layoutItem, targetWidget);
+    }
+
+    m_editAreaWidget->repaint();
 }
 
 void UILayoutWindow::addWidgetToEditArea(LayoutItem *item, QWidget *targetWidget)

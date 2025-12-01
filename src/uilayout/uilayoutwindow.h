@@ -129,6 +129,7 @@ private slots:
     void onHandleDragged(int handleIndex, const QPoint &delta);
     void onHandleReleased();
     void onEditAreaDoubleClicked(const QPoint &pos);
+    void onWidgetDropped(const QString &widgetType, const QPoint &pos);
     void onBindFeatureButtonClicked();
     void onUnbindFeatureButtonClicked();
     void onSyncFeaturesButtonClicked();
