@@ -56,10 +56,10 @@ RM = D:\Qt\Tools\CMake_64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\virtualMachine\github\software-editor
+CMAKE_SOURCE_DIR = D:\virtualMachine\github\20251202\software-editor-06
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\virtualMachine\github\software-editor\build
+CMAKE_BINARY_DIR = D:\virtualMachine\github\20251202\software-editor-06\build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -131,9 +131,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\virtualMachine\github\software-editor\build\CMakeFiles D:\virtualMachine\github\software-editor\build\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\virtualMachine\github\20251202\software-editor-06\build\CMakeFiles D:\virtualMachine\github\20251202\software-editor-06\build\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\virtualMachine\github\software-editor\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\virtualMachine\github\20251202\software-editor-06\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -222,6 +222,30 @@ software-editor_autogen/mocs_compilation.s: software-editor_autogen/mocs_compila
 software-editor_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.s
 .PHONY : software-editor_autogen/mocs_compilation.cpp.s
+
+src/designerwindow.obj: src/designerwindow.cpp.obj
+.PHONY : src/designerwindow.obj
+
+# target to build an object file
+src/designerwindow.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/designerwindow.cpp.obj
+.PHONY : src/designerwindow.cpp.obj
+
+src/designerwindow.i: src/designerwindow.cpp.i
+.PHONY : src/designerwindow.i
+
+# target to preprocess a source file
+src/designerwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/designerwindow.cpp.i
+.PHONY : src/designerwindow.cpp.i
+
+src/designerwindow.s: src/designerwindow.cpp.s
+.PHONY : src/designerwindow.s
+
+# target to generate assembly for a file
+src/designerwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\software-editor.dir\build.make CMakeFiles/software-editor.dir/src/designerwindow.cpp.s
+.PHONY : src/designerwindow.cpp.s
 
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
@@ -625,6 +649,9 @@ help:
 	@echo ... software-editor_autogen/mocs_compilation.obj
 	@echo ... software-editor_autogen/mocs_compilation.i
 	@echo ... software-editor_autogen/mocs_compilation.s
+	@echo ... src/designerwindow.obj
+	@echo ... src/designerwindow.i
+	@echo ... src/designerwindow.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

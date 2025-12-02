@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Xml Test OpenGLWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Xml Test OpenGLWidgets Designer REQUIRED)
 
 include_directories(src)
 include_directories(src/product)
@@ -16,6 +16,8 @@ include_directories(src/package)
 
 add_executable(software-editor
     src/main.cpp
+    src/designerwindow.cpp
+    src/designerwindow.h
     
     # 产品配置编辑模块
     src/product/mainwindow.cpp
@@ -60,12 +62,13 @@ add_executable(software-editor
     src/package/packageconfig.h
 )
 
-target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets)
+target_link_libraries(software-editor PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::OpenGLWidgets Qt6::Designer)
 
 target_link_libraries(software-editor PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
+    Qt6::Designer
 )
 
 # Test configuration (暂时移除)

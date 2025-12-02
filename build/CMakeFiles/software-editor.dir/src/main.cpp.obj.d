@@ -1,5 +1,5 @@
 CMakeFiles/software-editor.dir/src/main.cpp.obj: \
- D:\virtualMachine\github\software-editor\src\main.cpp \
+ D:\virtualMachine\github\20251202\software-editor-06\src\main.cpp \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -452,7 +452,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcess \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qprocess.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcessEnvironment \
- D:/virtualMachine/github/software-editor/src/product/mainwindow.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/product/mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
@@ -491,7 +491,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/product/product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
@@ -500,7 +500,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
- D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/package/packagemanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialog \
@@ -535,12 +535,12 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
- D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
- D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
- D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
- D:/virtualMachine/github/software-editor/src/product/productstate.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/package/ipackageservice.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/package/packageconfig.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/product/product.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/product/productconfigmanager.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/product/productstate.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uilayoutwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
@@ -657,18 +657,18 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
- D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
- D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/previewwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
- D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/customtreewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactioneditor.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
@@ -680,12 +680,19 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactionmodel.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h \
- D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterfacemanager.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterface.h \
+ D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/layoutitem.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSize
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
+ D:\virtualMachine\github\20251202\software-editor-06\src\designerwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtDesigner/qdesigner_components.h \
+ D:/Qt/6.9.1/mingw_64/include/QtDesigner/qdesigner_components_global.h \
+ D:/Qt/6.9.1/mingw_64/include/QtDesigner/QDesignerFormEditorInterface \
+ D:/Qt/6.9.1/mingw_64/include/QtDesigner/abstractformeditor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtDesigner/sdk_global.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpointer.h

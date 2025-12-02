@@ -12,6 +12,7 @@
 using namespace Qt;
 #include "mainwindow.h"
 #include "uilayoutwindow.h"
+#include "designerwindow.h"
 
 // 设置PowerShell编码配置
 void setupPowerShellEncoding() {
@@ -88,6 +89,18 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setApplicationVersion("1.0.0");
     QCoreApplication::setOrganizationName("软件工作室");
     
+    // 添加Qt Designer插件路径
+    QStringList designerPluginPaths;
+    designerPluginPaths << QCoreApplication::libraryPaths().first() + "/designer";
+    designerPluginPaths << QCoreApplication::applicationDirPath() + "/plugins/designer";
+    designerPluginPaths << QCoreApplication::applicationDirPath() + "/../plugins/designer";
+    
+    for (const QString &path : designerPluginPaths) {
+        if (QDir(path).exists()) {
+            QCoreApplication::addLibraryPath(path);
+        }
+    }
+    
     // 将日志输出到文件
     QString logPath = QCoreApplication::applicationDirPath() + "/debug.log";
     QFile *logFile = new QFile(logPath);
@@ -106,8 +119,7 @@ int main(int argc, char *argv[]) {
     
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
-    UILayoutWindow window;
-    // MainWindow window;
+    DesignerWindow window;
     window.resize(1000, 800);
     window.show();
     return app.exec();

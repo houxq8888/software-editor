@@ -120,6 +120,7 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qoverload.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qpair.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
+	D:/Qt/6.9.1/mingw_64/include/QtCore/qpointer.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qprocess.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qprocessordetection.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
@@ -183,6 +184,11 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qxptype_traits.h \
 	D:/Qt/6.9.1/mingw_64/include/QtCore/qyieldcpu.h \
+	D:/Qt/6.9.1/mingw_64/include/QtDesigner/QDesignerFormEditorInterface \
+	D:/Qt/6.9.1/mingw_64/include/QtDesigner/abstractformeditor.h \
+	D:/Qt/6.9.1/mingw_64/include/QtDesigner/qdesigner_components.h \
+	D:/Qt/6.9.1/mingw_64/include/QtDesigner/qdesigner_components_global.h \
+	D:/Qt/6.9.1/mingw_64/include/QtDesigner/sdk_global.h \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
 	D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
@@ -438,6 +444,30 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerAdditionalTargetInfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfig.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfigVersion.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfigVersionImpl.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerDependencies.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerPlugins.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerTargets-relwithdebinfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerVersionlessAliasTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginAdditionalTargetInfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginConfig.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginTargets-relwithdebinfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginAdditionalTargetInfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginConfig.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginTargets-relwithdebinfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateAdditionalTargetInfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfig.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfigVersion.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfigVersionImpl.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateDependencies.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateVersionlessAliasTargets.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointMinGW32Target.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateAdditionalTargetInfo.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateConfig.cmake \
@@ -556,6 +586,13 @@ software-editor_autogen/timestamp: \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateVersionlessAliasTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginAdditionalTargetInfo.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfig.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfigVersion.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfigVersionImpl.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginDependencies.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginTargets.cmake \
+	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginVersionlessAliasTargets.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginAdditionalTargetInfo.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginConfig.cmake \
 	D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginTargets-relwithdebinfo.cmake \
@@ -885,46 +922,48 @@ software-editor_autogen/timestamp: \
 	D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
 	D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
 	D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wctype.h \
-	D:/virtualMachine/github/software-editor/CMakeLists.txt \
-	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake \
-	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
-	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
-	D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeSystem.cmake \
-	D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h \
-	D:/virtualMachine/github/software-editor/src/main.cpp \
-	D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
-	D:/virtualMachine/github/software-editor/src/package/packageconfig.cpp \
-	D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
-	D:/virtualMachine/github/software-editor/src/package/packagemanager.cpp \
-	D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
-	D:/virtualMachine/github/software-editor/src/package/packageservice.cpp \
-	D:/virtualMachine/github/software-editor/src/package/packageservice.h \
-	D:/virtualMachine/github/software-editor/src/product/mainwindow.cpp \
-	D:/virtualMachine/github/software-editor/src/product/mainwindow.h \
-	D:/virtualMachine/github/software-editor/src/product/product.cpp \
-	D:/virtualMachine/github/software-editor/src/product/product.h \
-	D:/virtualMachine/github/software-editor/src/product/productconfigmanager.cpp \
-	D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
-	D:/virtualMachine/github/software-editor/src/product/productstate.cpp \
-	D:/virtualMachine/github/software-editor/src/product/productstate.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h \
-	D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.cpp \
-	D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h \
-	D:/virtualMachine/github/software-editor/src/product/mainwindow.ui \
-	D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.ui \
-	D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.ui \
+	D:/virtualMachine/github/20251202/software-editor-06/CMakeLists.txt \
+	D:/virtualMachine/github/20251202/software-editor-06/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake \
+	D:/virtualMachine/github/20251202/software-editor-06/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
+	D:/virtualMachine/github/20251202/software-editor-06/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
+	D:/virtualMachine/github/20251202/software-editor-06/build/CMakeFiles/3.30.5/CMakeSystem.cmake \
+	D:/virtualMachine/github/20251202/software-editor-06/build/software-editor_autogen/moc_predefs.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/designerwindow.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/designerwindow.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/main.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/ipackageservice.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packageconfig.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packageconfig.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packagemanager.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packagemanager.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packageservice.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/package/packageservice.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/mainwindow.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/mainwindow.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/product.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/product.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/productconfigmanager.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/productconfigmanager.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/productstate.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/productstate.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/customtreewidget.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/customtreewidget.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/editareawidget.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/editareawidget.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactioneditor.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactioneditor.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactionmodel.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/eventactionmodel.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/layoutitem.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/previewwindow.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/previewwindow.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterface.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterface.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterfacemanager.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uiinterfacemanager.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uilayoutwindow.cpp \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uilayoutwindow.h \
+	D:/virtualMachine/github/20251202/software-editor-06/src/product/mainwindow.ui \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/previewwindow.ui \
+	D:/virtualMachine/github/20251202/software-editor-06/src/uilayout/uilayoutwindow.ui \
 	D:/Qt/Tools/CMake_64/bin/cmake.exe
