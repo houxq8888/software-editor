@@ -1,0 +1,198 @@
+name: CI/CD Pipeline - Software Editor
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每天凌晨2点运行自动化测试
+    - cron: '0 2 * * *'
+
+env:
+  QT_VERSION: '6.9.1'
+  BUILD_TYPE: Release
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        qt-version: [6.9.1]
+        build-type: [Release, Debug]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Qt
+      uses: jurplel/setup-qt-action@v3
+      with:
+        version: ${{ matrix.qt-version }}
+        host: windows
+        target: desktop
+        arch: x64
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r test/ui_automation/requirements.txt
+        pip install pytest pytest-cov
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} ..
+
+    - name: Build project
+      run: |
+        cd build
+        cmake --build . --config ${{ matrix.build-type }}
+
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest -C ${{ matrix.build-type }} --output-on-failure
+
+    - name: Run UI automation tests
+      run: |
+        cd test/ui_automation
+        python -c "import sys; sys.path.append('.'); from test_manager import TestManager; print('✅ Test manager imported successfully')"
+        python -c "import sys; sys.path.append('.'); from run_automated_tests import execute_automated_testing; print('✅ Test framework imported successfully')"
+
+    - name: Execute automated testing
+      run: |
+        cd test/ui_automation
+        python run_automated_tests.py
+      continue-on-error: true
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.build-type }}
+        path: |
+          test/ui_automation/test_results/
+          build/Testing/
+        retention-days: 30
+
+    - name: Generate test report
+      run: |
+        cd test/ui_automation
+        python ci_test_pipeline.py --generate-report
+
+  quality-checks:
+    name: Quality Checks
+    runs-on: windows-latest
+    needs: build-and-test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install quality tools
+      run: |
+        pip install pylint black mypy
+
+    - name: Code formatting check
+      run: |
+        black --check src/ test/
+
+    - name: Static type checking
+      run: |
+        mypy src/ --ignore-missing-imports
+
+    - name: Linting
+      run: |
+        pylint src/ --exit-zero
+
+  deployment:
+    name: Deployment
+    runs-on: windows-latest
+    needs: [build-and-test, quality-checks]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: test-results-Release
+        path: artifacts/
+
+    - name: Create release package
+      run: |
+        mkdir -p release
+        cp build/Release/software-editor.exe release/
+        cp -r artifacts/ release/test-results/
+        # 创建版本信息文件
+        echo "Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" > release/build-info.txt
+        echo "Commit: ${{ github.sha }}" >> release/build-info.txt
+        echo "Branch: ${{ github.ref }}" >> release/build-info.txt
+
+    - name: Upload release package
+      uses: actions/upload-artifact@v4
+      with:
+        name: software-editor-release
+        path: release/
+        retention-days: 90
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: release/*
+        body: |
+          Automated release of Software Editor
+          
+          **Build Information:**
+          - Date: ${{ github.event.head_commit.timestamp }}
+          - Commit: ${{ github.sha }}
+          - Branch: ${{ github.ref }}
+          
+          **Test Results:**
+          - See attached test-results/ directory
+
+  notifications:
+    name: Notifications
+    runs-on: windows-latest
+    needs: [build-and-test, quality-checks, deployment]
+    if: always()
+    
+    steps:
+    - name: Send Slack notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#software-editor-ci'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      if: success() || failure()
+
+    - name: Send email notification
+      uses: dawidd6/action-send-mail@v3
+      if: failure()
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: 'CI/CD Pipeline Failed - Software Editor'
+        body: 'The CI/CD pipeline for Software Editor has failed. Please check the workflow run for details.'
+        to: ${{ secrets.NOTIFICATION_EMAIL }}
+        from: CI/CD Bot <ci-cd@software-editor.com>

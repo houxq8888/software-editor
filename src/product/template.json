@@ -1,0 +1,36 @@
+{
+  "name": "Qt Product Editor",
+  "version": "1.0.0",
+  "description": "一个基于Qt框架开发的可视化产品编辑工具，专为不会写代码的用户设计。",
+  "iconPath": "",
+  "screenshotPath": "",
+  "category": "开发工具",
+  "developer": "Qt Tools Team",
+  "website": "https://qt.io",
+  "features": [
+    {
+      "name": "可视化编辑",
+      "description": "无需编写代码，通过界面直观编辑产品信息"
+    },
+    {
+      "name": "基本信息管理",
+      "description": "管理产品名称、版本、开发者、分类等基本信息"
+    },
+    {
+      "name": "功能特性管理",
+      "description": "添加、删除、编辑产品的功能特性"
+    },
+    {
+      "name": "图标和截图",
+      "description": "支持添加产品图标和截图"
+    },
+    {
+      "name": "JSON导出",
+      "description": "将产品信息保存为JSON格式文件"
+    },
+    {
+      "name": "中文界面",
+      "description": "完全中文界面，操作简单易懂"
+    }
+  ]
+}
