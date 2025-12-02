@@ -1,0 +1,188 @@
+Control Identifiers:
+
+Dialog - '产品编辑器 - 新建 *'    (L460, T120, R1460, B920)
+['产品编辑器 - 新建 *', 'Dialog', '产品编辑器 - 新建 *Dialog']
+child_window(title="产品编辑器 - 新建 *", auto_id="QApplication.MainWindow", control_type="Window")
+   | 
+   | TitleBar - ''    (L476, T92, R1460, B120)
+   | ['TitleBar']
+   |    | 
+   |    | Menu - '系统'    (L460, T97, R482, B119)
+   |    | ['系统', 'Menu', '系统Menu', '系统0', '系统1', 'Menu0', 'Menu1']
+   |    | child_window(title="系统", auto_id="MenuBar", control_type="MenuBar")
+   |    |    | 
+   |    |    | MenuItem - '系统'    (L460, T97, R482, B119)
+   |    |    | ['MenuItem', '系统MenuItem', '系统2', 'MenuItem0', 'MenuItem1']
+   |    |    | child_window(title="系统", control_type="MenuItem")
+   |    | 
+   |    | Button - '最小化'    (L1321, T90, R1368, B120)
+   |    | ['Button', '最小化', '最小化Button', 'Button0', 'Button1']
+   |    | child_window(title="最小化", control_type="Button")
+   |    | 
+   |    | Button - '最大化'    (L1368, T90, R1414, B120)
+   |    | ['最大化', 'Button2', '最大化Button']
+   |    | child_window(title="最大化", control_type="Button")
+   |    | 
+   |    | Button - '关闭'    (L1414, T90, R1461, B120)
+   |    | ['关闭Button', 'Button3', '关闭']
+   |    | child_window(title="关闭", control_type="Button")
+   | 
+   | GroupBox - ''    (L503, T141, R1460, B900)
+   | ['产品名称：GroupBox', 'GroupBox', '产品名称：GroupBox0', '产品名称：GroupBox1', 'GroupBox0', 'GroupBox1']
+   | child_window(auto_id="QApplication.MainWindow.centralWidget", control_type="Group")
+   |    | 
+   |    | GroupBox - ''    (L512, T150, R1451, B827)
+   |    | ['产品名称：GroupBox2', 'GroupBox2']
+   |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget", control_type="Group")
+   |    |    | 
+   |    |    | Custom - ''    (L514, T174, R1447, B823)
+   |    |    | ['产品名称：Custom', 'Custom']
+   |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget", control_type="Custom")
+   |    |    |    | 
+   |    |    |    | GroupBox - ''    (L514, T174, R1447, B823)
+   |    |    |    | ['产品名称：GroupBox3', 'GroupBox3']
+   |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab", control_type="Group")
+   |    |    |    |    | 
+   |    |    |    |    | GroupBox - '产品基本信息'    (L523, T183, R1438, B347)
+   |    |    |    |    | ['产品基本信息GroupBox', '产品基本信息', 'GroupBox4']
+   |    |    |    |    | child_window(title="产品基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox", control_type="Group")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '产品名称：'    (L533, T208, R593, B229)
+   |    |    |    |    |    | ['Static', '产品名称：Static', '产品名称：', 'Static0', 'Static1']
+   |    |    |    |    |    | child_window(title="产品名称：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.nameLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T208, R1428, B229)
+   |    |    |    |    |    | ['Edit', '产品名称：Edit', 'Edit0', 'Edit1']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.nameLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '版本：'    (L533, T235, R593, B256)
+   |    |    |    |    |    | ['版本：', 'Static2', '版本：Static']
+   |    |    |    |    |    | child_window(title="版本：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.versionLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T235, R1428, B256)
+   |    |    |    |    |    | ['版本：Edit', 'Edit2']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.versionLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '分类：'    (L533, T262, R593, B283)
+   |    |    |    |    |    | ['Static3', '分类：', '分类：Static']
+   |    |    |    |    |    | child_window(title="分类：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.categoryLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T262, R1428, B283)
+   |    |    |    |    |    | ['分类：Edit', 'Edit3']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.categoryLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '开发者：'    (L533, T289, R593, B310)
+   |    |    |    |    |    | ['Static4', '开发者：Static', '开发者：']
+   |    |    |    |    |    | child_window(title="开发者：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.developerLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T289, R1428, B310)
+   |    |    |    |    |    | ['开发者：Edit', 'Edit4']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.developerLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '网站：'    (L533, T316, R593, B337)
+   |    |    |    |    |    | ['Static5', '网站：Static', '网站：']
+   |    |    |    |    |    | child_window(title="网站：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.websiteLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T316, R1428, B337)
+   |    |    |    |    |    | ['网站：Edit', 'Edit5']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.websiteLineEdit", control_type="Edit")
+   |    |    |    |    | 
+   |    |    |    |    | GroupBox - '文件设置'    (L523, T353, R1438, B440)
+   |    |    |    |    | ['文件设置GroupBox', 'GroupBox5', '文件设置']
+   |    |    |    |    | child_window(title="文件设置", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2", control_type="Group")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '图标路径：'    (L533, T378, R593, B401)
+   |    |    |    |    |    | ['Static6', '图标路径：Static', '图标路径：']
+   |    |    |    |    |    | child_window(title="图标路径：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconPathLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T379, R1347, B400)
+   |    |    |    |    |    | ['Edit6', '图标路径：Edit']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconPathLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Button - '浏览...'    (L1353, T378, R1428, B401)
+   |    |    |    |    |    | ['Button4', '浏览...', '浏览...Button', '浏览...0', '浏览...1', '浏览...Button0', '浏览...Button1']
+   |    |    |    |    |    | child_window(title="浏览...", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconBrowseButton", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Static - '截图路径：'    (L533, T407, R593, B430)
+   |    |    |    |    |    | ['Static7', '截图路径：', '截图路径：Static']
+   |    |    |    |    |    | child_window(title="截图路径：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotPathLabel", control_type="Text")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L599, T408, R1347, B429)
+   |    |    |    |    |    | ['截图路径：Edit', 'Edit7', '截图路径：Edit0', '截图路径：Edit1']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotPathLineEdit", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Button - '浏览...'    (L1353, T407, R1428, B430)
+   |    |    |    |    |    | ['Button5', '浏览...2', '浏览...Button2']
+   |    |    |    |    |    | child_window(title="浏览...", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotBrowseButton", control_type="Button")
+   |    |    |    |    | 
+   |    |    |    |    | GroupBox - '产品描述'    (L523, T446, R1438, B814)
+   |    |    |    |    | ['GroupBox6', '产品描述', '产品描述GroupBox']
+   |    |    |    |    | child_window(title="产品描述", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3", control_type="Group")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Edit - ''    (L533, T471, R1428, B804)
+   |    |    |    |    |    | ['截图路径：Edit2', 'Edit8']
+   |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3.descriptionTextEdit", control_type="Edit")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | GroupBox - ''    (L534, T472, R1427, B803)
+   |    |    |    |    |    |    | ['截图路径：GroupBox', 'GroupBox7']
+   |    |    |    |    |    |    | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3.descriptionTextEdit.qt_scrollarea_viewport", control_type="Group")
+   |    |    | 
+   |    |    | TabControl - '基本信息'    (L512, T150, R656, B173)
+   |    |    | ['基本信息', 'TabControl', '基本信息TabControl', '基本信息0', '基本信息1']
+   |    |    | child_window(title="基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="Tab")
+   |    |    |    | 
+   |    |    |    | TabItem - '基本信息'    (L512, T150, R584, B173)
+   |    |    |    | ['基本信息2', 'TabItem', '基本信息TabItem', 'TabItem0', 'TabItem1']
+   |    |    |    | child_window(title="基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="TabItem")
+   |    |    |    | 
+   |    |    |    | TabItem - '功能特性'    (L584, T150, R656, B173)
+   |    |    |    | ['功能特性TabItem', 'TabItem2', '功能特性']
+   |    |    |    | child_window(title="功能特性", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="TabItem")
+   |    | 
+   |    | GroupBox - '操作'    (L512, T833, R1451, B891)
+   |    | ['操作', 'GroupBox8', '操作GroupBox']
+   |    | child_window(title="操作", auto_id="QApplication.MainWindow.centralWidget.groupBox_5", control_type="Group")
+   |    |    | 
+   |    |    | Button - '保存'    (L522, T858, R824, B881)
+   |    |    | ['Button6', '保存', '保存Button']
+   |    |    | child_window(title="保存", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.saveButton", control_type="Button")
+   |    |    | 
+   |    |    | Button - '加载'    (L830, T858, R1133, B881)
+   |    |    | ['加载', 'Button7', '加载Button']
+   |    |    | child_window(title="加载", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.loadButton", control_type="Button")
+   |    |    | 
+   |    |    | Button - '导出'    (L1139, T858, R1441, B881)
+   |    |    | ['Button8', '导出', '导出Button']
+   |    |    | child_window(title="导出", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.exportButton", control_type="Button")
+   | 
+   | Menu - ''    (L460, T120, R1460, B141)
+   | ['Menu2']
+   | child_window(auto_id="QApplication.MainWindow.menuBar", control_type="MenuBar")
+   |    | 
+   |    | MenuItem - '文件'    (L460, T120, R500, B140)
+   |    | ['MenuItem2', '文件', '文件MenuItem']
+   |    | child_window(title="文件", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="MenuItem")
+   |    | 
+   |    | MenuItem - 'UI布局'    (L500, T120, R553, B140)
+   |    | ['MenuItem3', 'UI布局', 'UI布局MenuItem']
+   |    | child_window(title="UI布局", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="MenuItem")
+   |    | 
+   |    | MenuItem - '帮助'    (L553, T120, R593, B140)
+   |    | ['帮助', 'MenuItem4', '帮助MenuItem']
+   |    | child_window(title="帮助", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="MenuItem")
+   | 
+   | Toolbar - ''    (L460, T141, R503, B900)
+   | ['Toolbar']
+   | child_window(auto_id="QApplication.MainWindow.mainToolBar", control_type="ToolBar")
+   |    | 
+   |    | Button - '新建'    (L462, T151, R501, B172)
+   |    | ['新建Button', '新建', 'Button9']
+   |    | child_window(title="新建", auto_id="QApplication.MainWindow.mainToolBar.QToolButton", control_type="Button")
+   | 
+   | StatusBar - ''    (L460, T900, R1460, B920)
+   | ['截图路径：StatusBar', 'StatusBar']
+   | child_window(auto_id="QApplication.MainWindow.statusBar", control_type="StatusBar")
+   |    | 
+   |    | Thumb - ''    (L1447, T907, R1460, B920)
+   |    | ['Thumb']
+   |    | child_window(auto_id="QApplication.MainWindow.statusBar.QSizeGrip", control_type="Thumb")
