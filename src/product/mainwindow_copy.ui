@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ui version="4.0">
+  <class>MainWindow</class><widget class="QMainWindow" name="MainWindow">
+      <property name="windowTitle">
+        <string>软件产品编辑界面</string>
+      </property>
+      <action name="actionNew">
+        <property name="text">
+          <string>新建</string>
+        </property>
+      </action>
+      <action name="actionOpen">
+        <property name="text">
+          <string>打开</string>
+        </property>
+      </action>
+      <action name="actionSave">
+        <property name="text">
+          <string>保存</string>
+        </property>
+      </action>
+      <action name="actionSave_As">
+        <property name="text">
+          <string>另存为</string>
+        </property>
+      </action>
+      <action name="actionExit">
+        <property name="text">
+          <string>退出</string>
+        </property>
+      </action>
+      <action name="actionAbout">
+        <property name="text">
+          <string>关于</string>
+        </property>
+      </action>
+      <action name="actionOpen_UI_Layout_Editor">
+        <property name="text">
+          <string>打开UI布局编辑器</string>
+        </property>
+      </action>
+      <action name="actionSmart_Package_Software">
+        <property name="text">
+          <string>智能打包软件</string>
+        </property>
+      </action>
+      <property name="geometry">
+        <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>800</width>
+          <height>600</height>
+        </rect>
+      </property>
+    </widget>
+    <resources /><connections /></ui>

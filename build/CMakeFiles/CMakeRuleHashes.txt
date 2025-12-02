@@ -1,0 +1,3 @@
+# Hashes of file build rules.
+a0db8111a720dc221ee5fdcc3def42d5 CMakeFiles/software-editor_autogen
+b63ba0df5d2f719b911d179240af6cd0 software-editor_autogen/timestamp

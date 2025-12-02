@@ -1,0 +1,387 @@
+{
+  "timestamp": "2025-11-25T14:36:36.085436",
+  "project_root": "D:\\virtualMachine\\github\\software-editor",
+  "overall_progress": 0.0,
+  "weekly_progress": {
+    "第1周": 0.0,
+    "第2周": 0.0,
+    "第3周": 0.0,
+    "第4周": 0.0
+  },
+  "task_details": {
+    "week1_day1": {
+      "task_id": "week1_day1",
+      "description": "架构设计和接口定义",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week1_day2": {
+      "task_id": "week1_day2",
+      "description": "配置映射机制实现",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week1_day3": {
+      "task_id": "week1_day3",
+      "description": "实时同步机制",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week1_day4": {
+      "task_id": "week1_day4",
+      "description": "布局模板系统设计",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week1_day5": {
+      "task_id": "week1_day5",
+      "description": "集成测试和优化",
+      "files": {
+        "test/integration_test.cpp": {
+          "file": "test/integration_test.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week2_day6": {
+      "task_id": "week2_day6",
+      "description": "打包向导界面设计",
+      "files": {
+        "src/ui/mainwindow.h": {
+          "file": "src/ui/mainwindow.h",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        },
+        "src/ui/mainwindow.cpp": {
+          "file": "src/ui/mainwindow.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week2_day7": {
+      "task_id": "week2_day7",
+      "description": "打包配置界面",
+      "files": {
+        "src/ui/mainwindow.h": {
+          "file": "src/ui/mainwindow.h",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        },
+        "src/ui/mainwindow.cpp": {
+          "file": "src/ui/mainwindow.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week2_day8": {
+      "task_id": "week2_day8",
+      "description": "进度可视化实现",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week2_day9": {
+      "task_id": "week2_day9",
+      "description": "错误处理和用户提示",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week2_day10": {
+      "task_id": "week2_day10",
+      "description": "打包流程集成测试",
+      "files": {
+        "test/integration_test.cpp": {
+          "file": "test/integration_test.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week3_day11": {
+      "task_id": "week3_day11",
+      "description": "事件-动作编辑器框架",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week3_day12": {
+      "task_id": "week3_day12",
+      "description": "可视化编辑器界面",
+      "files": {
+        "src/ui/mainwindow.h": {
+          "file": "src/ui/mainwindow.h",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        },
+        "src/ui/mainwindow.cpp": {
+          "file": "src/ui/mainwindow.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week3_day13": {
+      "task_id": "week3_day13",
+      "description": "交互逻辑配置",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week3_day14": {
+      "task_id": "week3_day14",
+      "description": "常用交互模板",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week3_day15": {
+      "task_id": "week3_day15",
+      "description": "交互逻辑测试功能",
+      "files": {
+        "test/integration_test.cpp": {
+          "file": "test/integration_test.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week4_day16": {
+      "task_id": "week4_day16",
+      "description": "三大模块深度集成",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week4_day17": {
+      "task_id": "week4_day17",
+      "description": "打包流程与UI布局集成",
+      "files": {
+        "src/ui/mainwindow.h": {
+          "file": "src/ui/mainwindow.h",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        },
+        "src/ui/mainwindow.cpp": {
+          "file": "src/ui/mainwindow.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week4_day18": {
+      "task_id": "week4_day18",
+      "description": "性能优化和稳定性",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week4_day19": {
+      "task_id": "week4_day19",
+      "description": "用户体验改进",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    },
+    "week4_day20": {
+      "task_id": "week4_day20",
+      "description": "第一阶段功能验收",
+      "files": {
+        "src/temp/placeholder.cpp": {
+          "file": "src/temp/placeholder.cpp",
+          "exists": false,
+          "has_content": false,
+          "compilable": false,
+          "score": 0.0
+        }
+      },
+      "completion_rate": 0.0,
+      "details": [
+        "任务未开始"
+      ]
+    }
+  },
+  "summary": {
+    "completed_tasks": 0,
+    "total_tasks": 20,
+    "completion_rate": "0/20",
+    "status": "项目启动阶段"
+  }
+}
