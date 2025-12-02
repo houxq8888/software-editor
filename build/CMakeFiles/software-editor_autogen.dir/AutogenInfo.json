@@ -1,18 +1,18 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "D:/virtualMachine/github/software-editor/build/software-editor_autogen",
-	"CMAKE_BINARY_DIR" : "D:/virtualMachine/github/software-editor/build",
-	"CMAKE_CURRENT_BINARY_DIR" : "D:/virtualMachine/github/software-editor/build",
-	"CMAKE_CURRENT_SOURCE_DIR" : "D:/virtualMachine/github/software-editor",
+	"BUILD_DIR" : "D:/virtualMachine/github/software-editor-08/build/software-editor_autogen",
+	"CMAKE_BINARY_DIR" : "D:/virtualMachine/github/software-editor-08/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "D:/virtualMachine/github/software-editor-08/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "D:/virtualMachine/github/software-editor-08",
 	"CMAKE_EXECUTABLE" : "D:/Qt/Tools/CMake_64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"D:/virtualMachine/github/software-editor/CMakeLists.txt",
-		"D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeSystem.cmake",
+		"D:/virtualMachine/github/software-editor-08/CMakeLists.txt",
+		"D:/virtualMachine/github/software-editor-08/build/CMakeFiles/3.30.5/CMakeSystem.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-Initialize.cmake",
-		"D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake",
-		"D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
+		"D:/virtualMachine/github/software-editor-08/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake",
+		"D:/virtualMachine/github/software-editor-08/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake",
@@ -25,7 +25,7 @@
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-C.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake",
-		"D:/virtualMachine/github/software-editor/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake",
+		"D:/virtualMachine/github/software-editor-08/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCInformation.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-windres.cmake",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-C-ABI.cmake",
@@ -366,118 +366,118 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateVersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake"
 	],
-	"CMAKE_SOURCE_DIR" : "D:/virtualMachine/github/software-editor",
+	"CMAKE_SOURCE_DIR" : "D:/virtualMachine/github/software-editor-08",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "D:/virtualMachine/github/software-editor/build/software-editor_autogen/deps",
+	"DEP_FILE" : "D:/virtualMachine/github/software-editor-08/build/software-editor_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "software-editor_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"D:/virtualMachine/github/software-editor/src/package/ipackageservice.h",
+			"D:/virtualMachine/github/software-editor-08/src/package/ipackageservice.h",
 			"MU",
 			"S6CCOCQX7P/moc_ipackageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packageconfig.h",
+			"D:/virtualMachine/github/software-editor-08/src/package/packageconfig.h",
 			"MU",
 			"S6CCOCQX7P/moc_packageconfig.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packagemanager.h",
+			"D:/virtualMachine/github/software-editor-08/src/package/packagemanager.h",
 			"MU",
 			"S6CCOCQX7P/moc_packagemanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packageservice.h",
+			"D:/virtualMachine/github/software-editor-08/src/package/packageservice.h",
 			"MU",
 			"S6CCOCQX7P/moc_packageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/mainwindow.h",
+			"D:/virtualMachine/github/software-editor-08/src/product/mainwindow.h",
 			"MU",
 			"SL43BO5AMI/moc_mainwindow.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/product.h",
+			"D:/virtualMachine/github/software-editor-08/src/product/product.h",
 			"MU",
 			"SL43BO5AMI/moc_product.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h",
+			"D:/virtualMachine/github/software-editor-08/src/product/productconfigmanager.h",
 			"MU",
 			"SL43BO5AMI/moc_productconfigmanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/productstate.h",
+			"D:/virtualMachine/github/software-editor-08/src/product/productstate.h",
 			"MU",
 			"SL43BO5AMI/moc_productstate.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/customtreewidget.h",
 			"MU",
 			"ETQFUQNEGR/moc_customtreewidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/editareawidget.h",
 			"MU",
 			"ETQFUQNEGR/moc_editareawidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/eventactioneditor.h",
 			"MU",
 			"ETQFUQNEGR/moc_eventactioneditor.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/eventactionmodel.h",
 			"MU",
 			"ETQFUQNEGR/moc_eventactionmodel.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/layoutitem.h",
 			"MU",
 			"ETQFUQNEGR/moc_layoutitem.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/previewwindow.h",
 			"MU",
 			"ETQFUQNEGR/moc_previewwindow.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterface.h",
 			"MU",
 			"ETQFUQNEGR/moc_uiinterface.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterfacemanager.h",
 			"MU",
 			"ETQFUQNEGR/moc_uiinterfacemanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uilayoutwindow.h",
 			"MU",
 			"ETQFUQNEGR/moc_uilayoutwindow.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "D:/virtualMachine/github/software-editor/build/software-editor_autogen/include",
-	"MOC_COMPILATION_FILE" : "D:/virtualMachine/github/software-editor/build/software-editor_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "D:/virtualMachine/github/software-editor-08/build/software-editor_autogen/include",
+	"MOC_COMPILATION_FILE" : "D:/virtualMachine/github/software-editor-08/build/software-editor_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
@@ -503,12 +503,12 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"D:/virtualMachine/github/software-editor/build",
-		"D:/virtualMachine/github/software-editor",
-		"D:/virtualMachine/github/software-editor/src",
-		"D:/virtualMachine/github/software-editor/src/product",
-		"D:/virtualMachine/github/software-editor/src/uilayout",
-		"D:/virtualMachine/github/software-editor/src/package",
+		"D:/virtualMachine/github/software-editor-08/build",
+		"D:/virtualMachine/github/software-editor-08",
+		"D:/virtualMachine/github/software-editor-08/src",
+		"D:/virtualMachine/github/software-editor-08/src/product",
+		"D:/virtualMachine/github/software-editor-08/src/uilayout",
+		"D:/virtualMachine/github/software-editor-08/src/package",
 		"D:/Qt/6.9.1/mingw_64/include/QtCore",
 		"D:/Qt/6.9.1/mingw_64/include",
 		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
@@ -543,92 +543,96 @@
 		"-c",
 		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "D:/virtualMachine/github/software-editor/build/software-editor_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "D:/virtualMachine/github/software-editor-08/build/software-editor_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 10,
-	"PARSE_CACHE_FILE" : "D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "D:/virtualMachine/github/software-editor-08/build/CMakeFiles/software-editor_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
 	"QT_UIC_EXECUTABLE" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 9,
-	"SETTINGS_FILE" : "D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "D:/virtualMachine/github/software-editor-08/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
-		[ "D:/virtualMachine/github/software-editor/src/main.cpp", "MU", null ],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packageconfig.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/main.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packagemanager.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/package/packageconfig.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/package/packageservice.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/package/packagemanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/mainwindow.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/package/packageservice.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/product.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/product/mainwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/productconfigmanager.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/product/product.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/product/productstate.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/product/productconfigmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/product/productstate.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/customtreewidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/editareawidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/eventactioneditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/eventactionmodel.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/previewwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterface.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.cpp",
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterfacemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/software-editor-08/src/uilayout/uilayoutwindow.cpp",
 			"MU",
 			null
 		]

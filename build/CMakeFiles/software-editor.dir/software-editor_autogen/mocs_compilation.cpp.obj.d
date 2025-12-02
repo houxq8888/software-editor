@@ -1,7 +1,7 @@
 CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj: \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\mocs_compilation.cpp \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\S6CCOCQX7P/moc_ipackageservice.cpp \
- D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\mocs_compilation.cpp \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\S6CCOCQX7P/moc_ipackageservice.cpp \
+ D:/virtualMachine/github/software-editor-08/src/package/ipackageservice.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs.h \
@@ -324,7 +324,7 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
- D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
+ D:/virtualMachine/github/software-editor-08/src/package/packageconfig.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QSettings \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qsettings.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
@@ -398,10 +398,10 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtmocconstants.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20algorithm.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q23type_traits.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\S6CCOCQX7P/moc_packageconfig.cpp \
- D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\S6CCOCQX7P/moc_packagemanager.cpp \
- D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\S6CCOCQX7P/moc_packageconfig.cpp \
+ D:/virtualMachine/github/software-editor-08/src/package/packageconfig.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\S6CCOCQX7P/moc_packagemanager.cpp \
+ D:/virtualMachine/github/software-editor-08/src/package/packagemanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialog \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialog.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -500,8 +500,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
- D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
+ D:/virtualMachine/github/software-editor-08/src/package/ipackageservice.h \
+ D:/virtualMachine/github/software-editor-08/src/product/product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonObject \
@@ -516,8 +516,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\S6CCOCQX7P/moc_packageservice.cpp \
- D:/virtualMachine/github/software-editor/src/package/packageservice.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\S6CCOCQX7P/moc_packageservice.cpp \
+ D:/virtualMachine/github/software-editor-08/src/package/packageservice.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcess \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qprocess.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QFileInfo \
@@ -531,8 +531,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlglobal.h \
  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxml-config.h \
  D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlexports.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\SL43BO5AMI/moc_mainwindow.cpp \
- D:/virtualMachine/github/software-editor/src/product/mainwindow.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\SL43BO5AMI/moc_mainwindow.cpp \
+ D:/virtualMachine/github/software-editor-08/src/product/mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
@@ -542,16 +542,16 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qitemselectionmodel.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QJsonDocument \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsondocument.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
- D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
- D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
- D:/virtualMachine/github/software-editor/src/product/productstate.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\SL43BO5AMI/moc_productconfigmanager.cpp \
- D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\SL43BO5AMI/moc_productstate.cpp \
- D:/virtualMachine/github/software-editor/src/product/productstate.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_customtreewidget.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h \
+ D:/virtualMachine/github/software-editor-08/src/product/product.h \
+ D:/virtualMachine/github/software-editor-08/src/package/packagemanager.h \
+ D:/virtualMachine/github/software-editor-08/src/product/productconfigmanager.h \
+ D:/virtualMachine/github/software-editor-08/src/product/productstate.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\SL43BO5AMI/moc_productconfigmanager.cpp \
+ D:/virtualMachine/github/software-editor-08/src/product/productconfigmanager.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\SL43BO5AMI/moc_productstate.cpp \
+ D:/virtualMachine/github/software-editor-08/src/product/productstate.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_customtreewidget.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/customtreewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreewidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreeview.h \
@@ -562,8 +562,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_editareawidget.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_editareawidget.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/editareawidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
@@ -592,8 +592,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_eventactioneditor.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_eventactioneditor.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/eventactioneditor.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
@@ -610,24 +610,24 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/eventactionmodel.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_eventactionmodel.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_previewwindow.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_uiinterfacemanager.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h \
- D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_eventactionmodel.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/eventactionmodel.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_previewwindow.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/previewwindow.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_uiinterfacemanager.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterfacemanager.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterface.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/layoutitem.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
- D:\virtualMachine\github\software-editor\build\software-editor_autogen\ETQFUQNEGR/moc_uilayoutwindow.cpp \
- D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h \
+ D:\virtualMachine\github\software-editor-08\build\software-editor_autogen\ETQFUQNEGR/moc_uilayoutwindow.cpp \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/uilayoutwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPlainTextEdit \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qplaintextedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
@@ -709,8 +709,8 @@ CMakeFiles/software-editor.dir/software-editor_autogen/mocs_compilation.cpp.obj:
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
- D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h \
- D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h \
- D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h
+ D:/virtualMachine/github/software-editor-08/src/uilayout/editareawidget.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/previewwindow.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/customtreewidget.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/eventactioneditor.h \
+ D:/virtualMachine/github/software-editor-08/src/uilayout/uiinterfacemanager.h

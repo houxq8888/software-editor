@@ -52,10 +52,10 @@ RM = D:\Qt\Tools\CMake_64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\virtualMachine\github\software-editor
+CMAKE_SOURCE_DIR = D:\virtualMachine\github\software-editor-08
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\virtualMachine\github\software-editor\build
+CMAKE_BINARY_DIR = D:\virtualMachine\github\software-editor-08\build
 
 # Utility rule file for software-editor_autogen.
 
@@ -70,9 +70,9 @@ CMakeFiles/software-editor_autogen: software-editor_autogen/timestamp
 software-editor_autogen/timestamp: D:/Qt/6.9.1/mingw_64/bin/moc.exe
 software-editor_autogen/timestamp: D:/Qt/6.9.1/mingw_64/bin/uic.exe
 software-editor_autogen/timestamp: CMakeFiles/software-editor_autogen.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=D:\virtualMachine\github\software-editor\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target software-editor"
-	D:\Qt\Tools\CMake_64\bin\cmake.exe -E cmake_autogen D:/virtualMachine/github/software-editor/build/CMakeFiles/software-editor_autogen.dir/AutogenInfo.json Debug
-	D:\Qt\Tools\CMake_64\bin\cmake.exe -E touch D:/virtualMachine/github/software-editor/build/software-editor_autogen/timestamp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=D:\virtualMachine\github\software-editor-08\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target software-editor"
+	D:\Qt\Tools\CMake_64\bin\cmake.exe -E cmake_autogen D:/virtualMachine/github/software-editor-08/build/CMakeFiles/software-editor_autogen.dir/AutogenInfo.json Debug
+	D:\Qt\Tools\CMake_64\bin\cmake.exe -E touch D:/virtualMachine/github/software-editor-08/build/software-editor_autogen/timestamp
 
 software-editor_autogen: CMakeFiles/software-editor_autogen
 software-editor_autogen: software-editor_autogen/timestamp
@@ -88,6 +88,6 @@ CMakeFiles/software-editor_autogen.dir/clean:
 .PHONY : CMakeFiles/software-editor_autogen.dir/clean
 
 CMakeFiles/software-editor_autogen.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\virtualMachine\github\software-editor D:\virtualMachine\github\software-editor D:\virtualMachine\github\software-editor\build D:\virtualMachine\github\software-editor\build D:\virtualMachine\github\software-editor\build\CMakeFiles\software-editor_autogen.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\virtualMachine\github\software-editor-08 D:\virtualMachine\github\software-editor-08 D:\virtualMachine\github\software-editor-08\build D:\virtualMachine\github\software-editor-08\build D:\virtualMachine\github\software-editor-08\build\CMakeFiles\software-editor_autogen.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/software-editor_autogen.dir/depend
 

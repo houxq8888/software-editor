@@ -11,6 +11,7 @@
 #include <QProcessEnvironment>
 using namespace Qt;
 #include "mainwindow.h"
+#include "uilayoutwindow.h"
 
 // 设置PowerShell编码配置
 void setupPowerShellEncoding() {
@@ -106,7 +107,8 @@ int main(int argc, char *argv[]) {
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
     
-    MainWindow window;
+    UILayoutWindow window;
+    // MainWindow window;
     window.resize(1000, 800);
     window.show();
     return app.exec();

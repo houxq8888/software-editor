@@ -30,8 +30,8 @@
 
 
 
-LayoutItem::LayoutItem(const QString &widgetType, const QString &displayName)
-    : m_widgetType(widgetType), m_displayName(displayName), m_text(displayName), m_pos(0, 0), m_size(200, 50), m_zIndex(0), m_tabIndex(-1), m_dockArea(Qt::LeftDockWidgetArea), m_floating(false) {}
+LayoutItem::LayoutItem(const QString &widgetType, const QString &displayName, const QString &name)
+    : m_widgetType(widgetType), m_displayName(displayName), m_text(displayName), m_name(name), m_pos(0, 0), m_size(200, 50), m_zIndex(0), m_tabIndex(-1), m_dockArea(Qt::LeftDockWidgetArea), m_floating(false) {}
 
 QString LayoutItem::widgetType() const { return m_widgetType; }
 
@@ -52,6 +52,10 @@ void LayoutItem::setSize(const QSize &size) { m_size = size; }
 int LayoutItem::zIndex() const { return m_zIndex; }
 
 void LayoutItem::setZIndex(int zIndex) { m_zIndex = zIndex; }
+
+QString LayoutItem::name() const { return m_name; }
+
+void LayoutItem::setName(const QString &name) { m_name = name; }
 
 // 设置控件所属的Tab页索引
 void LayoutItem::setTabIndex(int index) {
@@ -78,6 +82,34 @@ bool LayoutItem::isFloating() const {
 
 void LayoutItem::setFloating(bool floating) {
     m_floating = floating;
+}
+
+bool LayoutItem::isLayout() const
+{
+    return m_widgetType == "QGridLayout" || m_widgetType == "QVBoxLayout" || m_widgetType == "QHBoxLayout";
+}
+
+void LayoutItem::addChild(LayoutItem *child)
+{
+    if (child && !m_children.contains(child)) {
+        m_children.append(child);
+        child->setParentLayout(this);
+    }
+}
+
+QList<LayoutItem*> LayoutItem::children() const
+{
+    return m_children;
+}
+
+void LayoutItem::setParentLayout(LayoutItem *parent)
+{
+    m_parentLayout = parent;
+}
+
+LayoutItem* LayoutItem::parentLayout() const
+{
+    return m_parentLayout;
 }
 
 QObject *LayoutItem::createWidget(QWidget *parent) const {
@@ -1010,86 +1042,235 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
         m_editAreaWidget->setHandles(QList<QRect>());
     }
 
-    // 加载新项
-    QDomElement root = doc.documentElement();
-    QDomElement widget = root.firstChildElement("widget");
-    QDomNodeList items = widget.childNodes();
+    // 递归解析DOM元素辅助函数
+    std::function<void(QDomElement, QWidget*)> parseDomElement = [&](QDomElement elem, QWidget* parentWidget) {
+        if (elem.tagName() == "widget") {
+            QString widgetType = elem.attribute("class");
+            QString widgetName = elem.attribute("name");
+            QString text;
+            int x = 0;
+            int y = 0;
+            int width = 0;
+            int height = 0;
 
-    qDebug() << "Loading layout items... Total items:" << items.size();
+            QDomNodeList properties = elem.childNodes();
+            for (int j = 0; j < properties.size(); ++j) {
+                QDomNode propNode = properties.at(j);
+                if (!propNode.isElement()) continue;
 
-    for (int i = 0; i < items.size(); ++i) {
-        QDomNode itemNode = items.at(i);
-        if (!itemNode.isElement()) {
-            qDebug() << "Item" << i << "is not an element, skipping...";
-            continue;
-        }
+                QDomElement propElem = propNode.toElement();
+                QString propName = propElem.attribute("name");
 
-        QDomElement widgetElem = itemNode.toElement();
-        if (widgetElem.isNull()) {
-            qDebug() << "Item" << i << "is null, skipping...";
-            continue;
-        }
-
-        QString widgetType = widgetElem.attribute("class");
-        QDomNodeList properties = widgetElem.childNodes();
-        QString text;
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
-        int tabIndex = 0;
-
-        for (int j = 0; j < properties.size(); ++j) {
-            QDomNode propNode = properties.at(j);
-            if (!propNode.isElement()) {
-                continue;
-            }
-
-            QDomElement propElem = propNode.toElement();
-            QString propName = propElem.attribute("name");
-
-            if (propName == "geometry") {
-                QDomElement rectElem = propElem.firstChildElement("rect");
-                if (!rectElem.isNull()) {
-                    x = rectElem.firstChildElement("x").text().toInt();
-                    y = rectElem.firstChildElement("y").text().toInt();
-                    width = rectElem.firstChildElement("width").text().toInt();
-                    height = rectElem.firstChildElement("height").text().toInt();
-                }
-            } else if (propName == "text") {
-                text = propElem.firstChildElement("string").text();
-            }
-        }
-
-        qDebug() << "Loading widget" << i << ":" << widgetType << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
-
-        // 创建 LayoutItem
-        LayoutItem *item = new LayoutItem(widgetType, text);
-        item->setPos(QPoint(x, y));
-        item->setSize(QSize(width, height));
-        item->setTabIndex(tabIndex);
-
-        // 确定控件的目标父窗口
-        QWidget *targetWidget = m_editAreaWidget;
-        if (tabIndex >= 0) {
-            // 找到TabWidget并添加到相应的Tab页
-            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
-                QWidget *w = it.key();
-                if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
-                    // 确保Tab页存在
-                    while (tabWidget->count() <= tabIndex) {
-                        tabWidget->addTab(new QWidget(), QString("Tab页 %1").arg(tabWidget->count() + 1));
+                if (propName == "geometry") {
+                    QDomElement rectElem = propElem.firstChildElement("rect");
+                    if (!rectElem.isNull()) {
+                        x = rectElem.firstChildElement("x").text().toInt();
+                        y = rectElem.firstChildElement("y").text().toInt();
+                        width = rectElem.firstChildElement("width").text().toInt();
+                        height = rectElem.firstChildElement("height").text().toInt();
                     }
-                    targetWidget = tabWidget->widget(tabIndex);
+                } else if (propName == "text") {
+                    text = propElem.firstChildElement("string").text();
+                } else if (propName == "windowTitle") {
+                    text = propElem.firstChildElement("string").text();
+                } else if (propName == "title") {
+                    text = propElem.firstChildElement("string").text();
+                } else if (propName == "placeholderText") {
+                    text = propElem.firstChildElement("string").text();
+                }
+            }
+
+            qDebug() << "Loading widget" << widgetType << "name:" << widgetName << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
+
+            // 创建 LayoutItem
+            LayoutItem *item = new LayoutItem(widgetType, text, widgetName);
+            item->setPos(QPoint(x, y));
+            item->setSize(QSize(width, height));
+
+            // 将控件添加到父窗口
+            addWidgetToEditArea(item, parentWidget);
+            
+            QWidget *createdWidget = m_widgetItemMap.key(item);
+            
+            // 特殊处理QMenu，解析子菜单和动作
+            if (widgetType == "QMenu") {
+                QDomNodeList children = elem.childNodes();
+                for (int k = 0; k < children.size(); ++k) {
+                    QDomNode childNode = children.at(k);
+                    if (childNode.isElement()) {
+                        QDomElement childElem = childNode.toElement();
+                        
+                        // 处理子菜单
+                        if (childElem.tagName() == "widget" && childElem.attribute("class") == "QMenu") {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                        // 处理动作
+                        else if (childElem.tagName() == "action") {
+                            QString actionName = childElem.attribute("name");
+                            QString actionText = "";
+                            
+                            // 获取动作文本
+                            QDomNodeList propNodes = childElem.elementsByTagName("property");
+                            for (int m = 0; m < propNodes.size(); ++m) {
+                                QDomElement propElem = propNodes.at(m).toElement();
+                                if (propElem.attribute("name") == "text") {
+                                    actionText = propElem.firstChildElement("string").text();
+                                    break;
+                                }
+                            }
+                            
+                            qDebug() << "Loading action" << actionName << "text:" << actionText;
+                            
+                            // 创建动作并添加到菜单
+                            if (QMenu *menu = qobject_cast<QMenu*>(createdWidget)) {
+                                QAction *action = new QAction(actionText, menu);
+                                action->setObjectName(actionName);
+                                menu->addAction(action);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // 递归解析子元素
+            QDomNodeList children = elem.childNodes();
+            for (int k = 0; k < children.size(); ++k) {
+                QDomNode childNode = children.at(k);
+                if (childNode.isElement()) {
+                    QDomElement childElem = childNode.toElement();
+                    
+                    // 处理<addaction>标签，绑定已定义的动作
+                    if (childElem.tagName() == "addaction") {
+                        QString actionName = childElem.attribute("name");
+                        qDebug() << "Adding action" << actionName << "to" << widgetName;
+                        
+                        // 在父窗口中查找对应的动作
+                        QAction *action = parentWidget->findChild<QAction*>(actionName);
+                        if (!action) {
+                            // 如果父窗口中找不到，尝试在全局查找
+                            action = qApp->findChild<QAction*>(actionName);
+                        }
+                        
+                        if (action) {
+                            // 添加到菜单
+                            if (QMenu *menu = qobject_cast<QMenu*>(createdWidget)) {
+                                menu->addAction(action);
+                            }
+                            // 添加到菜单栏
+                            else if (QMenuBar *menuBar = qobject_cast<QMenuBar*>(createdWidget)) {
+                                menuBar->addAction(action);
+                            }
+                            // 添加到工具栏
+                            else if (QToolBar *toolBar = qobject_cast<QToolBar*>(createdWidget)) {
+                                toolBar->addAction(action);
+                            }
+                        } else {
+                            qDebug() << "Action" << actionName << "not found";
+                        }
+                        continue;
+                    }
+                    
+                    // 特殊处理QMainWindow的子元素
+                    if (widgetType == "QMainWindow") {
+                        QString childTagName = childElem.tagName();
+                        
+                        // 先处理动作定义，确保动作先被创建
+                        if (childTagName == "action") {
+                            QString actionName = childElem.attribute("name");
+                            QString actionText = "";
+                            
+                            // 获取动作文本
+                            QDomNodeList propNodes = childElem.elementsByTagName("property");
+                            for (int m = 0; m < propNodes.size(); ++m) {
+                                QDomElement propElem = propNodes.at(m).toElement();
+                                if (propElem.attribute("name") == "text") {
+                                    actionText = propElem.firstChildElement("string").text();
+                                    break;
+                                }
+                            }
+                            
+                            qDebug() << "Creating global action" << actionName << "text:" << actionText;
+                            
+                            // 创建全局动作
+                            QAction *action = new QAction(actionText, createdWidget);
+                            action->setObjectName(actionName);
+                        }
+                        // 处理菜单栏
+                        else if (childTagName == "menuBar") {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                        // 处理工具栏
+                        else if (childTagName == "toolBar") {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                        // 处理中央控件
+                        else if (childTagName == "centralWidget") {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                        // 处理状态栏
+                        else if (childTagName == "statusBar") {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                        // 处理其他子元素
+                        else {
+                            parseDomElement(childElem, createdWidget);
+                        }
+                    } else {
+                        parseDomElement(childElem, createdWidget);
+                    }
+                }
+            }
+        } else if (elem.tagName() == "layout") {
+            // 获取布局类型
+            QString layoutType = elem.attribute("class");
+            QString layoutName = elem.attribute("name");
+            
+            qDebug() << "Loading layout" << layoutType << "name:" << layoutName;
+            
+            // 创建布局项
+            LayoutItem *layoutItem = new LayoutItem(layoutType, layoutName, layoutName);
+            
+            // 将布局添加到父窗口
+            addWidgetToEditArea(layoutItem, parentWidget);
+            
+            // 找到刚创建的布局控件
+            QWidget *layoutWidget = nullptr;
+            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
+                if (it.value() == layoutItem) {
+                    layoutWidget = it.key();
                     break;
                 }
             }
+            
+            // 递归解析布局中的item
+            QDomNodeList items = elem.childNodes();
+            for (int k = 0; k < items.size(); ++k) {
+                QDomNode itemNode = items.at(k);
+                if (itemNode.isElement()) {
+                    QDomElement itemElem = itemNode.toElement();
+                    if (itemElem.tagName() == "item") {
+                        QDomNodeList itemChildren = itemElem.childNodes();
+                        for (int l = 0; l < itemChildren.size(); ++l) {
+                            QDomNode childNode = itemChildren.at(l);
+                            if (childNode.isElement()) {
+                                // 解析子控件并将其添加到布局中
+                                parseDomElement(childNode.toElement(), layoutWidget ? layoutWidget : parentWidget);
+                            }
+                        }
+                    }
+                }
+            }
         }
+    };
 
-        // 将控件添加到编辑区
-        addWidgetToEditArea(item, targetWidget);
-        qDebug() << "Widget" << i << "added to edit area";
-    }
+    // 加载新项
+    QDomElement root = doc.documentElement();
+    QDomElement widget = root.firstChildElement("widget");
+
+    qDebug() << "Loading main window widget...";
+    
+    // 递归解析整个UI结构
+    parseDomElement(widget, m_editAreaWidget);
     qDebug() << "Layout loading completed. Total widgets loaded:" << m_widgetItemMap.size();
     
     // 设置当前布局路径并更新窗口标题
@@ -1162,47 +1343,263 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
         widget.setAttribute("name", "centralWidget");
         root.appendChild(widget);
 
-        const QList<LayoutItem*> layoutItems = getLayoutItems();
-        for (int i = 0; i < layoutItems.size(); ++i) {
-            LayoutItem* item = layoutItems[i];
+        // 递归保存布局项的函数
+        auto saveLayoutItem = [&](QDomElement parentElem, LayoutItem* item, auto& self) -> void {
             QString widgetType = item->widgetType();
             QString text = item->text();
             QPoint pos = item->pos();
             QSize size = item->size();
-            int tabIndex = item->tabIndex();
 
-            QDomElement itemWidget = doc.createElement("widget");
-            itemWidget.setAttribute("class", widgetType);
-            itemWidget.setAttribute("name", widgetType.toLower() + QString::number(i));
+            if (item->isLayout()) {
+                // 保存布局
+                QDomElement layoutElem = doc.createElement("layout");
+                layoutElem.setAttribute("class", widgetType);
+                QString layoutName = item->name();
+                if (layoutName.isEmpty()) {
+                    layoutName = widgetType.toLower();
+                }
+                layoutElem.setAttribute("name", layoutName);
+                parentElem.appendChild(layoutElem);
 
-            QDomElement geometry = doc.createElement("property");
-            geometry.setAttribute("name", "geometry");
-            QDomElement rect = doc.createElement("rect");
-            QDomElement x = doc.createElement("x");
-            x.appendChild(doc.createTextNode(QString::number(pos.x())));
-            QDomElement y = doc.createElement("y");
-            y.appendChild(doc.createTextNode(QString::number(pos.y())));
-            QDomElement width = doc.createElement("width");
-            width.appendChild(doc.createTextNode(QString::number(size.width())));
-            QDomElement height = doc.createElement("height");
-            height.appendChild(doc.createTextNode(QString::number(size.height())));
-            rect.appendChild(x);
-            rect.appendChild(y);
-            rect.appendChild(width);
-            rect.appendChild(height);
-            geometry.appendChild(rect);
-            itemWidget.appendChild(geometry);
+                // 保存布局中的子项
+                for (LayoutItem* child : item->children()) {
+                    QDomElement itemElem = doc.createElement("item");
+                    self(itemElem, child, self);
+                    layoutElem.appendChild(itemElem);
+                }
+            } else {
+                // 特殊处理QMainWindow
+                if (widgetType == "QMainWindow") {
+                    QDomElement mainWindow = doc.createElement("widget");
+                    mainWindow.setAttribute("class", "QMainWindow");
+                    QString widgetName = item->name();
+                    if (widgetName.isEmpty()) {
+                        widgetName = "MainWindow";
+                    }
+                    mainWindow.setAttribute("name", widgetName);
 
-            if (!text.isEmpty()) {
-                QDomElement propertyText = doc.createElement("property");
-                propertyText.setAttribute("name", "text");
-                QDomElement string = doc.createElement("string");
-                string.appendChild(doc.createTextNode(text));
-                propertyText.appendChild(string);
-                itemWidget.appendChild(propertyText);
+                    // 保存窗口标题
+                    if (!text.isEmpty()) {
+                        QDomElement propertyTitle = doc.createElement("property");
+                        propertyTitle.setAttribute("name", "windowTitle");
+                        QDomElement string = doc.createElement("string");
+                        string.appendChild(doc.createTextNode(text));
+                        propertyTitle.appendChild(string);
+                        mainWindow.appendChild(propertyTitle);
+                    }
+
+                    // 保存全局动作定义
+                    QWidget* mainWindowWidget = m_widgetItemMap.key(item);
+                    if (mainWindowWidget) {
+                        QList<QAction*> actions = mainWindowWidget->findChildren<QAction*>();
+                        for (QAction* action : actions) {
+                            if (!action->objectName().isEmpty() && !action->text().isEmpty()) {
+                                QDomElement actionElem = doc.createElement("action");
+                                actionElem.setAttribute("name", action->objectName());
+                                
+                                // 保存动作文本
+                                QDomElement propertyText = doc.createElement("property");
+                                propertyText.setAttribute("name", "text");
+                                QDomElement string = doc.createElement("string");
+                                string.appendChild(doc.createTextNode(action->text()));
+                                propertyText.appendChild(string);
+                                actionElem.appendChild(propertyText);
+                                
+                                mainWindow.appendChild(actionElem);
+                            }
+                        }
+                    }
+
+                    // 保存geometry属性
+                    if (!(pos.x() == 0 && pos.y() == 0 && size.width() == 0 && size.height() == 0)) {
+                        QDomElement geometry = doc.createElement("property");
+                        geometry.setAttribute("name", "geometry");
+                        QDomElement rect = doc.createElement("rect");
+                        QDomElement x = doc.createElement("x");
+                        x.appendChild(doc.createTextNode(QString::number(pos.x())));
+                        QDomElement y = doc.createElement("y");
+                        y.appendChild(doc.createTextNode(QString::number(pos.y())));
+                        QDomElement width = doc.createElement("width");
+                        width.appendChild(doc.createTextNode(QString::number(size.width())));
+                        QDomElement height = doc.createElement("height");
+                        height.appendChild(doc.createTextNode(QString::number(size.height())));
+                        rect.appendChild(x);
+                        rect.appendChild(y);
+                        rect.appendChild(width);
+                        rect.appendChild(height);
+                        geometry.appendChild(rect);
+                        mainWindow.appendChild(geometry);
+                    }
+
+                    // 保存子控件，区分centralWidget、menuBar、toolBar等
+                    QDomElement centralWidgetElem;
+                    for (LayoutItem* child : item->children()) {
+                        QString childType = child->widgetType();
+                        if (childType == "QWidget" && child->name() == "centralWidget") {
+                            // 处理centralWidget
+                            QDomElement itemWidget = doc.createElement("widget");
+                            itemWidget.setAttribute("class", childType);
+                            itemWidget.setAttribute("name", child->name());
+                            self(itemWidget, child, self);
+                            mainWindow.appendChild(itemWidget);
+                            centralWidgetElem = itemWidget;
+                        } else if (childType == "QMenuBar") {
+                            // 处理菜单条
+                            QDomElement menuBarElem = doc.createElement("widget");
+                            menuBarElem.setAttribute("class", childType);
+                            menuBarElem.setAttribute("name", child->name());
+                            
+                            // 保存menuBar geometry
+                            QPoint menuBarPos = child->pos();
+                            QSize menuBarSize = child->size();
+                            if (!(menuBarPos.x() == 0 && menuBarPos.y() == 0 && menuBarSize.width() == 0 && menuBarSize.height() == 0)) {
+                                QDomElement geometry = doc.createElement("property");
+                                geometry.setAttribute("name", "geometry");
+                                QDomElement rect = doc.createElement("rect");
+                                QDomElement x = doc.createElement("x");
+                                x.appendChild(doc.createTextNode(QString::number(menuBarPos.x())));
+                                QDomElement y = doc.createElement("y");
+                                y.appendChild(doc.createTextNode(QString::number(menuBarPos.y())));
+                                QDomElement width = doc.createElement("width");
+                                width.appendChild(doc.createTextNode(QString::number(menuBarSize.width())));
+                                QDomElement height = doc.createElement("height");
+                                height.appendChild(doc.createTextNode(QString::number(menuBarSize.height())));
+                                rect.appendChild(x);
+                                rect.appendChild(y);
+                                rect.appendChild(width);
+                                rect.appendChild(height);
+                                geometry.appendChild(rect);
+                                menuBarElem.appendChild(geometry);
+                            }
+                            
+                            self(menuBarElem, child, self);
+                            mainWindow.appendChild(menuBarElem);
+                        } else if (childType == "QToolBar") {
+                            // 处理工具栏
+                            QDomElement toolBarElem = doc.createElement("widget");
+                            toolBarElem.setAttribute("class", childType);
+                            toolBarElem.setAttribute("name", child->name());
+                            mainWindow.appendChild(toolBarElem);
+                        } else if (childType == "QStatusBar") {
+                            // 处理状态栏
+                            QDomElement statusBarElem = doc.createElement("widget");
+                            statusBarElem.setAttribute("class", childType);
+                            statusBarElem.setAttribute("name", child->name());
+                            mainWindow.appendChild(statusBarElem);
+                        } else {
+                            // 其他子控件
+                            QDomElement itemWidget = doc.createElement("widget");
+                            itemWidget.setAttribute("class", childType);
+                            itemWidget.setAttribute("name", child->name());
+                            self(itemWidget, child, self);
+                            if (!centralWidgetElem.isNull()) {
+                                centralWidgetElem.appendChild(itemWidget);
+                            } else {
+                                mainWindow.appendChild(itemWidget);
+                            }
+                        }
+                    }
+
+                    parentElem.appendChild(mainWindow);
+                } else if (widgetType == "QMenu") {
+                    // 特殊处理QMenu
+                    QDomElement menuElem = doc.createElement("widget");
+                    menuElem.setAttribute("class", widgetType);
+                    QString widgetName = item->name();
+                    if (widgetName.isEmpty()) {
+                        static int menuCounter = 0;
+                        widgetName = "menu" + QString::number(menuCounter++);
+                    }
+                    menuElem.setAttribute("name", widgetName);
+
+                    // 保存菜单标题
+                    if (!text.isEmpty()) {
+                        QDomElement propertyTitle = doc.createElement("property");
+                        propertyTitle.setAttribute("name", "title");
+                        QDomElement string = doc.createElement("string");
+                        string.appendChild(doc.createTextNode(text));
+                        propertyTitle.appendChild(string);
+                        menuElem.appendChild(propertyTitle);
+                    }
+
+                    // 尝试从实际QMenu对象中获取动作
+                    QWidget* menuWidget = m_widgetItemMap.key(item);
+                    if (QMenu* menu = qobject_cast<QMenu*>(menuWidget)) {
+                        // 保存菜单动作
+                        for (QAction* action : menu->actions()) {
+                            if (!action->objectName().isEmpty()) {
+                                QDomElement addAction = doc.createElement("addaction");
+                                addAction.setAttribute("name", action->objectName());
+                                menuElem.appendChild(addAction);
+                            }
+                        }
+                    } else {
+                        // 备用方案：从LayoutItem子项中查找
+                        for (LayoutItem* child : item->children()) {
+                            if (child->widgetType().startsWith("action")) {
+                                QDomElement addAction = doc.createElement("addaction");
+                                addAction.setAttribute("name", child->name());
+                                menuElem.appendChild(addAction);
+                            } else {
+                                self(menuElem, child, self);
+                            }
+                        }
+                    }
+
+                    parentElem.appendChild(menuElem);
+                } else {
+                    // 保存普通控件
+                    QDomElement itemWidget = doc.createElement("widget");
+                    itemWidget.setAttribute("class", widgetType);
+                    QString widgetName = item->name();
+                    if (widgetName.isEmpty()) {
+                        static int widgetCounter = 0;
+                        widgetName = widgetType.toLower() + QString::number(widgetCounter++);
+                    }
+                    itemWidget.setAttribute("name", widgetName);
+
+                    // 仅对顶级窗口（QDialog/QWidget）或有实际位置尺寸的控件写入geometry属性
+                    // 布局中的子控件不需要保存geometry，由布局自动管理
+                    if ((widgetType == "QDialog" || widgetType == "QWidget") && !(pos.x() == 0 && pos.y() == 0 && size.width() == 0 && size.height() == 0)) {
+                        QDomElement geometry = doc.createElement("property");
+                        geometry.setAttribute("name", "geometry");
+                        QDomElement rect = doc.createElement("rect");
+                        QDomElement x = doc.createElement("x");
+                        x.appendChild(doc.createTextNode(QString::number(pos.x())));
+                        QDomElement y = doc.createElement("y");
+                        y.appendChild(doc.createTextNode(QString::number(pos.y())));
+                        QDomElement width = doc.createElement("width");
+                        width.appendChild(doc.createTextNode(QString::number(size.width())));
+                        QDomElement height = doc.createElement("height");
+                        height.appendChild(doc.createTextNode(QString::number(size.height())));
+                        rect.appendChild(x);
+                        rect.appendChild(y);
+                        rect.appendChild(width);
+                        rect.appendChild(height);
+                        geometry.appendChild(rect);
+                        itemWidget.appendChild(geometry);
+                    }
+
+                    if (!text.isEmpty()) {
+                        QDomElement propertyText = doc.createElement("property");
+                        propertyText.setAttribute("name", widgetType == "QLabel" || widgetType == "QPushButton" ? "text" : "placeholderText");
+                        QDomElement string = doc.createElement("string");
+                        string.appendChild(doc.createTextNode(text));
+                        propertyText.appendChild(string);
+                        itemWidget.appendChild(propertyText);
+                    }
+
+                    parentElem.appendChild(itemWidget);
+                }
             }
+        };
 
-            widget.appendChild(itemWidget);
+        // 获取布局项并保存顶级控件（没有父布局的控件）
+        const QList<LayoutItem*> layoutItems = getLayoutItems();
+        for (LayoutItem *item : layoutItems) {
+            if (!item->parentLayout()) {
+                saveLayoutItem(widget, item, saveLayoutItem);
+            }
         }
 
         QFile file(filePath);
