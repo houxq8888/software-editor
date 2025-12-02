@@ -4,6 +4,7 @@ EditAreaWidget::EditAreaWidget(QWidget *parent)
     : QWidget{parent}
 {
     setMouseTracking(true); // 启用鼠标跟踪
+    setAcceptDrops(true); // 启用拖放功能
 }
 
 void EditAreaWidget::setHandles(const QList<QRect> &handles) {
@@ -141,4 +142,37 @@ void EditAreaWidget::mouseDoubleClickEvent(QMouseEvent *event)
     // 将双击事件传递给父窗口处理
     QWidget::mouseDoubleClickEvent(event);
     emit doubleClicked(event->pos());
+}
+
+void EditAreaWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    // 检查是否有文本数据
+    if (event->mimeData()->hasText()) {
+        event->acceptProposedAction();
+    }
+}
+
+void EditAreaWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    // 检查是否有文本数据
+    if (event->mimeData()->hasText()) {
+        event->acceptProposedAction();
+    }
+}
+
+void EditAreaWidget::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    QWidget::dragLeaveEvent(event);
+}
+
+void EditAreaWidget::dropEvent(QDropEvent *event)
+{
+    // 获取拖放的文本数据
+    QString widgetType = event->mimeData()->text();
+    // 获取拖放的位置
+    QPoint pos = event->pos();
+    // 发送控件拖放信号
+    emit widgetDropped(widgetType, pos);
+    // 接受拖放动作
+    event->acceptProposedAction();
 }

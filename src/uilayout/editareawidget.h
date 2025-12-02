@@ -40,6 +40,8 @@ signals:
     
     // 控件选中信号
     void widgetSelected(QWidget *widget);
+    // 控件拖放信号
+    void widgetDropped(const QString &widgetType, const QPoint &pos);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -48,6 +50,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
