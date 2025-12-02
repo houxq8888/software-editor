@@ -907,8 +907,10 @@ void UILayoutWindow::addWidgetToEditArea(LayoutItem *item, QWidget *targetWidget
         widget->move(item->pos());
         widget->resize(item->size());
         widget->show();
+        qDebug() << "Widget created and shown:" << widget->metaObject()->className() << "at" << widget->pos() << "size" << widget->size();
     } else {
         // 是布局类，不需要设置位置和大小
+        qDebug() << "Layout created:" << createdObj->metaObject()->className();
     }
 
     // 直接使用上面的widget变量，不需要重新声明
@@ -1012,84 +1014,34 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
 
     // 加载新项
     QDomElement root = doc.documentElement();
-    QDomElement widget = root.firstChildElement("widget");
-    QDomNodeList items = widget.childNodes();
-
-    qDebug() << "Loading layout items... Total items:" << items.size();
-
-    for (int i = 0; i < items.size(); ++i) {
-        QDomNode itemNode = items.at(i);
-        if (!itemNode.isElement()) {
-            qDebug() << "Item" << i << "is not an element, skipping...";
-            continue;
-        }
-
-        QDomElement widgetElem = itemNode.toElement();
-        if (widgetElem.isNull()) {
-            qDebug() << "Item" << i << "is null, skipping...";
-            continue;
-        }
-
-        QString widgetType = widgetElem.attribute("class");
-        QDomNodeList properties = widgetElem.childNodes();
-        QString text;
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
-        int tabIndex = 0;
-
-        for (int j = 0; j < properties.size(); ++j) {
-            QDomNode propNode = properties.at(j);
-            if (!propNode.isElement()) {
-                continue;
-            }
-
-            QDomElement propElem = propNode.toElement();
-            QString propName = propElem.attribute("name");
-
-            if (propName == "geometry") {
-                QDomElement rectElem = propElem.firstChildElement("rect");
-                if (!rectElem.isNull()) {
-                    x = rectElem.firstChildElement("x").text().toInt();
-                    y = rectElem.firstChildElement("y").text().toInt();
-                    width = rectElem.firstChildElement("width").text().toInt();
-                    height = rectElem.firstChildElement("height").text().toInt();
-                }
-            } else if (propName == "text") {
-                text = propElem.firstChildElement("string").text();
-            }
-        }
-
-        qDebug() << "Loading widget" << i << ":" << widgetType << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
-
-        // 创建 LayoutItem
-        LayoutItem *item = new LayoutItem(widgetType, text);
-        item->setPos(QPoint(x, y));
-        item->setSize(QSize(width, height));
-        item->setTabIndex(tabIndex);
-
-        // 确定控件的目标父窗口
-        QWidget *targetWidget = m_editAreaWidget;
-        if (tabIndex >= 0) {
-            // 找到TabWidget并添加到相应的Tab页
-            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
-                QWidget *w = it.key();
-                if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
-                    // 确保Tab页存在
-                    while (tabWidget->count() <= tabIndex) {
-                        tabWidget->addTab(new QWidget(), QString("Tab页 %1").arg(tabWidget->count() + 1));
-                    }
-                    targetWidget = tabWidget->widget(tabIndex);
-                    break;
-                }
-            }
-        }
-
-        // 将控件添加到编辑区
-        addWidgetToEditArea(item, targetWidget);
-        qDebug() << "Widget" << i << "added to edit area";
+    QDomElement mainWindow = root.firstChildElement("widget");
+    if (mainWindow.isNull()) {
+        qDebug() << "Main window widget not found";
+        return false;
     }
+
+    // 找到centralWidget
+    QDomNodeList mainWindowChildren = mainWindow.childNodes();
+    QDomElement centralWidget;
+    for (int i = 0; i < mainWindowChildren.size(); ++i) {
+        QDomNode childNode = mainWindowChildren.at(i);
+        if (childNode.isElement()) {
+            QDomElement childElem = childNode.toElement();
+            if (childElem.tagName() == "widget" && childElem.attribute("name") == "centralWidget") {
+                centralWidget = childElem;
+                break;
+            }
+        }
+    }
+
+    if (centralWidget.isNull()) {
+        qDebug() << "Central widget not found";
+        return false;
+    }
+
+    // 递归加载控件和布局
+    loadWidgetRecursive(centralWidget, m_editAreaWidget);
+
     qDebug() << "Layout loading completed. Total widgets loaded:" << m_widgetItemMap.size();
     
     // 设置当前布局路径并更新窗口标题
@@ -1113,6 +1065,183 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
     return true;
 }
 
+void UILayoutWindow::loadWidgetRecursive(QDomElement widgetElem, QWidget *parentWidget, bool isInLayout)
+{
+    if (widgetElem.isNull() || !parentWidget) {
+        return;
+    }
+
+    QString widgetType = widgetElem.attribute("class");
+    QString widgetName = widgetElem.attribute("name");
+
+    // 解析控件属性
+    QString text;
+    int x = 0;
+    int y = 0;
+    int width = 0;
+    int height = 0;
+
+    QDomNodeList widgetChildren = widgetElem.childNodes();
+    for (int j = 0; j < widgetChildren.size(); ++j) {
+        QDomNode childNode = widgetChildren.at(j);
+        if (!childNode.isElement()) {
+            continue;
+        }
+
+        QDomElement childElem = childNode.toElement();
+        if (childElem.tagName() == "property") {
+            QString propName = childElem.attribute("name");
+
+            if (propName == "geometry") {
+                QDomElement rectElem = childElem.firstChildElement("rect");
+                if (!rectElem.isNull()) {
+                    x = rectElem.firstChildElement("x").text().toInt();
+                    y = rectElem.firstChildElement("y").text().toInt();
+                    width = rectElem.firstChildElement("width").text().toInt();
+                    height = rectElem.firstChildElement("height").text().toInt();
+                }
+            } else if (propName == "text") {
+                QDomElement stringElem = childElem.firstChildElement("string");
+                if (!stringElem.isNull()) {
+                    text = stringElem.text();
+                }
+            } else if (propName == "windowTitle") {
+                QDomElement stringElem = childElem.firstChildElement("string");
+                if (!stringElem.isNull()) {
+                    text = stringElem.text();
+                }
+            } else if (propName == "placeholderText") {
+                QDomElement stringElem = childElem.firstChildElement("string");
+                if (!stringElem.isNull()) {
+                    // 占位符文本可以在创建控件后设置
+                }
+            }
+        }
+    }
+
+    qDebug() << "Loading widget:" << widgetType << "name:" << widgetName << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
+
+    // 创建 LayoutItem
+    LayoutItem *item = new LayoutItem(widgetType, text);
+    item->setPos(QPoint(x, y));
+    item->setSize(QSize(width, height));
+    item->setTabIndex(-1); // 暂时不处理Tab页
+
+    // 将控件添加到父窗口
+    addWidgetToEditArea(item, parentWidget);
+    QWidget *newWidget = m_widgetItemMap.key(item);
+
+    // 只有当控件不在布局中时，才查找并加载控件的布局
+    if (!isInLayout) {
+        // 查找并加载布局
+        QDomElement layoutElem;
+        for (int j = 0; j < widgetChildren.size(); ++j) {
+            QDomNode childNode = widgetChildren.at(j);
+            if (!childNode.isElement()) {
+                continue;
+            }
+
+            QDomElement childElem = childNode.toElement();
+            if (childElem.tagName() == "layout") {
+                layoutElem = childElem;
+                break;
+            }
+        }
+
+        if (!layoutElem.isNull()) {
+            // 加载布局和布局中的控件
+            loadLayoutRecursive(layoutElem, newWidget);
+        }
+    } else {
+        // 如果控件在布局中，不需要设置位置和大小，布局会自动管理
+        if (newWidget) {
+            newWidget->move(0, 0);
+            newWidget->resize(100, 100);
+        }
+    }
+
+    // 加载子控件
+    for (int j = 0; j < widgetChildren.size(); ++j) {
+        QDomNode childNode = widgetChildren.at(j);
+        if (!childNode.isElement()) {
+            continue;
+        }
+
+        QDomElement childElem = childNode.toElement();
+        if (childElem.tagName() == "widget") {
+            loadWidgetRecursive(childElem, newWidget, false);
+        }
+    }
+}
+
+void UILayoutWindow::loadLayoutRecursive(QDomElement layoutElem, QWidget *parentWidget)
+{
+    if (layoutElem.isNull() || !parentWidget) {
+        return;
+    }
+
+    QString layoutType = layoutElem.attribute("class");
+    qDebug() << "Loading layout:" << layoutType;
+
+    // 创建布局管理器
+    QLayout *layout = nullptr;
+    if (layoutType == "QVBoxLayout") {
+        layout = new QVBoxLayout(parentWidget);
+    } else if (layoutType == "QHBoxLayout") {
+        layout = new QHBoxLayout(parentWidget);
+    } else if (layoutType == "QGridLayout") {
+        layout = new QGridLayout(parentWidget);
+    } else if (layoutType == "QFormLayout") {
+        layout = new QFormLayout(parentWidget);
+    }
+
+    if (!layout) {
+        qDebug() << "Unsupported layout type:" << layoutType;
+        return;
+    }
+
+    // 加载布局中的控件
+    QDomNodeList layoutChildren = layoutElem.childNodes();
+    for (int i = 0; i < layoutChildren.size(); ++i) {
+        QDomNode childNode = layoutChildren.at(i);
+        if (!childNode.isElement()) {
+            continue;
+        }
+
+        QDomElement childElem = childNode.toElement();
+        if (childElem.tagName() == "item") {
+            // 加载布局项中的控件
+            QDomNodeList itemChildren = childElem.childNodes();
+            for (int j = 0; j < itemChildren.size(); ++j) {
+                QDomNode itemChildNode = itemChildren.at(j);
+                if (!itemChildNode.isElement()) {
+                    continue;
+                }
+
+                QDomElement itemChildElem = itemChildNode.toElement();
+                if (itemChildElem.tagName() == "widget") {
+                    // 加载控件并将其添加到布局中
+                    loadWidgetRecursive(itemChildElem, parentWidget, true);
+                    // 获取最后一个添加的控件
+                    QWidget *widget = nullptr;
+                    if (!m_widgetItemMap.isEmpty()) {
+                        widget = m_widgetItemMap.lastKey();
+                    }
+                    if (widget) {
+                        layout->addWidget(widget);
+                    }
+                } else if (itemChildElem.tagName() == "layout") {
+                    // 递归加载嵌套布局
+                    loadLayoutRecursive(itemChildElem, parentWidget);
+                }
+            }
+        }
+    }
+
+    // 设置布局到父窗口
+    parentWidget->setLayout(layout);
+}
+
 QString UILayoutWindow::getCurrentLayoutPath() const
 {
     return m_currentLayoutPath;
@@ -1125,6 +1254,10 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
         filePath = QFileDialog::getSaveFileName(this, "保存", "", "UI文件 (*.ui);;多界面文件 (*.json)");
         if (filePath.isEmpty()) {
             return;
+        }
+        // 确保UI文件的扩展名是.ui
+        if (!filePath.endsWith(".ui") && !filePath.endsWith(".json")) {
+            filePath += ".ui";
         }
         m_currentLayoutPath = filePath;
         setWindowTitle(QString("UI布局编辑器 - %1").arg(QFileInfo(m_currentLayoutPath).fileName()));
@@ -1151,59 +1284,101 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
             }
         }
     } else {
+        // 确保UI文件的扩展名是.ui
+        if (!filePath.endsWith(".ui")) {
+            filePath += ".ui";
+        }
         // 保存为传统DOM格式（单个界面）
         QDomDocument doc;
         QDomElement root = doc.createElement("ui");
         root.setAttribute("version", "4.0");
         doc.appendChild(root);
 
-        QDomElement widget = doc.createElement("widget");
-        widget.setAttribute("class", "QWidget");
-        widget.setAttribute("name", "centralWidget");
-        root.appendChild(widget);
+        // 添加class元素
+        QDomElement classElem = doc.createElement("class");
+        classElem.appendChild(doc.createTextNode("MainWindow"));
+        root.appendChild(classElem);
 
-        const QList<LayoutItem*> layoutItems = getLayoutItems();
-        for (int i = 0; i < layoutItems.size(); ++i) {
-            LayoutItem* item = layoutItems[i];
-            QString widgetType = item->widgetType();
-            QString text = item->text();
-            QPoint pos = item->pos();
-            QSize size = item->size();
-            int tabIndex = item->tabIndex();
+        // 添加MainWindow widget
+        QDomElement mainWindow = doc.createElement("widget");
+        mainWindow.setAttribute("class", "QMainWindow");
+        mainWindow.setAttribute("name", "MainWindow");
+        root.appendChild(mainWindow);
 
-            QDomElement itemWidget = doc.createElement("widget");
-            itemWidget.setAttribute("class", widgetType);
-            itemWidget.setAttribute("name", widgetType.toLower() + QString::number(i));
+        // 添加MainWindow geometry
+        QDomElement mainWindowGeometry = doc.createElement("property");
+        mainWindowGeometry.setAttribute("name", "geometry");
+        QDomElement mainWindowRect = doc.createElement("rect");
+        QDomElement mainWindowX = doc.createElement("x");
+        mainWindowX.appendChild(doc.createTextNode("0"));
+        QDomElement mainWindowY = doc.createElement("y");
+        mainWindowY.appendChild(doc.createTextNode("0"));
+        QDomElement mainWindowWidth = doc.createElement("width");
+        mainWindowWidth.appendChild(doc.createTextNode("800"));
+        QDomElement mainWindowHeight = doc.createElement("height");
+        mainWindowHeight.appendChild(doc.createTextNode("600"));
+        mainWindowRect.appendChild(mainWindowX);
+        mainWindowRect.appendChild(mainWindowY);
+        mainWindowRect.appendChild(mainWindowWidth);
+        mainWindowRect.appendChild(mainWindowHeight);
+        mainWindowGeometry.appendChild(mainWindowRect);
+        mainWindow.appendChild(mainWindowGeometry);
 
-            QDomElement geometry = doc.createElement("property");
-            geometry.setAttribute("name", "geometry");
-            QDomElement rect = doc.createElement("rect");
-            QDomElement x = doc.createElement("x");
-            x.appendChild(doc.createTextNode(QString::number(pos.x())));
-            QDomElement y = doc.createElement("y");
-            y.appendChild(doc.createTextNode(QString::number(pos.y())));
-            QDomElement width = doc.createElement("width");
-            width.appendChild(doc.createTextNode(QString::number(size.width())));
-            QDomElement height = doc.createElement("height");
-            height.appendChild(doc.createTextNode(QString::number(size.height())));
-            rect.appendChild(x);
-            rect.appendChild(y);
-            rect.appendChild(width);
-            rect.appendChild(height);
-            geometry.appendChild(rect);
-            itemWidget.appendChild(geometry);
+        // 添加MainWindow windowTitle
+        QDomElement mainWindowTitle = doc.createElement("property");
+        mainWindowTitle.setAttribute("name", "windowTitle");
+        QDomElement mainWindowTitleString = doc.createElement("string");
+        mainWindowTitleString.appendChild(doc.createTextNode("MainWindow"));
+        mainWindowTitle.appendChild(mainWindowTitleString);
+        mainWindow.appendChild(mainWindowTitle);
 
-            if (!text.isEmpty()) {
-                QDomElement propertyText = doc.createElement("property");
-                propertyText.setAttribute("name", "text");
-                QDomElement string = doc.createElement("string");
-                string.appendChild(doc.createTextNode(text));
-                propertyText.appendChild(string);
-                itemWidget.appendChild(propertyText);
-            }
+        // 添加centralWidget
+        QDomElement centralWidget = doc.createElement("widget");
+        centralWidget.setAttribute("class", "QWidget");
+        centralWidget.setAttribute("name", "centralwidget");
+        mainWindow.appendChild(centralWidget);
 
-            widget.appendChild(itemWidget);
-        }
+        // 递归保存控件和布局
+        saveWidgetRecursive(centralWidget, m_editAreaWidget, doc);
+
+        // 添加menubar
+        QDomElement menubar = doc.createElement("widget");
+        menubar.setAttribute("class", "QMenuBar");
+        menubar.setAttribute("name", "menubar");
+        mainWindow.appendChild(menubar);
+
+        // 添加menubar geometry
+        QDomElement menubarGeometry = doc.createElement("property");
+        menubarGeometry.setAttribute("name", "geometry");
+        QDomElement menubarRect = doc.createElement("rect");
+        QDomElement menubarX = doc.createElement("x");
+        menubarX.appendChild(doc.createTextNode("0"));
+        QDomElement menubarY = doc.createElement("y");
+        menubarY.appendChild(doc.createTextNode("0"));
+        QDomElement menubarWidth = doc.createElement("width");
+        menubarWidth.appendChild(doc.createTextNode("800"));
+        QDomElement menubarHeight = doc.createElement("height");
+        menubarHeight.appendChild(doc.createTextNode("20"));
+        menubarRect.appendChild(menubarX);
+        menubarRect.appendChild(menubarY);
+        menubarRect.appendChild(menubarWidth);
+        menubarRect.appendChild(menubarHeight);
+        menubarGeometry.appendChild(menubarRect);
+        menubar.appendChild(menubarGeometry);
+
+        // 添加statusbar
+        QDomElement statusbar = doc.createElement("widget");
+        statusbar.setAttribute("class", "QStatusBar");
+        statusbar.setAttribute("name", "statusbar");
+        mainWindow.appendChild(statusbar);
+
+        // 添加resources元素
+        QDomElement resources = doc.createElement("resources");
+        root.appendChild(resources);
+
+        // 添加connections元素
+        QDomElement connections = doc.createElement("connections");
+        root.appendChild(connections);
 
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1218,6 +1393,104 @@ void UILayoutWindow::on_actionSave_Layout_triggered()
                 qDebug() << "UI布局路径已更新到ProductConfigManager:" << filePath;
             }
         }
+    }
+}
+
+// 递归保存控件和布局的辅助函数
+void UILayoutWindow::saveWidgetRecursive(QDomElement parentElem, QWidget *parentWidget, QDomDocument &doc) {
+    if (!parentWidget) {
+        return;
+    }
+
+    // 保存父控件的所有子控件
+    QList<QWidget*> children = parentWidget->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
+    for (QWidget *child : children) {
+        // 跳过编辑区本身和控制点
+        if (child == m_editAreaWidget || child->objectName() == "handle") {
+            continue;
+        }
+
+        // 找到对应的LayoutItem
+        LayoutItem *item = m_widgetItemMap.value(child);
+        if (!item) {
+            continue;
+        }
+
+        QString widgetType = item->widgetType();
+        QString text = item->text();
+        QPoint pos = item->pos();
+        QSize size = item->size();
+
+        // 创建widget元素
+        QDomElement widgetElem = doc.createElement("widget");
+        widgetElem.setAttribute("class", widgetType);
+        widgetElem.setAttribute("name", child->objectName());
+
+        // 添加geometry属性
+        QDomElement geometryElem = doc.createElement("property");
+        geometryElem.setAttribute("name", "geometry");
+        QDomElement rectElem = doc.createElement("rect");
+        QDomElement xElem = doc.createElement("x");
+        xElem.appendChild(doc.createTextNode(QString::number(pos.x())));
+        QDomElement yElem = doc.createElement("y");
+        yElem.appendChild(doc.createTextNode(QString::number(pos.y())));
+        QDomElement widthElem = doc.createElement("width");
+        widthElem.appendChild(doc.createTextNode(QString::number(size.width())));
+        QDomElement heightElem = doc.createElement("height");
+        heightElem.appendChild(doc.createTextNode(QString::number(size.height())));
+        rectElem.appendChild(xElem);
+        rectElem.appendChild(yElem);
+        rectElem.appendChild(widthElem);
+        rectElem.appendChild(heightElem);
+        geometryElem.appendChild(rectElem);
+        widgetElem.appendChild(geometryElem);
+
+        // 添加text属性
+        if (!text.isEmpty()) {
+            QDomElement textElem = doc.createElement("property");
+            textElem.setAttribute("name", "text");
+            QDomElement stringElem = doc.createElement("string");
+            stringElem.appendChild(doc.createTextNode(text));
+            textElem.appendChild(stringElem);
+            widgetElem.appendChild(textElem);
+        }
+
+        // 检查子控件是否有布局
+        QLayout *layout = child->layout();
+        if (layout) {
+            // 创建layout元素
+            QString layoutType = layout->metaObject()->className();
+            layoutType = layoutType.replace("Layout", ""); // 移除Layout后缀
+            QDomElement layoutElem = doc.createElement("layout");
+            layoutElem.setAttribute("class", layoutType);
+
+            // 保存布局中的所有控件
+            int itemCount = layout->count();
+            for (int i = 0; i < itemCount; ++i) {
+                QLayoutItem *layoutItem = layout->itemAt(i);
+                if (!layoutItem) {
+                    continue;
+                }
+
+                QWidget *layoutWidget = layoutItem->widget();
+                if (layoutWidget) {
+                    // 创建item元素
+                    QDomElement itemElem = doc.createElement("item");
+
+                    // 递归保存布局中的控件
+                    saveWidgetRecursive(itemElem, layoutWidget, doc);
+
+                    layoutElem.appendChild(itemElem);
+                }
+            }
+
+            widgetElem.appendChild(layoutElem);
+        } else {
+            // 没有布局，直接保存子控件
+            saveWidgetRecursive(widgetElem, child, doc);
+        }
+
+        parentElem.appendChild(widgetElem);
     }
 }
 

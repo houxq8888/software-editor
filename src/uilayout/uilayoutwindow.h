@@ -1,3 +1,4 @@
+
 #ifndef UILAYOUTWINDOW_H
 #define UILAYOUTWINDOW_H
 
@@ -94,6 +95,9 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
+    // 递归保存控件和布局的辅助函数
+    void saveWidgetRecursive(QDomElement parentElem, QWidget *parentWidget, QDomDocument &doc);
+
     // 用于跟踪控件移动和调整大小的状态
     QWidget *m_currentWidget = nullptr;
     QWidget *m_selectedWidget = nullptr;  // 当前选中的控件
@@ -195,6 +199,10 @@ private:
     void onActionPreviewTriggered(); // 预览布局
     void addWidgetToEditArea(LayoutItem *item, QWidget *targetWidget = nullptr); // 添加控件到编辑区，并指定父窗口将控件添加到编辑区
     
+    // 递归加载控件和布局
+    void loadWidgetRecursive(QDomElement widgetElem, QWidget *parentWidget, bool isInLayout = false);
+    void loadLayoutRecursive(QDomElement layoutElem, QWidget *parentWidget);
+
     // 撤销/重做功能相关
     void saveLayoutState(); // 保存当前布局状态
     
