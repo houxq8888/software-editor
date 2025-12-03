@@ -333,6 +333,20 @@ UILayoutWindow::UILayoutWindow(QWidget *parent, bool isNewProduct, const QString
     
     // 设置多界面管理UI
     setupInterfaceManagementUI();
+    
+    // 从产品配置中获取UI布局路径并加载
+    if (m_configManager) {
+        QString uiLayoutPath = m_configManager->getUiLayoutPath();
+        if (!uiLayoutPath.isEmpty()) {
+            if (loadLayout(uiLayoutPath)) {
+                qDebug() << "UILayoutWindow: 成功加载默认UI布局:" << uiLayoutPath;
+                m_currentLayoutPath = uiLayoutPath;
+                setWindowTitle("UI布局编辑器 - " + QFileInfo(uiLayoutPath).fileName());
+            } else {
+                qDebug() << "UILayoutWindow: 加载默认UI布局失败:" << uiLayoutPath;
+            }
+        }
+    }
 }
 
 UILayoutWindow::~UILayoutWindow()
@@ -2963,6 +2977,9 @@ void UILayoutWindow::closeEvent(QCloseEvent *event)
     
     // 接受关闭事件
     event->accept();
+    
+    // 发送窗口关闭信号
+    emit closed();
 }
 
 // 产品配置集成功能实现

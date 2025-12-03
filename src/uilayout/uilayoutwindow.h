@@ -86,6 +86,10 @@ public:
     
     // 获取当前UI文件路径
     QString getCurrentLayoutPath() const;
+    
+    // 窗口关闭信号
+    signals:
+        void closed();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

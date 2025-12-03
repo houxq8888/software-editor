@@ -398,6 +398,13 @@ void ProductMainWindow::on_actionOpen_UI_Layout_Editor_triggered()
             return;
         }
     }
+    
+    // 创建UI布局编辑器实例并传递产品配置管理器
+    UILayoutWindow *uiLayoutWindow = new UILayoutWindow(this, false, m_currentFile, m_configManager);
+    uiLayoutWindow->show();
+    
+    // 连接UI布局窗口关闭信号到槽函数
+    connect(uiLayoutWindow, &UILayoutWindow::closed, this, &ProductMainWindow::onUILayoutWindowClosed);
 }
 
 void ProductMainWindow::onUILayoutWindowClosed()
