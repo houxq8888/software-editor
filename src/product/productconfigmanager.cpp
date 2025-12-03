@@ -98,6 +98,9 @@ void ProductConfigManager::setUiLayoutPath(const QString &uiLayoutPath)
         m_currentUiLayoutPath = uiLayoutPath;
         m_uiLayoutChanged = true;
         m_lastUiLayoutChange = QDateTime::currentDateTime();
+        
+        // 发出UI布局路径变化信号
+        emit uiLayoutPathChanged(uiLayoutPath);
     }
 }
 

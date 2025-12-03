@@ -21,6 +21,8 @@ class QErrorMessage;
 class QCommandLineParser;
 struct Options;
 
+class QDesignerPrivate;
+
 class QDesigner: public QApplication
 {
     Q_OBJECT
@@ -35,6 +37,7 @@ public:
     ~QDesigner() override;
 
     ParseArgumentsResult parseCommandLineArguments();
+    void setArguments(const QStringList &arguments);
 
     QDesignerWorkbench *workbench() const;
     QDesignerServer *server() const;
@@ -45,7 +48,7 @@ public:
 protected:
     bool event(QEvent *ev) override;
 
-signals:
+ signals:
     void initialized();
 
 public slots:
@@ -54,6 +57,7 @@ public slots:
 private:
     void showErrorMessageBox(const QString &);
 
+    QDesignerPrivate *d;
     QDesignerServer *m_server = nullptr;
     QDesignerClient *m_client = nullptr;
     QDesignerWorkbench *m_workbench = nullptr;

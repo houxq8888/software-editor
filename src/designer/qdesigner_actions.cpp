@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 
 #include "qdesigner_actions.h"
+#include "../product/productconfigmanager.h"
 #include "designer_enums.h"
 #include <qdesigner_utils_p.h>
 #include "qdesigner.h"
@@ -767,6 +768,11 @@ bool QDesignerActions::readInForm(const QString &fileName)
         if (workbench()->openForm(fn, &errorMessage)) {
             addRecentFile(fn);
             m_openDirectory = QFileInfo(fn).absolutePath();
+            
+            // 将最后加载的UI文件路径保存到产品配置文件的uiLayoutPath字段
+            ProductConfigManager configManager;
+            configManager.setUiLayoutPath(fn);
+            
             return true;
         } else {
             // prompt to reload

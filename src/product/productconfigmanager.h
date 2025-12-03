@@ -104,6 +104,7 @@ signals:
     void conflictDetected(const QString &conflictId, const QString &description);
     void conflictResolved(const QString &conflictId);
     void autoSyncToggled(bool enabled);
+    void uiLayoutPathChanged(const QString &newPath);
 
 private:
     ProductState *m_productState;  // 产品状态管理器

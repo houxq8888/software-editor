@@ -55,8 +55,14 @@ static void designerMessageHandler(QtMsgType type, const QMessageLogContext &con
     designerApp->showErrorMessage(msg);
 }
 
+class QDesignerPrivate {
+public:
+    QStringList m_arguments;
+};
+
 QDesigner::QDesigner(int &argc, char **argv)
     : QApplication(argc, argv)
+    , d(new QDesignerPrivate)
 {
     setOrganizationName(u"QtProject"_s);
     QGuiApplication::setApplicationDisplayName(designerDisplayName);
@@ -73,6 +79,7 @@ QDesigner::~QDesigner()
     delete m_workbench;
     delete m_server;
     delete m_client;
+    delete d;
 }
 
 void QDesigner::showErrorMessage(const QString &message)
@@ -216,18 +223,73 @@ static inline QDesigner::ParseArgumentsResult
     return QDesigner::ParseArgumentsSuccess;
 }
 
+void QDesigner::setArguments(const QStringList &arguments)
+{
+    d->m_arguments = arguments;
+}
+
 QDesigner::ParseArgumentsResult QDesigner::parseCommandLineArguments()
 {
     QString errorMessage;
     Options options;
     QCommandLineParser parser;
-    const ParseArgumentsResult result = parseDesignerCommandLineArguments(parser, &options, &errorMessage);
+    
+    ParseArgumentsResult result = ParseArgumentsSuccess;
+    
+    // 如果保存了命令行参数，则使用保存的参数
+    if (!d->m_arguments.isEmpty()) {
+        // 解析保存的命令行参数
+        if (!parser.parse(d->m_arguments)) {
+            errorMessage = parser.errorText();
+            showHelp(parser, errorMessage);
+            return ParseArgumentsError;
+        }
+        
+        // 处理帮助选项
+        if (parser.isSet(parser.addHelpOption())) {
+            showHelp(parser);
+            return ParseArgumentsHelpRequested;
+        }
+        if (parser.isSet(u"help-all"_s)) {
+            parser.process(d->m_arguments); // exits
+        }
+        
+        // 处理其他选项
+        options.server = parser.isSet(u"server"_s);
+        if (parser.isSet(u"client"_s)) {
+            bool ok;
+            options.clientPort = parser.value(u"client"_s).toUShort(&ok);
+            if (!ok) {
+                errorMessage = u"Non-numeric argument specified for -client"_s;
+                showHelp(parser, errorMessage);
+                return ParseArgumentsError;
+            }
+        }
+        if (parser.isSet(u"resourcedir"_s)) {
+            options.resourceDir = parser.value(u"resourcedir"_s);
+        }
+        options.enableInternalDynamicProperties = parser.isSet(u"enableinternaldynamicproperties"_s);
+        const auto pluginPathValues = parser.values(u"plugin-path"_s);
+        for (const auto &pluginPath : pluginPathValues) {
+            options.pluginPaths.append(pluginPath.split(QDir::listSeparator(), Qt::SkipEmptyParts));
+        }
+        if (parser.isSet(u"qt-version"_s)) {
+            options.qtVersion = QVersionNumber::fromString(parser.value(u"qt-version"_s));
+        }
+        
+        // 处理位置参数（UI文件路径）
+        options.files = parser.positionalArguments();
+    } else {
+        // 如果没有保存命令行参数，则使用原始命令行参数
+        result = parseDesignerCommandLineArguments(parser, &options, &errorMessage);
+    }
+
     if (result != ParseArgumentsSuccess) {
         showHelp(parser, errorMessage);
         return result;
     }
-    // initialize the sub components
-    if (options.clientPort)
+
+    if (options.clientPort) 
         m_client = new QDesignerClient(options.clientPort, this);
     if (options.server) {
         m_server = new QDesignerServer();

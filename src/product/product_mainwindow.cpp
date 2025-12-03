@@ -63,6 +63,40 @@ ProductMainWindow::ProductMainWindow(QWidget *parent)
         updateStatusBar();
     });
     
+    // 连接UI布局路径变化信号
+    connect(m_configManager, &ProductConfigManager::uiLayoutPathChanged, this, [this](const QString &newPath) {
+        // 检查是否有有效的产品数据
+        if (m_product.name().isEmpty() || m_currentFile.isEmpty()) {
+            qDebug() << "当前没有产品数据或产品文件路径为空，无法绑定UI布局"; 
+            return;
+        }
+        
+        // 检查新的UI布局路径是否与产品当前的UI布局路径不同
+        if (newPath != m_product.uiLayoutPath()) {
+            // 询问用户是否要绑定UI布局
+            QMessageBox::StandardButton reply = QMessageBox::question(this,
+                "UI布局绑定",
+                QString("检测到新的UI布局文件：%1\n是否要为当前产品绑定这个UI布局？").arg(QFileInfo(newPath).fileName()),
+                QMessageBox::Yes | QMessageBox::No);
+            
+            if (reply == QMessageBox::Yes) {
+                // 绑定UI布局
+                m_configManager->bindUiLayout(newPath);
+                
+                // 更新产品的UI布局路径
+                m_product.setUiLayoutPath(newPath);
+                qDebug() << "已将UI布局文件绑定到产品:" << newPath;
+                
+                // 标记产品已修改
+                setModified(true);
+            } else {
+                // 用户选择不绑定，将UI布局路径改回原来的路径
+                m_configManager->setUiLayoutPath(m_product.uiLayoutPath());
+                qDebug() << "用户选择不绑定UI布局，已将UI布局路径改回:" << m_product.uiLayoutPath();
+            }
+        }
+    });
+    
     // 设置日志捕获
     setupLogCapture();
     
@@ -389,6 +423,22 @@ void ProductMainWindow::on_actionOpen_UI_Layout_Editor_triggered()
     
     QDesigner *app = qDesigner;
     if (app) {
+        // 获取当前产品的UI布局路径
+        QString uiLayoutPath = m_product.uiLayoutPath();
+        
+        // 如果UI布局路径不为空，则将其作为命令行参数传递给Qt designer
+        if (!uiLayoutPath.isEmpty()) {
+            // 创建一个新的命令行参数列表，包含UI文件路径
+            QStringList args;
+            args << app->applicationFilePath();
+            args << uiLayoutPath;
+            
+            // 设置Qt designer的命令行参数
+            app->setArguments(args);
+            
+            qDebug() << "正在打开UI布局编辑器，并加载UI文件：" << uiLayoutPath;
+        }
+        
         switch (app->parseCommandLineArguments()) {
         case QDesigner::ParseArgumentsSuccess:
             break;

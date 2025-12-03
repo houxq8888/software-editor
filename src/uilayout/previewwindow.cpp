@@ -76,6 +76,7 @@ void PreviewWindow::setLayoutItems(const QList<LayoutItem *> &items){
     qDebug() << "PreviewWindow::setLayoutItems: Clearing previous widgets from m_widgetMap";
     qDeleteAll(m_widgetMap.values());
     m_widgetMap.clear();
+    m_widgetToItemMap.clear(); // 同时清除反向映射，避免内存泄漏和访问错误
 
     // 设置previewWidget为容器
     QWidget *containerWidget = ui->previewWidget;
