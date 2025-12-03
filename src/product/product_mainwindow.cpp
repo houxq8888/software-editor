@@ -6,6 +6,10 @@
 #include <QCloseEvent>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QDesignerFormWindowInterface>
+#include <QDesignerFormWindowManagerInterface>
+#include <QDesignerFormEditorInterface>
+#include "qdesigner_workbench.h"
 
 ProductMainWindow::ProductMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -398,6 +402,12 @@ void ProductMainWindow::on_actionOpen_UI_Layout_Editor_triggered()
             return;
         }
     }
+    
+    // 连接formWindowAdded信号和activeFormWindowChanged信号，以便检测UI文件的加载事件
+    if (app && app->workbench() && app->workbench()->core()) {
+        connect(app->workbench()->core()->formWindowManager(), &QDesignerFormWindowManagerInterface::formWindowAdded, this, &ProductMainWindow::onFormWindowAdded);
+        connect(app->workbench()->core()->formWindowManager(), &QDesignerFormWindowManagerInterface::activeFormWindowChanged, this, &ProductMainWindow::onActiveFormWindowChanged);
+    }
 }
 
 void ProductMainWindow::onUILayoutWindowClosed()
@@ -452,6 +462,31 @@ void ProductMainWindow::onUILayoutWindowClosed()
     } else {
         // UI绑定和UI内容都没有修改
         qDebug() << "UI绑定没有修改";
+    }
+}
+
+void ProductMainWindow::onFormWindowAdded(QDesignerFormWindowInterface *formWindow)
+{
+    // 当新的表单窗口被添加时，连接fileNameChanged信号
+    connect(formWindow, &QDesignerFormWindowInterface::fileNameChanged, this, &ProductMainWindow::onFormWindowFileNameChanged);
+}
+
+void ProductMainWindow::onActiveFormWindowChanged(QDesignerFormWindowInterface *formWindow)
+{
+    // 当活动表单窗口改变时，如果有新的表单窗口，连接fileNameChanged信号
+    if (formWindow) {
+        connect(formWindow, &QDesignerFormWindowInterface::fileNameChanged, this, &ProductMainWindow::onFormWindowFileNameChanged);
+    }
+}
+
+void ProductMainWindow::onFormWindowFileNameChanged(const QString &fileName)
+{
+    // 当表单窗口的文件名改变时，更新产品的UI布局路径
+    if (!fileName.isEmpty()) {
+        m_configManager->setUiLayoutPath(fileName);
+        m_product.setUiLayoutPath(fileName);
+        setModified(true);
+        qDebug() << "UI布局文件路径已更新:" << fileName;
     }
 }
 

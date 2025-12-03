@@ -17,6 +17,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui {
 class ProductMainWindow;
 }
+class QDesigner;
+class QDesignerFormWindowInterface;
 QT_END_NAMESPACE
 
 class ProductMainWindow : public QMainWindow
@@ -39,6 +41,9 @@ private slots:
     
     // UI layout window management
     void onUILayoutWindowClosed();
+    void onFormWindowAdded(QDesignerFormWindowInterface *formWindow);
+    void onActiveFormWindowChanged(QDesignerFormWindowInterface *formWindow);
+    void onFormWindowFileNameChanged(const QString &fileName);
     void on_iconBrowseButton_clicked();
     void on_screenshotBrowseButton_clicked();
     void on_addFeatureButton_clicked();
@@ -63,6 +68,11 @@ private:
     QStringList m_logMessages;
     QTimer *m_logTimer;
     static const int MAX_LOG_MESSAGES = 10; // 最大显示日志数量
+    
+    // QDesigner相关成员
+    QStringList m_qdesigner_args; // 存储QDesigner的命令行参数
+    QList<char*> m_qdesigner_char_args; // 存储转换为char*的命令行参数
+    QDesigner *m_qdesigner_instance; // 存储QDesigner实例的指针
 
     void clearProductData();
     void loadProductData(const Product &product);

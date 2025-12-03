@@ -642,7 +642,10 @@ bool QDesignerActions::saveFormAs(QDesignerFormWindowInterface *fw)
     saveAsDialog.reset(); // writeOutForm potentially shows other dialogs
 
     fw->setFileName(saveFile);
-    return writeOutForm(fw, saveFile);
+    bool ret = writeOutForm(fw, saveFile);
+    if (ret)
+        emit formSaved(saveFile);
+    return ret;
 }
 
 void QDesignerActions::saveForm()
@@ -686,6 +689,8 @@ bool QDesignerActions::saveForm(QDesignerFormWindowInterface *fw)
         ret = saveFormAs(fw);
     else
         ret =  writeOutForm(fw, fw->fileName());
+    if (ret)
+        emit formSaved(fw->fileName());
     return ret;
 }
 

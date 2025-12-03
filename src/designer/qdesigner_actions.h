@@ -87,6 +87,7 @@ public slots:
 
 signals:
     void useBigIcons(bool);
+    void formSaved(const QString &fileName);
 
 private slots:
     void saveForm();
