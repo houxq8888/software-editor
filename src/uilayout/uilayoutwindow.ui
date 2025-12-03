@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UILayoutWindow</class>
+ <widget class="QMainWindow" name="UILayoutWindow">
+  <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>700</height>
+    </rect>
+   </property>
+  <property name="windowTitle">
+   <string>UI布局编辑器</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QSplitter" name="splitter">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="handleWidth">
+         <number>8</number>
+        </property>
+        <property name="childrenCollapsible">
+         <bool>false</bool>
+        </property>
+        <widget class="QWidget" name="leftPanelWidget">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>控件盒子</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="searchLineEdit">
+             <property name="placeholderText">
+              <string>搜索控件...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="CustomTreeWidget" name="widgetListWidget">
+             <property name="dragEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="graphicsView" native="true">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QWidget" name="rightPanelWidget">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QTabWidget" name="rightTabWidget">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="propertiesTab">
+              <attribute name="title">
+               <string>属性编辑器</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <widget class="QLabel" name="propertiesLabel">
+                  <property name="text">
+                   <string>属性编辑器</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeWidget" name="propertiesTreeWidget">
+                  <property name="headerLabels">
+                   <stringlist>
+                    <string>属性名</string>
+                    <string>属性值</string>
+                   </stringlist>
+                  </property>
+                 </widget>
+                </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="featuresTab">
+              <attribute name="title">
+               <string>功能特性</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QLabel" name="featuresLabel">
+                  <property name="text">
+                   <string>功能特性关联</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeWidget" name="featuresTreeWidget">
+                  <property name="headerLabels">
+                   <stringlist>
+                    <string>功能特性</string>
+                    <string>关联控件</string>
+                    <string>状态</string>
+                   </stringlist>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="bindFeatureButton">
+                    <property name="text">
+                     <string>绑定特性</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="unbindFeatureButton">
+                    <property name="text">
+                     <string>解绑特性</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="syncFeaturesButton">
+                  <property name="text">
+                   <string>同步功能特性</string>
+                  </property>
+                 </widget>
+                </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionNew_Layout"/>
+    <addaction name="actionSave_Layout"/>
+    <addaction name="actionSave_As_Layout"/>
+    <addaction name="actionLoad_Layout"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>交互</string>
+    </property>
+    <addaction name="actionEventActionEditor"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionPreview"/>
+   <addaction name="actionNew_Layout"/>
+   <addaction name="actionSuggestLayout"/>
+   <addaction name="actionEventActionEditor"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNew_Layout">
+   <property name="text">
+    <string>新建</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionSave_Layout">
+   <property name="text">
+    <string>保存</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_As_Layout">
+   <property name="text">
+    <string>另存为</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionLoad_Layout">
+   <property name="text">
+    <string>加载</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>撤销(&amp;Z)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>恢复(&amp;Y)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionPreview">
+   <property name="text">
+    <string>预览(&amp;P)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionSuggestLayout">
+   <property name="text">
+    <string>布局建议(&amp;L)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+   <property name="toolTip">
+    <string>获取基于产品功能特性的布局建议</string>
+   </property>
+  </action>
+  <action name="actionEventActionEditor">
+   <property name="text">
+    <string>事件-动作编辑器(&amp;E)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+   <property name="toolTip">
+    <string>打开事件-动作编辑器，配置控件间交互关系</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>customtreewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
