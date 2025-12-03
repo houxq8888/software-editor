@@ -1,4 +1,9 @@
 D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/INSTALL.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/ALL_BUILD.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/ZERO_CHECK.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/edit_cache.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/rebuild_cache.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/list_install_components.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/install.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/install/local.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/install/strip.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen_timestamp_deps.dir
+D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir

@@ -1181,42 +1181,48 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
 
     // 加载新项
     QDomElement root = doc.documentElement();
-    QDomElement widget = root.firstChildElement("widget");
-    QDomNodeList items = widget.childNodes();
-
-    qDebug() << "Loading layout items... Total items:" << items.size();
-
-    for (int i = 0; i < items.size(); ++i) {
-        QDomNode itemNode = items.at(i);
-        if (!itemNode.isElement()) {
-            qDebug() << "Item" << i << "is not an element, skipping...";
-            continue;
-        }
-
-        QDomElement widgetElem = itemNode.toElement();
+    QDomNodeList widgets = root.elementsByTagName("widget");
+    
+    qDebug() << "Loading layout items... Total widgets:" << widgets.size();
+    
+    // 存储控件名称到控件对象的映射，用于处理嵌套布局
+    QMap<QString, QWidget*> widgetMap;
+    
+    // 第一遍遍历：创建所有控件但不添加到布局
+    for (int i = 0; i < widgets.size(); ++i) {
+        QDomElement widgetElem = widgets.at(i).toElement();
         if (widgetElem.isNull()) {
-            qDebug() << "Item" << i << "is null, skipping...";
             continue;
         }
-
+        
         QString widgetType = widgetElem.attribute("class");
-        QDomNodeList properties = widgetElem.childNodes();
+        QString widgetName = widgetElem.attribute("name");
+        
+        // 处理QMainWindow，我们需要将其添加到widgetMap以便后续处理子控件
+        if (widgetType == "QMainWindow") {
+            // 创建一个虚拟的QMainWindow对象来添加到widgetMap
+            QWidget *mainWindow = new QWidget();
+            widgetMap[widgetName] = mainWindow;
+            qDebug() << "Added QMainWindow to widgetMap with name:" << widgetName;
+            continue;
+        }
+        
         QString text;
         int x = 0;
         int y = 0;
         int width = 0;
         int height = 0;
-        int tabIndex = 0;
-
+        
+        QDomNodeList properties = widgetElem.childNodes();
         for (int j = 0; j < properties.size(); ++j) {
             QDomNode propNode = properties.at(j);
             if (!propNode.isElement()) {
                 continue;
             }
-
+            
             QDomElement propElem = propNode.toElement();
             QString propName = propElem.attribute("name");
-
+            
             if (propName == "geometry") {
                 QDomElement rectElem = propElem.firstChildElement("rect");
                 if (!rectElem.isNull()) {
@@ -1227,37 +1233,134 @@ bool UILayoutWindow::loadLayout(const QString &filePath)
                 }
             } else if (propName == "text") {
                 text = propElem.firstChildElement("string").text();
+            } else if (propName == "currentIndex") {
+                // 处理TabWidget的currentIndex属性
             }
         }
-
-        qDebug() << "Loading widget" << i << ":" << widgetType << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
-
+        
+        qDebug() << "Creating widget" << i << ":" << widgetType << "name:" << widgetName << "at (" << x << "," << y << ") size:" << width << "x" << height << "text:" << text;
+        
         // 创建 LayoutItem
         LayoutItem *item = new LayoutItem(widgetType, text);
         item->setPos(QPoint(x, y));
         item->setSize(QSize(width, height));
-        item->setTabIndex(tabIndex);
-
-        // 确定控件的目标父窗口
-        QWidget *targetWidget = m_editAreaWidget;
-        if (tabIndex >= 0) {
-            // 找到TabWidget并添加到相应的Tab页
-            for (auto it = m_widgetItemMap.begin(); it != m_widgetItemMap.end(); ++it) {
-                QWidget *w = it.key();
-                if (QTabWidget *tabWidget = qobject_cast<QTabWidget*>(w)) {
-                    // 确保Tab页存在
-                    while (tabWidget->count() <= tabIndex) {
-                        tabWidget->addTab(new QWidget(), QString("Tab页 %1").arg(tabWidget->count() + 1));
+        item->setTabIndex(-1); // 默认为-1，不指定Tab页
+        
+        // 将控件添加到编辑区的临时父控件
+        addWidgetToEditArea(item, nullptr);
+        
+        // 从m_widgetItemMap中获取刚创建的控件
+        if (!m_widgetItemMap.isEmpty()) {
+            QWidget *widget = m_widgetItemMap.lastKey();
+            widgetMap[widgetName] = widget;
+            qDebug() << "Widget" << widgetName << "created and added to widgetMap";
+        }
+    }
+    
+    // 第二遍遍历：处理嵌套布局和子控件
+    for (int i = 0; i < widgets.size(); ++i) {
+        QDomElement widgetElem = widgets.at(i).toElement();
+        if (widgetElem.isNull()) {
+            continue;
+        }
+        
+        QString widgetType = widgetElem.attribute("class");
+        QString widgetName = widgetElem.attribute("name");
+        
+        // 跳过QMainWindow
+        if (widgetType == "QMainWindow") {
+            continue;
+        }
+        
+        // 查找布局
+        QDomNodeList layouts = widgetElem.elementsByTagName("layout");
+        for (int j = 0; j < layouts.size(); ++j) {
+            QDomElement layoutElem = layouts.at(j).toElement();
+            QString layoutType = layoutElem.attribute("class");
+            
+            qDebug() << "Processing layout" << j << ":" << layoutType << "for widget:" << widgetName;
+            
+            // 处理布局项
+            QDomNodeList layoutItems = layoutElem.elementsByTagName("item");
+            for (int k = 0; k < layoutItems.size(); ++k) {
+                QDomElement itemElem = layoutItems.at(k).toElement();
+                
+                // 查找widget元素
+                QDomElement childWidgetElem = itemElem.firstChildElement("widget");
+                if (!childWidgetElem.isNull()) {
+                    QString childWidgetName = childWidgetElem.attribute("name");
+                    
+                    // 从widgetMap中查找子控件
+                    if (widgetMap.contains(childWidgetName)) {
+                        QWidget *childWidget = widgetMap[childWidgetName];
+                        
+                        // 查找父控件
+                        QWidget *parentWidget = widgetMap[widgetName];
+                        
+                        if (parentWidget && childWidget) {
+                            // 将子控件添加到父控件
+                            childWidget->setParent(parentWidget);
+                            qDebug() << "Added widget" << childWidgetName << "to parent" << widgetName;
+                        } else {
+                            qDebug() << "Warning: Could not add widget" << childWidgetName << "to parent" << widgetName;
+                            if (!parentWidget) {
+                                qDebug() << "  Parent widget" << widgetName << "not found in widgetMap";
+                            }
+                            if (!childWidget) {
+                                qDebug() << "  Child widget" << childWidgetName << "not found in widgetMap";
+                            }
+                        }
                     }
-                    targetWidget = tabWidget->widget(tabIndex);
-                    break;
+                }
+                
+                // 处理TabWidget的页
+                QDomElement tabElem = itemElem.firstChildElement("widget");
+                if (widgetType == "QTabWidget" && !tabElem.isNull()) {
+                    QString tabName = tabElem.attribute("name");
+                    
+                    // 查找TabWidget
+                    if (widgetMap.contains(widgetName)) {
+                        QTabWidget *tabWidget = qobject_cast<QTabWidget*>(widgetMap[widgetName]);
+                        
+                        if (tabWidget && widgetMap.contains(tabName)) {
+                            QWidget *tabPage = widgetMap[tabName];
+                            
+                            // 查找Tab页标题
+                            QDomNodeList attributes = tabElem.childNodes();
+                            for (int l = 0; l < attributes.size(); ++l) {
+                                QDomNode attrNode = attributes.at(l);
+                                if (attrNode.isElement()) {
+                                    QDomElement attrElem = attrNode.toElement();
+                                    if (attrElem.tagName() == "attribute" && attrElem.attribute("name") == "title") {
+                                        QDomNode stringNode = attrElem.firstChildElement("string");
+                                        if (!stringNode.isNull()) {
+                                            QString tabTitle = stringNode.toElement().text();
+                                            tabWidget->addTab(tabPage, tabTitle);
+                                            qDebug() << "Added tab page" << tabName << "to TabWidget" << widgetName << "with title:" << tabTitle;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-
-        // 将控件添加到编辑区
-        addWidgetToEditArea(item, targetWidget);
-        qDebug() << "Widget" << i << "added to edit area";
+    }
+    
+    // 最后，将centralWidget的所有子控件添加到编辑区
+    if (widgetMap.contains("centralWidget")) {
+        QWidget *centralWidget = widgetMap["centralWidget"];
+        QList<QWidget*> children = centralWidget->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
+        
+        for (QWidget *child : children) {
+            if (widgetMap.values().contains(child)) {
+                // 将控件添加到编辑区
+                child->setParent(m_editAreaWidget);
+                qDebug() << "Added centralWidget child" << child->objectName() << "to edit area";
+            }
+        }
     }
     qDebug() << "Layout loading completed. Total widgets loaded:" << m_widgetItemMap.size();
     

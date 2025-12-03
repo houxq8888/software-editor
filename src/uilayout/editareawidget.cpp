@@ -1,4 +1,5 @@
 #include "editareawidget.h"
+#include <QMimeData>
 
 EditAreaWidget::EditAreaWidget(QWidget *parent)
     : QWidget{parent}
