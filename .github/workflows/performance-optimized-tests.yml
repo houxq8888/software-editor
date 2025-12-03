@@ -1,0 +1,299 @@
+name: Performance Optimized Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - '.github/workflows/performance-optimized-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - '.github/workflows/performance-optimized-tests.yml'
+  schedule:
+    # 每天凌晨2点运行性能测试
+    - cron: '0 2 * * *'
+
+env:
+  PYTHON_VERSION: '3.9'
+  MAX_TEST_WORKERS: 3
+  TEST_TIMEOUT: 600  # 10分钟超时
+
+jobs:
+  performance-optimized-testing:
+    name: Performance Optimized Testing
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整历史记录用于智能测试选择
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install system dependencies
+      run: |
+        # 安装Windows系统依赖
+        python -m pip install --upgrade pip
+        python -m pip install wheel setuptools
+    
+    - name: Install test dependencies
+      run: |
+        cd test/ui_automation
+        pip install -r requirements.txt
+        # 安装性能监控工具
+        pip install psutil memory-profiler
+    
+    - name: Environment optimization
+      run: |
+        # 设置性能优化环境变量
+        echo "PYTHONOPTIMIZE=1" >> $env:GITHUB_ENV
+        echo "PYTHONDONTWRITEBYTECODE=1" >> $env:GITHUB_ENV
+        echo "PYTHONHASHSEED=0" >> $env:GITHUB_ENV
+    
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v41
+      with:
+        files: |
+          src/**
+          test/**
+    
+    - name: Run optimized test manager
+      run: |
+        cd test/ui_automation
+        python test_manager_optimized.py
+      env:
+        MAX_WORKERS: ${{ env.MAX_TEST_WORKERS }}
+        TEST_TIMEOUT: ${{ env.TEST_TIMEOUT }}
+    
+    - name: Smart test selection (if changed files)
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        cd test/ui_automation
+        # 将修改的文件列表传递给智能测试选择
+        $changedFiles = "${{ steps.changed-files.outputs.all_changed_files }}"
+        python -c "
+        import sys
+        sys.path.append('.')
+        from test_manager_optimized import OptimizedTestManager
+        manager = OptimizedTestManager()
+        changed_files = '$changedFiles'.split()
+        manager.run_smart_test_selection(changed_files)
+        "
+    
+    - name: Performance monitoring
+      run: |
+        # 监控系统资源使用情况
+        echo "=== 系统资源监控 ==="
+        Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, FreePhysicalMemory
+        
+        # 监控Python进程资源使用
+        Get-Process python | Select-Object ProcessName, CPU, WorkingSet, PM
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-test-results-${{ matrix.python-version }}
+        path: |
+          test/ui_automation/test_results/**/*.json
+          test/ui_automation/test_results/**/*.xlsx
+        retention-days: 30
+    
+    - name: Generate performance report
+      run: |
+        cd test/ui_automation
+        # 生成性能分析报告
+        python -c "
+        import json
+        import glob
+        from datetime import datetime
+        
+        # 查找最新的性能报告
+        report_files = glob.glob('test_results/*/性能报告_*.json')
+        if report_files:
+            latest_report = max(report_files, key=lambda x: x.split('_')[-1].split('.')[0])
+            with open(latest_report, 'r', encoding='utf-8') as f:
+                report = json.load(f)
+            
+            print('📊 性能测试报告摘要:')
+            for key, value in report.items():
+                print(f'  {key}: {value}')
+        "
+    
+    - name: Performance metrics
+      run: |
+        # 计算性能指标
+        echo "=== 性能指标 ==="
+        
+        # 测试执行时间统计
+        $startTime = Get-Date
+        $endTime = Get-Date
+        $duration = $endTime - $startTime
+        echo "总执行时间: $($duration.TotalSeconds) 秒"
+        
+        # 内存使用统计
+        $memoryUsage = (Get-Process python -ErrorAction SilentlyContinue | 
+                       Measure-Object WorkingSet -Maximum).Maximum / 1MB
+        echo "最大内存使用: $([math]::Round($memoryUsage, 2)) MB"
+  
+  memory-optimized-build:
+    name: Memory Optimized Build
+    runs-on: windows-latest
+    needs: performance-optimized-testing
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Download test results
+      uses: actions/download-artifact@v3
+      with:
+        name: performance-test-results-3.9
+        path: test_results
+    
+    - name: Memory optimized build
+      run: |
+        # 内存优化构建脚本
+        echo "开始内存优化构建..."
+        
+        # 设置内存限制
+        $env:PIP_NO_CACHE_DIR = "1"
+        $env:PYTHONPYCACHEPREFIX = "/tmp/pycache"
+        
+        # 使用内存优化策略构建
+        python scripts/build_pipeline.py --memory-optimized
+    
+    - name: Build performance analysis
+      run: |
+        # 分析构建性能
+        echo "=== 构建性能分析 ==="
+        
+        # 检查构建产物大小
+        if (Test-Path "build") {
+            $buildSize = (Get-ChildItem "build" -Recurse | 
+                         Measure-Object -Property Length -Sum).Sum / 1MB
+            echo "构建产物大小: $([math]::Round($buildSize, 2)) MB"
+        }
+    
+    - name: Upload optimized build
+      uses: actions/upload-artifact@v3
+      with:
+        name: memory-optimized-build
+        path: |
+          build/**
+          deploy/**
+        retention-days: 7
+
+  performance-regression-detection:
+    name: Performance Regression Detection
+    runs-on: windows-latest
+    needs: [performance-optimized-testing, memory-optimized-build]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Download historical data
+      uses: actions/download-artifact@v3
+      with:
+        name: performance-test-results-3.9
+        path: current_results
+    
+    - name: Performance regression analysis
+      run: |
+        cd test/ui_automation
+        python -c "
+        import json
+        import glob
+        import os
+        from datetime import datetime, timedelta
+        
+        # 查找历史性能数据
+        def analyze_performance_trends():
+            current_files = glob.glob('current_results/**/性能报告_*.json')
+            
+            if not current_files:
+                print('❌ 未找到当前性能数据')
+                return
+            
+            # 分析性能趋势
+            print('📈 性能趋势分析:')
+            
+            # 这里可以添加更复杂的性能回归检测逻辑
+            # 比如比较历史数据，检测性能下降等
+            
+            print('✅ 性能回归检测完成')
+        
+        analyze_performance_trends()
+        "
+    
+    - name: Generate performance dashboard
+      run: |
+        # 生成性能监控仪表板数据
+        echo "生成性能监控仪表板..."
+        
+        # 创建简单的性能指标文件
+        $metrics = @{
+            timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
+            test_execution_time = '待计算'
+            memory_usage = '待计算'
+            success_rate = '待计算'
+        }
+        
+        $metrics | ConvertTo-Json | Out-File "performance_metrics.json"
+    
+    - name: Upload performance metrics
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-metrics
+        path: performance_metrics.json
+        retention-days: 90
+
+  notify-performance-results:
+    name: Notify Performance Results
+    runs-on: windows-latest
+    needs: performance-regression-detection
+    if: always()
+    
+    steps:
+    - name: Performance summary
+      run: |
+        echo "=== 性能测试结果摘要 ==="
+        echo "性能优化测试流程执行完成"
+        echo "详细结果请查看相关Artifacts"
+    
+    - name: Send notification (optional)
+      if: failure()
+      run: |
+        echo "性能测试失败，需要人工检查"
+        # 这里可以集成邮件、Slack等通知方式

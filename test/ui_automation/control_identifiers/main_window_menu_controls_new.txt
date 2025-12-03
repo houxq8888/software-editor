@@ -1,0 +1,189 @@
+Control Identifiers:
+
+MainWindow - '产品编辑器 - 新建 *'    (460, 120, 1460, 920)
+["'产品编辑器 - 新建 *'", 'MainWindow']
+child_window(title="产品编辑器 - 新建 *", auto_id="QApplication.MainWindow", control_type="Unknown")
+   | 
+   |  - ''    (476, 92, 1460, 120)
+   | ["''", '']
+   | child_window(control_type="Unknown")
+      | 
+      |  - '系统'    (460, 97, 482, 119)
+      | ["'系统'", '', "'系统'"]
+      | child_window(title="系统", auto_id="MenuBar", control_type="Unknown")
+         | 
+         |  - '系统'    (460, 97, 482, 119)
+         | ["'系统'", '']
+         | child_window(title="系统", control_type="Unknown")
+      | 
+      |  - '最小化'    (1321, 90, 1368, 120)
+      | ["'最小化'", '']
+      | child_window(title="最小化", control_type="Unknown")
+      | 
+      |  - '最大化'    (1368, 90, 1414, 120)
+      | ["'最大化'", '']
+      | child_window(title="最大化", control_type="Unknown")
+      | 
+      |  - '关闭'    (1414, 90, 1461, 120)
+      | ["'关闭'", '']
+      | child_window(title="关闭", control_type="Unknown")
+   | 
+   | QWidget - ''    (503, 141, 1460, 900)
+   | ["''", 'QWidget', "'QWidget'"]
+   | child_window(auto_id="QApplication.MainWindow.centralWidget", control_type="Unknown")
+      | 
+      | QTabWidget - ''    (512, 150, 1451, 827)
+      | ["''", 'QTabWidget', "'QTabWidget'"]
+      | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget", control_type="Unknown")
+         | 
+         | QStackedWidget - ''    (514, 174, 1447, 823)
+         | ["''", 'QStackedWidget', "'QStackedWidget'"]
+         | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget", control_type="Unknown")
+            | 
+            | QWidget - ''    (514, 174, 1447, 823)
+            | ["''", 'QWidget', "'QWidget'"]
+            | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab", control_type="Unknown")
+               | 
+               | QGroupBox - '产品基本信息'    (523, 183, 1438, 347)
+               | ["'产品基本信息'", 'QGroupBox', "'产品基本信息QGroupBox'"]
+               | child_window(title="产品基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox", control_type="Unknown")
+                  | 
+                  | QLabel - '产品名称：'    (533, 208, 593, 229)
+                  | ["'产品名称：'", 'QLabel', "'产品名称：QLabel'"]
+                  | child_window(title="产品名称：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.nameLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 208, 1428, 229)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.nameLineEdit", control_type="Unknown")
+                  | 
+                  | QLabel - '版本：'    (533, 235, 593, 256)
+                  | ["'版本：'", 'QLabel', "'版本：QLabel'"]
+                  | child_window(title="版本：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.versionLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 235, 1428, 256)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.versionLineEdit", control_type="Unknown")
+                  | 
+                  | QLabel - '分类：'    (533, 262, 593, 283)
+                  | ["'分类：'", 'QLabel', "'分类：QLabel'"]
+                  | child_window(title="分类：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.categoryLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 262, 1428, 283)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.categoryLineEdit", control_type="Unknown")
+                  | 
+                  | QLabel - '开发者：'    (533, 289, 593, 310)
+                  | ["'开发者：'", 'QLabel', "'开发者：QLabel'"]
+                  | child_window(title="开发者：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.developerLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 289, 1428, 310)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.developerLineEdit", control_type="Unknown")
+                  | 
+                  | QLabel - '网站：'    (533, 316, 593, 337)
+                  | ["'网站：'", 'QLabel', "'网站：QLabel'"]
+                  | child_window(title="网站：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.websiteLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 316, 1428, 337)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox.websiteLineEdit", control_type="Unknown")
+               | 
+               | QGroupBox - '文件设置'    (523, 353, 1438, 440)
+               | ["'文件设置'", 'QGroupBox', "'文件设置QGroupBox'"]
+               | child_window(title="文件设置", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2", control_type="Unknown")
+                  | 
+                  | QLabel - '图标路径：'    (533, 378, 593, 401)
+                  | ["'图标路径：'", 'QLabel', "'图标路径：QLabel'"]
+                  | child_window(title="图标路径：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconPathLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 379, 1347, 400)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconPathLineEdit", control_type="Unknown")
+                  | 
+                  | QPushButton - '浏览...'    (1353, 378, 1428, 401)
+                  | ["'浏览...'", 'QPushButton', "'浏览...QPushButton'"]
+                  | child_window(title="浏览...", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.iconBrowseButton", control_type="Unknown")
+                  | 
+                  | QLabel - '截图路径：'    (533, 407, 593, 430)
+                  | ["'截图路径：'", 'QLabel', "'截图路径：QLabel'"]
+                  | child_window(title="截图路径：", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotPathLabel", control_type="Unknown")
+                  | 
+                  | QLineEdit - ''    (599, 408, 1347, 429)
+                  | ["''", 'QLineEdit', "'QLineEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotPathLineEdit", control_type="Unknown")
+                  | 
+                  | QPushButton - '浏览...'    (1353, 407, 1428, 430)
+                  | ["'浏览...'", 'QPushButton', "'浏览...QPushButton'"]
+                  | child_window(title="浏览...", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_2.screenshotBrowseButton", control_type="Unknown")
+               | 
+               | QGroupBox - '产品描述'    (523, 446, 1438, 814)
+               | ["'产品描述'", 'QGroupBox', "'产品描述QGroupBox'"]
+               | child_window(title="产品描述", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3", control_type="Unknown")
+                  | 
+                  | QTextEdit - ''    (533, 471, 1428, 804)
+                  | ["''", 'QTextEdit', "'QTextEdit'"]
+                  | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3.descriptionTextEdit", control_type="Unknown")
+                     | 
+                     | QWidget - ''    (534, 472, 1427, 803)
+                     | ["''", 'QWidget', "'QWidget'"]
+                     | child_window(auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_stackedwidget.basicInfoTab.groupBox_3.descriptionTextEdit.qt_scrollarea_viewport", control_type="Unknown")
+         | 
+         | QTabBar - '基本信息'    (512, 150, 656, 173)
+         | ["'基本信息'", 'QTabBar', "'基本信息QTabBar'"]
+         | child_window(title="基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="Unknown")
+            | 
+            |  - '基本信息'    (512, 150, 584, 173)
+            | ["'基本信息'", '', "'基本信息'"]
+            | child_window(title="基本信息", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="Unknown")
+            | 
+            |  - '功能特性'    (584, 150, 656, 173)
+            | ["'功能特性'", '', "'功能特性'"]
+            | child_window(title="功能特性", auto_id="QApplication.MainWindow.centralWidget.tabWidget.qt_tabwidget_tabbar", control_type="Unknown")
+      | 
+      | QGroupBox - '操作'    (512, 833, 1451, 891)
+      | ["'操作'", 'QGroupBox', "'操作QGroupBox'"]
+      | child_window(title="操作", auto_id="QApplication.MainWindow.centralWidget.groupBox_5", control_type="Unknown")
+         | 
+         | QPushButton - '保存'    (522, 858, 824, 881)
+         | ["'保存'", 'QPushButton', "'保存QPushButton'"]
+         | child_window(title="保存", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.saveButton", control_type="Unknown")
+         | 
+         | QPushButton - '加载'    (830, 858, 1133, 881)
+         | ["'加载'", 'QPushButton', "'加载QPushButton'"]
+         | child_window(title="加载", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.loadButton", control_type="Unknown")
+         | 
+         | QPushButton - '导出'    (1139, 858, 1441, 881)
+         | ["'导出'", 'QPushButton', "'导出QPushButton'"]
+         | child_window(title="导出", auto_id="QApplication.MainWindow.centralWidget.groupBox_5.exportButton", control_type="Unknown")
+   | 
+   | QMenuBar - ''    (460, 120, 1460, 141)
+   | ["''", 'QMenuBar', "'QMenuBar'"]
+   | child_window(auto_id="QApplication.MainWindow.menuBar", control_type="Unknown")
+      | 
+      | QAction - '文件'    (460, 120, 500, 140)
+      | ["'文件'", 'QAction', "'文件QAction'"]
+      | child_window(title="文件", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="Unknown")
+      | 
+      | QAction - 'UI布局'    (500, 120, 553, 140)
+      | ["'UI布局'", 'QAction', "'UI布局QAction'"]
+      | child_window(title="UI布局", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="Unknown")
+      | 
+      | QAction - '帮助'    (553, 120, 593, 140)
+      | ["'帮助'", 'QAction', "'帮助QAction'"]
+      | child_window(title="帮助", auto_id="QApplication.MainWindow.menuBar.QAction", control_type="Unknown")
+   | 
+   | QToolBar - ''    (460, 141, 503, 900)
+   | ["''", 'QToolBar', "'QToolBar'"]
+   | child_window(auto_id="QApplication.MainWindow.mainToolBar", control_type="Unknown")
+      | 
+      | QToolButton - '新建'    (462, 151, 501, 172)
+      | ["'新建'", 'QToolButton', "'新建QToolButton'"]
+      | child_window(title="新建", auto_id="QApplication.MainWindow.mainToolBar.QToolButton", control_type="Unknown")
+   | 
+   | QStatusBar - '就绪'    (460, 900, 1460, 920)
+   | ["'就绪'", 'QStatusBar', "'就绪QStatusBar'"]
+   | child_window(title="就绪", auto_id="QApplication.MainWindow.statusBar", control_type="Unknown")
+      | 
+      | QSizeGrip - ''    (1447, 907, 1460, 920)
+      | ["''", 'QSizeGrip', "'QSizeGrip'"]
+      | child_window(auto_id="QApplication.MainWindow.statusBar.QSizeGrip", control_type="Unknown")
