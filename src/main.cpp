@@ -1,4 +1,3 @@
-#include <QApplication>
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
@@ -9,9 +8,11 @@
 #include <QDir>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QtCore/qlibraryinfo.h>
+#include <QtCore/qoperatingsystemversion.h>
 using namespace Qt;
 #include "mainwindow.h"
-#include "uilayoutwindow.h"
+#include "designer/qdesigner.h"
 
 // 设置PowerShell编码配置
 void setupPowerShellEncoding() {
@@ -80,8 +81,20 @@ void loadApplicationConfig() {
     qDebug() << "应用程序配置加载完成";
 }
 
-int main(int argc, char *argv[]) { 
-    QApplication app(argc, argv);
+static const char rhiBackEndVar[] = "QSG_RHI_BACKEND";
+
+int main(int argc, char *argv[]) {
+    // Enable the QWebEngineView, QQuickWidget plugins on Windows.
+    if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::Windows
+        && !qEnvironmentVariableIsSet(rhiBackEndVar)) {
+        qputenv(rhiBackEndVar, "gl");
+    }
+
+    // required for QWebEngineView
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+
+    // 先实例化QApplication，确保applicationDirPath()可以正常调用
+    QDesigner app(argc, argv);
     
     // 设置应用程序属性
     QCoreApplication::setApplicationName("软件编辑器");
@@ -106,9 +119,15 @@ int main(int argc, char *argv[]) {
     
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
-    UILayoutWindow window;
-    // MainWindow window;
-    window.resize(1000, 800);
-    window.show();
-    return app.exec();
+    switch (app.parseCommandLineArguments()) {
+    case QDesigner::ParseArgumentsSuccess:
+        break;
+    case QDesigner::ParseArgumentsError:
+        return 1;
+    case QDesigner::ParseArgumentsHelpRequested:
+        return 0;
+    }
+    QGuiApplication::setQuitOnLastWindowClosed(false);
+
+    return QApplication::exec();
 }

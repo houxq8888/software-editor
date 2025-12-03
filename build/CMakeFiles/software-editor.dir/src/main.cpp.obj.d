@@ -1,9 +1,8 @@
 CMakeFiles/software-editor.dir/src/main.cpp.obj: \
- D:\virtualMachine\github\software-editor\src\main.cpp \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QApplication \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
+ D:\virtualMachine\github\20251202\software-editor-08\src\main.cpp \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qglobal.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -150,14 +149,6 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtresource.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qttranslation.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qversiontagging.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtgui-config.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qchar.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcompare.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstdlibdetection.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcomparehelpers.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/q20type_traits.h \
@@ -188,6 +179,10 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/vector.tcc \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/compare \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qfloat16.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qhashfunctions.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qchar.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringview.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qrefcount.h \
@@ -289,34 +284,29 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringbuilder.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringconverter.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstringconverter_base.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qhashfunctions.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/numeric \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_numeric.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qiterator.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearraylist.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qmath.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qalgorithms.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qstringmatcher.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qscopedpointer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevicebase.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcontiguouscache.h \
+ D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qshareddata.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer_impl.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmetatype.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatastream.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevicebase.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qfloat16.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qmath.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtformat_impl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qscopedpointer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qiterable.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmetacontainer.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcontainerinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtaggedpointer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qscopeguard.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/list \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_list.h \
@@ -325,69 +315,35 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tree.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_map.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multimap.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qobject_impl.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qbindingstorage.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/chrono \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/chrono.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ratio \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs_win.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q23utility.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q20utility.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qmargins.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpixmap.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qrgb.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qrgba64.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qshareddata.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qimage.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpixelformat.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpolygon.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qregion.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qspan.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cassert \
- D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qline.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qtextstream.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qcontiguouscache.h \
- D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsharedpointer_impl.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_set.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multiset.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_set \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_set.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qiterator.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbytearraylist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qstringmatcher.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qshareddata_impl.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qset.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qhash.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qvarlengtharray.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QDebug \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QFile \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfile.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qfiledevice.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qiodevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qobject_impl.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbindingstorage.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qspan.h \
+ D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cassert \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q20iterator.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/filesystem \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_fwd.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fs_path.h \
@@ -423,12 +379,40 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDateTime \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdatetime.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcalendar.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlocale.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdebug.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q23utility.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/q20utility.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMainWindow \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiglobal.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtgui-config.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtguiexports.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qmargins.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qkeysequence.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qicon.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpixmap.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpaintdevice.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qcolor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qrgb.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qrgba64.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qimage.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpixelformat.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qpolygon.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qregion.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qline.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qpalette.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qbrush.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfont.h \
@@ -437,10 +421,21 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfontinfo.h \
  D:/Qt/6.9.1/mingw_64/include/QtGui/qfontvariableaxis.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qsizepolicy.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qcursor.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qbitmap.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QSettings \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qsettings.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QCoreApplication \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreevent.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qbasictimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qeventloop.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qdeadlinetimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qelapsedtimer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qnativeinterface.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qcoreapplication.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QDir \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qdir.h \
@@ -452,7 +447,11 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcess \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qprocess.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QProcessEnvironment \
- D:/virtualMachine/github/software-editor/src/product/mainwindow.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qlibraryinfo.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qversionnumber.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qtyperevision.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qoperatingsystemversion.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/product/mainwindow.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QListWidget \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistwidget.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlistview.h \
@@ -491,7 +490,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QTimer \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qtimer.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/product/product.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QString \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qstring.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
@@ -500,7 +499,7 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qjsonarray.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QUuid \
  D:/Qt/6.9.1/mingw_64/include/QtCore/quuid.h \
- D:/virtualMachine/github/software-editor/src/package/packagemanager.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/package/packagemanager.h \
  D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
  D:/Qt/6.9.1/mingw_64/include/QtCore/qobject.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialog \
@@ -535,157 +534,14 @@ CMakeFiles/software-editor.dir/src/main.cpp.obj: \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcheckbox.h \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/QComboBox \
  D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
- D:/virtualMachine/github/software-editor/src/package/ipackageservice.h \
- D:/virtualMachine/github/software-editor/src/package/packageconfig.h \
- D:/virtualMachine/github/software-editor/src/product/product.h \
- D:/virtualMachine/github/software-editor/src/product/productconfigmanager.h \
- D:/virtualMachine/github/software-editor/src/product/productstate.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uilayoutwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTreeWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreewidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreeview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtreewidgetitemiterator.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QPlainTextEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qplaintextedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qabstracttextdocumentlayout.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtextlayout.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qeventpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvector2d.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qvectornd.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpointingdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qinputdevice.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QList \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QObject \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qrect.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSize \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qsize.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSizeF \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QTransform \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qtransform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qscreen_platform.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qglyphrun.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qrawfont.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qfontdatabase.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFontComboBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qfontcombobox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcombobox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpinBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qspinbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDoubleSpinBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSlider \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qslider.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QScrollBar \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollbar.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QKeySequenceEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qkeysequenceedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QSpacerItem \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayoutitem.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsview.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMdiArea \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmdiarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QStackedWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qstackedwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QScrollArea \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qscrollarea.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDialogButtonBox \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QColumnView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcolumnview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QUndoView \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qundoview.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTimeEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdatetimeedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDateEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTextBrowser \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtextbrowser.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLCDNumber \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlcdnumber.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDateTimeEdit \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QDial \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qdial.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDragEnterEvent \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qevent.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDropEvent \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QMimeData \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qmimedata.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QToolButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtoolbutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QCommandLinkButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qpushbutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QRadioButton \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qradiobutton.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QTabWidget \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qtabwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFormLayout \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qformlayout.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QLayout \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlayout.h \
- D:/Qt/6.9.1/mingw_64/include/QtXml/QDomDocument \
- D:/Qt/6.9.1/mingw_64/include/QtXml/qdom.h \
- D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlglobal.h \
- D:/Qt/6.9.1/mingw_64/include/QtXml/qtxml-config.h \
- D:/Qt/6.9.1/mingw_64/include/QtXml/qtxmlexports.h \
- D:/Qt/6.9.1/mingw_64/include/QtXml/QDomElement \
- D:/Qt/6.9.1/mingw_64/include/QtXml/QDomNodeList \
- D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
- D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
- D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QWidget \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QSurfaceFormat \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qsurfaceformat.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qopengl.h \
- D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/GL/gl.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qopenglext.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QFrame \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qframe.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QInputDialog \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qinputdialog.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qlineedit.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QStringList \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qstringlist.h \
- D:/virtualMachine/github/software-editor/src/uilayout/editareawidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QPainter \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainter.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QRect \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QMouseEvent \
- D:/virtualMachine/github/software-editor/src/uilayout/previewwindow.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QMap \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qmap.h \
- D:/virtualMachine/github/software-editor/src/uilayout/customtreewidget.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QDrag \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qdrag.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactioneditor.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsScene \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QGraphicsItem \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qgraphicsitem.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qpainterpath.h \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/QMenu \
- D:/Qt/6.9.1/mingw_64/include/QtWidgets/qmenu.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QAction \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qaction.h \
- D:/Qt/6.9.1/mingw_64/include/QtGui/QUndoStack \
- D:/Qt/6.9.1/mingw_64/include/QtGui/qundostack.h \
- D:/virtualMachine/github/software-editor/src/uilayout/eventactionmodel.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QVariant \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qvariant.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterfacemanager.h \
- D:/virtualMachine/github/software-editor/src/uilayout/uiinterface.h \
- D:/virtualMachine/github/software-editor/src/uilayout/layoutitem.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QPoint \
- D:/Qt/6.9.1/mingw_64/include/QtCore/qpoint.h \
- D:/Qt/6.9.1/mingw_64/include/QtCore/QSize
+ D:/virtualMachine/github/20251202/software-editor-08/src/package/ipackageservice.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/package/packageconfig.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/product/product.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/product/productconfigmanager.h \
+ D:/virtualMachine/github/20251202/software-editor-08/src/product/productstate.h \
+ D:\virtualMachine\github\20251202\software-editor-08\src\designer/qdesigner.h \
+ D:/Qt/6.9.1/mingw_64/include/QtCore/qpointer.h \
+ D:/Qt/6.9.1/mingw_64/include/QtWidgets/qapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qinputmethod.h \
+ D:/Qt/6.9.1/mingw_64/include/QtGui/qguiapplication_platform.h

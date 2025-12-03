@@ -1,4 +1,5 @@
 #include "editareawidget.h"
+#include <QMimeData>
 
 EditAreaWidget::EditAreaWidget(QWidget *parent)
     : QWidget{parent}
@@ -170,7 +171,7 @@ void EditAreaWidget::dropEvent(QDropEvent *event)
     // 获取拖放的文本数据
     QString widgetType = event->mimeData()->text();
     // 获取拖放的位置
-    QPoint pos = event->pos();
+    QPoint pos = event->position().toPoint();
     // 发送控件拖放信号
     emit widgetDropped(widgetType, pos);
     // 接受拖放动作
