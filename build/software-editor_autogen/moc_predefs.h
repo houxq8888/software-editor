@@ -257,6 +257,7 @@
 #define __cpp_digit_separators 201309L
 #define __GCC_ASM_FLAG_OUTPUTS__ 1
 #define __UINT32_TYPE__ unsigned int
+#define QT_UIPLUGIN_LIB 1
 #define __BFLT16_HAS_QUIET_NAN__ 1
 #define __FLT_RADIX__ 2
 #define __INT_LEAST16_TYPE__ short int
@@ -302,6 +303,7 @@
 #define __INT_LEAST16_MAX__ 0x7fff
 #define __FLT16_NORM_MAX__ 6.55040000000000000000000000000000000e+4F16
 #define __DEC64_MANT_DIG__ 16
+#define QT_NETWORK_LIB 1
 #define __FLT32_DENORM_MIN__ 1.40129846432481707092372958328991613e-45F32
 #define __SIG_ATOMIC_WIDTH__ 32
 #define __INT_LEAST64_TYPE__ long long int
@@ -415,6 +417,7 @@
 #define __DBL_NORM_MAX__ double(1.79769313486231570814527423731704357e+308L)
 #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
 #define __MINGW64__ 1
+#define QT_DESIGNER_LIB 1
 #define __GCC_DESTRUCTIVE_SIZE 64
 #define __INTMAX_WIDTH__ 64
 #define __cpp_runtime_arrays 198712L
@@ -425,6 +428,7 @@
 #define WINNT 1
 #define __FLT_DENORM_MIN__ 1.40129846432481707092372958328991613e-45F
 #define __FLT128_IS_IEC_60559__ 1
+#define QT_DESIGNER_STATIC 1
 #define __INT8_MAX__ 0x7f
 #define __LONG_WIDTH__ 32
 #define __DBL_MIN__ double(2.22507385850720138309023271733240406e-308L)

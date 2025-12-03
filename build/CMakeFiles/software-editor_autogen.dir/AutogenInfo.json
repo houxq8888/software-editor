@@ -1,53 +1,43 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen",
-	"CMAKE_BINARY_DIR" : "D:/virtualMachine/github/software-editor-06/build",
-	"CMAKE_CURRENT_BINARY_DIR" : "D:/virtualMachine/github/software-editor-06/build",
-	"CMAKE_CURRENT_SOURCE_DIR" : "D:/virtualMachine/github/software-editor-06",
-	"CMAKE_EXECUTABLE" : "D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/bin/cmake.exe",
+	"BUILD_DIR" : "D:/virtualMachine/github/20251202/software-editor-08/build/software-editor_autogen",
+	"CMAKE_BINARY_DIR" : "D:/virtualMachine/github/20251202/software-editor-08/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "D:/virtualMachine/github/20251202/software-editor-08/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "D:/virtualMachine/github/20251202/software-editor-08",
+	"CMAKE_EXECUTABLE" : "D:/Qt/Tools/CMake_64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"D:/virtualMachine/github/software-editor-06/CMakeLists.txt",
-		"D:/virtualMachine/github/software-editor-06/build/CMakeFiles/4.1.3/CMakeSystem.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeSystemSpecificInitialize.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows-Initialize.cmake",
-		"D:/virtualMachine/github/software-editor-06/build/CMakeFiles/4.1.3/CMakeCCompiler.cmake",
-		"D:/virtualMachine/github/software-editor-06/build/CMakeFiles/4.1.3/CMakeCXXCompiler.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeSystemSpecificInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeGenericSystem.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeInitializeConfigs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/WindowsPaths.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeLanguageInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/MSVC-C.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/CMakeCommonCompilerMacros.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows-MSVC-C.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake",
-		"D:/virtualMachine/github/software-editor-06/build/CMakeFiles/4.1.3/CMakeRCCompiler.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeRCInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCommonLanguageInclude.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CMakeCLinkerInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CMakeCommonLinkerInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Linker/MSVC-C.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Linker/MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC-C.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCXXInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeLanguageInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/MSVC-CXX.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Compiler/CMakeCommonCompilerMacros.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows-MSVC-CXX.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCommonLanguageInclude.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CMakeCXXLinkerInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CMakeCommonLinkerInformation.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Linker/MSVC-CXX.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Linker/MSVC.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC-CXX.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Platform/Linker/Windows-MSVC.cmake",
+		"D:/virtualMachine/github/20251202/software-editor-08/CMakeLists.txt",
+		"D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/3.30.5/CMakeSystem.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-Initialize.cmake",
+		"D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake",
+		"D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-C.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-C.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake",
+		"D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/3.30.5/CMakeRCCompiler.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-windres.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-C-ABI.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-CXX.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX-ABI.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6ConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6ConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6Config.cmake",
@@ -58,13 +48,13 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6Targets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6VersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtFeature.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckCXXCompilerFlag.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckCompilerFlag.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckFlagCommonConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckCXXSourceCompiles.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXCompilerFlag.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckCompilerFlag.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckFlagCommonConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtFeatureCommon.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtPublicAndroidHelpers.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtPublicAppleHelpers.cmake",
@@ -94,28 +84,28 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtPublicToolHelpers.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/QtPublicWindowsHelpers.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/Qt6Dependencies.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindThreads.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckLibraryExists.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckIncludeFile.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckCSourceCompiles.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindThreads.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckLibraryExists.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckIncludeFile.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/FindWrapAtomic.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CheckCXXSourceCompiles.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXSourceCompiles.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake",
@@ -124,14 +114,14 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateVersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6EntryPointPrivate/Qt6EntryPointPrivateAdditionalTargetInfo.cmake",
@@ -143,35 +133,35 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CorePrivate/Qt6CorePrivateVersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreMacros.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/GNUInstallDirs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreVersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6GuiConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindVulkan.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindVulkan.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake",
@@ -186,59 +176,59 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateVersionlessAliasTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QGifPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QGifPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QGifPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QGifPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QICOPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QJpegPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgIconPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QSvgPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QTuioTouchPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QTuioTouchPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QTuioTouchPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QTuioTouchPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsDirect2DIntegrationPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsDirect2DIntegrationPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsDirect2DIntegrationPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsDirect2DIntegrationPluginAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsIntegrationPluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsIntegrationPluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsIntegrationPluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Gui/Qt6QWindowsIntegrationPluginAdditionalTargetInfo.cmake",
@@ -246,17 +236,17 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake",
@@ -264,12 +254,12 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake",
@@ -287,7 +277,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateAdditionalTargetInfo.cmake",
@@ -295,7 +285,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6WidgetsPlugins.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginAdditionalTargetInfo.cmake",
@@ -303,7 +293,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Xml/Qt6XmlTargets-relwithdebinfo.cmake",
@@ -311,7 +301,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6XmlPrivate/Qt6XmlPrivateAdditionalTargetInfo.cmake",
@@ -320,7 +310,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Test/Qt6TestTargets-relwithdebinfo.cmake",
@@ -328,7 +318,7 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6TestPrivate/Qt6TestPrivateAdditionalTargetInfo.cmake",
@@ -338,26 +328,26 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindVulkan.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindVulkan.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLPrivate/Qt6OpenGLPrivateAdditionalTargetInfo.cmake",
@@ -369,192 +359,1122 @@
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateConfigVersion.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateConfigVersionImpl.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateConfig.cmake",
-		"D:/ProgramData/miniconda3/Lib/site-packages/cmake/data/share/cmake-4.1/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateDependencies.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateTargets.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateAdditionalTargetInfo.cmake",
 		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgetsPrivate/Qt6OpenGLWidgetsPrivateVersionlessAliasTargets.cmake",
-		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake"
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfigVersion.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfigVersionImpl.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerDependencies.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfigVersion.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfigVersionImpl.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginDependencies.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6UiPlugin/Qt6UiPluginVersionlessAliasTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfigVersion.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfigVersionImpl.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateDependencies.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6DesignerPrivate/Qt6DesignerPrivateVersionlessAliasTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerPlugins.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QAxWidgetPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6QQuickWidgetPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Designer/Qt6DesignerVersionlessAliasTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfigVersion.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfigVersionImpl.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateConfigVersion.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateConfigVersionImpl.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateDependencies.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6NetworkPrivate/Qt6NetworkPrivateVersionlessAliasTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginConfig.cmake",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake",
+		"D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6Network/Qt6NetworkVersionlessAliasTargets.cmake"
 	],
-	"CMAKE_SOURCE_DIR" : "D:/virtualMachine/github/software-editor-06",
+	"CMAKE_SOURCE_DIR" : "D:/virtualMachine/github/20251202/software-editor-08",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "",
-	"DEP_FILE_RULE_NAME" : "",
+	"DEP_FILE" : "D:/virtualMachine/github/20251202/software-editor-08/build/software-editor_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "software-editor_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/ipackageservice.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractactioneditor.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractactioneditor.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractdialoggui_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractdialoggui_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractdnditem.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractdnditem.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformeditor.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformeditor.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformeditorplugin.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformeditorplugin.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindow.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformwindow.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowcursor.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformwindowcursor.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowmanager.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformwindowmanager.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowtool.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractformwindowtool.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractintegration.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractintegration.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractintrospection_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractintrospection_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractlanguage.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractlanguage.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractmetadatabase.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractmetadatabase.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractnewformwidget.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractnewformwidget.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractobjectinspector.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractobjectinspector.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractoptionspage.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractoptionspage.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractpromotioninterface.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractpromotioninterface.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractpropertyeditor.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractpropertyeditor.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractresourcebrowser.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractresourcebrowser.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractsettings.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractsettings.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetbox.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractwidgetbox.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetdatabase.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractwidgetdatabase.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetfactory.h",
+			"MU",
+			"DGOCUGXLIG/moc_abstractwidgetfactory.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/actioneditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_actioneditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/actionprovider_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_actionprovider_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/actionrepository_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_actionrepository_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/appfontdialog.h",
+			"MU",
+			"DGOCUGXLIG/moc_appfontdialog.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/assistantclient.h",
+			"MU",
+			"DGOCUGXLIG/moc_assistantclient.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/codedialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_codedialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/connectionedit_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_connectionedit_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/container.h",
+			"MU",
+			"DGOCUGXLIG/moc_container.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/csshighlighter_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_csshighlighter_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/designer_enums.h",
+			"MU",
+			"DGOCUGXLIG/moc_designer_enums.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/deviceprofile_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_deviceprofile_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/deviceskin/deviceskin_p.h",
+			"MU",
+			"3BTECUN7WS/moc_deviceskin_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/dialoggui_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_dialoggui_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/dynamicpropertysheet.h",
+			"MU",
+			"DGOCUGXLIG/moc_dynamicpropertysheet.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/extensionfactory_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_extensionfactory_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/extrainfo.h",
+			"MU",
+			"DGOCUGXLIG/moc_extrainfo.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/abstractfindwidget_p.h",
+			"MU",
+			"SP2YN2R5I4/moc_abstractfindwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/itemviewfindwidget_p.h",
+			"MU",
+			"SP2YN2R5I4/moc_itemviewfindwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/texteditfindwidget_p.h",
+			"MU",
+			"SP2YN2R5I4/moc_texteditfindwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/fontpanel/fontpanel_p.h",
+			"MU",
+			"NVUMXABL5A/moc_fontpanel_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/formlayoutmenu_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_formlayoutmenu_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/formwindowbase_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_formwindowbase_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/grid_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_grid_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/gridpanel_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_gridpanel_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/htmlhighlighter_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_htmlhighlighter_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/iconloader_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_iconloader_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/iconselector_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_iconselector_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/invisible_widget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_invisible_widget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/layout_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_layout_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/layoutdecoration.h",
+			"MU",
+			"DGOCUGXLIG/moc_layoutdecoration.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/layoutinfo_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_layoutinfo_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/mainwindow.h",
+			"MU",
+			"DGOCUGXLIG/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/membersheet.h",
+			"MU",
+			"DGOCUGXLIG/moc_membersheet.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/metadatabase_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_metadatabase_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/morphmenu_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_morphmenu_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newactiondialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_newactiondialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newform.h",
+			"MU",
+			"DGOCUGXLIG/moc_newform.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newformwidget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_newformwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/orderdialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_orderdialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/plaintexteditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_plaintexteditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/plugindialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_plugindialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/pluginmanager_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_pluginmanager_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/preferencesdialog.h",
+			"MU",
+			"DGOCUGXLIG/moc_preferencesdialog.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/previewconfigurationwidget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_previewconfigurationwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/previewmanager_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_previewmanager_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/promotionmodel_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_promotionmodel_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/promotiontaskmenu_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_promotiontaskmenu_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/propertylineedit_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_propertylineedit_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/propertysheet.h",
+			"MU",
+			"DGOCUGXLIG/moc_propertysheet.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_actions.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_actions.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_appearanceoptions.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_appearanceoptions.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_command2_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_command2_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_command_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_command_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_dnditem_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_dnditem_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_dockwidget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_dockwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formbuilder_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_formbuilder_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formeditorcommand_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_formeditorcommand_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindow.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_formwindow.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindowcommand_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_formwindowcommand_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindowmanager_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_formwindowmanager_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_introspection_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_introspection_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_membersheet_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_membersheet_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_menu_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_menu_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_menubar_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_menubar_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_objectinspector_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_objectinspector_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_pch.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_pch.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_promotion_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_promotion_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_promotiondialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_promotiondialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertycommand_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_propertycommand_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertyeditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_propertyeditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertysheet_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_propertysheet_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_qsettings_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_qsettings_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_server.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_server.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_settings.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_settings.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_stackedbox_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_stackedbox_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_tabwidget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_tabwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_taskmenu_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_taskmenu_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolbar_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_toolbar_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolbox_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_toolbox_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolwindow.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_toolwindow.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_utils_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_utils_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_widget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widgetbox_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_widgetbox_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widgetitem_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_widgetitem_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_workbench.h",
+			"MU",
+			"DGOCUGXLIG/moc_qdesigner_workbench.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qlayout_widget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qlayout_widget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qsimpleresource_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qsimpleresource_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtcolorbutton_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtcolorbutton_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtcolorline_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtcolorline_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientdialog_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientdialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradienteditor_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradienteditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientmanager_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientmanager_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopscontroller_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientstopscontroller_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopsmodel_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientstopsmodel_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopswidget_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientstopswidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientutils_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientutils_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientview_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientview_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientviewdialog_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientviewdialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientwidget_p.h",
+			"MU",
+			"U4MG5FFFQH/moc_qtgradientwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtbuttonpropertybrowser_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtbuttonpropertybrowser_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qteditorfactory_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qteditorfactory_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtgroupboxpropertybrowser_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtgroupboxpropertybrowser_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertybrowser_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtpropertybrowser_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertybrowserutils_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtpropertybrowserutils_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertymanager_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtpropertymanager_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qttreepropertybrowser_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qttreepropertybrowser_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtvariantproperty_p.h",
+			"MU",
+			"XCGWJYDJWP/moc_qtvariantproperty_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourceeditordialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qtresourceeditordialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourcemodel_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qtresourcemodel_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourceview_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_qtresourceview_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qttoolbardialog/qttoolbardialog_p.h",
+			"MU",
+			"3ONCHPE7TQ/moc_qttoolbardialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/rcc_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_rcc_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/richtexteditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_richtexteditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/saveformastemplate.h",
+			"MU",
+			"DGOCUGXLIG/moc_saveformastemplate.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/sdk_global.h",
+			"MU",
+			"DGOCUGXLIG/moc_sdk_global.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/selectsignaldialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_selectsignaldialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/shared_enums_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_shared_enums_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/shared_global_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_shared_global_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/shared_settings_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_shared_settings_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/sheet_delegate_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_sheet_delegate_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/signalslotdialog_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_signalslotdialog_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/spacer_widget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_spacer_widget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/stylesheeteditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_stylesheeteditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/taskmenu.h",
+			"MU",
+			"DGOCUGXLIG/moc_taskmenu.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/textpropertyeditor_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_textpropertyeditor_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/versiondialog.h",
+			"MU",
+			"DGOCUGXLIG/moc_versiondialog.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/widgetdatabase_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_widgetdatabase_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/widgetfactory_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_widgetfactory_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/zoomwidget_p.h",
+			"MU",
+			"DGOCUGXLIG/moc_zoomwidget_p.cpp",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/ipackageservice.h",
 			"MU",
 			"S6CCOCQX7P/moc_ipackageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packageconfig.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packageconfig.h",
 			"MU",
 			"S6CCOCQX7P/moc_packageconfig.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packagemanager.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packagemanager.h",
 			"MU",
 			"S6CCOCQX7P/moc_packagemanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packageservice.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packageservice.h",
 			"MU",
 			"S6CCOCQX7P/moc_packageservice.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/mainwindow.h",
-			"MU",
-			"SL43BO5AMI/moc_mainwindow.cpp",
-			null
-		],
-		[
-			"D:/virtualMachine/github/software-editor-06/src/product/product.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/product.h",
 			"MU",
 			"SL43BO5AMI/moc_product.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/productconfigmanager.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/productconfigmanager.h",
 			"MU",
 			"SL43BO5AMI/moc_productconfigmanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/productstate.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/productstate.h",
 			"MU",
 			"SL43BO5AMI/moc_productstate.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/customtreewidget.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/customtreewidget.h",
 			"MU",
 			"ETQFUQNEGR/moc_customtreewidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/editareawidget.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/editareawidget.h",
 			"MU",
 			"ETQFUQNEGR/moc_editareawidget.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/eventactioneditor.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/eventactioneditor.h",
 			"MU",
 			"ETQFUQNEGR/moc_eventactioneditor.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/eventactionmodel.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/eventactionmodel.h",
 			"MU",
 			"ETQFUQNEGR/moc_eventactionmodel.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/layoutitem.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/layoutitem.h",
 			"MU",
 			"ETQFUQNEGR/moc_layoutitem.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/previewwindow.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/previewwindow.h",
 			"MU",
 			"ETQFUQNEGR/moc_previewwindow.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uiinterface.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uiinterface.h",
 			"MU",
 			"ETQFUQNEGR/moc_uiinterface.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uiinterfacemanager.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uiinterfacemanager.h",
 			"MU",
 			"ETQFUQNEGR/moc_uiinterfacemanager.cpp",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uilayoutwindow.h",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uilayoutwindow.h",
 			"MU",
 			"ETQFUQNEGR/moc_uilayoutwindow.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/include",
-	"INCLUDE_DIR_Debug" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/include_Debug",
-	"INCLUDE_DIR_MinSizeRel" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/include_MinSizeRel",
-	"INCLUDE_DIR_RelWithDebInfo" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/include_RelWithDebInfo",
-	"INCLUDE_DIR_Release" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/include_Release",
-	"MOC_COMPILATION_FILE" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/mocs_compilation.cpp",
-	"MOC_COMPILATION_FILE_Debug" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/mocs_compilation_Debug.cpp",
-	"MOC_COMPILATION_FILE_MinSizeRel" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/mocs_compilation_MinSizeRel.cpp",
-	"MOC_COMPILATION_FILE_RelWithDebInfo" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/mocs_compilation_RelWithDebInfo.cpp",
-	"MOC_COMPILATION_FILE_Release" : "D:/virtualMachine/github/software-editor-06/build/software-editor_autogen/mocs_compilation_Release.cpp",
-	"MOC_DEFINITIONS" : [],
-	"MOC_DEFINITIONS_Debug" : 
+	"INCLUDE_DIR" : "D:/virtualMachine/github/20251202/software-editor-08/build/software-editor_autogen/include",
+	"MOC_COMPILATION_FILE" : "D:/virtualMachine/github/20251202/software-editor-08/build/software-editor_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
 		"QT_CORE_LIB",
+		"QT_DESIGNER_LIB",
+		"QT_DESIGNER_STATIC",
 		"QT_GUI_LIB",
+		"QT_NETWORK_LIB",
 		"QT_OPENGLWIDGETS_LIB",
 		"QT_OPENGL_LIB",
-		"QT_WIDGETS_LIB",
-		"QT_XML_LIB",
-		"UNICODE",
-		"WIN32",
-		"WIN64",
-		"_ENABLE_EXTENDED_ALIGNED_STORAGE",
-		"_UNICODE",
-		"_WIN64"
-	],
-	"MOC_DEFINITIONS_MinSizeRel" : 
-	[
-		"MINGW_HAS_SECURE_API=1",
-		"QT_CORE_LIB",
-		"QT_GUI_LIB",
-		"QT_NO_DEBUG",
-		"QT_OPENGLWIDGETS_LIB",
-		"QT_OPENGL_LIB",
-		"QT_WIDGETS_LIB",
-		"QT_XML_LIB",
-		"UNICODE",
-		"WIN32",
-		"WIN64",
-		"_ENABLE_EXTENDED_ALIGNED_STORAGE",
-		"_UNICODE",
-		"_WIN64"
-	],
-	"MOC_DEFINITIONS_RelWithDebInfo" : 
-	[
-		"MINGW_HAS_SECURE_API=1",
-		"QT_CORE_LIB",
-		"QT_GUI_LIB",
-		"QT_NO_DEBUG",
-		"QT_OPENGLWIDGETS_LIB",
-		"QT_OPENGL_LIB",
-		"QT_WIDGETS_LIB",
-		"QT_XML_LIB",
-		"UNICODE",
-		"WIN32",
-		"WIN64",
-		"_ENABLE_EXTENDED_ALIGNED_STORAGE",
-		"_UNICODE",
-		"_WIN64"
-	],
-	"MOC_DEFINITIONS_Release" : 
-	[
-		"MINGW_HAS_SECURE_API=1",
-		"QT_CORE_LIB",
-		"QT_GUI_LIB",
-		"QT_NO_DEBUG",
-		"QT_OPENGLWIDGETS_LIB",
-		"QT_OPENGL_LIB",
+		"QT_UIPLUGIN_LIB",
 		"QT_WIDGETS_LIB",
 		"QT_XML_LIB",
 		"UNICODE",
@@ -571,74 +1491,45 @@
 			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
 		]
 	],
-	"MOC_INCLUDES" : [],
-	"MOC_INCLUDES_Debug" : 
+	"MOC_INCLUDES" : 
 	[
-		"D:/virtualMachine/github/software-editor-06/build",
-		"D:/virtualMachine/github/software-editor-06",
-		"D:/virtualMachine/github/software-editor-06/src",
-		"D:/virtualMachine/github/software-editor-06/src/product",
-		"D:/virtualMachine/github/software-editor-06/src/uilayout",
-		"D:/virtualMachine/github/software-editor-06/src/package",
-		"D:/Qt/6.9.1/mingw_64/include/QtCore",
+		"D:/virtualMachine/github/20251202/software-editor-08/build",
+		"D:/virtualMachine/github/20251202/software-editor-08",
+		"D:/virtualMachine/github/20251202/software-editor-08/src",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/product",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/package",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/designer",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget",
+		"D:/virtualMachine/github/20251202/software-editor-08/src/designer/deviceskin",
+		"D:/virtualMachine/github/20251202/software-editor-08/include",
+		"D:/Qt/6.9.1/mingw_64/include/QtWidgets/6.9.1",
+		"D:/Qt/6.9.1/mingw_64/include/QtWidgets/6.9.1/QtWidgets",
+		"D:/Qt/6.9.1/mingw_64/include/QtWidgets/6.9.1/QtWidgets/private",
+		"D:/Qt/6.9.1/mingw_64/include/QtGui/6.9.1",
+		"D:/Qt/6.9.1/mingw_64/include/QtGui/6.9.1/QtGui",
+		"D:/Qt/6.9.1/mingw_64/include/QtGui/6.9.1/QtGui/private",
+		"D:/Qt/6.9.1/mingw_64/include/QtCore/6.9.1",
+		"D:/Qt/6.9.1/mingw_64/include/QtCore/6.9.1/QtCore",
+		"D:/Qt/6.9.1/mingw_64/include/QtCore/6.9.1/QtCore/private",
 		"D:/Qt/6.9.1/mingw_64/include",
+		"D:/Qt/6.9.1/mingw_64/include/QtCore",
 		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
 		"D:/Qt/6.9.1/mingw_64/include/QtGui",
 		"D:/Qt/6.9.1/mingw_64/include/QtWidgets",
 		"D:/Qt/6.9.1/mingw_64/include/QtXml",
 		"D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGL"
-	],
-	"MOC_INCLUDES_MinSizeRel" : 
-	[
-		"D:/virtualMachine/github/software-editor-06/build",
-		"D:/virtualMachine/github/software-editor-06",
-		"D:/virtualMachine/github/software-editor-06/src",
-		"D:/virtualMachine/github/software-editor-06/src/product",
-		"D:/virtualMachine/github/software-editor-06/src/uilayout",
-		"D:/virtualMachine/github/software-editor-06/src/package",
-		"D:/Qt/6.9.1/mingw_64/include/QtCore",
-		"D:/Qt/6.9.1/mingw_64/include",
-		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
-		"D:/Qt/6.9.1/mingw_64/include/QtGui",
-		"D:/Qt/6.9.1/mingw_64/include/QtWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtXml",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGL"
-	],
-	"MOC_INCLUDES_RelWithDebInfo" : 
-	[
-		"D:/virtualMachine/github/software-editor-06/build",
-		"D:/virtualMachine/github/software-editor-06",
-		"D:/virtualMachine/github/software-editor-06/src",
-		"D:/virtualMachine/github/software-editor-06/src/product",
-		"D:/virtualMachine/github/software-editor-06/src/uilayout",
-		"D:/virtualMachine/github/software-editor-06/src/package",
-		"D:/Qt/6.9.1/mingw_64/include/QtCore",
-		"D:/Qt/6.9.1/mingw_64/include",
-		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
-		"D:/Qt/6.9.1/mingw_64/include/QtGui",
-		"D:/Qt/6.9.1/mingw_64/include/QtWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtXml",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGL"
-	],
-	"MOC_INCLUDES_Release" : 
-	[
-		"D:/virtualMachine/github/software-editor-06/build",
-		"D:/virtualMachine/github/software-editor-06",
-		"D:/virtualMachine/github/software-editor-06/src",
-		"D:/virtualMachine/github/software-editor-06/src/product",
-		"D:/virtualMachine/github/software-editor-06/src/uilayout",
-		"D:/virtualMachine/github/software-editor-06/src/package",
-		"D:/Qt/6.9.1/mingw_64/include/QtCore",
-		"D:/Qt/6.9.1/mingw_64/include",
-		"D:/Qt/6.9.1/mingw_64/mkspecs/win32-g++",
-		"D:/Qt/6.9.1/mingw_64/include/QtGui",
-		"D:/Qt/6.9.1/mingw_64/include/QtWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtXml",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGLWidgets",
-		"D:/Qt/6.9.1/mingw_64/include/QtOpenGL"
+		"D:/Qt/6.9.1/mingw_64/include/QtOpenGL",
+		"D:/Qt/6.9.1/mingw_64/include/QtDesigner",
+		"D:/Qt/6.9.1/mingw_64/include/QtUiPlugin",
+		"D:/Qt/6.9.1/mingw_64/include/QtNetwork",
+		"D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++",
+		"D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32",
+		"D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward",
+		"D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include",
+		"D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed",
+		"D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include"
 	],
 	"MOC_MACRO_NAMES" : 
 	[
@@ -651,113 +1542,784 @@
 	],
 	"MOC_OPTIONS" : [],
 	"MOC_PATH_PREFIX" : false,
-	"MOC_PREDEFS_CMD" : [],
-	"MOC_PREDEFS_FILE" : "",
+	"MOC_PREDEFS_CMD" : 
+	[
+		"D:/Qt/Tools/mingw1310_64/bin/g++.exe",
+		"-dM",
+		"-E",
+		"-c",
+		"D:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "D:/virtualMachine/github/20251202/software-editor-08/build/software-editor_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
-	"MULTI_CONFIG" : true,
+	"MULTI_CONFIG" : false,
 	"PARALLEL" : 10,
-	"PARSE_CACHE_FILE" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/ParseCache.txt",
-	"PARSE_CACHE_FILE_Debug" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/ParseCache_Debug.txt",
-	"PARSE_CACHE_FILE_MinSizeRel" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/ParseCache_MinSizeRel.txt",
-	"PARSE_CACHE_FILE_RelWithDebInfo" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/ParseCache_RelWithDebInfo.txt",
-	"PARSE_CACHE_FILE_Release" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/ParseCache_Release.txt",
-	"QT_MOC_EXECUTABLE" : "",
-	"QT_MOC_EXECUTABLE_Debug" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
-	"QT_MOC_EXECUTABLE_MinSizeRel" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
-	"QT_MOC_EXECUTABLE_RelWithDebInfo" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
-	"QT_MOC_EXECUTABLE_Release" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
-	"QT_UIC_EXECUTABLE" : "",
-	"QT_UIC_EXECUTABLE_Debug" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
-	"QT_UIC_EXECUTABLE_MinSizeRel" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
-	"QT_UIC_EXECUTABLE_RelWithDebInfo" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
-	"QT_UIC_EXECUTABLE_Release" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
+	"PARSE_CACHE_FILE" : "D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/software-editor_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "D:/Qt/6.9.1/mingw_64/bin/moc.exe",
+	"QT_UIC_EXECUTABLE" : "D:/Qt/6.9.1/mingw_64/bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 9,
-	"SETTINGS_FILE" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
-	"SETTINGS_FILE_Debug" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed_Debug.txt",
-	"SETTINGS_FILE_MinSizeRel" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed_MinSizeRel.txt",
-	"SETTINGS_FILE_RelWithDebInfo" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed_RelWithDebInfo.txt",
-	"SETTINGS_FILE_Release" : "D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed_Release.txt",
+	"SETTINGS_FILE" : "D:/virtualMachine/github/20251202/software-editor-08/build/CMakeFiles/software-editor_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"D:/virtualMachine/github/software-editor-06/src/main.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractactioneditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packageconfig.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractdialoggui.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packagemanager.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformeditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/package/packageservice.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformeditorplugin.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/mainwindow.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/product.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowcursor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/productconfigmanager.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/product/productstate.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractformwindowtool.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/customtreewidget.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractintegration.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/editareawidget.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractintrospection.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/eventactioneditor.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractmetadatabase.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/eventactionmodel.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractnewformwidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/previewwindow.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractobjectinspector.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uiinterface.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractpromotioninterface.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uiinterfacemanager.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractpropertyeditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"D:/virtualMachine/github/software-editor-06/src/uilayout/uilayoutwindow.cpp",
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractresourcebrowser.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetbox.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetdatabase.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/abstractwidgetfactory.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/actioneditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/actionrepository.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/appfontdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/assistantclient.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/codedialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/connectionedit.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/csshighlighter.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/deviceprofile.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/deviceskin/deviceskin.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/dialoggui.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/extrainfo.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/abstractfindwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/itemviewfindwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/findwidget/texteditfindwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/fontpanel/fontpanel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/formlayoutmenu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/formwindowbase.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/grid.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/gridpanel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/htmlhighlighter.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/iconloader.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/iconselector.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/invisible_widget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/layout.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/layoutinfo.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/mainwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/metadatabase.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/morphmenu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newactiondialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newform.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/newformwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/orderdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/plaintexteditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/plugindialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/pluginmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/preferencesdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/previewconfigurationwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/previewmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/promotionmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/promotiontaskmenu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/propertylineedit.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_actions.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_appearanceoptions.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_command.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_command2.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_dnditem.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_dockwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formbuilder.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formeditorcommand.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindowcommand.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_formwindowmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_introspection.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_membersheet.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_menu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_menubar.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_objectinspector.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_promotion.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_promotiondialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertycommand.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertyeditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_propertysheet.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_qsettings.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_server.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_settings.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_stackedbox.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_tabwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_taskmenu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolbar.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolbox.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_toolwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_utils.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widgetbox.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_widgetitem.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qdesigner_workbench.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qlayout_widget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qsimpleresource.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtcolorbutton.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtcolorline.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradienteditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopscontroller.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopsmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientstopswidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientutils.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientview.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientviewdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtgradienteditor/qtgradientwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtbuttonpropertybrowser.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qteditorfactory.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtgroupboxpropertybrowser.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertybrowser.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertybrowserutils.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtpropertymanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qttreepropertybrowser.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtpropertybrowser/qtvariantproperty.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourceeditordialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourcemodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qtresourceview.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/qttoolbardialog/qttoolbardialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/rcc.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/richtexteditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/saveformastemplate.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/selectsignaldialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/shared_settings.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/sheet_delegate.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/signalslotdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/spacer_widget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/stylesheeteditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/taskmenu.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/textpropertyeditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/versiondialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/widgetdatabase.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/widgetfactory.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/designer/zoomwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/main.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packageconfig.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packagemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/package/packageservice.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/product.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/productconfigmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/product/productstate.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/customtreewidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/editareawidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/eventactioneditor.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/eventactionmodel.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/previewwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uiinterface.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uiinterfacemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/virtualMachine/github/20251202/software-editor-08/src/uilayout/uilayoutwindow.cpp",
 			"MU",
 			null
 		]
