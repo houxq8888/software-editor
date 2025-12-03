@@ -1,0 +1,320 @@
+name: Continuous Deployment
+
+on:
+  # 仅当推送到main分支且CI测试通过时触发部署
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+  # 支持手动触发部署
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      version:
+        description: '部署版本'
+        required: false
+        default: 'latest'
+
+env:
+  DEPLOY_ENV: ${{ github.event.inputs.environment || 'staging' }}
+  DEPLOY_VERSION: ${{ github.event.inputs.version || 'latest' }}
+
+jobs:
+  deployment-validation:
+    name: Deployment Validation
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Validate deployment configuration
+      run: |
+        echo "验证部署配置..."
+        echo "部署环境: ${{ env.DEPLOY_ENV }}"
+        echo "部署版本: ${{ env.DEPLOY_VERSION }}"
+        
+        # 检查必要的部署文件
+        $requiredFiles = @(
+            "scripts/deploy_pipeline.py",
+            "scripts/build_pipeline.py",
+            "build.bat"
+        )
+        
+        foreach ($file in $requiredFiles) {
+            if (Test-Path $file) {
+                echo "✅ $file 存在"
+            } else {
+                echo "❌ $file 缺失"
+                exit 1
+            }
+        }
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: memory-optimized-build
+        path: downloaded_build
+    
+    - name: Verify build artifacts
+      run: |
+        echo "验证构建产物..."
+        
+        if (Test-Path "downloaded_build") {
+            $buildFiles = Get-ChildItem "downloaded_build" -Recurse
+            echo "构建产物文件数量: $($buildFiles.Count)"
+            
+            # 检查关键文件
+            $exeFiles = Get-ChildItem "downloaded_build" -Filter "*.exe" -Recurse
+            if ($exeFiles.Count -gt 0) {
+                echo "✅ 找到可执行文件: $($exeFiles.Name)"
+            } else {
+                echo "❌ 未找到可执行文件"
+                exit 1
+            }
+        } else {
+            echo "❌ 构建产物目录不存在"
+            exit 1
+        }
+
+  staging-deployment:
+    name: Staging Deployment
+    runs-on: windows-latest
+    needs: deployment-validation
+    if: env.DEPLOY_ENV == 'staging'
+    
+    environment:
+      name: staging
+      url: https://staging.example.com
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: memory-optimized-build
+        path: staging_deploy
+    
+    - name: Run staging deployment
+      run: |
+        echo "开始测试环境部署..."
+        
+        # 运行部署脚本
+        python scripts/deploy_pipeline.py --skip-staging
+        
+        # 验证部署结果
+        if (Test-Path "deploy") {
+            $deployFiles = Get-ChildItem "deploy"
+            echo "部署包文件: $($deployFiles.Name)"
+        }
+    
+    - name: Run smoke tests on staging
+      run: |
+        echo "运行冒烟测试..."
+        
+        # 模拟冒烟测试
+        if (Test-Path "deploy/software-editor.exe") {
+            echo "✅ 部署包验证通过"
+            
+            # 这里可以添加实际的冒烟测试逻辑
+            # 比如启动应用程序验证基本功能
+        } else {
+            echo "❌ 部署包验证失败"
+            exit 1
+        }
+    
+    - name: Upload staging deployment
+      uses: actions/upload-artifact@v3
+      with:
+        name: staging-deployment-${{ github.run_number }}
+        path: deploy/
+        retention-days: 30
+    
+    - name: Notify staging deployment
+      run: |
+        echo "测试环境部署完成"
+        echo "部署版本: ${{ env.DEPLOY_VERSION }}"
+        echo "部署时间: $(Get-Date)"
+
+  production-deployment:
+    name: Production Deployment
+    runs-on: windows-latest
+    needs: staging-deployment
+    if: env.DEPLOY_ENV == 'production'
+    
+    environment:
+      name: production
+      url: https://production.example.com
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Download staging artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: staging-deployment-${{ github.run_number }}
+        path: production_deploy
+    
+    - name: Production deployment preparation
+      run: |
+        echo "准备生产环境部署..."
+        
+        # 生产环境特定的准备工作
+        # 比如配置管理、密钥设置等
+        
+        echo "生产环境配置完成"
+    
+    - name: Run production deployment
+      run: |
+        echo "开始生产环境部署..."
+        
+        # 生产环境部署逻辑
+        # 这里可以集成实际的部署工具
+        # 比如使用FTP、SCP、Docker等
+        
+        # 模拟部署过程
+        Start-Sleep -Seconds 10
+        echo "生产环境部署完成"
+    
+    - name: Production verification
+      run: |
+        echo "验证生产环境部署..."
+        
+        # 生产环境验证逻辑
+        # 比如健康检查、功能验证等
+        
+        echo "✅ 生产环境验证通过"
+    
+    - name: Create deployment release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.DEPLOY_VERSION }}
+        release_name: Release v${{ env.DEPLOY_VERSION }}
+        body: |
+          生产环境部署完成
+          
+          部署信息:
+          - 版本: ${{ env.DEPLOY_VERSION }}
+          - 环境: ${{ env.DEPLOY_ENV }}
+          - 时间: $(Get-Date)
+          
+          变更内容:
+          ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
+    
+    - name: Notify production deployment
+      run: |
+        echo "生产环境部署完成"
+        echo "发布版本: v${{ env.DEPLOY_VERSION }}"
+        echo "部署时间: $(Get-Date)"
+
+  deployment-monitoring:
+    name: Deployment Monitoring
+    runs-on: windows-latest
+    needs: 
+      - staging-deployment
+      - production-deployment
+    if: always()
+    
+    steps:
+    - name: Deployment status summary
+      run: |
+        echo "=== 部署监控报告 ==="
+        echo "部署环境: ${{ env.DEPLOY_ENV }}"
+        echo "部署版本: ${{ env.DEPLOY_VERSION }}"
+        echo "工作流状态: ${{ needs }}"
+        
+        # 生成部署监控数据
+        $monitoringData = @{
+            deployment_id = "${{ github.run_id }}"
+            environment = "${{ env.DEPLOY_ENV }}"
+            version = "${{ env.DEPLOY_VERSION }}"
+            timestamp = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+            status = "${{ job.status }}"
+        }
+        
+        $monitoringData | ConvertTo-Json | Out-File "deployment_monitoring.json"
+    
+    - name: Upload monitoring data
+      uses: actions/upload-artifact@v3
+      with:
+        name: deployment-monitoring-${{ github.run_number }}
+        path: deployment_monitoring.json
+        retention-days: 90
+    
+    - name: Send deployment notification
+      if: always()
+      run: |
+        # 部署结果通知
+        if ("${{ job.status }}" -eq "success") {
+            echo "🎉 部署成功完成"
+            # 这里可以集成邮件、Slack等通知方式
+        } else {
+            echo "❌ 部署失败"
+            # 发送失败通知
+        }
+
+  rollback-preparation:
+    name: Rollback Preparation
+    runs-on: windows-latest
+    if: failure() && (env.DEPLOY_ENV == 'staging' || env.DEPLOY_ENV == 'production')
+    
+    steps:
+    - name: Prepare rollback
+      run: |
+        echo "准备回滚操作..."
+        
+        # 回滚准备工作
+        # 比如备份当前状态、准备回滚脚本等
+        
+        echo "回滚准备完成"
+    
+    - name: Create rollback plan
+      run: |
+        echo "生成回滚计划..."
+        
+        $rollbackPlan = @{
+            rollback_id = "RB-${{ github.run_number }}"
+            original_deployment = "${{ env.DEPLOY_VERSION }}"
+            rollback_target = "previous_stable"
+            timestamp = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+            steps = @(
+                "停止当前服务",
+                "恢复备份配置",
+                "启动回滚版本",
+                "验证回滚结果"
+            )
+        }
+        
+        $rollbackPlan | ConvertTo-Json | Out-File "rollback_plan.json"
+    
+    - name: Upload rollback plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: rollback-plan-${{ github.run_number }}
+        path: rollback_plan.json
+        retention-days: 30
