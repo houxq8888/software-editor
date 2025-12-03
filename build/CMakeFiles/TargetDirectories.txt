@@ -1,4 +1,0 @@
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/software-editor.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/INSTALL.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/ALL_BUILD.dir
-D:/virtualMachine/github/software-editor-06/build/CMakeFiles/ZERO_CHECK.dir
