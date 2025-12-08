@@ -683,9 +683,23 @@ bool QDesignerWorkbench::handleClose()
 {
     m_state = StateClosing;
     QList<QDesignerFormWindow *> dirtyForms;
+    
+    // Save current opened UI file paths for reloading
+    QStringList openFormFiles;
     for (QDesignerFormWindow *w : std::as_const(m_formWindows)) {
+        QString fileName = w->editor()->fileName();
+        if (!fileName.isEmpty()) {
+            openFormFiles << fileName;
+        }
         if (w->editor()->isDirty())
             dirtyForms << w;
+    }
+    
+    // Save opened UI file paths to settings
+    if (!openFormFiles.isEmpty()) {
+        QDesignerSettings settings(m_core);
+        settings.setOpenFormFiles(openFormFiles);
+        qDebug() << "Saving current opened UI file paths:" << openFormFiles;
     }
 
     const auto count = dirtyForms.size();
@@ -712,10 +726,10 @@ bool QDesignerWorkbench::handleClose()
             for (QDesignerFormWindow *fw : std::as_const(dirtyForms)) {
                 fw->show();
                 fw->raise();
-                if (!fw->close()) {
-                    m_state = StateUp;
-                    return false;
-                }
+                // if (!fw->close()) {
+                //     m_state = StateUp;
+                //     return false;
+                // }
             }
             break;
         case QMessageBox::Discard:
@@ -727,8 +741,10 @@ bool QDesignerWorkbench::handleClose()
         }
     }
 
-    for (QDesignerFormWindow *fw : std::as_const(m_formWindows))
-        fw->close();
+    // // Properly close all form windows to ensure clean shutdown
+    // // This prevents memory leaks and ensures proper state cleanup
+    // for (QDesignerFormWindow *fw : std::as_const(m_formWindows))
+    //     fw->close();
 
     saveSettings();
     return true;
@@ -784,32 +800,6 @@ void QDesignerWorkbench::closeAllToolWindows()
 {
     for (QDesignerToolWindow *tw : std::as_const(m_toolWindows))
         tw->hide();
-}
-
-bool QDesignerWorkbench::readInBackup()
-{
-    const QMap<QString, QString> backupFileMap = QDesignerSettings(m_core).backup();
-    if (backupFileMap.isEmpty())
-        return false;
-
-    const  QMessageBox::StandardButton answer =
-        QMessageBox::question(nullptr, tr("Backup Information"),
-                                 tr("The last session of Designer was not terminated correctly. "
-                                       "Backup files were left behind. Do you want to load them?"),
-                                    QMessageBox::Yes|QMessageBox::No, QMessageBox::Yes);
-    if (answer == QMessageBox::No)
-        return false;
-
-    const auto modifiedPlaceHolder = "[*]"_L1;
-    for (auto it = backupFileMap.cbegin(), end = backupFileMap.cend(); it != end; ++it) {
-        QString fileName = it.key();
-        fileName.remove(modifiedPlaceHolder);
-
-        if(m_actionManager->readInForm(it.value()))
-            formWindowManager()->activeFormWindow()->setFileName(fileName);
-
-    }
-    return true;
 }
 
 void QDesignerWorkbench::updateBackup(QDesignerFormWindowInterface* fwi)
@@ -900,7 +890,7 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
     QFile file(fileName);
 
     // 添加详细的文件加载日志
-    qDebug() << "开始加载UI文件:" << fileName;
+    qDebug() << "start loading UI file:" << fileName;
     
     qdesigner_internal::FormWindowBase::LineTerminatorMode mode = qdesigner_internal::FormWindowBase::NativeLineTerminator;
 
@@ -920,7 +910,7 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
 
     if (!file.open(QFile::ReadOnly|QFile::Text)) {
         QString errorMsg = tr("The file <b>%1</b> could not be opened: %2").arg(file.fileName(), file.errorString());
-        qDebug() << "文件打开失败:" << errorMsg;
+        qDebug() << "UI file open failed:" << errorMsg;
         *errorMessage = errorMsg;
         return nullptr;
     }
@@ -938,7 +928,7 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
     editor->setFileName(fileName);
 
     if (!editor->setContents(&file, errorMessage)) {
-        qDebug() << "UI文件内容设置失败:" << (errorMessage ? *errorMessage : "未知错误");
+        qDebug() << "UI file content set failed:" << (errorMessage ? *errorMessage : "unknown error");
         removeFormWindow(formWindow);
         formWindowManager->removeFormWindow(editor);
         m_core->metaDataBase()->remove(editor);
@@ -948,7 +938,7 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
     if (qdesigner_internal::FormWindowBase *fwb = qobject_cast<qdesigner_internal::FormWindowBase *>(editor))
         fwb->setLineTerminatorMode(mode);
 
-    qDebug() << "UI文件加载成功:" << fileName;
+    qDebug() << "UI file loaded successfully:" << fileName;
 
     switch (m_mode) {
     case DockedMode: {
@@ -982,15 +972,15 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
 
 QDesignerFormWindow * QDesignerWorkbench::openForm(const QString &fileName, QString *errorMessage)
 {
-    qDebug() << "调用openForm打开UI文件:" << fileName;
+    qDebug() << "call openForm to open UI file:" << fileName;
     QDesignerFormWindow *rc = loadForm(fileName, true, errorMessage);
     if (!rc) {
-        qDebug() << "openForm失败:" << (errorMessage ? *errorMessage : "未知错误");
+        qDebug() << "openForm failed:" << (errorMessage ? *errorMessage : "unknown error");
         return nullptr;
     }
     rc->editor()->setFileName(fileName);
     rc->firstShow();
-    qDebug() << "openForm成功:" << fileName;
+    qDebug() << "openForm successfully:" << fileName;
     return rc;
 }
 
@@ -1122,7 +1112,7 @@ void QDesignerWorkbench::handleCloseEvent(QCloseEvent *ev)
             for (const QString &arg : args) {
                 if (arg.endsWith(".json") && QFile::exists(arg)) {
                     isLaunchedFromProductMainWindow = true;
-                    qDebug() << "检测到从产品配置页面启动，关闭UI编辑器后将返回到产品配置页面";
+                    qDebug() << "detected launch from product configuration page, will return to product configuration page after UI editor closes";
                     break;
                 }
             }
@@ -1133,7 +1123,7 @@ void QDesignerWorkbench::handleCloseEvent(QCloseEvent *ev)
                 QVariant productLaunchFlag = qDesigner->property("launchedFromProductMainWindow");
                 if (productLaunchFlag.isValid() && productLaunchFlag.toBool()) {
                     isLaunchedFromProductMainWindow = true;
-                    qDebug() << "通过属性检测到从产品配置页面启动";
+                    qDebug() << "detected launch from product configuration page via property";
                 }
             }
         }
@@ -1142,7 +1132,7 @@ void QDesignerWorkbench::handleCloseEvent(QCloseEvent *ev)
             // 只有独立启动UI编辑器时才退出程序
             QMetaObject::invokeMethod(qDesigner, "quit", Qt::QueuedConnection);  // We're going down!
         } else {
-            qDebug() << "UI编辑器关闭，返回到产品配置页面";
+            qDebug() << "UI editor closed, returning to product configuration page";
         }
     }
 }

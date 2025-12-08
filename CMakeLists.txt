@@ -57,12 +57,6 @@ add_executable(software-editor
     src/product/template.json
     
     # UI布局编辑器模块（可选保留，如果需要兼容旧功能）
-    src/uilayout/uilayoutwindow.cpp
-    src/uilayout/uilayoutwindow.h
-    src/uilayout/uilayoutwindow.ui
-    src/uilayout/previewwindow.cpp
-    src/uilayout/previewwindow.h
-    src/uilayout/previewwindow.ui
     src/uilayout/editareawidget.cpp
     src/uilayout/editareawidget.h
     src/uilayout/customtreewidget.cpp
@@ -75,7 +69,12 @@ add_executable(software-editor
     src/uilayout/uiinterfacemanager.h
     src/uilayout/uiinterface.cpp
     src/uilayout/uiinterface.h
+    src/uilayout/layoutitem.cpp
     src/uilayout/layoutitem.h
+    src/uilayout/statemachine.cpp
+    src/uilayout/statemachine.h
+    src/uilayout/statemachineeditor.cpp
+    src/uilayout/statemachineeditor.h
     
     # 智能打包模块
     src/package/packagemanager.cpp

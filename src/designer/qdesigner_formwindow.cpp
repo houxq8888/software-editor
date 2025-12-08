@@ -199,7 +199,9 @@ void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
 
         switch (box.exec()) {
             case QMessageBox::Save: {
+                qDebug()<<"begin to save form";
                 bool ok = workbench()->saveForm(m_editor);
+                qDebug()<<"end to save form";
                 ev->setAccepted(ok);
                 m_editor->setDirty(!ok);
                 break;

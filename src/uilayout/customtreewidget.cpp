@@ -46,27 +46,27 @@ void CustomTreeWidget::startDrag(Qt::DropActions supportedActions)
 {
     QTreeWidgetItem *item = currentItem();
     if (!item) {
-        qDebug() << "CustomTreeWidget::startDrag: 当前选中项为空";
+        qDebug() << "CustomTreeWidget::startDrag: current choice is empty";
         return;
     }
 
     // 只有子项可以拖动
     if (item->childCount() > 0) {
-        qDebug() << "CustomTreeWidget::startDrag: 父项不可拖动";
+        qDebug() << "CustomTreeWidget::startDrag: parent item is not draggable";
         return;
     }
 
     QString widgetType = item->text(0);
-    qDebug() << "CustomTreeWidget::startDrag: 开始拖动控件类型:" << widgetType;
+    qDebug() << "CustomTreeWidget::startDrag: start dragging widget type:" << widgetType;
 
     QMimeData *mimeData = new QMimeData;
     mimeData->setText(widgetType);
-    qDebug() << "CustomTreeWidget::startDrag: 设置mimeData文本:" << mimeData->text();
+    qDebug() << "CustomTreeWidget::startDrag: set mimeData text:" << mimeData->text();
     qDebug() << "CustomTreeWidget::startDrag: mimeData hasText:" << mimeData->hasText();
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    qDebug() << "CustomTreeWidget::startDrag: 创建QDrag对象";
+    qDebug() << "CustomTreeWidget::startDrag: create QDrag object";
 
     // 创建拖动时的预览
     QPixmap pixmap(80, 60);
@@ -78,8 +78,8 @@ void CustomTreeWidget::startDrag(Qt::DropActions supportedActions)
 
     drag->setPixmap(pixmap);
     drag->setHotSpot(pixmap.rect().center());
-    qDebug() << "CustomTreeWidget::startDrag: 设置拖动预览和热点";
+    qDebug() << "CustomTreeWidget::startDrag: set drag preview and hot spot";
 
     Qt::DropAction result = drag->exec(Qt::CopyAction | Qt::MoveAction);
-    qDebug() << "CustomTreeWidget::startDrag: 拖动执行结果:" << result;
+    qDebug() << "CustomTreeWidget::startDrag: drag execution result:" << result;
 }

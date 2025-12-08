@@ -207,4 +207,14 @@ ToolWindowFontSettings QDesignerSettings::toolWindowFont() const
     return fontSettings;
 }
 
+void QDesignerSettings::setOpenFormFiles(const QStringList &files)
+{
+    settings()->setValue(u"openFormFiles"_s, files);
+}
+
+QStringList QDesignerSettings::openFormFiles() const
+{
+    return settings()->value(u"openFormFiles"_s, QStringList()).toStringList();
+}
+
 QT_END_NAMESPACE

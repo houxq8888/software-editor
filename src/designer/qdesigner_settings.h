@@ -49,6 +49,9 @@ public:
     void clearBackup();
     void setBackup(const QMap<QString, QString> &map);
     QMap<QString, QString> backup() const;
+
+    void setOpenFormFiles(const QStringList &files);
+    QStringList openFormFiles() const;
 };
 
 QT_END_NAMESPACE

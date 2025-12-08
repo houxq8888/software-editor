@@ -42,14 +42,14 @@ ProductConfigManager::ProductConfigManager(QObject *parent)
 ProductConfigManager::~ProductConfigManager()
 {
     // 确保定时器被正确停止和清理
-    qDebug() << "ProductConfigManager析构函数开始执行";
+    qDebug() << "ProductConfigManager destructor starts";
     if (m_syncTimer) {
-        qDebug() << "停止和清理同步定时器";
+        qDebug() << "Stop and delete sync timer";
         m_syncTimer->stop();
         delete m_syncTimer;
         m_syncTimer = nullptr;
     }
-    qDebug() << "ProductConfigManager析构函数执行完成";
+    qDebug() << "ProductConfigManager destructor completes";
 }
 
 void ProductConfigManager::setProduct(const Product &product)
@@ -297,7 +297,7 @@ void ProductConfigManager::bindUiLayout(const QString &uiLayoutPath)
         setUiLayoutChanged(false);
         setProductModified(true);
         
-        qDebug() << "UI布局已绑定:" << uiLayoutPath;
+        qDebug() << "UI layout is bound to product:" << uiLayoutPath;
     }
 }
 
@@ -311,7 +311,7 @@ void ProductConfigManager::bindProductFeatureToWidget(const QString &featureName
     
     // UI绑定修改应该触发UI布局修改状态，而不是产品信息修改状态
     setUiLayoutModified(true);
-    qDebug() << "ProductConfigManager: 功能特性绑定，设置UI布局修改状态";
+    qDebug() << "ProductConfigManager: bind product feature to widget, set UI layout modified";
 }
 
 void ProductConfigManager::unbindProductFeatureFromWidget(const QString &featureName, const QString &widgetId)
@@ -323,7 +323,7 @@ void ProductConfigManager::unbindProductFeatureFromWidget(const QString &feature
     
     // UI绑定修改应该触发UI布局修改状态，而不是产品信息修改状态
     setUiLayoutModified(true);
-    qDebug() << "ProductConfigManager: 功能特性解绑，设置UI布局修改状态";
+    qDebug() << "ProductConfigManager: unbind product feature from widget, set UI layout modified";
 }
 
 QMap<QString, QString> ProductConfigManager::getFeatureWidgetBindings() const
@@ -454,7 +454,7 @@ void ProductConfigManager::startRealTimeSync()
     m_realTimeSyncActive = true;
     m_syncTimer->start();
     
-    qDebug() << "ProductConfigManager: 实时同步已启动";
+    qDebug() << "ProductConfigManager: real time sync started";
     emit realTimeSyncStarted();
     emit syncStatusChanged("实时同步已启动");
 }
@@ -468,7 +468,7 @@ void ProductConfigManager::stopRealTimeSync()
     m_realTimeSyncActive = false;
     m_syncTimer->stop();
     
-    qDebug() << "ProductConfigManager: 实时同步已停止";
+    qDebug() << "ProductConfigManager: real time sync stopped";
     emit realTimeSyncStopped();
     emit syncStatusChanged("实时同步已停止");
 }
@@ -525,7 +525,7 @@ void ProductConfigManager::resolveConflict(const QString &conflictId, bool usePr
     // 移除冲突
     m_conflicts.remove(conflictId);
     
-    qDebug() << "ProductConfigManager: 冲突已解决:" << conflictId << "使用" << (useProductVersion ? "产品版本" : "UI布局版本");
+    qDebug() << "ProductConfigManager: resolve conflict:" << conflictId << "use" << (useProductVersion ? "product version" : "UI layout version");
     emit conflictResolved(conflictId);
     
     // 检查是否还有冲突
@@ -556,7 +556,7 @@ void ProductConfigManager::enableAutoSync(bool enable)
         stopRealTimeSync();
     }
     
-    qDebug() << "ProductConfigManager: 自动同步" << (enable ? "已启用" : "已禁用");
+    qDebug() << "ProductConfigManager: auto sync" << (enable ? "enabled" : "disabled");
     emit autoSyncToggled(enable);
 }
 
@@ -613,7 +613,7 @@ void ProductConfigManager::performSync()
     }
     
     // 执行同步操作
-    qDebug() << "ProductConfigManager: 执行同步操作";
+    qDebug() << "ProductConfigManager: perform sync";
     
     // 检查是否需要同步产品信息
     if (m_productModified) {

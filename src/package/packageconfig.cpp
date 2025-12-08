@@ -252,7 +252,7 @@ void PackageConfigManager::initializeDefaultConfig()
     QString qtPath = packageService.detectQtPath();
     if (!qtPath.isEmpty()) {
         m_currentConfig.qtDir = qtPath;
-        qDebug() << "Qt路径检测成功:" << qtPath;
+        qDebug() << "Qt path detected successfully:" << qtPath;
     }
     
     // 从Qt路径推断MinGW路径
@@ -260,7 +260,7 @@ void PackageConfigManager::initializeDefaultConfig()
         QString mingwPath = m_currentConfig.qtDir + "/../../Tools/mingw1310_64";
         if (QDir(mingwPath).exists()) {
             m_currentConfig.mingwDir = mingwPath;
-            qDebug() << "MinGW路径检测成功:" << mingwPath;
+            qDebug() << "MinGW path detected successfully:" << mingwPath;
         }
     }
     
@@ -268,7 +268,7 @@ void PackageConfigManager::initializeDefaultConfig()
     QString cmakePath = packageService.detectCmakePath();
     if (!cmakePath.isEmpty()) {
         m_currentConfig.cmakeDir = cmakePath;
-        qDebug() << "CMake路径检测成功:" << cmakePath;
+        qDebug() << "CMake path detected successfully:" << cmakePath;
     }
 }
 

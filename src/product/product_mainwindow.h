@@ -17,6 +17,8 @@
 #include "product.h"
 #include "packagemanager.h"
 #include "productconfigmanager.h"
+#include "../uilayout/statemachine.h"
+#include "../uilayout/statemachineeditor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -43,9 +45,8 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionSmart_Package_Software_triggered();
     void on_actionOpen_UI_Layout_Editor_triggered();
+    void on_actionOpen_State_Machine_Editor_triggered();
     
-    // UI layout window management
-    void onUILayoutWindowClosed();
     void on_iconBrowseButton_clicked();
     void on_screenshotBrowseButton_clicked();
     void on_addFeatureButton_clicked();
@@ -77,6 +78,10 @@ private:
     // UI编辑器相关成员
     bool m_uiEditorActive; // UI编辑器是否正在运行
     QDesigner *m_qdesigner_instance; // 存储QDesigner实例的指针
+    
+    // 状态机编辑器相关成员
+    StateMachineEditor *m_stateMachineEditor; // 状态机编辑器实例
+    bool m_stateMachineEditorActive; // 状态机编辑器是否正在运行
     
     // 产品加载状态
     bool m_productLoaded; // 产品是否已从文件加载
@@ -116,6 +121,11 @@ private:
     void stopUIEditor();
     void onQDesignerProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onQDesignerProcessError(QProcess::ProcessError error);
+    
+    // 状态机编辑器管理函数
+    void startStateMachineEditor();
+    void stopStateMachineEditor();
+    void onStateMachineEditorClosed();
 };
 
 #endif // PRODUCT_MAINWINDOW_H

@@ -757,10 +757,33 @@ bool QDesignerActions::readInForm(const QString &fileName)
     // First make sure that we don't have this one open already.
     QDesignerFormWindowManagerInterface *formWindowManager = core()->formWindowManager();
     const int totalWindows = formWindowManager->formWindowCount();
+    qDebug()<<"readInForm"<<fileName;
     for (int i = 0; i < totalWindows; ++i) {
+        qDebug()<<"totalWIndows:"<<totalWindows;
         QDesignerFormWindowInterface *w = formWindowManager->formWindow(i);
+        qDebug()<<"w->fileName():"<<w->fileName();
         if (w->fileName() == fn) {
-            w->raise();
+            // 确保窗口完全显示和激活，修复第二次打开时控件不显示的问题
+            QWidget *formWindowWidget = qobject_cast<QWidget*>(w->parentWidget());
+            if (formWindowWidget) {
+                qDebug()<<"formWindowWidget:"<<formWindowWidget;
+                // 确保窗口不是最小化状态
+                if (formWindowWidget->isMinimized()) {
+                    qDebug()<<"formWindowWidget is minimized";
+                    formWindowWidget->setWindowState(formWindowWidget->windowState() & ~Qt::WindowMinimized);
+                }
+                
+                // 确保窗口可见
+                if (!formWindowWidget->isVisible()) {
+                    qDebug()<<"formWindowWidget is not visible";
+                    formWindowWidget->show();
+                }
+                
+                // 激活窗口并置于顶层
+                formWindowWidget->activateWindow();
+                formWindowWidget->raise();
+            }
+            
             formWindowManager->setActiveFormWindow(w);
             addRecentFile(fn);
             return true;
@@ -770,11 +793,14 @@ bool QDesignerActions::readInForm(const QString &fileName)
     // Otherwise load it.
     do {
         QString errorMessage;
+        qDebug()<<"otherwise load it";
         if (workbench()->openForm(fn, &errorMessage)) {
+            qDebug()<<"openForm success";
             addRecentFile(fn);
             m_openDirectory = QFileInfo(fn).absolutePath();
             return true;
         } else {
+            qDebug()<<"openForm failed";
             // prompt to reload
             QMessageBox box(QMessageBox::Warning, tr("Read error"),
                             tr("%1\nDo you want to update the file location or generate a new form?").arg(errorMessage),

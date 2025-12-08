@@ -69,7 +69,6 @@ public:
     bool writeOutForm(QDesignerFormWindowInterface *formWindow, const QString &fileName) const;
     bool saveForm(QDesignerFormWindowInterface *fw);
     bool handleClose();
-    bool readInBackup();
     void updateBackup(QDesignerFormWindowInterface* fwi);
     void applyUiSettings();
 
