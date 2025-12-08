@@ -57,8 +57,6 @@ add_executable(software-editor
     src/product/template.json
     
     # UI布局编辑器模块（可选保留，如果需要兼容旧功能）
-    src/uilayout/editareawidget.cpp
-    src/uilayout/editareawidget.h
     src/uilayout/customtreewidget.cpp
     src/uilayout/customtreewidget.h
     src/uilayout/eventactioneditor.cpp

@@ -188,6 +188,13 @@ void QDesignerFormWindow::updateWindowTitle(const QString &fileName)
 
 void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
 {
+    // 安全检查：确保指针有效
+    if (!m_editor || !workbench()) {
+        qDebug() << "QDesignerFormWindow::closeEvent: Invalid pointer detected, ignoring close event";
+        ev->ignore();
+        return;
+    }
+
     if (m_editor->isDirty()) {
         raise();
         QMessageBox box(QMessageBox::Information, tr("Save Form?"),
@@ -200,8 +207,16 @@ void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
         switch (box.exec()) {
             case QMessageBox::Save: {
                 qDebug()<<"begin to save form";
+                
+                // 再次检查指针有效性
+                if (!m_editor || !workbench()) {
+                    qDebug() << "QDesignerFormWindow::closeEvent: Pointer became invalid during save dialog";
+                    ev->setAccepted(false);
+                    break;
+                }
+                
                 bool ok = workbench()->saveForm(m_editor);
-                qDebug()<<"end to save form";
+                qDebug()<<"end to save form, result:" << ok;
                 ev->setAccepted(ok);
                 m_editor->setDirty(!ok);
                 break;
@@ -214,6 +229,9 @@ void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
                 ev->ignore();
                 break;
         }
+    } else {
+        // 如果窗体没有修改，直接接受关闭事件
+        ev->accept();
     }
 }
 

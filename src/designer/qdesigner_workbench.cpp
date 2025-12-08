@@ -1133,6 +1133,7 @@ void QDesignerWorkbench::handleCloseEvent(QCloseEvent *ev)
             QMetaObject::invokeMethod(qDesigner, "quit", Qt::QueuedConnection);  // We're going down!
         } else {
             qDebug() << "UI editor closed, returning to product configuration page";
+            emit closeQDesignerUI();
         }
     }
 }

@@ -56,6 +56,7 @@ protected:
 
 signals:
     void initialized();
+    
 
 public slots:
     void showErrorMessage(const QString &message);

@@ -1,0 +1,23 @@
+{
+    "category": "工具软件",
+    "description": "这是一个测试产品，创建于20251121_113422",
+    "developer": "测试开发者",
+    "features": [],
+    "iconPath": "C:\\test\\icon.png",
+    "name": "Test_20251121_113422",
+    "screenshotPath": "C:\\test\\screenshot.png",
+    "uiLayoutPath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
+    "uniqueId": "b3836d3c-f2c5-4dcb-9fc7-52f5b0617cde",
+    "version": "1.0.0",
+    "website": "https://example.com",
+    "uiFiles": [
+        {
+            "name": "主窗口",
+            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
+            "type": "main_window",
+            "isMain": true,
+            "description": "产品主界面窗口",
+            "order": 0
+        }
+    ]
+}

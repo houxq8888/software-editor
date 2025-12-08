@@ -78,6 +78,7 @@ public:
 signals:
     void modeChanged(UIMode mode);
     void initialized();
+    void closeQDesignerUI();
 
 public slots:
     void addFormWindow(QDesignerFormWindow *formWindow);

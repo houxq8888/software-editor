@@ -453,14 +453,22 @@ bool QDesigner::event(QEvent *ev)
         break;
     case QEvent::Close: {
         QCloseEvent *closeEvent = static_cast<QCloseEvent *>(ev);
+        qDebug()<<"qdesigner workbench handleClose";
         closeEvent->setAccepted(m_workbench->handleClose());
+        
+        // 关键修复：确保信号在关闭事件被接受后发出
         if (closeEvent->isAccepted()) {
+            qDebug() << "QDesigner close event accepted, emitting closeQDesignerUI signal";
+           
+            
             // We're going down, make sure that we don't get our settings saved twice.
             if (m_mainWindow)
                 m_mainWindow->setCloseEventPolicy(MainWindowBase::AcceptCloseEvents);
             eaten = QApplication::event(ev);
+        } else {
+            qDebug() << "QDesigner close event rejected, not emitting signal";
+            eaten = true;
         }
-        eaten = true;
         break;
     }
     default:

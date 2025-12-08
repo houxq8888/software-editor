@@ -126,6 +126,10 @@ private:
     void startStateMachineEditor();
     void stopStateMachineEditor();
     void onStateMachineEditorClosed();
+    
+    // UI文件类型识别和描述生成函数
+    QString detectUiFileType(const QString &filePath) const;
+    QString generateUiFileDescription(const QString &filePath, const QString &type) const;
 };
 
 #endif // PRODUCT_MAINWINDOW_H

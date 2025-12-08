@@ -1,5 +1,11 @@
 #include "product_mainwindow.h"
 #include "ui_product_mainwindow.h"
+#include "productconfigmanager.h"
+#include "packagemanager.h"
+#include "../uilayout/statemachine.h"
+#include "../uilayout/statemachineeditor.h"
+#include "../designer/qdesigner_workbench.h"
+#include "../designer/qdesigner_formwindow.h"
 #include "../designer/qdesigner.h"
 #include "../designer/mainwindow.h"
 #include "../designer/qdesigner_settings.h"
@@ -10,9 +16,9 @@
 #include <QDesignerFormWindowInterface>
 #include <QDesignerFormWindowManagerInterface>
 #include <QDesignerFormEditorInterface>
-#include "qdesigner_workbench.h"
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QFileInfo>
 
 ProductMainWindow::ProductMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -479,10 +485,7 @@ void ProductMainWindow::startUIEditor()
     
     // 设置启动标记属性，标识这是从产品配置页面启动的
     m_qdesigner_instance->setProperty("launchedFromProductMainWindow", true);
-    
-    // 连接QDesigner的退出信号
-    connect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
-    
+
     // 关键修改：检查是否有之前打开的UI文件需要重新加载
     QStringList filesToOpen;
     
@@ -600,13 +603,19 @@ void ProductMainWindow::startUIEditor()
     // 重要：设置UI编辑器为活动状态
     m_uiEditorActive = true;
     qDebug() << "UI editor start up complete, status set to active";
+    
+    connect(m_qdesigner_instance->workbench(), &QDesignerWorkbench::closeQDesignerUI, this, &ProductMainWindow::onQDesignerFinished);
+    
+    // 重要：QDesigner继承自QApplication，Qt框架已经自动启动了事件循环
+    // 不需要再次调用exec()，否则会导致"The event loop is already running"错误
+    qDebug() << "QDesigner application started successfully, event loop is running";
 }
 
 void ProductMainWindow::stopUIEditor()
 {
     if (m_uiEditorActive && m_qdesigner_instance) {
         // 断开信号连接
-        disconnect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
+        disconnect(m_qdesigner_instance, &QApplication::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
         
         // 重要：不要调用quit()，因为QDesigner继承自QApplication，调用quit()会导致整个程序退出
         // 只需要断开连接并置空指针，让QDesigner自然关闭
@@ -627,28 +636,85 @@ void ProductMainWindow::onQDesignerFinished()
 {
     qDebug() << "QDesigner finish quit";
     
-    // 保存当前打开的UI文件路径到产品配置
+    // 保存所有打开的UI文件路径到产品配置
     if (m_qdesigner_instance && m_qdesigner_instance->workbench()) {
-        // 获取当前打开的UI文件路径 - 通过formWindowManager获取activeFormWindow
-        QDesignerFormWindowInterface *currentForm = m_qdesigner_instance->workbench()->core()->formWindowManager()->activeFormWindow();
-        if (currentForm) {
-            QString currentUiPath = currentForm->fileName();
-            if (!currentUiPath.isEmpty()) {
-                qDebug() << "detect current open ui layout file:" << currentUiPath;
-                
-                // 保存UI路径到产品配置
-                m_product.setUiLayoutPath(currentUiPath);
-                m_configManager->setUiLayoutPath(currentUiPath);
-                
-                qDebug() << "save current open ui layout file path to product config:" << currentUiPath;
+        QDesignerWorkbench *workbench = m_qdesigner_instance->workbench();
+        
+        // 清空现有的UI文件列表
+        m_product.setUiFiles(QList<ProductUIFile>());
+        
+        // 获取所有打开的UI文件路径
+        int formWindowCount = workbench->formWindowCount();
+        qDebug() << "detect" << formWindowCount << "open ui layout files";
+        
+        // 先在控制台打印所有检测到的UI文件路径
+        qDebug() << "=== detect all UI file paths ===";
+        for (int i = 0; i < formWindowCount; i++) {
+            QDesignerFormWindow *formWindow = workbench->formWindow(i);
+            if (formWindow) {
+                QDesignerFormWindowInterface *editor = formWindow->editor();
+                if (editor) {
+                    QString uiPath = editor->fileName();
+                    if (!uiPath.isEmpty()) {
+                        qDebug() << "UI file" << i + 1 << ":" << uiPath;
+                    }
+                }
             }
         }
+        qDebug() << "================================";
+        
+        // 保存UI文件到产品配置
+        for (int i = 0; i < formWindowCount; i++) {
+            QDesignerFormWindow *formWindow = workbench->formWindow(i);
+            if (formWindow) {
+                QDesignerFormWindowInterface *editor = formWindow->editor();
+                if (editor) {
+                    QString uiPath = editor->fileName();
+                    if (!uiPath.isEmpty()) {
+                        qDebug() << "detect open ui layout file:" << uiPath;
+                        
+                        // 创建UI文件结构
+                        ProductUIFile uiFile;
+                        uiFile.name = QFileInfo(uiPath).baseName(); // 使用文件名作为UI文件名称
+                        uiFile.filePath = uiPath;
+                        uiFile.type = detectUiFileType(uiPath); // 智能识别UI文件类型
+                        uiFile.isMain = (i == 0); // 第一个文件设为主文件
+                        uiFile.description = generateUiFileDescription(uiPath, uiFile.type); // 生成描述信息
+                        uiFile.order = i;
+                        
+                        // 添加到产品配置
+                        m_product.addUiFile(uiFile);
+                        
+                        qDebug() << "save ui layout file to product config:" << uiPath << "type:" << uiFile.type;
+                    }
+                }
+            }
+        }
+        
+        // 如果至少有一个UI文件，设置第一个为主UI文件路径（向后兼容）
+        if (formWindowCount > 0) {
+            QDesignerFormWindow *firstFormWindow = workbench->formWindow(0);
+            if (firstFormWindow) {
+                QDesignerFormWindowInterface *editor = firstFormWindow->editor();
+                if (editor && !editor->fileName().isEmpty()) {
+                    QString mainUiPath = editor->fileName();
+                    m_product.setUiLayoutPath(mainUiPath);
+                    m_configManager->setUiLayoutPath(mainUiPath);
+                    qDebug() << "set main ui layout file path:" << mainUiPath;
+                }
+            }
+        }
+        
+        // 标记产品配置已修改
+        m_configManager->setProductModified(true);
+        
+        qDebug() << "save all" << formWindowCount << "ui layout files to product config";
     }
     
     // 清理QDesigner实例 - 注意：不能删除QApplication实例，否则会导致整个程序退出
     if (m_qdesigner_instance) {
         qDebug() << "cleanup QDesigner instance connections";
-        disconnect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
+        disconnect(m_qdesigner_instance, &QApplication::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
         
         // 重要：不要删除QDesigner实例，因为它继承自QApplication
         // 只需要将指针置为nullptr，让QDesigner自然退出
@@ -1068,4 +1134,115 @@ void ProductMainWindow::onStateMachineEditorClosed()
     
     // 更新状态栏
     updateStatusBar();
+}
+
+// UI文件类型识别函数
+QString ProductMainWindow::detectUiFileType(const QString &filePath) const
+{
+    QFileInfo fileInfo(filePath);
+    QString fileName = fileInfo.fileName().toLower();
+    QString baseName = fileInfo.baseName().toLower();
+    
+    // 基于文件名关键字识别UI类型
+    if (fileName.contains("main") || fileName.contains("主窗口") || 
+        fileName.contains("primary") || baseName.contains("main") ||
+        baseName.contains("主窗口") || baseName.contains("primary")) {
+        return "main_window";
+    }
+    else if (fileName.contains("dialog") || fileName.contains("对话框") || 
+             baseName.contains("dialog") || baseName.contains("对话框")) {
+        return "dialog";
+    }
+    else if (fileName.contains("widget") || fileName.contains("控件") || 
+             baseName.contains("widget") || baseName.contains("控件")) {
+        return "widget";
+    }
+    else if (fileName.contains("settings") || fileName.contains("设置") || 
+             baseName.contains("settings") || baseName.contains("设置")) {
+        return "settings";
+    }
+    else if (fileName.contains("config") || fileName.contains("配置") || 
+             baseName.contains("config") || baseName.contains("配置")) {
+        return "config";
+    }
+    else if (fileName.contains("about") || fileName.contains("关于") || 
+             baseName.contains("about") || baseName.contains("关于")) {
+        return "about";
+    }
+    else if (fileName.contains("login") || fileName.contains("登录") || 
+             baseName.contains("login") || baseName.contains("登录")) {
+        return "login";
+    }
+    else if (fileName.contains("register") || fileName.contains("注册") || 
+             baseName.contains("register") || baseName.contains("注册")) {
+        return "register";
+    }
+    else if (fileName.contains("wizard") || fileName.contains("向导") || 
+             baseName.contains("wizard") || baseName.contains("向导")) {
+        return "wizard";
+    }
+    else if (fileName.contains("toolbar") || fileName.contains("工具栏") || 
+             baseName.contains("toolbar") || baseName.contains("工具栏")) {
+        return "toolbar";
+    }
+    else if (fileName.contains("statusbar") || fileName.contains("状态栏") || 
+             baseName.contains("statusbar") || baseName.contains("状态栏")) {
+        return "statusbar";
+    }
+    else if (fileName.contains("menu") || fileName.contains("菜单") || 
+             baseName.contains("menu") || baseName.contains("菜单")) {
+        return "menu";
+    }
+    else {
+        // 默认类型
+        return "custom";
+    }
+}
+
+// UI文件描述生成函数
+QString ProductMainWindow::generateUiFileDescription(const QString &filePath, const QString &type) const
+{
+    QFileInfo fileInfo(filePath);
+    QString baseName = fileInfo.baseName();
+    
+    // 基于类型生成描述
+    if (type == "main_window") {
+        return QString("主窗口界面 - %1").arg(baseName);
+    }
+    else if (type == "dialog") {
+        return QString("对话框界面 - %1").arg(baseName);
+    }
+    else if (type == "widget") {
+        return QString("控件界面 - %1").arg(baseName);
+    }
+    else if (type == "settings") {
+        return QString("设置界面 - %1").arg(baseName);
+    }
+    else if (type == "config") {
+        return QString("配置界面 - %1").arg(baseName);
+    }
+    else if (type == "about") {
+        return QString("关于界面 - %1").arg(baseName);
+    }
+    else if (type == "login") {
+        return QString("登录界面 - %1").arg(baseName);
+    }
+    else if (type == "register") {
+        return QString("注册界面 - %1").arg(baseName);
+    }
+    else if (type == "wizard") {
+        return QString("向导界面 - %1").arg(baseName);
+    }
+    else if (type == "toolbar") {
+        return QString("工具栏界面 - %1").arg(baseName);
+    }
+    else if (type == "statusbar") {
+        return QString("状态栏界面 - %1").arg(baseName);
+    }
+    else if (type == "menu") {
+        return QString("菜单界面 - %1").arg(baseName);
+    }
+    else {
+        return QString("自定义界面 - %1").arg(baseName);
+    }
 }

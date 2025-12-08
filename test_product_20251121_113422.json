@@ -7,6 +7,24 @@
     "iconPath": "C:\\test\\icon.png",
     "name": "Test_20251121_113422",
     "screenshotPath": "C:\\test\\screenshot.png",
+    "uiFiles": [
+        {
+            "description": "自定义界面 - 43214",
+            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
+            "isMain": true,
+            "name": "43214",
+            "order": 0,
+            "type": "custom"
+        },
+        {
+            "description": "自定义界面 - 1208",
+            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/1208.ui",
+            "isMain": false,
+            "name": "1208",
+            "order": 1,
+            "type": "custom"
+        }
+    ],
     "uiLayoutPath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
     "uniqueId": "b3836d3c-f2c5-4dcb-9fc7-52f5b0617cde",
     "version": "1.0.0",
