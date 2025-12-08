@@ -2,6 +2,7 @@
 #include "ui_product_mainwindow.h"
 #include "uilayoutwindow.h"
 #include "../designer/qdesigner.h"
+#include "../designer/mainwindow.h"
 #include <QApplication>
 #include <QCloseEvent>
 #include <QScreen>
@@ -10,17 +11,63 @@
 #include <QDesignerFormWindowManagerInterface>
 #include <QDesignerFormEditorInterface>
 #include "qdesigner_workbench.h"
+#include <QProcess>
+#include <QProcessEnvironment>
 
 ProductMainWindow::ProductMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ProductMainWindow)
-    , m_currentFile("")
     , m_packageManager(nullptr)
-    , m_configManager(new ProductConfigManager(this))
+    , m_configManager(nullptr)
     , m_logTimer(nullptr)
+    , m_qdesigner_instance(nullptr)
+    , m_uiEditorActive(false)
+    , m_productLoaded(false) // 初始时产品未加载
 {
     ui->setupUi(this);
     
+    // 初始化配置管理器
+    m_configManager = new ProductConfigManager(this);
+    
+    // 初始化产品数据
+    m_product = Product();
+    
+    // 设置窗口标题
+    setWindowTitle("软件编辑器 - 产品配置");
+    
+    // 初始化UI组件
+    initUI();
+    
+    // 连接信号
+    connectSignals();
+    
+    // 加载配置
+    loadConfig();
+}
+
+ProductMainWindow::~ProductMainWindow()
+{
+    qDebug() << "ProductMainWindow析构函数开始执行";
+    
+    // 先删除PackageManager对象，确保在UI删除前断开所有信号连接
+    qDebug()<<"delete package manager";
+    if (m_packageManager) {
+        delete m_packageManager;
+        m_packageManager = nullptr;
+    }
+    
+    // 清理日志捕获资源
+    qDebug() << "清理日志捕获资源";
+    cleanupLogCapture();
+    
+    delete ui;
+    qDebug()<<"delete ui";
+    
+    qDebug() << "ProductMainWindow析构函数执行完成";
+}
+
+void ProductMainWindow::initUI()
+{
     // 限制窗口大小不超过屏幕分辨率
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->availableGeometry();
@@ -37,7 +84,18 @@ ProductMainWindow::ProductMainWindow(QWidget *parent)
     
     ui->featuresListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->featuresListWidget->setAlternatingRowColors(true);
+    
+    // 设置日志捕获
+    setupLogCapture();
+    
+    clearProductData();
+    
+    ui->mainToolBar->setIconSize(QSize(24, 24));
+    ui->statusBar->showMessage("就绪");
+}
 
+void ProductMainWindow::connectSignals()
+{
     // Connect signals
     connect(ui->nameLineEdit, &QLineEdit::textChanged, this, [this]() { setModified(true); });
     connect(ui->versionLineEdit, &QLineEdit::textChanged, this, [this]() { setModified(true); });
@@ -66,25 +124,12 @@ ProductMainWindow::ProductMainWindow(QWidget *parent)
         // 需要保存状态变化
         updateStatusBar();
     });
-    
-    // 设置日志捕获
-    setupLogCapture();
-    
-    clearProductData();
-
-    ui->mainToolBar->setIconSize(QSize(24, 24));
-    ui->statusBar->showMessage("就绪");
 }
 
-ProductMainWindow::~ProductMainWindow()
+void ProductMainWindow::loadConfig()
 {
-    // 先删除PackageManager对象，确保在UI删除前断开所有信号连接
-    if (m_packageManager) {
-        delete m_packageManager;
-        m_packageManager = nullptr;
-    }
-    
-    delete ui;
+    // 这里可以加载应用程序配置
+    // 目前暂时为空实现
 }
 
 void ProductMainWindow::on_actionNew_triggered()
@@ -256,6 +301,7 @@ void ProductMainWindow::clearProductData()
     ui->featureDescriptionTextEdit->clear();
     ui->featuresListWidget->clear();
     m_product = Product();
+    m_productLoaded = false; // 重置产品加载状态
     
     // 重置配置管理器状态
     m_configManager->setProduct(m_product);
@@ -273,6 +319,7 @@ void ProductMainWindow::updateFeatureEditors()
 void ProductMainWindow::loadProductData(const Product &product)
 {
     m_product = product;
+    m_productLoaded = true; // 标记产品已从文件加载
 
     ui->nameLineEdit->setText(product.name());
     ui->versionLineEdit->setText(product.version());
@@ -388,26 +435,185 @@ void ProductMainWindow::on_actionAbout_triggered()
 
 void ProductMainWindow::on_actionOpen_UI_Layout_Editor_triggered()
 {
-    // Save current product data first
-    saveProductData();
+    // 检查产品基本信息是否完整
+    if (m_product.name().isEmpty()) {
+        QMessageBox::warning(this, "打开UI布局编辑器", "请先填写产品基本信息。");
+        return;
+    }
     
-    QDesigner *app = qDesigner;
-    if (app) {
-        switch (app->parseCommandLineArguments()) {
-        case QDesigner::ParseArgumentsSuccess:
-            break;
-        case QDesigner::ParseArgumentsError:
-            return;
-        case QDesigner::ParseArgumentsHelpRequested:
+    // 如果UI编辑器已经在运行，则直接激活
+    if (m_uiEditorActive && m_qdesigner_instance) {
+        qDebug()<<"ui editor already active";
+        // 获取QDesigner的主窗口并激活
+        QMainWindow *mainWindow = qobject_cast<QMainWindow*>(m_qdesigner_instance->mainWindow());
+        if (mainWindow) {
+            mainWindow->show();
+            mainWindow->raise();
+            mainWindow->activateWindow();
             return;
         }
     }
     
-    // 连接formWindowAdded信号和activeFormWindowChanged信号，以便检测UI文件的加载事件
-    if (app && app->workbench() && app->workbench()->core()) {
-        connect(app->workbench()->core()->formWindowManager(), &QDesignerFormWindowManagerInterface::formWindowAdded, this, &ProductMainWindow::onFormWindowAdded);
-        connect(app->workbench()->core()->formWindowManager(), &QDesignerFormWindowManagerInterface::activeFormWindowChanged, this, &ProductMainWindow::onActiveFormWindowChanged);
+    // 启动UI编辑器
+    startUIEditor();
+}
+
+void ProductMainWindow::startUIEditor()
+{
+    if (m_uiEditorActive) {
+        qDebug() << "UI编辑器已经在运行";
+        return;
     }
+    
+    qDebug() << "启动UI编辑器";
+    
+    // 创建QDesigner实例
+    static int argc = 1;
+    static const char *argv[] = {"software-editor", nullptr};
+    
+    m_qdesigner_instance = new QDesigner(argc, const_cast<char**>(argv));
+    
+    // 设置启动标记属性，标识这是从产品配置页面启动的
+    m_qdesigner_instance->setProperty("launchedFromProductMainWindow", true);
+    
+    // 连接QDesigner的退出信号
+    connect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
+    
+    // 关键修改：在解析命令行参数之前设置预定义文件路径
+    // 获取UI文件路径
+    QString uiPath = m_configManager->getUiLayoutPath();
+    if (uiPath.isEmpty()) {
+        // 如果没有UI文件，使用默认路径
+        uiPath = QDir::currentPath() + "/default.ui";
+        qDebug() << "使用默认UI文件路径:" << uiPath;
+    }
+    
+    // 如果UI文件不存在，创建一个空的UI文件
+    if (!QFile::exists(uiPath)) {
+        qDebug() << "UI文件不存在，创建空文件:" << uiPath;
+        QFile file(uiPath);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            file.write("<ui version=\"4.0\">\n");
+            file.write(" <class>Form</class>\n");
+            file.write(" <widget class=\"QWidget\" name=\"Form\">\n");
+            file.write("  <property name=\"geometry\">\n");
+            file.write("   <rect>\n");
+            file.write("    <x>0</x>\n");
+            file.write("    <y>0</y>\n");
+            file.write("    <width>400</width>\n");
+            file.write("    <height>300</height>\n");
+            file.write("   </rect>\n");
+            file.write("  </property>\n");
+            file.write("  <property name=\"windowTitle\">\n");
+            file.write("   <string>Form</string>\n");
+            file.write("  </property>\n");
+            file.write(" </widget>\n");
+            file.write(" <resources/>\n");
+            file.write(" <connections/>\n");
+            file.write("</ui>\n");
+            file.close();
+        }
+    }
+    
+    // 关键修复：在解析命令行参数之前设置预定义文件路径
+    // 这样在parseCommandLineArguments()中就能识别到有文件要打开，从而抑制NewForm窗口
+    QStringList filesToOpen;
+    filesToOpen << uiPath;
+    
+    qDebug() << "调用setPredefinedFiles方法，设置预定义UI文件路径:" << uiPath;
+    m_qdesigner_instance->setPredefinedFiles(filesToOpen);
+    
+    // 解析命令行参数
+    QDesigner::ParseArgumentsResult result = m_qdesigner_instance->parseCommandLineArguments();
+    
+    if (result != QDesigner::ParseArgumentsSuccess) {
+        qDebug() << "QDesigner参数解析失败";
+        delete m_qdesigner_instance;
+        m_qdesigner_instance = nullptr;
+        return;
+    }
+}
+
+void ProductMainWindow::stopUIEditor()
+{
+    if (m_uiEditorActive && m_qdesigner_instance) {
+        // 断开信号连接
+        disconnect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
+        
+        // 重要：不要调用quit()，因为QDesigner继承自QApplication，调用quit()会导致整个程序退出
+        // 只需要断开连接并置空指针，让QDesigner自然关闭
+        // m_qdesigner_instance->quit(); // 这行代码会导致整个应用程序退出
+        
+        // 重要：不要删除QDesigner实例，因为它继承自QApplication
+        // 只需要将指针置为nullptr，让QDesigner自然退出
+        m_qdesigner_instance = nullptr;
+        
+        m_uiEditorActive = false;
+        qDebug() << "UI编辑器已停止";
+    }
+}
+
+
+
+void ProductMainWindow::onQDesignerFinished()
+{
+    qDebug() << "QDesigner finish quit";
+    
+    // 保存当前打开的UI文件路径到产品配置
+    if (m_qdesigner_instance && m_qdesigner_instance->workbench()) {
+        // 获取当前打开的UI文件路径 - 通过formWindowManager获取activeFormWindow
+        QDesignerFormWindowInterface *currentForm = m_qdesigner_instance->workbench()->core()->formWindowManager()->activeFormWindow();
+        if (currentForm) {
+            QString currentUiPath = currentForm->fileName();
+            if (!currentUiPath.isEmpty()) {
+                qDebug() << "detect current open ui layout file:" << currentUiPath;
+                
+                // 保存UI路径到产品配置
+                m_product.setUiLayoutPath(currentUiPath);
+                m_configManager->setUiLayoutPath(currentUiPath);
+                
+                qDebug() << "save current open ui layout file path to product config:" << currentUiPath;
+            }
+        }
+    }
+    
+    // 清理QDesigner实例 - 注意：不能删除QApplication实例，否则会导致整个程序退出
+    if (m_qdesigner_instance) {
+        qDebug() << "cleanup QDesigner instance connections";
+        disconnect(m_qdesigner_instance, &QDesigner::aboutToQuit, this, &ProductMainWindow::onQDesignerFinished);
+        
+        // 重要：不要删除QDesigner实例，因为它继承自QApplication
+        // 只需要将指针置为nullptr，让QDesigner自然退出
+        m_qdesigner_instance = nullptr;
+    }
+    
+    m_uiEditorActive = false;
+    
+    // 确保产品配置页面正确显示
+    // 先确保窗口没有被最小化
+    if (this->isMinimized()) {
+        this->showNormal();
+    }
+    
+    // 显示窗口
+    this->show();
+    qDebug()<<"show mainwindow";
+    // 确保窗口获得焦点
+    this->raise();
+    this->activateWindow();
+    
+    // 强制窗口重绘以确保可见
+    this->repaint();
+    
+    // 添加延迟处理，确保窗口状态正确恢复
+    QTimer::singleShot(100, this, [this]() {
+        this->raise();
+        this->activateWindow();
+        qDebug() << "延迟激活窗口完成";
+    });
+    
+    qDebug() << "return to product config page, ui layout path saved";
 }
 
 void ProductMainWindow::onUILayoutWindowClosed()
@@ -465,30 +671,9 @@ void ProductMainWindow::onUILayoutWindowClosed()
     }
 }
 
-void ProductMainWindow::onFormWindowAdded(QDesignerFormWindowInterface *formWindow)
-{
-    // 当新的表单窗口被添加时，连接fileNameChanged信号
-    connect(formWindow, &QDesignerFormWindowInterface::fileNameChanged, this, &ProductMainWindow::onFormWindowFileNameChanged);
-}
 
-void ProductMainWindow::onActiveFormWindowChanged(QDesignerFormWindowInterface *formWindow)
-{
-    // 当活动表单窗口改变时，如果有新的表单窗口，连接fileNameChanged信号
-    if (formWindow) {
-        connect(formWindow, &QDesignerFormWindowInterface::fileNameChanged, this, &ProductMainWindow::onFormWindowFileNameChanged);
-    }
-}
 
-void ProductMainWindow::onFormWindowFileNameChanged(const QString &fileName)
-{
-    // 当表单窗口的文件名改变时，更新产品的UI布局路径
-    if (!fileName.isEmpty()) {
-        m_configManager->setUiLayoutPath(fileName);
-        m_product.setUiLayoutPath(fileName);
-        setModified(true);
-        qDebug() << "UI布局文件路径已更新:" << fileName;
-    }
-}
+
 
 
 
@@ -648,8 +833,28 @@ void ProductMainWindow::closeEvent(QCloseEvent *event)
         }
     } else {
         // 没有修改，直接关闭
+        qDebug()<<"event accept";
         event->accept(); // 接受关闭事件
     }
+    
+    // 确保在窗口关闭时清理资源
+    qDebug()<<"cleanup log capture";
+    cleanupLogCapture();
+    
+    qDebug()<<"closeEvent function over, ready to quit app";
+    
+    // 检查QApplication实例是否存在
+    if (qApp) {
+        qDebug()<<"QApplication instance has, ready to quit";
+        // 显式退出应用程序，确保所有资源被正确释放
+        qDebug()<<"explicitly quit app";
+        QApplication::quit();
+        qDebug()<<"QApplication::quit() called";
+    } else {
+        qDebug()<<"error: QApplication instance not found";
+    }
+    
+    qDebug()<<"closeEvent function over";
 }
 
 // 日志捕获相关函数实现
@@ -688,8 +893,8 @@ void ProductMainWindow::updateStatusBarWithLogs()
         // 如果没有日志，显示默认状态
         QString status = m_configManager->getStatusDescription();
         
-        // 添加uniqueId显示到状态栏
-        if (!m_product.uniqueId().isEmpty()) {
+        // 只有在产品真正被加载时才显示产品ID
+        if (m_productLoaded && !m_product.uniqueId().isEmpty()) {
             status += QString(" | 产品ID: %1").arg(m_product.uniqueId());
         }
         
@@ -703,8 +908,8 @@ void ProductMainWindow::updateStatusBarWithLogs()
     // 构建状态栏显示文本
     QString status = m_configManager->getStatusDescription();
     
-    // 添加uniqueId显示到状态栏
-    if (!m_product.uniqueId().isEmpty()) {
+    // 只有在产品真正被加载时才显示产品ID
+    if (m_productLoaded && !m_product.uniqueId().isEmpty()) {
         status += QString(" | 产品ID: %1").arg(m_product.uniqueId());
     }
     
@@ -718,12 +923,14 @@ void ProductMainWindow::cleanupLogCapture()
 {
     // 清理日志捕获资源
     if (m_logTimer) {
+        qDebug()<<"cleanup log timer";
         m_logTimer->stop();
         delete m_logTimer;
         m_logTimer = nullptr;
     }
     
     // 恢复默认的消息处理器
+    qDebug()<<"restore default message handler";
     qInstallMessageHandler(nullptr);
 }
 

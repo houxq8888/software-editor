@@ -598,8 +598,10 @@ void QDesignerWorkbench::removeFormWindow(QDesignerFormWindow *formWindow)
     if (m_formWindows.isEmpty()) {
         m_actionManager->setWindowListSeparatorVisible(false);
         // Show up new form dialog unless closing
-        if (loadOk && m_state == StateUp)
+        if (loadOk && m_state == StateUp && !m_suppressNewFormShow){
+            qDebug()<<"showNewForm m_state == StateUp && !m_suppressNewFormShow";
             showNewForm();
+        }
     }
 }
 
@@ -897,6 +899,9 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
 {
     QFile file(fileName);
 
+    // 添加详细的文件加载日志
+    qDebug() << "开始加载UI文件:" << fileName;
+    
     qdesigner_internal::FormWindowBase::LineTerminatorMode mode = qdesigner_internal::FormWindowBase::NativeLineTerminator;
 
     if (detectLineTermiantorMode) {
@@ -914,7 +919,9 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
     }
 
     if (!file.open(QFile::ReadOnly|QFile::Text)) {
-        *errorMessage = tr("The file <b>%1</b> could not be opened: %2").arg(file.fileName(), file.errorString());
+        QString errorMsg = tr("The file <b>%1</b> could not be opened: %2").arg(file.fileName(), file.errorString());
+        qDebug() << "文件打开失败:" << errorMsg;
+        *errorMessage = errorMsg;
         return nullptr;
     }
 
@@ -931,6 +938,7 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
     editor->setFileName(fileName);
 
     if (!editor->setContents(&file, errorMessage)) {
+        qDebug() << "UI文件内容设置失败:" << (errorMessage ? *errorMessage : "未知错误");
         removeFormWindow(formWindow);
         formWindowManager->removeFormWindow(editor);
         m_core->metaDataBase()->remove(editor);
@@ -939,6 +947,8 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
 
     if (qdesigner_internal::FormWindowBase *fwb = qobject_cast<qdesigner_internal::FormWindowBase *>(editor))
         fwb->setLineTerminatorMode(mode);
+
+    qDebug() << "UI文件加载成功:" << fileName;
 
     switch (m_mode) {
     case DockedMode: {
@@ -972,11 +982,15 @@ QDesignerFormWindow * QDesignerWorkbench::loadForm(const QString &fileName,
 
 QDesignerFormWindow * QDesignerWorkbench::openForm(const QString &fileName, QString *errorMessage)
 {
+    qDebug() << "调用openForm打开UI文件:" << fileName;
     QDesignerFormWindow *rc = loadForm(fileName, true, errorMessage);
-    if (!rc)
+    if (!rc) {
+        qDebug() << "openForm失败:" << (errorMessage ? *errorMessage : "未知错误");
         return nullptr;
+    }
     rc->editor()->setFileName(fileName);
     rc->firstShow();
+    qDebug() << "openForm成功:" << fileName;
     return rc;
 }
 
@@ -1096,8 +1110,41 @@ void QDesignerWorkbench::restoreUISettings()
 void QDesignerWorkbench::handleCloseEvent(QCloseEvent *ev)
 {
     ev->setAccepted(handleClose());
-    if (ev->isAccepted())
-        QMetaObject::invokeMethod(qDesigner, "quit", Qt::QueuedConnection);  // We're going down!
+    if (ev->isAccepted()) {
+        // 检查是否是从产品配置页面启动的
+        // 如果是，则不调用quit，让程序返回到产品配置页面
+        bool isLaunchedFromProductMainWindow = false;
+        
+        // 检查命令行参数中是否包含产品配置文件
+        if (qDesigner) {
+            // 获取命令行参数
+            QStringList args = QCoreApplication::arguments();
+            for (const QString &arg : args) {
+                if (arg.endsWith(".json") && QFile::exists(arg)) {
+                    isLaunchedFromProductMainWindow = true;
+                    qDebug() << "检测到从产品配置页面启动，关闭UI编辑器后将返回到产品配置页面";
+                    break;
+                }
+            }
+            
+            // 如果命令行参数中没有检测到，检查是否有特定的启动标记
+            if (!isLaunchedFromProductMainWindow) {
+                // 检查是否有特定的环境变量或属性标记
+                QVariant productLaunchFlag = qDesigner->property("launchedFromProductMainWindow");
+                if (productLaunchFlag.isValid() && productLaunchFlag.toBool()) {
+                    isLaunchedFromProductMainWindow = true;
+                    qDebug() << "通过属性检测到从产品配置页面启动";
+                }
+            }
+        }
+        
+        if (!isLaunchedFromProductMainWindow) {
+            // 只有独立启动UI编辑器时才退出程序
+            QMetaObject::invokeMethod(qDesigner, "quit", Qt::QueuedConnection);  // We're going down!
+        } else {
+            qDebug() << "UI编辑器关闭，返回到产品配置页面";
+        }
+    }
 }
 
 QDesignerToolWindow *QDesignerWorkbench::widgetBoxToolWindow() const

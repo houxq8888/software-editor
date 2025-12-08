@@ -85,6 +85,30 @@ void loadApplicationConfig() {
 static const char rhiBackEndVar[] = "QSG_RHI_BACKEND";
 
 int main(int argc, char *argv[]) {
+    // 将日志输出到文件 - 在QApplication实例化之前设置
+    // 使用临时路径，因为QCoreApplication::applicationDirPath()在QApplication实例化前不可用
+    QString logPath = "debug.log";
+    QFile *logFile = new QFile(logPath);
+    static QTextStream *logStream = nullptr;
+    
+    if (logFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) { 
+        logStream = new QTextStream(logFile);
+        qInstallMessageHandler([](QtMsgType type, const QMessageLogContext &context, const QString &msg) { 
+            QString logEntry = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + " " + msg;
+            // 输出到控制台
+            QTextStream(stdout) << logEntry << endl;
+            // 输出到日志文件
+            if (logStream) {
+                *logStream << logEntry << endl;
+                logStream->flush();
+            }
+        });
+    } else {
+        // 如果日志文件打开失败，清理资源
+        delete logFile;
+        qDebug() << "无法打开日志文件:" << logPath;
+    }
+    
     // Enable the QWebEngineView, QQuickWidget plugins on Windows.
     if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::Windows
         && !qEnvironmentVariableIsSet(rhiBackEndVar)) {
@@ -102,29 +126,23 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setApplicationVersion("1.0.0");
     QCoreApplication::setOrganizationName("软件工作室");
     
-    // 将日志输出到文件
-    QString logPath = QCoreApplication::applicationDirPath() + "/debug.log";
-    QFile *logFile = new QFile(logPath);
-    if (logFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) { 
-        QTextStream *logStream = new QTextStream(logFile);
-        qInstallMessageHandler([](QtMsgType type, const QMessageLogContext &context, const QString &msg) { 
-            QString logEntry = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + " " + msg;
-            // 输出到控制台
-            QTextStream(stdout) << logEntry << endl;
-        });
-    } else {
-        // 如果日志文件打开失败，清理资源
-        delete logFile;
-        qDebug() << "无法打开日志文件:" << logPath;
-    }
-    
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
 
     ProductMainWindow w;
     w.show();
     
-    QGuiApplication::setQuitOnLastWindowClosed(false);
+    // 连接应用程序退出信号，用于调试
+    QObject::connect(qApp, &QApplication::aboutToQuit, []() {
+        qDebug() << "应用程序即将退出，开始清理资源";
+    });
+    
+    // QGuiApplication::setQuitOnLastWindowClosed(false);
 
-    return QApplication::exec();
+    int result = QApplication::exec();
+    
+    qDebug() << "QApplication::exec() 返回，退出码:" << result;
+    qDebug() << "应用程序主循环结束";
+    
+    return result;
 }

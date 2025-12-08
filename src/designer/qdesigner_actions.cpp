@@ -572,7 +572,8 @@ void QDesignerActions::editWidgetsSlot()
 
 void QDesignerActions::createForm()
 {
-    showNewFormDialog(QString());
+    // 可以注释这里，但必须要先确定没有UI文件加载进来
+   showNewFormDialog(QString());
 }
 
 void QDesignerActions::showNewFormDialog(const QString &fileName)

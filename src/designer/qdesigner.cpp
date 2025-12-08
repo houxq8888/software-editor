@@ -57,6 +57,7 @@ static void designerMessageHandler(QtMsgType type, const QMessageLogContext &con
 
 QDesigner::QDesigner(int &argc, char **argv)
     : QApplication(argc, argv)
+    , m_predefinedFiles() // 初始化预设置文件列表为空
 {
     setOrganizationName(u"QtProject"_s);
     QGuiApplication::setApplicationDisplayName(designerDisplayName);
@@ -70,9 +71,22 @@ QDesigner::QDesigner(int &argc, char **argv)
 
 QDesigner::~QDesigner()
 {
+    // 确保在析构时清理备份文件
+    cleanupBackupFiles();
+    
     delete m_workbench;
     delete m_server;
     delete m_client;
+}
+
+void QDesigner::cleanupBackupFiles()
+{
+    // 清理Qt Designer的备份文件，防止"last session was not terminated correctly"错误
+    if (m_workbench && m_workbench->core()) {
+        QDesignerSettings settings(m_workbench->core());
+        settings.clearBackup();
+        qDebug() << "Qt Designer备份文件已清理";
+    }
 }
 
 void QDesigner::showErrorMessage(const QString &message)
@@ -216,6 +230,80 @@ static inline QDesigner::ParseArgumentsResult
     return QDesigner::ParseArgumentsSuccess;
 }
 
+void QDesigner::setPredefinedFiles(const QStringList &files)
+{
+    // 在构造函数阶段设置预定义文件路径
+    qDebug() << "设置预定义文件路径:" << files;
+    m_predefinedFiles = files;
+}
+
+void QDesigner::setFilesToOpen(const QStringList &files)
+{
+    // 手动设置要打开的文件列表，模拟命令行参数传入的效果
+    qDebug() << "手动设置要打开的文件:" << files;
+    
+    bool suppressNewFormShow = m_workbench->readInBackup();
+    qDebug() << "初始suppressNewFormShow标志:" << suppressNewFormShow;
+    
+    // 记录是否有任何UI文件被成功打开
+    bool anyFileOpened = false;
+    
+    for (auto fileName : files) {
+        // Ensure absolute paths for recent file list to be unique
+        const QFileInfo fi(fileName);
+        if (fi.exists() && fi.isRelative())
+            fileName = fi.absoluteFilePath();
+            
+        // 检查文件扩展名，区分UI文件和产品配置文件
+        if (fileName.endsWith(".json", Qt::CaseInsensitive)) {
+            // 如果是JSON文件，认为是产品配置文件，不直接作为UI文件打开
+            qDebug() << "检测到产品配置文件:" << fileName;
+            qDebug() << "产品配置文件将由ProductMainWindow处理，不直接作为UI文件打开";
+            // 产品配置文件不抑制新建表单对话框
+        } else if (fileName.endsWith(".ui", Qt::CaseInsensitive)) {
+            // 如果是UI文件，正常打开
+            if (m_workbench->readInForm(fileName)) {
+                // 如果成功打开了UI文件，则抑制新建表单对话框的显示
+                suppressNewFormShow = true;
+                anyFileOpened = true;
+                qDebug() << "成功打开UI文件:" << fileName;
+            } else {
+                qDebug() << "打开UI文件失败:" << fileName;
+                // 即使打开失败，如果有UI文件传入，也应该抑制新建表单对话框
+                suppressNewFormShow = true;
+            }
+        } else {
+            // 其他文件类型，尝试作为UI文件打开
+            if (m_workbench->readInForm(fileName)) {
+                suppressNewFormShow = true;
+                anyFileOpened = true;
+                qDebug() << "成功打开文件(非标准扩展名):" << fileName;
+            } else {
+                qDebug() << "打开文件失败(非标准扩展名):" << fileName;
+                // 即使打开失败，如果有文件传入，也应该抑制新建表单对话框
+                suppressNewFormShow = true;
+            }
+        }
+    }
+
+    // 如果有UI文件被传入（无论是否成功打开），都应该抑制新建表单对话框
+    if (!files.isEmpty()) {
+        suppressNewFormShow = true;
+        qDebug() << "有文件传入，抑制新建表单显示";
+    }
+
+    // 如果已经有表单窗口打开，也应该抑制新建表单对话框
+    if (m_workbench->formWindowCount() > 0) {
+        suppressNewFormShow = true;
+        qDebug() << "有表单窗口已打开，抑制新建表单显示";
+    }
+
+    // 关键修复：将抑制标志设置到workbench对象中，确保所有showNewForm()调用都能正确抑制
+    m_workbench->setSuppressNewFormShow(suppressNewFormShow);
+    qDebug() << "设置suppressNewFormShow标志: suppressNewFormShow =" << suppressNewFormShow;
+    qDebug() << "workbench suppressNewFormShow标志: m_workbench->suppressNewFormShow() =" << m_workbench->suppressNewFormShow();
+}
+
 QDesigner::ParseArgumentsResult QDesigner::parseCommandLineArguments()
 {
     QString errorMessage;
@@ -226,6 +314,15 @@ QDesigner::ParseArgumentsResult QDesigner::parseCommandLineArguments()
         showHelp(parser, errorMessage);
         return result;
     }
+    
+    // 关键修改：如果存在预设置的文件路径，则优先使用预设置的文件
+    if (!m_predefinedFiles.isEmpty()) {
+        qDebug() << "使用预设置的文件路径:" << m_predefinedFiles;
+        options.files = m_predefinedFiles;
+        // 清空预设置文件，避免重复使用
+        m_predefinedFiles.clear();
+    }
+    
     // initialize the sub components
     if (options.clientPort)
         m_client = new QDesignerClient(options.clientPort, this);
@@ -252,17 +349,64 @@ QDesigner::ParseArgumentsResult QDesigner::parseCommandLineArguments()
     Q_ASSERT(previousMessageHandler);
 
     bool suppressNewFormShow = m_workbench->readInBackup();
-
+    qDebug()<<"suppressNewFormShow flag:"<<suppressNewFormShow;
+    // 记录是否有任何UI文件被成功打开
+    bool anyFileOpened = false;
+    
     for (auto fileName : std::as_const(options.files)) {
         // Ensure absolute paths for recent file list to be unique
         const QFileInfo fi(fileName);
         if (fi.exists() && fi.isRelative())
             fileName = fi.absoluteFilePath();
-        m_workbench->readInForm(fileName);
+            
+        // 检查文件扩展名，区分UI文件和产品配置文件
+        if (fileName.endsWith(".json", Qt::CaseInsensitive)) {
+            // 如果是JSON文件，认为是产品配置文件，不直接作为UI文件打开
+            qDebug() << "检测到产品配置文件:" << fileName;
+            qDebug() << "产品配置文件将由ProductMainWindow处理，不直接作为UI文件打开";
+            // 产品配置文件不抑制新建表单对话框
+        } else if (fileName.endsWith(".ui", Qt::CaseInsensitive)) {
+            // 如果是UI文件，正常打开
+            if (m_workbench->readInForm(fileName)) {
+                // 如果成功打开了UI文件，则抑制新建表单对话框的显示
+                suppressNewFormShow = true;
+                anyFileOpened = true;
+                qDebug() << "success open UI file:" << fileName;
+            } else {
+                qDebug() << "open UI file failed:" << fileName;
+                // 即使打开失败，如果有UI文件传入，也应该抑制新建表单对话框
+                suppressNewFormShow = true;
+            }
+        } else {
+            // 其他文件类型，尝试作为UI文件打开
+            if (m_workbench->readInForm(fileName)) {
+                suppressNewFormShow = true;
+                anyFileOpened = true;
+                qDebug() << "success open file(非标准扩展名):" << fileName;
+            } else {
+                qDebug() << "open file failed(非标准扩展名):" << fileName;
+                // 即使打开失败，如果有文件传入，也应该抑制新建表单对话框
+                suppressNewFormShow = true;
+            }
+        }
     }
 
-    if (m_workbench->formWindowCount() > 0)
+    // 如果有UI文件被传入（无论是否成功打开），都应该抑制新建表单对话框
+    if (!options.files.isEmpty()) {
         suppressNewFormShow = true;
+        qDebug()<<"has file input, suppress new form display";
+    }
+
+    // 如果已经有表单窗口打开，也应该抑制新建表单对话框
+    if (m_workbench->formWindowCount() > 0) {
+        suppressNewFormShow = true;
+        qDebug()<<"has form window opened, suppress new form display";
+    }
+
+    // 关键修复：将抑制标志设置到workbench对象中，确保所有showNewForm()调用都能正确抑制
+    m_workbench->setSuppressNewFormShow(suppressNewFormShow);
+    qDebug()<<"set suppressNewFormShow flag: suppressNewFormShow =" << suppressNewFormShow;
+    qDebug() << "workbench suppressNewFormShow flag: m_workbench->suppressNewFormShow() =" << m_workbench->suppressNewFormShow();
 
     if (options.qtVersion.has_value()) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
@@ -275,8 +419,18 @@ QDesigner::ParseArgumentsResult QDesigner::parseCommandLineArguments()
 
     // Show up error box with parent now if something went wrong
     if (m_initializationErrors.isEmpty()) {
-        if (!isServerOrClientEnabled() && !suppressNewFormShow)
+        qDebug()<<"check showNewForm condition:";
+        qDebug() << "  isServerOrClientEnabled() =" << isServerOrClientEnabled();
+        qDebug() << "  m_workbench->suppressNewFormShow() =" << m_workbench->suppressNewFormShow();
+        qDebug() << "  !isServerOrClientEnabled() =" << !isServerOrClientEnabled();
+        qDebug() << "  !m_workbench->suppressNewFormShow() =" << !m_workbench->suppressNewFormShow();
+        qDebug()<<"final condition: !isServerOrClientEnabled() && !m_workbench->suppressNewFormShow() =" << (!isServerOrClientEnabled() && !m_workbench->suppressNewFormShow());
+        
+        if (!isServerOrClientEnabled() && !m_workbench->suppressNewFormShow())
+        {
+            qDebug() << "showNewForm !isServerOrClientEnabled() && !m_workbench->suppressNewFormShow()";
             m_workbench->showNewForm();
+        }
     } else {
         showErrorMessageBox(m_initializationErrors);
         m_initializationErrors.clear();

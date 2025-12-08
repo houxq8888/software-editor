@@ -4,8 +4,13 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QFileDialog>
+#include <QProcess>
+#include <QStringList>
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QFile>
+#include <QDebug>
 #include <QMessageBox>
 #include <QTimer>
 #include <QDateTime>
@@ -41,9 +46,6 @@ private slots:
     
     // UI layout window management
     void onUILayoutWindowClosed();
-    void onFormWindowAdded(QDesignerFormWindowInterface *formWindow);
-    void onActiveFormWindowChanged(QDesignerFormWindowInterface *formWindow);
-    void onFormWindowFileNameChanged(const QString &fileName);
     void on_iconBrowseButton_clicked();
     void on_screenshotBrowseButton_clicked();
     void on_addFeatureButton_clicked();
@@ -56,6 +58,9 @@ private slots:
     void onPackageProgress(int progress, const QString &message);
     void onPackageFinished(bool success, const QString &message);
     void onPackageError(const QString &error);
+    
+    // QDesigner关闭事件处理
+    void onQDesignerFinished();
 
 private:
     Ui::ProductMainWindow *ui;
@@ -66,13 +71,15 @@ private:
     
     // 日志捕获相关成员
     QStringList m_logMessages;
-    QTimer *m_logTimer;
+    QTimer *m_logTimer;                    // 日志定时器
     static const int MAX_LOG_MESSAGES = 10; // 最大显示日志数量
     
-    // QDesigner相关成员
-    QStringList m_qdesigner_args; // 存储QDesigner的命令行参数
-    QList<char*> m_qdesigner_char_args; // 存储转换为char*的命令行参数
+    // UI编辑器相关成员
+    bool m_uiEditorActive; // UI编辑器是否正在运行
     QDesigner *m_qdesigner_instance; // 存储QDesigner实例的指针
+    
+    // 产品加载状态
+    bool m_productLoaded; // 产品是否已从文件加载
 
     void clearProductData();
     void loadProductData(const Product &product);
@@ -98,6 +105,17 @@ private:
     void updateStatusBarWithLogs();
     void cleanupLogCapture();
     static void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    
+    // UI编辑器初始化函数
+    void initUI();
+    void connectSignals();
+    void loadConfig();
+    
+    // UI编辑器管理函数
+    void startUIEditor();
+    void stopUIEditor();
+    void onQDesignerProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onQDesignerProcessError(QProcess::ProcessError error);
 };
 
 #endif // PRODUCT_MAINWINDOW_H

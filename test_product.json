@@ -1,0 +1,7 @@
+{
+    "name": "测试产品",
+    "version": "1.0.0",
+    "developer": "测试开发者",
+    "uniqueId": "test-product-001",
+    "uiLayoutPath": "test\\data\\mainwindow.ui"
+}

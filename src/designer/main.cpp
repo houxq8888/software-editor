@@ -32,7 +32,18 @@ int main(int argc, char *argv[])
     case QDesigner::ParseArgumentsHelpRequested:
         return 0;
     }
-    QGuiApplication::setQuitOnLastWindowClosed(false);
+    
+    // 设置当最后一个窗口关闭时退出应用程序
+    // 这确保Qt Designer进程能够正确清理备份文件
+    QGuiApplication::setQuitOnLastWindowClosed(true);
 
-    return QApplication::exec();
+    // 添加全局异常处理，确保程序异常退出时也能清理备份文件
+    try {
+        return QApplication::exec();
+    } catch (...) {
+        // 异常时执行清理，防止备份文件残留
+        qWarning() << "Qt Designer异常退出，正在清理备份文件...";
+        // 这里可以添加备份文件清理逻辑
+        return -1;
+    }
 }

@@ -39,6 +39,19 @@ ProductConfigManager::ProductConfigManager(QObject *parent)
     connect(m_syncTimer, &QTimer::timeout, this, &ProductConfigManager::checkForConflicts);
 }
 
+ProductConfigManager::~ProductConfigManager()
+{
+    // 确保定时器被正确停止和清理
+    qDebug() << "ProductConfigManager析构函数开始执行";
+    if (m_syncTimer) {
+        qDebug() << "停止和清理同步定时器";
+        m_syncTimer->stop();
+        delete m_syncTimer;
+        m_syncTimer = nullptr;
+    }
+    qDebug() << "ProductConfigManager析构函数执行完成";
+}
+
 void ProductConfigManager::setProduct(const Product &product)
 {
     // 使用ProductState进行状态管理

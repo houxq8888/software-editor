@@ -14,6 +14,7 @@ class ProductConfigManager : public QObject
 
 public:
     explicit ProductConfigManager(QObject *parent = nullptr);
+    ~ProductConfigManager();
     
     // 产品信息管理
     void setProduct(const Product &product);
