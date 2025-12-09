@@ -1,0 +1,69 @@
+{
+    "productInfo": {
+        "category": "工具软件",
+        "description": "这是一个测试产品，创建于20251121_113422",
+        "developer": "测试开发者",
+        "features": [
+        ],
+        "name": "Test_20251121_113422",
+        "resources": {
+            "icon": "resources/icon.png",
+            "screenshot": "resources/screenshot.png"
+        },
+        "uniqueId": "b3836d3c-f2c5-4dcb-9fc7-52f5b0617cde",
+        "version": "1.0.0",
+        "website": "https://example.com"
+    },
+    "stateMachines": [
+    ],
+    "uiFiles": [
+        {
+            "description": "UI布局文件: 43214",
+            "fileName": "../product_12345/ui_layouts/43214.ui",
+            "isMain": true,
+            "name": "43214",
+            "order": 0,
+            "type": "ui_layout"
+        },
+        {
+            "description": "UI布局文件: 1208",
+            "fileName": "../product_12345/ui_layouts/1208.ui",
+            "isMain": false,
+            "name": "1208",
+            "order": 1,
+            "type": "ui_layout"
+        },
+        {
+            "description": "UI布局文件: 1209",
+            "fileName": "../product_12345/ui_layouts/1209.ui",
+            "isMain": false,
+            "name": "1209",
+            "order": 2,
+            "type": "ui_layout"
+        },
+        {
+            "description": "UI布局文件: 1209-1",
+            "fileName": "../product_12345/ui_layouts/1209-1.ui",
+            "isMain": false,
+            "name": "1209-1",
+            "order": 3,
+            "type": "ui_layout"
+        },
+        {
+            "description": "UI布局文件: 1209-2",
+            "fileName": "../product_12345/ui_layouts/1209-2.ui",
+            "isMain": false,
+            "name": "1209-2",
+            "order": 4,
+            "type": "ui_layout"
+        },
+        {
+            "description": "UI布局文件: untitled",
+            "fileName": "../product_12345/ui_layouts/untitled.ui",
+            "isMain": false,
+            "name": "untitled",
+            "order": 5,
+            "type": "ui_layout"
+        }
+    ]
+}

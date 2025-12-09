@@ -164,7 +164,7 @@ void ProductMainWindow::on_actionOpen_triggered()
 
                 if (jsonDoc.isObject()) {
                     Product product;
-                    if (product.fromJson(jsonDoc.object())) {
+                    if (product.fromJson(jsonDoc.object(), fileName)) {
                         loadProductData(product);
                         m_currentFile = fileName;
                         setModified(false);
@@ -736,30 +736,35 @@ void ProductMainWindow::onQDesignerFinished()
             QDesignerFormWindow *formWindow = workbench->formWindow(i);
             if (formWindow && formWindow->editor()) {
                 QString fileName = formWindow->editor()->fileName();
-                if (!fileName.isEmpty()) {
-                    ProductUIFile uiFile;
-                    
-                    // 从文件名提取UI文件名称
-                    QFileInfo fileInfo(fileName);
-                    uiFile.name = fileInfo.baseName();
-                    uiFile.filePath = fileName;
-                    uiFile.type = "ui_layout";
-                    
-                    // 检查是否是主UI文件（基于文件路径匹配）
-                    // 这里可以根据业务逻辑调整判断条件
-                    if (fileName.contains("main") || i == 0) {
-                        uiFile.isMain = true;
-                    } else {
-                        uiFile.isMain = false;
-                    }
-                    
-                    uiFile.description = QString("UI布局文件: %1").arg(uiFile.name);
-                    uiFile.order = i;
-                    
-                    currentUiFiles.append(uiFile);
-                    
-                    qDebug() << "before close QDesigner, save UI file info:" << uiFile.name << "path:" << uiFile.filePath << "is main file:" << uiFile.isMain;
+                
+                // 重要修复：保存所有UI文件，包括untitled.ui文件
+                // 如果文件名为空，使用默认名称
+                if (fileName.isEmpty()) {
+                    fileName = QString("untitled_%1.ui").arg(i + 1);
                 }
+                
+                ProductUIFile uiFile;
+                
+                // 从文件名提取UI文件名称
+                QFileInfo fileInfo(fileName);
+                uiFile.name = fileInfo.baseName();
+                uiFile.filePath = fileName;
+                uiFile.type = "ui_layout";
+                
+                // 检查是否是主UI文件（基于文件路径匹配）
+                // 这里可以根据业务逻辑调整判断条件
+                if (fileName.contains("main") || i == 0) {
+                    uiFile.isMain = true;
+                } else {
+                    uiFile.isMain = false;
+                }
+                
+                uiFile.description = QString("UI布局文件: %1").arg(uiFile.name);
+                uiFile.order = i;
+                
+                currentUiFiles.append(uiFile);
+                
+                qDebug() << "before close QDesigner, save UI file info:" << uiFile.name << "path:" << uiFile.filePath << "is main file:" << uiFile.isMain;
             }
         }
         
@@ -799,6 +804,49 @@ void ProductMainWindow::onQDesignerFinished()
                 if (formWindow && formWindow->editor() && formWindow->editor()->isDirty()) {
                     hasLayoutChanges = true;
                     qDebug() << "before close QDesigner, detect UI layout change, window" << i << "has unsaved changes";
+                    
+                    // 重要修复：实际保存UI文件内容到磁盘
+                    QString fileName = formWindow->editor()->fileName();
+                    if (fileName.isEmpty()) {
+                        fileName = QString("untitled_%1.ui").arg(i + 1);
+                    }
+                    
+                    // 确保文件路径是绝对路径
+                    QFileInfo fileInfo(fileName);
+                    if (!fileInfo.isAbsolute()) {
+                        // 使用产品配置的基础路径（从产品UI布局路径推断）
+                        QString uiLayoutPath = m_product.uiLayoutPath();
+                        if (!uiLayoutPath.isEmpty()) {
+                            QFileInfo layoutInfo(uiLayoutPath);
+                            QString configDir = layoutInfo.absolutePath();
+                            fileName = configDir + "/ui_layouts/" + fileInfo.fileName();
+                        } else {
+                            // 如果UI布局路径为空，使用当前工作目录
+                            fileName = QDir::currentPath() + "/ui_layouts/" + fileInfo.fileName();
+                        }
+                    }
+                    
+                    // 创建目录（如果不存在）
+                    QDir dir = QFileInfo(fileName).absoluteDir();
+                    if (!dir.exists()) {
+                        dir.mkpath(".");
+                    }
+                    
+                    // 保存UI文件内容到磁盘
+                    if (workbench->writeOutForm(formWindow->editor(), fileName)) {
+                        qDebug() << "before close QDesigner, successfully saved UI file:" << fileName;
+                        
+                        // 更新UI文件信息中的路径
+                        for (ProductUIFile &uiFile : currentUiFiles) {
+                            if (uiFile.order == i) {
+                                uiFile.filePath = fileName;
+                                break;
+                            }
+                        }
+                    } else {
+                        qDebug() << "before close QDesigner, failed to save UI file:" << fileName;
+                    }
+                    
                     break;
                 }
             }

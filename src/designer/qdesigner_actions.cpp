@@ -711,8 +711,10 @@ bool QDesignerActions::saveForm(QDesignerFormWindowInterface *fw)
     }
     
     bool ret;
-    if (fwPtr->fileName().isEmpty())
+    qDebug()<<"fileName:"<<fwPtr->fileName();
+    if (fwPtr->fileName().isEmpty()){
         ret = saveFormAs(fwPtr);
+    }
     else
         ret =  writeOutForm(fwPtr, fwPtr->fileName());
     
@@ -874,6 +876,7 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
     
     Q_ASSERT(fwPtr && !saveFile.isEmpty());
 
+    qDebug()<<"writeOutForm1";
     if (check) {
         const QStringList problems = fwPtr->checkContents();
         if (!problems.isEmpty())
@@ -882,6 +885,7 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
 
     m_workbench->updateBackup(fwPtr);
 
+    qDebug()<<"writeOutForm2";
     QSaveFile f(saveFile);
     while (!f.open(QFile::WriteOnly)) {
         // 检查指针是否仍然有效
@@ -890,6 +894,7 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
             return false;
         }
         
+    qDebug()<<"writeOutForm3";
         QMessageBox box(QMessageBox::Warning,
                         tr("Save Form?"),
                         tr("Could not open file"),
@@ -926,12 +931,14 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         // loop back around...
     }
     
+    qDebug()<<"writeOutForm4";
     // 检查指针是否仍然有效
     if (!fwPtr) {
         qDebug() << "QDesignerActions::writeOutForm: Form window became invalid before writing content";
         return false;
     }
     
+    qDebug()<<"writeOutForm5";
     // 重要修复：安全地获取表单内容
     QByteArray formContents;
     
@@ -941,13 +948,9 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         return false;
     }
     
+    qDebug()<<"writeOutForm6";
     try {
-        // 尝试访问表单内容，但先进行更深入的指针检查
-        if (!QMetaObject::invokeMethod(fwPtr.data(), "contents", Qt::DirectConnection)) {
-            qDebug() << "QDesignerActions::writeOutForm: Failed to invoke contents method, form may be invalid";
-            return false;
-        }
-        
+        // 直接调用formWindowContents获取表单内容，避免不必要的QMetaObject::invokeMethod调用
         formContents = formWindowContents(fwPtr);
         if (formContents.isEmpty()) {
             qDebug() << "QDesignerActions::writeOutForm: Form contents is empty, skipping save";
@@ -961,6 +964,7 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         return false;
     }
     
+    qDebug()<<"writeOutFor7";
     f.write(formContents);
     if (!f.commit()) {
         // 检查指针是否仍然有效
@@ -980,9 +984,11 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         return false;
     }
     
+    qDebug()<<"writeOutForm8";
     addRecentFile(saveFile);
     m_saveDirectory = QFileInfo(f.fileName()).absolutePath();
 
+    qDebug()<<"writeOutForm9";
     // 重要修复：在设置窗口状态前检查指针有效性
     if (fwPtr) {
         fwPtr->setDirty(false);

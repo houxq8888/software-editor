@@ -29,6 +29,9 @@ class Product
 public:
     Product();
     ~Product() = default;
+    
+    // Path conversion helper
+    QString toAbsolutePath(const QString &relativePath) const;
 
     // Product information
     QString name() const;      void setName(const QString &name);
@@ -70,7 +73,7 @@ public:
 
     // Serialization
     QJsonObject toJson() const;
-    bool fromJson(const QJsonObject &json);
+    bool fromJson(const QJsonObject &json, const QString &configFilePath = QString());
 
 private:
     QString m_name;

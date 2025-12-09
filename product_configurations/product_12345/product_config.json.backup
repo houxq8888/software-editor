@@ -1,16 +1,30 @@
 {
-    "category": "工具软件",
-    "description": "这是一个测试产品，创建于20251121_113422",
-    "developer": "测试开发者",
-    "features": [
+    "productInfo": {
+        "category": "工具软件",
+        "description": "这是一个测试产品，创建于20251121_113422",
+        "developer": "测试开发者",
+        "resources": {
+            "icon": "resources/icon.png",
+            "screenshot": "resources/screenshot.png"
+        },
+        "name": "Test_20251121_113422",
+        "uniqueId": "b3836d3c-f2c5-4dcb-9fc7-52f5b0617cde",
+        "version": "1.0.0",
+        "website": "https://example.com",
+        "features": [
+        ]
+    },
+    "stateMachines": [
+        {
+            "description": "主状态机文件",
+            "fileName": "state_machines/state_machine_1.json",
+            "name": "state_machine_1"
+        }
     ],
-    "iconPath": "C:\\test\\icon.png",
-    "name": "Test_20251121_113422",
-    "screenshotPath": "C:\\test\\screenshot.png",
     "uiFiles": [
         {
             "description": "UI布局文件: 43214",
-            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
+            "fileName": "ui_layouts/43214.ui",
             "isMain": true,
             "name": "43214",
             "order": 0,
@@ -18,7 +32,7 @@
         },
         {
             "description": "UI布局文件: 1208",
-            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/1208.ui",
+            "fileName": "ui_layouts/1208.ui",
             "isMain": false,
             "name": "1208",
             "order": 1,
@@ -26,7 +40,7 @@
         },
         {
             "description": "UI布局文件: 1209",
-            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/1209.ui",
+            "fileName": "ui_layouts/1209.ui",
             "isMain": false,
             "name": "1209",
             "order": 2,
@@ -34,7 +48,7 @@
         },
         {
             "description": "UI布局文件: 1209-1",
-            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/1209-1.ui",
+            "fileName": "ui_layouts/1209-1.ui",
             "isMain": false,
             "name": "1209-1",
             "order": 3,
@@ -42,15 +56,11 @@
         },
         {
             "description": "UI布局文件: 1209-2",
-            "filePath": "D:/virtualMachine/github/20251203/software-editor-04/1209-2.ui",
+            "fileName": "ui_layouts/1209-2.ui",
             "isMain": false,
             "name": "1209-2",
             "order": 4,
             "type": "ui_layout"
         }
-    ],
-    "uiLayoutPath": "D:/virtualMachine/github/20251203/software-editor-04/43214.ui",
-    "uniqueId": "b3836d3c-f2c5-4dcb-9fc7-52f5b0617cde",
-    "version": "1.0.0",
-    "website": "https://example.com"
+    ]
 }

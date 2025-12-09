@@ -7,20 +7,23 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>594</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QListView" name="listView">
+  <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>130</x>
      <y>160</y>
-     <width>256</width>
-     <height>192</height>
+     <width>80</width>
+     <height>19</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>CheckBox</string>
    </property>
   </widget>
  </widget>

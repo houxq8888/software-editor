@@ -43,6 +43,7 @@ list(REMOVE_ITEM DESIGNER_SOURCES "${PROJECT_SOURCE_DIR}/src/designer/main.cpp")
 add_executable(software-editor
     src/main.cpp
     ${DESIGNER_SOURCES}
+    resources.qrc
     
     # 产品配置编辑模块
     src/product/product_mainwindow.cpp

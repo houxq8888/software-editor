@@ -11,6 +11,7 @@
 #include <QProcessEnvironment>
 #include <QtCore/qlibraryinfo.h>
 #include <QtCore/qoperatingsystemversion.h>
+#include <QIcon>
 using namespace Qt;
 #include "product_mainwindow.h"
 #include "designer/qdesigner.h"
@@ -125,6 +126,10 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setApplicationName("软件编辑器");
     QCoreApplication::setApplicationVersion("1.0.0");
     QCoreApplication::setOrganizationName("软件工作室");
+    
+    // 设置应用程序图标
+    QIcon appIcon(":/config/icon.png");
+    app.setWindowIcon(appIcon);
     
     // 加载配置并设置PowerShell编码
     loadApplicationConfig();
