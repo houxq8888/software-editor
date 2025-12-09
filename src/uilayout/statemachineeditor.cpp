@@ -26,6 +26,7 @@
 StateNode::StateNode(const StateMachineState &state, QGraphicsItem *parent)
     : QGraphicsRectItem(parent)
     , m_state(state)
+    , m_uiInterfaceIndicator(nullptr)
 {
     setRect(-50, -30, 100, 60);
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -59,6 +60,7 @@ void StateNode::setState(const StateMachineState &state)
 
 void StateNode::updateAppearance()
 {
+    // 基础颜色设置
     if (m_state.isInitialState) {
         setBrush(QBrush(QColor(144, 238, 144))); // 浅绿色
     } else if (m_state.isFinalState) {
@@ -71,6 +73,31 @@ void StateNode::updateAppearance()
     
     if (isSelected()) {
         setPen(QPen(Qt::blue, 3));
+    }
+    
+    // 更新UI界面标识
+    updateUiInterfaceIndicator();
+}
+
+void StateNode::updateUiInterfaceIndicator()
+{
+    // 移除旧的UI界面标识
+    if (m_uiInterfaceIndicator) {
+        scene()->removeItem(m_uiInterfaceIndicator);
+        delete m_uiInterfaceIndicator;
+        m_uiInterfaceIndicator = nullptr;
+    }
+    
+    // 如果有关联的UI界面，添加标识
+    if (!m_state.uiInterfaceId.isEmpty()) {
+        // 创建UI界面标识（小图标或文字）
+        m_uiInterfaceIndicator = new QGraphicsTextItem("UI", this);
+        m_uiInterfaceIndicator->setFont(QFont("Arial", 8, QFont::Bold));
+        m_uiInterfaceIndicator->setDefaultTextColor(QColor(0, 100, 0)); // 深绿色
+        m_uiInterfaceIndicator->setPos(rect().right() - 25, rect().top() + 5);
+        
+        // 添加工具提示显示具体的UI界面ID
+        m_uiInterfaceIndicator->setToolTip("关联UI界面: " + m_state.uiInterfaceId);
     }
 }
 
@@ -462,12 +489,15 @@ void StateMachineView::scaleView(qreal scaleFactor)
 StateMachineEditor::StateMachineEditor(QWidget *parent)
     : QWidget(parent)
     , m_stateMachineManager(nullptr)
-    , m_uiInterfaceManager(nullptr)
     , m_view(new StateMachineView(this))
     , m_scene(new StateMachineScene(this))
     , m_propertiesPanel(new QWidget(this))
     , m_toolbar(new QToolBar(this))
     , m_undoStack(new QUndoStack(this))
+    , m_runtime(new StateMachineRuntime(this))
+    , m_runtimeView(new StateMachineRuntimeView(this))
+    , m_runtimeDock(nullptr)
+    , m_product(nullptr)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     
@@ -488,10 +518,17 @@ StateMachineEditor::StateMachineEditor(QWidget *parent)
     
     mainLayout->addLayout(contentLayout);
     
+    // 设置运行时
+    setupRuntime();
+    
     // 连接信号
     connect(m_scene, &StateMachineScene::stateSelected, this, &StateMachineEditor::onStateSelected);
     connect(m_scene, &StateMachineScene::transitionSelected, this, &StateMachineEditor::onTransitionSelected);
     connect(m_scene, &StateMachineScene::stateMachineChanged, this, &StateMachineEditor::onStateMachineChanged);
+    
+    // 连接UI界面选择信号
+    connect(m_uiInterfaceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &StateMachineEditor::onUiInterfaceChanged);
 }
 
 void StateMachineEditor::setStateMachineManager(StateMachineManager *manager)
@@ -502,9 +539,21 @@ void StateMachineEditor::setStateMachineManager(StateMachineManager *manager)
     }
 }
 
-void StateMachineEditor::setUiInterfaceManager(UIInterfaceManager *uiManager)
+void StateMachineEditor::setProductUiFiles(const QList<ProductUIFile> &uiFiles)
 {
-    m_uiInterfaceManager = uiManager;
+    m_productUiFiles = uiFiles;
+    qDebug() << "状态机编辑器接收到产品UI文件信息:" << m_productUiFiles.size() << "个文件";
+    
+    // 更新属性面板中的UI界面下拉框
+    updatePropertiesPanel();
+}
+
+void StateMachineEditor::setProduct(Product *product)
+{
+    m_product = product;
+    if (product) {
+        qDebug() << "状态机编辑器已关联产品:" << product->name();
+    }
 }
 
 void StateMachineEditor::loadStateMachine(const QString &filePath)
@@ -522,12 +571,22 @@ void StateMachineEditor::saveStateMachine(const QString &filePath)
 {
     if (!m_stateMachineManager || !m_stateMachineManager->currentStateMachine()) return;
     
-    m_stateMachineManager->currentStateMachine()->saveToFile(filePath);
+    // 保存状态机到文件
+    if (m_stateMachineManager->currentStateMachine()->saveToFile(filePath)) {
+        // 如果关联了产品对象，则更新产品配置中的状态机路径
+        if (m_product) {
+            m_product->setStateMachinePath(filePath);
+            qDebug() << "已更新产品配置中的状态机路径:" << filePath;
+        }
+    }
 }
 
 void StateMachineEditor::createNewStateMachine()
 {
-    if (!m_stateMachineManager) return;
+    if (!m_stateMachineManager) {
+        qDebug()<<"state machine manager is null";
+        return;
+    }
     
     StateMachine *stateMachine = m_stateMachineManager->createStateMachine("新状态机");
     m_stateMachineManager->setCurrentStateMachine(stateMachine);
@@ -603,15 +662,45 @@ void StateMachineEditor::onStateMachineChanged()
     // 状态机发生变化时的处理
 }
 
+void StateMachineEditor::onUiInterfaceChanged(int index)
+{
+    if (index < 0) return;
+    
+    // 获取选中的UI界面ID
+    QString uiInterfaceId = m_uiInterfaceCombo->currentData().toString();
+    
+    // 检查是否有选中的状态
+    if (m_currentState.stateId.isEmpty()) {
+        qDebug() << "current state is empty, ui interface selection will not take effect";
+        return;
+    }
+    
+    // 更新当前状态的UI界面ID
+    m_currentState.uiInterfaceId = uiInterfaceId;
+    
+    // 如果状态机存在，则更新状态机中的状态信息
+    if (m_stateMachineManager && m_stateMachineManager->currentStateMachine()) {
+        m_stateMachineManager->currentStateMachine()->updateState(m_currentState);
+        
+        // 刷新场景显示
+        m_scene->refreshScene();
+        
+        qDebug() << "state" << m_currentState.name << "ui interface has been updated to:" 
+                 << m_uiInterfaceCombo->currentText() << "(" << uiInterfaceId << ")";
+    }
+}
+
 void StateMachineEditor::createToolbar()
 {
     QAction *newAction = m_toolbar->addAction("新建");
     QAction *openAction = m_toolbar->addAction("打开");
     QAction *saveAction = m_toolbar->addAction("保存");
     QAction *validateAction = m_toolbar->addAction("验证");
+    QAction *runtimeAction = m_toolbar->addAction("运行时预览");
     
     connect(newAction, &QAction::triggered, this, &StateMachineEditor::createNewStateMachine);
     connect(validateAction, &QAction::triggered, this, &StateMachineEditor::validateStateMachine);
+    connect(runtimeAction, &QAction::triggered, this, &StateMachineEditor::showRuntimePreview);
 }
 
 void StateMachineEditor::createPropertiesPanel()
@@ -672,9 +761,13 @@ void StateMachineEditor::updatePropertiesPanel()
     
     // 更新UI界面下拉框
     m_uiInterfaceCombo->clear();
-    if (m_uiInterfaceManager) {
-        for (auto *uiInterface : m_uiInterfaceManager->interfaces()) {
-            m_uiInterfaceCombo->addItem(uiInterface->name(), uiInterface->id());
+    
+    // 添加产品配置中的UI文件信息
+    if (!m_productUiFiles.isEmpty()) {
+        for (const auto &uiFile : m_productUiFiles) {
+            QString displayName = uiFile.name;
+            // 使用文件路径作为唯一标识符
+            m_uiInterfaceCombo->addItem(displayName, uiFile.filePath);
         }
     }
     
@@ -688,4 +781,48 @@ void StateMachineEditor::updatePropertiesPanel()
     m_transitionEventEdit->setText(m_currentTransition.eventName);
     m_transitionEventTypeCombo->setCurrentIndex(static_cast<int>(m_currentTransition.eventType));
     m_transitionActionEdit->setPlainText(m_currentTransition.actionScript);
+}
+
+void StateMachineEditor::setupRuntime()
+{
+    // 设置运行时引擎
+    m_runtime->setProductUiFiles(m_productUiFiles);
+    
+    // 设置运行时视图
+    m_runtimeView->setRuntime(m_runtime);
+    m_runtimeView->setStateMachineEditor(this);
+}
+
+void StateMachineEditor::showRuntimePreview()
+{
+    if (!m_stateMachineManager || !m_stateMachineManager->currentStateMachine()) {
+        QMessageBox::warning(this, "运行时预览", "请先创建或加载一个状态机");
+        return;
+    }
+    
+    // 设置当前状态机到运行时引擎
+    m_runtime->setStateMachine(m_stateMachineManager->currentStateMachine());
+    
+    // 创建或显示运行时预览窗口
+    if (!m_runtimeDock) {
+        m_runtimeDock = new QDockWidget("状态机运行时预览", this);
+        m_runtimeDock->setWidget(m_runtimeView);
+        m_runtimeDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+        
+        // 获取主窗口并添加停靠窗口
+        QWidget *mainWindow = this->window();
+        
+        // 使用更安全的方法检查是否为QMainWindow
+        if (mainWindow && mainWindow->inherits("QMainWindow")) {
+            QMainWindow *mainWin = static_cast<QMainWindow*>(mainWindow);
+            mainWin->addDockWidget(Qt::RightDockWidgetArea, m_runtimeDock);
+        } else {
+            // 如果没有主窗口，则显示为独立窗口
+            m_runtimeDock->setWindowFlags(Qt::Window);
+            m_runtimeDock->show();
+        }
+    }
+    
+    m_runtimeDock->show();
+    m_runtimeDock->raise();
 }

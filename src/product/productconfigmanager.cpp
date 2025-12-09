@@ -295,7 +295,10 @@ void ProductConfigManager::bindUiLayout(const QString &uiLayoutPath)
         m_product.setUiLayoutPath(uiLayoutPath);
         m_currentUiLayoutPath = uiLayoutPath;
         setUiLayoutChanged(false);
-        setProductModified(true);
+        
+        // 重要修改：UI布局绑定到产品属于UI布局修改，而不是产品配置修改
+        // 只标记UI布局已修改，不标记产品配置已修改
+        setUiLayoutModified(true);
         
         qDebug() << "UI layout is bound to product:" << uiLayoutPath;
     }

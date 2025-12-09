@@ -63,6 +63,11 @@ public:
     void addFeature(const ProductFeature &feature);
     void removeFeature(int index);
 
+    // State machine management
+    QString stateMachinePath() const;
+    void setStateMachinePath(const QString &stateMachinePath);
+    bool hasStateMachine() const;
+
     // Serialization
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject &json);
@@ -78,6 +83,7 @@ private:
     QString m_website;
     QString m_uniqueId;      // Unique identifier for product distinction
     QString m_uiLayoutPath;  // UI layout file path (backward compatibility)
+    QString m_stateMachinePath; // State machine file path
     QList<ProductUIFile> m_uiFiles; // Multiple UI files
     QList<ProductFeature> m_features;
 };

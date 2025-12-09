@@ -208,21 +208,19 @@ void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
             case QMessageBox::Save: {
                 qDebug()<<"begin to save form";
                 
-                // 再次检查指针有效性
-                if (!m_editor || !workbench()) {
-                    qDebug() << "QDesignerFormWindow::closeEvent: Pointer became invalid during save dialog";
-                    ev->setAccepted(false);
-                    break;
-                }
-                
-                bool ok = workbench()->saveForm(m_editor);
+                // // 重要修复：使用QPointer进行更安全的指针检查
+                QPointer<QDesignerFormWindowInterface> editorPtr = m_editor;
+                QPointer<QDesignerWorkbench> workbenchPtr = workbench();
+            
+                bool ok = workbenchPtr->saveForm(editorPtr);
                 qDebug()<<"end to save form, result:" << ok;
-                ev->setAccepted(ok);
-                m_editor->setDirty(!ok);
+                
                 break;
             }
             case QMessageBox::Discard:
-                m_editor->setDirty(false); // Not really necessary, but stops problems if we get close again.
+                if (m_editor) {
+                    m_editor->setDirty(false); // Not really necessary, but stops problems if we get close again.
+                }
                 ev->accept();
                 break;
             case QMessageBox::Cancel:

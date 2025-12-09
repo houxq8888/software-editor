@@ -13,30 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QToolButton" name="toolButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>140</y>
-     <width>75</width>
-     <height>23</height>
+     <x>70</x>
+     <y>100</y>
+     <width>24</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="radioButton">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>70</y>
-     <width>95</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>RadioButton</string>
+    <string>...</string>
    </property>
   </widget>
  </widget>

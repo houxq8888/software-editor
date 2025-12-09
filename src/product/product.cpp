@@ -152,6 +152,19 @@ void Product::removeFeature(int index) {
     }
 }
 
+// State machine management
+QString Product::stateMachinePath() const { 
+    return m_stateMachinePath; 
+}
+
+void Product::setStateMachinePath(const QString &stateMachinePath) { 
+    m_stateMachinePath = stateMachinePath; 
+}
+
+bool Product::hasStateMachine() const { 
+    return !m_stateMachinePath.isEmpty(); 
+}
+
 QJsonObject Product::toJson() const {
     QJsonObject json;
     json["name"] = m_name;
@@ -167,6 +180,11 @@ QJsonObject Product::toJson() const {
     // 向后兼容：保留单个UI文件路径
     if (!m_uiLayoutPath.isEmpty()) {
         json["uiLayoutPath"] = m_uiLayoutPath;
+    }
+    
+    // State machine file path
+    if (!m_stateMachinePath.isEmpty()) {
+        json["stateMachinePath"] = m_stateMachinePath;
     }
     
     // 多UI文件管理
@@ -209,6 +227,7 @@ bool Product::fromJson(const QJsonObject &json) {
     m_website = json.value("website").toString();
     m_uniqueId = json.value("uniqueId").toString();
     m_uiLayoutPath = json.value("uiLayoutPath").toString();
+    m_stateMachinePath = json.value("stateMachinePath").toString();
     
     // If uniqueId is empty, generate a new one
     if (m_uniqueId.isEmpty()) {

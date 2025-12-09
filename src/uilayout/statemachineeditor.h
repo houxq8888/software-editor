@@ -15,8 +15,12 @@
 #include <QScrollBar>
 #include <QToolBar>
 #include <QGraphicsSceneMouseEvent>
+#include <QDockWidget>
+#include <QMainWindow>
+#include <QList>
 #include "statemachine.h"
-#include "uiinterfacemanager.h"
+#include "product.h"
+#include "statemachineruntime.h"
 
 // 状态图节点
 class StateNode : public QGraphicsRectItem
@@ -38,6 +42,9 @@ private:
     StateMachineState m_state;
     QGraphicsTextItem *m_nameText;
     QGraphicsTextItem *m_descriptionText;
+    QGraphicsTextItem *m_uiInterfaceIndicator;
+    
+    void updateUiInterfaceIndicator();
 };
 
 // 状态图转换线
@@ -137,35 +144,48 @@ public:
     explicit StateMachineEditor(QWidget *parent = nullptr);
     
     void setStateMachineManager(StateMachineManager *manager);
-    void setUiInterfaceManager(UIInterfaceManager *uiManager);
+    void setProductUiFiles(const QList<ProductUIFile> &uiFiles);
+    void setProduct(Product *product);
     
     void loadStateMachine(const QString &filePath);
     void saveStateMachine(const QString &filePath);
-    
+
 public slots:
     void createNewStateMachine();
     void editStateProperties();
     void editTransitionProperties();
     void setInitialState();
     void validateStateMachine();
-    
+    void showRuntimePreview();
+
 private slots:
     void onStateSelected(const StateMachineState &state);
     void onTransitionSelected(const StateMachineTransition &transition);
     void onStateMachineChanged();
-    
+    void onUiInterfaceChanged(int index);
+
 private:
     void createToolbar();
     void createPropertiesPanel();
+    void createRuntimePreview();
     void updatePropertiesPanel();
+    void setupRuntime();
     
     StateMachineManager *m_stateMachineManager;
-    UIInterfaceManager *m_uiInterfaceManager;
     StateMachineView *m_view;
     StateMachineScene *m_scene;
     QWidget *m_propertiesPanel;
     QToolBar *m_toolbar;
     QUndoStack *m_undoStack;
+    
+    // 运行时预览
+    StateMachineRuntime *m_runtime;
+    StateMachineRuntimeView *m_runtimeView;
+    QDockWidget *m_runtimeDock;
+    
+    // 产品UI文件信息
+    QList<ProductUIFile> m_productUiFiles;
+    Product *m_product;
     
     // UI元素
     QLineEdit *m_stateNameEdit;

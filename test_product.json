@@ -4,6 +4,7 @@
     "developer": "测试开发者",
     "uniqueId": "test-product-001",
     "uiLayoutPath": "test\\data\\mainwindow.ui",
+    "stateMachinePath": "test_product_statemachine.json",
     "uiFiles": [
         {
             "name": "主窗口",

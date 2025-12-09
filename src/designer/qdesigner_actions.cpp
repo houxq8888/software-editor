@@ -614,9 +614,17 @@ bool QDesignerActions::openForm(QWidget *parent)
 
 bool QDesignerActions::saveFormAs(QDesignerFormWindowInterface *fw)
 {
+    // 重要修复：使用QPointer进行安全的指针检查
+    QPointer<QDesignerFormWindowInterface> fwPtr = fw;
+    
+    if (!fwPtr) {
+        qDebug() << "QDesignerActions::saveFormAs: Invalid form window pointer";
+        return false;
+    }
+    
     const QString extension = uiExtension();
 
-    QString dir = fw->fileName();
+    QString dir = fwPtr->fileName();
     if (dir.isEmpty()) {
         do {
             // Build untitled name
@@ -635,17 +643,26 @@ bool QDesignerActions::saveFormAs(QDesignerFormWindowInterface *fw)
         dir += extension;
     }
 
-    QScopedPointer<QFileDialog> saveAsDialog(createSaveAsDialog(fw, dir, extension));
+    QScopedPointer<QFileDialog> saveAsDialog(createSaveAsDialog(fwPtr, dir, extension));
     if (saveAsDialog->exec() != QDialog::Accepted)
         return false;
 
     const QString saveFile = saveAsDialog->selectedFiles().constFirst();
     saveAsDialog.reset(); // writeOutForm potentially shows other dialogs
 
-    fw->setFileName(saveFile);
-    bool ret = writeOutForm(fw, saveFile);
-    if (ret)
+    // 检查指针是否仍然有效
+    if (!fwPtr) {
+        qDebug() << "QDesignerActions::saveFormAs: Form window became invalid during file dialog";
+        return false;
+    }
+    
+    fwPtr->setFileName(saveFile);
+    bool ret = writeOutForm(fwPtr, saveFile);
+    
+    // 检查指针是否仍然有效
+    if (fwPtr && ret)
         emit formSaved(saveFile);
+    
     return ret;
 }
 
@@ -685,13 +702,24 @@ void QDesignerActions::saveAllForms()
 
 bool QDesignerActions::saveForm(QDesignerFormWindowInterface *fw)
 {
+    // 重要修复：使用QPointer进行安全的指针检查
+    QPointer<QDesignerFormWindowInterface> fwPtr = fw;
+    
+    if (!fwPtr) {
+        qDebug() << "QDesignerActions::saveForm: Invalid form window pointer";
+        return false;
+    }
+    
     bool ret;
-    if (fw->fileName().isEmpty())
-        ret = saveFormAs(fw);
+    if (fwPtr->fileName().isEmpty())
+        ret = saveFormAs(fwPtr);
     else
-        ret =  writeOutForm(fw, fw->fileName());
-    if (ret)
-        emit formSaved(fw->fileName());
+        ret =  writeOutForm(fwPtr, fwPtr->fileName());
+    
+    // 检查指针是否仍然有效
+    if (fwPtr && ret)
+        emit formSaved(fwPtr->fileName());
+    
     return ret;
 }
 
@@ -841,22 +869,31 @@ bool QDesignerActions::readInForm(const QString &fileName)
 
 bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QString &saveFile, bool check)
 {
-    Q_ASSERT(fw && !saveFile.isEmpty());
+    // 重要修复：使用QPointer进行安全的指针检查
+    QPointer<QDesignerFormWindowInterface> fwPtr = fw;
+    
+    Q_ASSERT(fwPtr && !saveFile.isEmpty());
 
     if (check) {
-        const QStringList problems = fw->checkContents();
+        const QStringList problems = fwPtr->checkContents();
         if (!problems.isEmpty())
-            QMessageBox::information(fw->window(), tr("Qt Widgets Designer"), problems.join("<br>"_L1));
+            QMessageBox::information(fwPtr->window(), tr("Qt Widgets Designer"), problems.join("<br>"_L1));
     }
 
-    m_workbench->updateBackup(fw);
+    m_workbench->updateBackup(fwPtr);
 
     QSaveFile f(saveFile);
     while (!f.open(QFile::WriteOnly)) {
+        // 检查指针是否仍然有效
+        if (!fwPtr) {
+            qDebug() << "QDesignerActions::writeOutForm: Form window became invalid during file open dialog";
+            return false;
+        }
+        
         QMessageBox box(QMessageBox::Warning,
                         tr("Save Form?"),
                         tr("Could not open file"),
-                        QMessageBox::NoButton, fw);
+                        QMessageBox::NoButton, fwPtr);
 
         box.setWindowModality(Qt::WindowModal);
         box.setInformativeText(tr("The file %1 could not be opened."
@@ -872,21 +909,69 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         if (box.clickedButton() == cancelButton)
             return false;
         if (box.clickedButton() == switchButton) {
-            QScopedPointer<QFileDialog> saveAsDialog(createSaveAsDialog(fw, QDir::currentPath(), uiExtension()));
+            // 检查指针是否仍然有效
+            if (!fwPtr) {
+                qDebug() << "QDesignerActions::writeOutForm: Form window became invalid during file selection dialog";
+                return false;
+            }
+            
+            QScopedPointer<QFileDialog> saveAsDialog(createSaveAsDialog(fwPtr, QDir::currentPath(), uiExtension()));
             if (saveAsDialog->exec() != QDialog::Accepted)
                 return false;
 
             const QString fileName = saveAsDialog->selectedFiles().constFirst();
             f.setFileName(fileName);
-            fw->setFileName(fileName);
+            fwPtr->setFileName(fileName);
         }
         // loop back around...
     }
-    f.write(formWindowContents(fw));
+    
+    // 检查指针是否仍然有效
+    if (!fwPtr) {
+        qDebug() << "QDesignerActions::writeOutForm: Form window became invalid before writing content";
+        return false;
+    }
+    
+    // 重要修复：安全地获取表单内容
+    QByteArray formContents;
+    
+    // 多重安全检查：确保指针有效且可以安全访问
+    if (!fwPtr || !fwPtr->window() || !fwPtr->core()) {
+        qDebug() << "QDesignerActions::writeOutForm: Form window or its dependencies are invalid, skipping save";
+        return false;
+    }
+    
+    try {
+        // 尝试访问表单内容，但先进行更深入的指针检查
+        if (!QMetaObject::invokeMethod(fwPtr.data(), "contents", Qt::DirectConnection)) {
+            qDebug() << "QDesignerActions::writeOutForm: Failed to invoke contents method, form may be invalid";
+            return false;
+        }
+        
+        formContents = formWindowContents(fwPtr);
+        if (formContents.isEmpty()) {
+            qDebug() << "QDesignerActions::writeOutForm: Form contents is empty, skipping save";
+            return false;
+        }
+    } catch (const std::exception& e) {
+        qDebug() << "QDesignerActions::writeOutForm: Exception when getting form contents:" << e.what();
+        return false;
+    } catch (...) {
+        qDebug() << "QDesignerActions::writeOutForm: Unknown exception when getting form contents";
+        return false;
+    }
+    
+    f.write(formContents);
     if (!f.commit()) {
+        // 检查指针是否仍然有效
+        if (!fwPtr) {
+            qDebug() << "QDesignerActions::writeOutForm: Form window became invalid during file commit";
+            return false;
+        }
+        
         QMessageBox box(QMessageBox::Warning, tr("Save Form"),
                         tr("Could not write file"),
-                        QMessageBox::Cancel, fw);
+                        QMessageBox::Cancel, fwPtr);
         box.setWindowModality(Qt::WindowModal);
         box.setInformativeText(tr("It was not possible to write the file %1 to disk."
                                 "\nReason: %2")
@@ -894,11 +979,18 @@ bool QDesignerActions::writeOutForm(QDesignerFormWindowInterface *fw, const QStr
         box.exec();
         return false;
     }
+    
     addRecentFile(saveFile);
     m_saveDirectory = QFileInfo(f.fileName()).absolutePath();
 
-    fw->setDirty(false);
-    fw->parentWidget()->setWindowModified(false);
+    // 重要修复：在设置窗口状态前检查指针有效性
+    if (fwPtr) {
+        fwPtr->setDirty(false);
+        if (QWidget *parentWidget = fwPtr->parentWidget()) {
+            parentWidget->setWindowModified(false);
+        }
+    }
+    
     return true;
 }
 

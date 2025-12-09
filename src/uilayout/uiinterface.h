@@ -1,17 +1,20 @@
 #ifndef UIINTERFACE_H
 #define UIINTERFACE_H
 
+#include <QObject>
 #include <QString>
 #include <QList>
 #include <QJsonObject>
 #include "layoutitem.h"
 
 // UI界面类，表示一个完整的UI界面
-class UIInterface
+class UIInterface : public QObject
 {
+    Q_OBJECT
+
 public:
-    explicit UIInterface(const QString &name = "", const QString &description = "");
-    ~UIInterface() = default;
+    explicit UIInterface(const QString &name = "", const QString &description = "", QObject *parent = nullptr);
+    ~UIInterface() override = default;
 
     // 基本信息
     QString name() const;
@@ -47,6 +50,23 @@ public:
     
     bool isMainWindow() const;
     void setIsMainWindow(bool isMain);
+
+    // 事件处理
+    void triggerButtonClick(const QString &buttonName);
+    void triggerMenuAction(const QString &actionName);
+    
+    // 获取界面控件信息
+    QList<QString> getButtonNames() const;
+    QList<QString> getMenuActionNames() const;
+    
+    // 界面控件创建
+    QWidget* widget();
+
+signals:
+    void buttonClicked(const QString &buttonName);
+    void menuActionTriggered(const QString &actionName);
+    void interfaceActivated();
+    void interfaceDeactivated();
 
 private:
     QString m_id;

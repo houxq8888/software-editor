@@ -666,7 +666,15 @@ bool QDesignerWorkbench::writeOutForm(QDesignerFormWindowInterface *formWindow, 
 
 bool QDesignerWorkbench::saveForm(QDesignerFormWindowInterface *frm)
 {
-    return m_actionManager->saveForm(frm);
+    // 重要修复：使用QPointer进行安全的指针检查
+    QPointer<QDesignerFormWindowInterface> frmPtr = frm;
+    
+    if (!frmPtr) {
+        qDebug() << "QDesignerWorkbench::saveForm: Invalid form window pointer";
+        return false;
+    }
+    
+    return m_actionManager->saveForm(frmPtr);
 }
 
 QDesignerFormWindow *QDesignerWorkbench::findFormWindow(QWidget *widget) const
