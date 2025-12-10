@@ -18,6 +18,22 @@ enum class StateMachineEventType {
     CustomEvent       // 自定义事件
 };
 
+// 条件操作符
+enum class ConditionOperator {
+    Equal,           // 等于
+    NotEqual,        // 不等于
+    Greater,         // 大于
+    Less,            // 小于
+    Contains,        // 包含
+    IsEmpty          // 为空
+};
+
+// 条件逻辑关系
+enum class ConditionLogic {
+    And,             // 与
+    Or               // 或
+};
+
 // 状态机转换条件
 struct StateMachineCondition {
     QString conditionId;          // 条件ID
@@ -41,6 +57,15 @@ struct StateMachineTransition {
     QList<StateMachineCondition> conditions; // 转换条件
     QString actionScript;         // 转换时执行的脚本
     bool isEnabled;               // 是否启用
+    
+    // 新增条件配置字段
+    QString eventSource;          // 事件源（如按钮ID、菜单项ID等）
+    struct {
+        QString variable;         // 条件变量名
+        ConditionOperator operatorType; // 操作符类型
+        QString value;            // 比较值
+        ConditionLogic logic;     // 逻辑关系
+    } condition;                  // 简单条件配置
     
     StateMachineTransition() : isEnabled(true) {}
     

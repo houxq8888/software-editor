@@ -206,12 +206,12 @@ void QDesignerFormWindow::closeEvent(QCloseEvent *ev)
 
         switch (box.exec()) {
             case QMessageBox::Save: {
-                qDebug()<<"begin to save form";
                 
                 // // 重要修复：使用QPointer进行更安全的指针检查
                 QPointer<QDesignerFormWindowInterface> editorPtr = m_editor;
                 QPointer<QDesignerWorkbench> workbenchPtr = workbench();
             
+                qDebug()<<"begin to save form";
                 bool ok = workbenchPtr->saveForm(editorPtr);
                 qDebug()<<"end to save form, result:" << ok;
                 

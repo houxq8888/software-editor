@@ -1,11 +1,245 @@
 {
-    "currentStateId": "",
-    "description": "",
-    "id": "802c212e-01c1-4e30-acae-273f42c5bbc4",
-    "initialStateId": "",
-    "name": "新状态机",
-    "states": [
-    ],
-    "transitions": [
-    ]
+    "created": "2025-12-10T11:58:58",
+    "integrationManager": {
+        "integrationMode": 2,
+        "logicSequenceStateMachine": {
+            "currentStateId": "default_logic_state",
+            "globalData": {
+            },
+            "id": "97eec985-13a0-47a0-9f92-b1be16acfbdb",
+            "initialStateId": "default_logic_state",
+            "name": "LogicSequenceStateMachine",
+            "states": [
+                {
+                    "data": {
+                    },
+                    "description": "应用程序默认逻辑状态",
+                    "isFinalState": true,
+                    "isInitialState": true,
+                    "name": "默认逻辑状态",
+                    "stateId": "default_logic_state"
+                }
+            ],
+            "transitions": [
+            ]
+        },
+        "mappings": [
+            {
+                "logicStateId": "default_logic_state",
+                "mappingId": "default_mapping",
+                "uiFlowStateId": "default_ui_state"
+            }
+        ],
+        "uiFlowStateMachine": {
+            "currentStateId": "ui_state_14477178285115710256",
+            "id": "7994b0af-648f-4076-b9d0-2467c3c6b8b5",
+            "initialStateId": "default_ui_state",
+            "name": "UIFlowStateMachine",
+            "states": [
+                {
+                    "isFinalState": false,
+                    "isInitialState": true,
+                    "name": "43214",
+                    "stateId": "ui_state_14477178285115710256",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/43214.ui"
+                },
+                {
+                    "isFinalState": false,
+                    "isInitialState": false,
+                    "name": "1208",
+                    "stateId": "ui_state_7196698971376659576",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1208.ui"
+                },
+                {
+                    "isFinalState": false,
+                    "isInitialState": false,
+                    "name": "1209",
+                    "stateId": "ui_state_7082120446084594182",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209.ui"
+                },
+                {
+                    "isFinalState": false,
+                    "isInitialState": false,
+                    "name": "1209-1",
+                    "stateId": "ui_state_16938523400926986498",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-1.ui"
+                },
+                {
+                    "isFinalState": false,
+                    "isInitialState": false,
+                    "name": "1209-2",
+                    "stateId": "ui_state_12779142625252973823",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-2.ui"
+                },
+                {
+                    "isFinalState": true,
+                    "isInitialState": false,
+                    "name": "untitled",
+                    "stateId": "ui_state_1965989114434212728",
+                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/untitled.ui"
+                },
+                {
+                    "isFinalState": true,
+                    "isInitialState": true,
+                    "name": "默认界面",
+                    "stateId": "default_ui_state",
+                    "uiInterfaceId": "main_window"
+                }
+            ],
+            "transitions": [
+                {
+                    "eventSource": "next_button",
+                    "eventType": "click",
+                    "fromStateId": "ui_state_14477178285115710256",
+                    "toStateId": "ui_state_7196698971376659576",
+                    "transitionId": "trans_0_to_1"
+                },
+                {
+                    "eventSource": "next_button",
+                    "eventType": "click",
+                    "fromStateId": "ui_state_7196698971376659576",
+                    "toStateId": "ui_state_7082120446084594182",
+                    "transitionId": "trans_1_to_2"
+                },
+                {
+                    "eventSource": "next_button",
+                    "eventType": "click",
+                    "fromStateId": "ui_state_7082120446084594182",
+                    "toStateId": "ui_state_16938523400926986498",
+                    "transitionId": "trans_2_to_3"
+                },
+                {
+                    "eventSource": "next_button",
+                    "eventType": "click",
+                    "fromStateId": "ui_state_16938523400926986498",
+                    "toStateId": "ui_state_12779142625252973823",
+                    "transitionId": "trans_3_to_4"
+                },
+                {
+                    "eventSource": "next_button",
+                    "eventType": "click",
+                    "fromStateId": "ui_state_12779142625252973823",
+                    "toStateId": "ui_state_1965989114434212728",
+                    "transitionId": "trans_4_to_5"
+                }
+            ]
+        }
+    },
+    "logicSequenceStateMachine": {
+        "currentStateId": "default_logic_state",
+        "globalData": {
+        },
+        "id": "97eec985-13a0-47a0-9f92-b1be16acfbdb",
+        "initialStateId": "default_logic_state",
+        "name": "LogicSequenceStateMachine",
+        "states": [
+            {
+                "data": {
+                },
+                "description": "应用程序默认逻辑状态",
+                "isFinalState": true,
+                "isInitialState": true,
+                "name": "默认逻辑状态",
+                "stateId": "default_logic_state"
+            }
+        ],
+        "transitions": [
+        ]
+    },
+    "type": "decoupled_state_machine",
+    "uiFlowStateMachine": {
+        "currentStateId": "ui_state_14477178285115710256",
+        "id": "7994b0af-648f-4076-b9d0-2467c3c6b8b5",
+        "initialStateId": "default_ui_state",
+        "name": "UIFlowStateMachine",
+        "states": [
+            {
+                "isFinalState": false,
+                "isInitialState": true,
+                "name": "43214",
+                "stateId": "ui_state_14477178285115710256",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/43214.ui"
+            },
+            {
+                "isFinalState": false,
+                "isInitialState": false,
+                "name": "1208",
+                "stateId": "ui_state_7196698971376659576",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1208.ui"
+            },
+            {
+                "isFinalState": false,
+                "isInitialState": false,
+                "name": "1209",
+                "stateId": "ui_state_7082120446084594182",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209.ui"
+            },
+            {
+                "isFinalState": false,
+                "isInitialState": false,
+                "name": "1209-1",
+                "stateId": "ui_state_16938523400926986498",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-1.ui"
+            },
+            {
+                "isFinalState": false,
+                "isInitialState": false,
+                "name": "1209-2",
+                "stateId": "ui_state_12779142625252973823",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-2.ui"
+            },
+            {
+                "isFinalState": true,
+                "isInitialState": false,
+                "name": "untitled",
+                "stateId": "ui_state_1965989114434212728",
+                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/untitled.ui"
+            },
+            {
+                "isFinalState": true,
+                "isInitialState": true,
+                "name": "默认界面",
+                "stateId": "default_ui_state",
+                "uiInterfaceId": "main_window"
+            }
+        ],
+        "transitions": [
+            {
+                "eventSource": "next_button",
+                "eventType": "click",
+                "fromStateId": "ui_state_14477178285115710256",
+                "toStateId": "ui_state_7196698971376659576",
+                "transitionId": "trans_0_to_1"
+            },
+            {
+                "eventSource": "next_button",
+                "eventType": "click",
+                "fromStateId": "ui_state_7196698971376659576",
+                "toStateId": "ui_state_7082120446084594182",
+                "transitionId": "trans_1_to_2"
+            },
+            {
+                "eventSource": "next_button",
+                "eventType": "click",
+                "fromStateId": "ui_state_7082120446084594182",
+                "toStateId": "ui_state_16938523400926986498",
+                "transitionId": "trans_2_to_3"
+            },
+            {
+                "eventSource": "next_button",
+                "eventType": "click",
+                "fromStateId": "ui_state_16938523400926986498",
+                "toStateId": "ui_state_12779142625252973823",
+                "transitionId": "trans_3_to_4"
+            },
+            {
+                "eventSource": "next_button",
+                "eventType": "click",
+                "fromStateId": "ui_state_12779142625252973823",
+                "toStateId": "ui_state_1965989114434212728",
+                "transitionId": "trans_4_to_5"
+            }
+        ]
+    },
+    "version": "2.0"
 }

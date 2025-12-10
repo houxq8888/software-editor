@@ -4,6 +4,10 @@
 #include "packagemanager.h"
 #include "../uilayout/statemachine.h"
 #include "../uilayout/statemachineeditor.h"
+#include "../uilayout/statemachineeditor_v2.h"
+#include "../uilayout/uiflowstatemachine.h"
+#include "../uilayout/logicsequencestatemachine.h"
+#include "../uilayout/statemachineintegrationmanager.h"
 #include "../uilayout/uiinterface.h"
 
 #include "../designer/qdesigner_workbench.h"
@@ -1213,11 +1217,22 @@ void ProductMainWindow::startStateMachineEditor()
         return;
     }
     
-    // 创建状态机编辑器实例（独立窗口，不设置父窗口）
-    m_stateMachineEditor = new StateMachineEditor(nullptr);
+    // 创建新的状态机编辑器V2实例（独立窗口，不设置父窗口）
+    m_stateMachineEditor = new StateMachineEditorV2(nullptr);
     
     // 创建并设置状态机管理器
     StateMachineManager *stateMachineManager = new StateMachineManager(m_stateMachineEditor);
+    
+    // 创建解耦的状态机实例
+    UIFlowStateMachine *uiFlowStateMachine = new UIFlowStateMachine("UIFlowStateMachine", m_stateMachineEditor);
+    LogicSequenceStateMachine *logicStateMachine = new LogicSequenceStateMachine("LogicSequenceStateMachine", m_stateMachineEditor);
+    StateMachineIntegrationManager *integrationManager = new StateMachineIntegrationManager(m_stateMachineEditor);
+    
+    // 设置集成管理器
+    integrationManager->setUiFlowStateMachine(uiFlowStateMachine);
+    integrationManager->setLogicSequenceStateMachine(logicStateMachine);
+    
+    // 设置编辑器状态机管理器
     m_stateMachineEditor->setStateMachineManager(stateMachineManager);
     
     // 传递产品对象到状态机编辑器
@@ -1228,6 +1243,9 @@ void ProductMainWindow::startStateMachineEditor()
     if (!uiFiles.isEmpty()) {
         m_stateMachineEditor->setProductUiFiles(uiFiles);
         qDebug() << "状态机编辑器已接收到" << uiFiles.size() << "个产品UI文件信息";
+        
+        // 根据UI文件自动创建UI流状态机状态
+        setupUIFlowStatesFromProduct(uiFlowStateMachine, uiFiles);
     }
     
     // 如果产品配置中有状态机文件路径，则自动加载状态机
@@ -1237,41 +1255,32 @@ void ProductMainWindow::startStateMachineEditor()
         
         // 检查状态机文件是否存在
         if (fileInfo.exists() && fileInfo.isFile()) {
-            // 文件存在，直接加载
-            m_stateMachineEditor->loadStateMachine(stateMachinePath);
-            qDebug() << "已从产品配置加载状态机文件:" << stateMachinePath;
-        } else {
-            // 文件不存在，创建新的空状态机文件
-            StateMachine *stateMachine = stateMachineManager->createStateMachine("新状态机");
-            if (stateMachine->saveToFile(stateMachinePath)) {
-                stateMachineManager->setCurrentStateMachine(stateMachine);
-                m_stateMachineEditor->setStateMachineManager(stateMachineManager);
-                qDebug() << "已创建新的状态机文件:" << stateMachinePath;
+            // 文件存在，尝试加载解耦状态机配置
+            if (loadDecoupledStateMachine(stateMachinePath, uiFlowStateMachine, logicStateMachine, integrationManager)) {
+                qDebug() << "已从产品配置加载解耦状态机文件:" << stateMachinePath;
             } else {
-                qWarning() << "无法创建状态机文件:" << stateMachinePath;
+                // 如果加载失败，使用旧格式加载
+                m_stateMachineEditor->loadStateMachine(stateMachinePath);
+                qDebug() << "已从产品配置加载状态机文件（旧格式）:" << stateMachinePath;
             }
+        } else {
+            // 文件不存在，创建新的解耦状态机文件
+            createNewDecoupledStateMachine(stateMachinePath, uiFlowStateMachine, logicStateMachine, integrationManager);
         }
     } else {
         // 产品配置中没有状态机文件路径，创建默认路径
         QString defaultStateMachinePath = QDir::currentPath() + "/" + m_product.name() + "_statemachine.json";
         m_product.setStateMachinePath(defaultStateMachinePath);
         
-        // 创建新的空状态机
-        StateMachine *stateMachine = stateMachineManager->createStateMachine("新状态机");
-        if (stateMachine->saveToFile(defaultStateMachinePath)) {
-            stateMachineManager->setCurrentStateMachine(stateMachine);
-            m_stateMachineEditor->setStateMachineManager(stateMachineManager);
-            qDebug() << "已创建默认状态机文件:" << defaultStateMachinePath;
-        } else {
-            qWarning() << "无法创建默认状态机文件:" << defaultStateMachinePath;
-        }
+        // 创建新的解耦状态机
+        createNewDecoupledStateMachine(defaultStateMachinePath, uiFlowStateMachine, logicStateMachine, integrationManager);
     }
     
     // 连接关闭信号
     connect(m_stateMachineEditor, &StateMachineEditor::destroyed, this, &ProductMainWindow::onStateMachineEditorClosed);
     
     // 设置窗口属性
-    m_stateMachineEditor->setWindowTitle("状态机编辑器 - " + (m_product.name().isEmpty() ? "未命名产品" : m_product.name()));
+    m_stateMachineEditor->setWindowTitle("状态机编辑器V2 - " + (m_product.name().isEmpty() ? "未命名产品" : m_product.name()));
     m_stateMachineEditor->setAttribute(Qt::WA_DeleteOnClose);
     
     // 设置窗口大小和位置
@@ -1292,7 +1301,7 @@ void ProductMainWindow::startStateMachineEditor()
     m_stateMachineEditor->show();
     m_stateMachineEditorActive = true;
     
-    qDebug() << "state machine editor started";
+    qDebug() << "state machine editor V2 started with decoupled architecture";
 }
 
 void ProductMainWindow::stopStateMachineEditor()
@@ -1320,6 +1329,211 @@ void ProductMainWindow::onStateMachineEditorClosed()
     
     // 更新状态栏
     updateStatusBar();
+}
+
+// 根据产品UI文件自动创建UI流状态机状态
+void ProductMainWindow::setupUIFlowStatesFromProduct(UIFlowStateMachine *uiFlowStateMachine, const QList<ProductUIFile> &uiFiles)
+{
+    if (!uiFlowStateMachine || uiFiles.isEmpty()) {
+        return;
+    }
+    
+    qDebug() << "开始根据产品UI文件创建UI流状态机状态";
+    
+    // 清空现有状态 - 通过移除所有状态和转换
+    QList<UIFlowStateMachine::UIFlowState> states = uiFlowStateMachine->states();
+    for (const auto &state : states) {
+        uiFlowStateMachine->removeState(state.stateId);
+    }
+    
+    QList<UIFlowStateMachine::UIFlowTransition> transitions = uiFlowStateMachine->transitions();
+    for (const auto &transition : transitions) {
+        uiFlowStateMachine->removeTransition(transition.transitionId);
+    }
+    
+    // 为每个UI文件创建状态
+    for (int i = 0; i < uiFiles.size(); i++) {
+        const ProductUIFile &uiFile = uiFiles[i];
+        UIFlowStateMachine::UIFlowState state;
+        state.stateId = QString("ui_state_%1").arg(QString::number(qHash(uiFile.filePath)));
+        state.name = uiFile.name;
+        state.uiInterfaceId = uiFile.filePath;
+        
+        // 设置初始状态（第一个文件）
+        if (i == 0) {
+            state.isInitialState = true;
+        }
+        
+        // 设置最终状态（最后一个文件）
+        if (i == uiFiles.size() - 1) {
+            state.isFinalState = true;
+        }
+        
+        uiFlowStateMachine->addState(state);
+        qDebug() << "创建UI流状态:" << state.name;
+    }
+    
+    // 创建状态之间的转换
+    for (int i = 0; i < uiFiles.size() - 1; i++) {
+        UIFlowStateMachine::UIFlowTransition transition;
+        transition.transitionId = QString("trans_%1_to_%2").arg(i).arg(i+1);
+        transition.fromStateId = QString("ui_state_%1").arg(QString::number(qHash(uiFiles[i].filePath)));
+        transition.toStateId = QString("ui_state_%1").arg(QString::number(qHash(uiFiles[i+1].filePath)));
+        transition.eventSource = "next_button";
+        transition.eventType = "click";
+        
+        uiFlowStateMachine->addTransition(transition);
+        qDebug() << "创建UI流转换:" << transition.transitionId;
+    }
+    
+    qDebug() << "UI流状态机状态创建完成，共" << uiFiles.size() << "个状态";
+}
+
+// 加载解耦状态机配置
+bool ProductMainWindow::loadDecoupledStateMachine(const QString &filePath, 
+                                                  UIFlowStateMachine *uiFlowStateMachine,
+                                                  LogicSequenceStateMachine *logicStateMachine,
+                                                  StateMachineIntegrationManager *integrationManager)
+{
+    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
+        qWarning() << "无法加载解耦状态机：状态机实例为空";
+        return false;
+    }
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "无法打开状态机文件:" << filePath;
+        return false;
+    }
+    
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
+    file.close();
+    
+    if (!jsonDoc.isObject()) {
+        qWarning() << "状态机文件格式无效:" << filePath;
+        return false;
+    }
+    
+    QJsonObject rootObj = jsonDoc.object();
+    
+    // 检查是否为解耦状态机格式
+    if (rootObj.contains("uiFlowStateMachine") && 
+        rootObj.contains("logicSequenceStateMachine") &&
+        rootObj.contains("integrationManager")) {
+        
+        // 加载UI流状态机
+        QJsonObject uiFlowObj = rootObj["uiFlowStateMachine"].toObject();
+        if (!uiFlowStateMachine->fromJson(uiFlowObj)) {
+            qWarning() << "加载UI流状态机失败";
+            return false;
+        }
+        
+        // 加载逻辑时序状态机
+        QJsonObject logicObj = rootObj["logicSequenceStateMachine"].toObject();
+        if (!logicStateMachine->fromJson(logicObj)) {
+            qWarning() << "加载逻辑时序状态机失败";
+            return false;
+        }
+        
+        // 加载集成管理器
+        QJsonObject integrationObj = rootObj["integrationManager"].toObject();
+        if (!integrationManager->fromJson(integrationObj)) {
+            qWarning() << "加载集成管理器失败";
+            return false;
+        }
+        
+        qDebug() << "成功加载解耦状态机配置";
+        return true;
+    }
+    
+    qDebug() << "状态机文件不是解耦格式，尝试旧格式加载";
+    return false;
+}
+
+// 创建新的解耦状态机
+void ProductMainWindow::createNewDecoupledStateMachine(const QString &filePath,
+                                                       UIFlowStateMachine *uiFlowStateMachine,
+                                                       LogicSequenceStateMachine *logicStateMachine,
+                                                       StateMachineIntegrationManager *integrationManager)
+{
+    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
+        qWarning() << "无法创建解耦状态机：状态机实例为空";
+        return;
+    }
+    
+    // 创建默认的UI流状态机状态
+    UIFlowStateMachine::UIFlowState defaultState;
+    defaultState.stateId = "default_ui_state";
+    defaultState.name = "默认界面";
+    defaultState.uiInterfaceId = "main_window";
+    defaultState.isInitialState = true;
+    defaultState.isFinalState = true;
+    
+    uiFlowStateMachine->addState(defaultState);
+    
+    // 创建默认的逻辑时序状态机状态
+    LogicSequenceStateMachine::LogicState logicState;
+    logicState.stateId = "default_logic_state";
+    logicState.name = "默认逻辑状态";
+    logicState.description = "应用程序默认逻辑状态";
+    logicState.isInitialState = true;
+    logicState.isFinalState = true;
+    
+    logicStateMachine->addState(logicState);
+    
+    // 创建默认的状态映射
+    StateMachineIntegrationManager::StateMachineMapping mapping;
+    mapping.uiFlowStateId = "default_ui_state";
+    mapping.logicStateId = "default_logic_state";
+    mapping.mappingId = "default_mapping";
+    
+    integrationManager->addMapping(mapping);
+    
+    // 保存到文件
+    saveDecoupledStateMachine(filePath, uiFlowStateMachine, logicStateMachine, integrationManager);
+    
+    qDebug() << "已创建新的解耦状态机文件:" << filePath;
+}
+
+// 保存解耦状态机配置
+bool ProductMainWindow::saveDecoupledStateMachine(const QString &filePath,
+                                                  UIFlowStateMachine *uiFlowStateMachine,
+                                                  LogicSequenceStateMachine *logicStateMachine,
+                                                  StateMachineIntegrationManager *integrationManager)
+{
+    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
+        qWarning() << "无法保存解耦状态机：状态机实例为空";
+        return false;
+    }
+    
+    QJsonObject rootObj;
+    
+    // 添加UI流状态机配置
+    rootObj["uiFlowStateMachine"] = uiFlowStateMachine->toJson();
+    
+    // 添加逻辑时序状态机配置
+    rootObj["logicSequenceStateMachine"] = logicStateMachine->toJson();
+    
+    // 添加集成管理器配置
+    rootObj["integrationManager"] = integrationManager->toJson();
+    
+    // 添加元数据
+    rootObj["version"] = "2.0";
+    rootObj["created"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    rootObj["type"] = "decoupled_state_machine";
+    
+    QJsonDocument jsonDoc(rootObj);
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "无法创建状态机文件:" << filePath;
+        return false;
+    }
+    
+    file.write(jsonDoc.toJson(QJsonDocument::Indented));
+    file.close();
+    
+    return true;
 }
 
 // UI文件类型识别函数

@@ -18,13 +18,20 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QList>
+#include <QMap>
+#include <QPointF>
+#include <QPropertyAnimation>
+#include <QEasingCurve>
+#include <QGraphicsDropShadowEffect>
 #include "statemachine.h"
 #include "product.h"
 #include "statemachineruntime.h"
 
 // 状态图节点
-class StateNode : public QGraphicsRectItem
+class StateNode : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+
 public:
     explicit StateNode(const StateMachineState &state, QGraphicsItem *parent = nullptr);
     
@@ -32,10 +39,22 @@ public:
     void setState(const StateMachineState &state);
     
     void updateAppearance();
+    void animateSelection();
+    void animateConnection();
+    void setHighlighted(bool highlighted);
+    
+    QPointF getConnectionPoint(const QPointF &targetPoint) const;
+
+signals:
+    void connectionRequested(StateNode *node);
     
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     
 private:
@@ -43,13 +62,25 @@ private:
     QGraphicsTextItem *m_nameText;
     QGraphicsTextItem *m_descriptionText;
     QGraphicsTextItem *m_uiInterfaceIndicator;
+    QGraphicsEllipseItem *m_uiIcon;
+    QGraphicsDropShadowEffect *m_shadowEffect;
+    QPropertyAnimation *m_selectionAnimation;
+    
+    bool m_isHovered;
+    bool m_isDragging;
+    bool m_isHighlighted;
+    QPointF m_dragStartPos;
     
     void updateUiInterfaceIndicator();
+    void createVisualEffects();
+    void updateNodeStyle();
 };
 
 // 状态图转换线
-class TransitionEdge : public QGraphicsLineItem
+class TransitionEdge : public QObject, public QGraphicsLineItem
 {
+    Q_OBJECT
+
 public:
     explicit TransitionEdge(const StateMachineTransition &transition, 
                            StateNode *fromNode, StateNode *toNode, 
@@ -59,9 +90,17 @@ public:
     void setTransition(const StateMachineTransition &transition);
     
     void updatePosition();
+    void animateTransition();
+    void setHighlighted(bool highlighted);
+    
+    StateNode* fromNode() const { return m_fromNode; }
+    StateNode* toNode() const { return m_toNode; }
     
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     
 private:
@@ -70,6 +109,15 @@ private:
     StateNode *m_toNode;
     QGraphicsTextItem *m_eventText;
     QGraphicsPolygonItem *m_arrowHead;
+    QGraphicsDropShadowEffect *m_shadowEffect;
+    QPropertyAnimation *m_highlightAnimation;
+    
+    bool m_isHovered;
+    bool m_isHighlighted;
+    
+    void updateArrowPosition();
+    void updateLineStyle();
+    void createVisualEffects();
 };
 
 // 状态机编辑器场景
@@ -84,9 +132,14 @@ public:
     StateMachine* stateMachine() const;
     
     void refreshScene();
+    void startConnection(StateNode *fromNode, const QPointF &startPos);
+    void updateConnection(const QPointF &currentPos);
+    void finishConnection(StateNode *toNode);
+    void cancelConnection();
     
     StateNode* findStateNode(const QString &stateId) const;
     TransitionEdge* findTransitionEdge(const QString &transitionId) const;
+    StateNode* getNodeAtPosition(const QPointF &scenePos) const;
     
 public slots:
     void addState(const QPointF &position);
@@ -98,18 +151,29 @@ signals:
     void stateSelected(const StateMachineState &state);
     void transitionSelected(const StateMachineTransition &transition);
     void stateMachineChanged();
+    void connectionStarted(StateNode *fromNode);
+    void connectionFinished(StateNode *fromNode, StateNode *toNode);
     
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     
 private:
     StateMachine *m_stateMachine;
     QMap<QString, StateNode*> m_stateNodes;
     QMap<QString, TransitionEdge*> m_transitionEdges;
     
+    // 连接线相关
+    StateNode *m_connectionFromNode;
+    QGraphicsLineItem *m_tempConnectionLine;
+    bool m_isConnecting;
+    
     void createStateNode(const StateMachineState &state);
     void createTransitionEdge(const StateMachineTransition &transition);
     void clearScene();
+    void setupConnectionMode();
+    void cleanupConnectionMode();
 };
 
 // 状态机编辑器视图
@@ -197,6 +261,13 @@ private:
     QLineEdit *m_transitionEventEdit;
     QComboBox *m_transitionEventTypeCombo;
     QTextEdit *m_transitionActionEdit;
+    
+    // 条件配置UI组件
+    QLineEdit *m_transitionSourceEdit;
+    QLineEdit *m_conditionVariableEdit;
+    QComboBox *m_conditionOperatorCombo;
+    QLineEdit *m_conditionValueEdit;
+    QComboBox *m_conditionLogicCombo;
     
     StateMachineState m_currentState;
     StateMachineTransition m_currentTransition;

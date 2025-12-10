@@ -72,8 +72,16 @@ add_executable(software-editor
     src/uilayout/statemachine.h
     src/uilayout/statemachineeditor.cpp
     src/uilayout/statemachineeditor.h
+    src/uilayout/statemachineeditor_v2.cpp
+    src/uilayout/statemachineeditor_v2.h
     src/uilayout/statemachineruntime.cpp
     src/uilayout/statemachineruntime.h
+    src/uilayout/uiflowstatemachine.cpp
+    src/uilayout/uiflowstatemachine.h
+    src/uilayout/logicsequencestatemachine.cpp
+    src/uilayout/logicsequencestatemachine.h
+    src/uilayout/statemachineintegrationmanager.cpp
+    src/uilayout/statemachineintegrationmanager.h
     
     # 智能打包模块
     src/package/packagemanager.cpp

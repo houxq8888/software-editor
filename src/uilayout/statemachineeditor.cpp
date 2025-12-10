@@ -27,21 +27,31 @@ StateNode::StateNode(const StateMachineState &state, QGraphicsItem *parent)
     : QGraphicsRectItem(parent)
     , m_state(state)
     , m_uiInterfaceIndicator(nullptr)
+    , m_uiIcon(nullptr)
+    , m_shadowEffect(nullptr)
+    , m_selectionAnimation(nullptr)
+    , m_isHovered(false)
+    , m_isDragging(false)
+    , m_isHighlighted(false)
 {
-    setRect(-50, -30, 100, 60);
+    setRect(-60, -40, 120, 80); // 增大节点尺寸
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    setAcceptHoverEvents(true);
     
+    // 创建文本元素
     m_nameText = new QGraphicsTextItem(m_state.name, this);
-    m_nameText->setPos(-45, -25);
-    m_nameText->setTextWidth(90);
+    m_nameText->setPos(-55, -35);
+    m_nameText->setTextWidth(110);
+    m_nameText->setFont(QFont("Arial", 10, QFont::Bold));
     
     m_descriptionText = new QGraphicsTextItem(m_state.description, this);
-    m_descriptionText->setPos(-45, -5);
-    m_descriptionText->setTextWidth(90);
+    m_descriptionText->setPos(-55, -15);
+    m_descriptionText->setTextWidth(110);
     m_descriptionText->setFont(QFont("Arial", 8));
     
+    createVisualEffects();
     updateAppearance();
 }
 
@@ -58,25 +68,64 @@ void StateNode::setState(const StateMachineState &state)
     updateAppearance();
 }
 
+void StateNode::animateSelection()
+{
+    if (m_selectionAnimation) {
+        m_selectionAnimation->stop();
+        m_selectionAnimation->setStartValue(scale());
+        m_selectionAnimation->setEndValue(QPointF(1.1, 1.1));
+        m_selectionAnimation->start();
+    }
+}
+
+void StateNode::animateConnection()
+{
+    if (m_selectionAnimation) {
+        m_selectionAnimation->stop();
+        m_selectionAnimation->setStartValue(scale());
+        m_selectionAnimation->setEndValue(QPointF(1.05, 1.05));
+        m_selectionAnimation->start();
+    }
+}
+
+void StateNode::setHighlighted(bool highlighted)
+{
+    m_isHighlighted = highlighted;
+    updateAppearance();
+}
+
+QPointF StateNode::getConnectionPoint(const QPointF &targetPoint) const
+{
+    QPointF center = scenePos() + rect().center();
+    QLineF line(center, targetPoint);
+    
+    // 计算与矩形边界的交点
+    QRectF rectInScene = sceneBoundingRect();
+    QPointF intersection;
+    
+    // 简化实现：返回中心点
+    return center;
+}
+
 void StateNode::updateAppearance()
 {
-    // 基础颜色设置
-    if (m_state.isInitialState) {
-        setBrush(QBrush(QColor(144, 238, 144))); // 浅绿色
-    } else if (m_state.isFinalState) {
-        setBrush(QBrush(QColor(255, 182, 193))); // 浅粉色
-    } else {
-        setBrush(QBrush(QColor(240, 240, 240))); // 浅灰色
-    }
-    
-    setPen(QPen(Qt::black, 2));
-    
-    if (isSelected()) {
-        setPen(QPen(Qt::blue, 3));
-    }
-    
-    // 更新UI界面标识
+    updateNodeStyle();
     updateUiInterfaceIndicator();
+}
+
+void StateNode::createVisualEffects()
+{
+    // 创建阴影效果
+    m_shadowEffect = new QGraphicsDropShadowEffect(this);
+    m_shadowEffect->setBlurRadius(15);
+    m_shadowEffect->setColor(QColor(0, 0, 0, 80));
+    m_shadowEffect->setOffset(3, 3);
+    setGraphicsEffect(m_shadowEffect);
+    
+    // 创建选择动画
+    m_selectionAnimation = new QPropertyAnimation(this, "scale");
+    m_selectionAnimation->setDuration(200);
+    m_selectionAnimation->setEasingCurve(QEasingCurve::OutCubic);
 }
 
 void StateNode::updateUiInterfaceIndicator()
@@ -88,28 +137,133 @@ void StateNode::updateUiInterfaceIndicator()
         m_uiInterfaceIndicator = nullptr;
     }
     
+    // 移除旧的UI图标
+    if (m_uiIcon) {
+        scene()->removeItem(m_uiIcon);
+        delete m_uiIcon;
+        m_uiIcon = nullptr;
+    }
+    
     // 如果有关联的UI界面，添加标识
     if (!m_state.uiInterfaceId.isEmpty()) {
-        // 创建UI界面标识（小图标或文字）
+        // 创建UI界面图标（圆形图标）
+        m_uiIcon = new QGraphicsEllipseItem(this);
+        m_uiIcon->setRect(rect().right() - 20, rect().top() + 5, 15, 15);
+        m_uiIcon->setBrush(QBrush(QColor(76, 175, 80))); // 绿色
+        m_uiIcon->setPen(QPen(Qt::white, 1));
+        
+        // 创建UI文字标识
         m_uiInterfaceIndicator = new QGraphicsTextItem("UI", this);
-        m_uiInterfaceIndicator->setFont(QFont("Arial", 8, QFont::Bold));
-        m_uiInterfaceIndicator->setDefaultTextColor(QColor(0, 100, 0)); // 深绿色
-        m_uiInterfaceIndicator->setPos(rect().right() - 25, rect().top() + 5);
+        m_uiInterfaceIndicator->setFont(QFont("Arial", 7, QFont::Bold));
+        m_uiInterfaceIndicator->setDefaultTextColor(Qt::white);
+        m_uiInterfaceIndicator->setPos(rect().right() - 17, rect().top() + 7);
         
         // 添加工具提示显示具体的UI界面ID
-        m_uiInterfaceIndicator->setToolTip("关联UI界面: " + m_state.uiInterfaceId);
+        setToolTip("状态: " + m_state.name + "\n关联UI界面: " + m_state.uiInterfaceId);
+    } else {
+        setToolTip("状态: " + m_state.name);
     }
+}
+
+void StateNode::updateNodeStyle()
+{
+    QColor baseColor;
+    QColor borderColor = Qt::black;
+    int borderWidth = 2;
+    
+    if (m_state.isInitialState) {
+        baseColor = QColor(144, 238, 144); // 浅绿色
+        borderColor = QColor(34, 139, 34); // 森林绿
+    } else if (m_state.isFinalState) {
+        baseColor = QColor(255, 182, 193); // 浅粉色
+        borderColor = QColor(219, 112, 147); // 深粉色
+    } else {
+        baseColor = QColor(240, 240, 240); // 浅灰色
+    }
+    
+    // 悬停效果
+    if (m_isHovered) {
+        baseColor = baseColor.lighter(110); // 变亮10%
+        borderWidth = 3;
+    }
+    
+    // 选中效果
+    if (isSelected()) {
+        borderColor = QColor(30, 144, 255); // 道奇蓝
+        borderWidth = 4;
+    }
+    
+    // 高亮效果（连接模式）
+    if (m_isHighlighted) {
+        borderColor = QColor(255, 165, 0); // 橙色
+        borderWidth = 4;
+    }
+    
+    setBrush(QBrush(baseColor));
+    setPen(QPen(borderColor, borderWidth));
 }
 
 void StateNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsRectItem::mousePressEvent(event);
+    
     if (event->button() == Qt::LeftButton) {
+        m_isDragging = true;
+        m_dragStartPos = event->scenePos();
+        
         StateMachineScene *scene = qobject_cast<StateMachineScene*>(this->scene());
         if (scene) {
             emit scene->stateSelected(m_state);
+            animateSelection();
         }
     }
+}
+
+void StateNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (m_isDragging) {
+        QGraphicsRectItem::mouseMoveEvent(event);
+        
+        // 更新状态的位置
+        m_state.position = scenePos();
+        
+        // 通知场景状态位置已更新
+        StateMachineScene *scene = qobject_cast<StateMachineScene*>(this->scene());
+        if (scene && scene->stateMachine()) {
+            scene->stateMachine()->updateState(m_state);
+        }
+    }
+}
+
+void StateNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsRectItem::mouseReleaseEvent(event);
+    
+    if (event->button() == Qt::LeftButton) {
+        m_isDragging = false;
+        
+        // 恢复动画
+        if (m_selectionAnimation) {
+            m_selectionAnimation->stop();
+            m_selectionAnimation->setStartValue(scale());
+            m_selectionAnimation->setEndValue(QPointF(1.0, 1.0));
+            m_selectionAnimation->start();
+        }
+    }
+}
+
+void StateNode::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsRectItem::hoverEnterEvent(event);
+    m_isHovered = true;
+    updateAppearance();
+}
+
+void StateNode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsRectItem::hoverLeaveEvent(event);
+    m_isHovered = false;
+    updateAppearance();
 }
 
 void StateNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -128,6 +282,7 @@ void StateNode::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QAction *editAction = menu.addAction("编辑状态");
     QAction *deleteAction = menu.addAction("删除状态");
     QAction *setInitialAction = menu.addAction("设为初始状态");
+    QAction *connectAction = menu.addAction("创建连接");
     
     QAction *selectedAction = menu.exec(event->screenPos());
     
@@ -141,6 +296,8 @@ void StateNode::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     } else if (selectedAction == setInitialAction) {
         scene->stateMachine()->setInitialState(m_state.stateId);
         scene->refreshScene();
+    } else if (selectedAction == connectAction) {
+        emit connectionRequested(this);
     }
 }
 
@@ -152,8 +309,15 @@ TransitionEdge::TransitionEdge(const StateMachineTransition &transition,
     , m_transition(transition)
     , m_fromNode(fromNode)
     , m_toNode(toNode)
+    , m_eventText(nullptr)
+    , m_arrowHead(nullptr)
+    , m_shadowEffect(nullptr)
+    , m_highlightAnimation(nullptr)
+    , m_isHighlighted(false)
+    , m_isHovered(false)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setAcceptHoverEvents(true);
     
     m_eventText = new QGraphicsTextItem(m_transition.eventName, this);
     m_eventText->setFont(QFont("Arial", 9));
@@ -165,6 +329,7 @@ TransitionEdge::TransitionEdge(const StateMachineTransition &transition,
     m_arrowHead->setPolygon(arrow);
     m_arrowHead->setBrush(QBrush(Qt::black));
     
+    createVisualEffects();
     updatePosition();
 }
 
@@ -180,12 +345,30 @@ void TransitionEdge::setTransition(const StateMachineTransition &transition)
     updatePosition();
 }
 
+void TransitionEdge::animateTransition()
+{
+    if (m_highlightAnimation) {
+        m_highlightAnimation->stop();
+        m_highlightAnimation->setStartValue(1.0);
+        m_highlightAnimation->setEndValue(1.5);
+        m_highlightAnimation->start();
+    }
+}
+
+void TransitionEdge::setHighlighted(bool highlighted)
+{
+    m_isHighlighted = highlighted;
+    updateLineStyle();
+}
+
+
+
 void TransitionEdge::updatePosition()
 {
     if (!m_fromNode || !m_toNode) return;
     
-    QPointF fromCenter = m_fromNode->scenePos() + m_fromNode->rect().center();
-    QPointF toCenter = m_toNode->scenePos() + m_toNode->rect().center();
+    QPointF fromCenter = m_fromNode->getConnectionPoint(m_toNode->scenePos() + m_toNode->rect().center());
+    QPointF toCenter = m_toNode->getConnectionPoint(m_fromNode->scenePos() + m_fromNode->rect().center());
     
     // 计算连线
     QLineF line(fromCenter, toCenter);
@@ -203,8 +386,46 @@ void TransitionEdge::updatePosition()
     m_arrowHead->setRotation(-angle * 180 / M_PI);
     
     // 设置线条样式
-    if (isSelected()) {
+    updateLineStyle();
+}
+
+void TransitionEdge::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsLineItem::hoverEnterEvent(event);
+    m_isHovered = true;
+    updateLineStyle();
+}
+
+void TransitionEdge::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    QGraphicsLineItem::hoverLeaveEvent(event);
+    m_isHovered = false;
+    updateLineStyle();
+}
+
+void TransitionEdge::createVisualEffects()
+{
+    // 创建阴影效果
+    m_shadowEffect = new QGraphicsDropShadowEffect(this);
+    m_shadowEffect->setBlurRadius(10);
+    m_shadowEffect->setColor(QColor(0, 0, 0, 60));
+    m_shadowEffect->setOffset(2, 2);
+    setGraphicsEffect(m_shadowEffect);
+    
+    // 创建高亮动画
+    m_highlightAnimation = new QPropertyAnimation(this, QByteArray("scale"), this);
+    m_highlightAnimation->setDuration(300);
+    m_highlightAnimation->setEasingCurve(QEasingCurve::OutCubic);
+}
+
+void TransitionEdge::updateLineStyle()
+{
+    if (m_isHighlighted) {
+        setPen(QPen(Qt::red, 4));
+    } else if (isSelected()) {
         setPen(QPen(Qt::blue, 3));
+    } else if (m_isHovered) {
+        setPen(QPen(Qt::darkGreen, 3));
     } else {
         setPen(QPen(Qt::black, 2));
     }
@@ -218,6 +439,15 @@ void TransitionEdge::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if (scene) {
             emit scene->transitionSelected(m_transition);
         }
+    }
+}
+
+void TransitionEdge::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsLineItem::mouseDoubleClickEvent(event);
+    StateMachineScene *scene = qobject_cast<StateMachineScene*>(this->scene());
+    if (scene) {
+        emit scene->transitionSelected(m_transition);
     }
 }
 
@@ -243,6 +473,9 @@ void TransitionEdge::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 StateMachineScene::StateMachineScene(QObject *parent)
     : QGraphicsScene(parent)
     , m_stateMachine(nullptr)
+    , m_isConnecting(false)
+    , m_connectionFromNode(nullptr)
+    , m_tempConnectionLine(nullptr)
 {
     setSceneRect(-1000, -1000, 2000, 2000);
 }
@@ -376,12 +609,42 @@ void StateMachineScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void StateMachineScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseMoveEvent(event);
+    
+    // 更新临时连接线
+    if (m_isConnecting && m_tempConnectionLine && m_connectionFromNode) {
+        updateConnection(event->scenePos());
+    }
+}
+
+void StateMachineScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseReleaseEvent(event);
+    
+    if (m_isConnecting && event->button() == Qt::LeftButton) {
+        // 检查是否释放到状态节点上
+        QGraphicsItem *item = itemAt(event->scenePos(), QTransform());
+        if (StateNode *toNode = qgraphicsitem_cast<StateNode*>(item)) {
+            finishConnection(toNode);
+        } else {
+            cancelConnection();
+        }
+    }
+}
+
 void StateMachineScene::createStateNode(const StateMachineState &state)
 {
     StateNode *node = new StateNode(state);
     node->setPos(state.position);
     addItem(node);
     m_stateNodes[state.stateId] = node;
+    
+    // 连接右键菜单信号
+    connect(node, &StateNode::connectionRequested, this, [this](StateNode *node) {
+        startConnection(node, node->scenePos());
+    });
 }
 
 void StateMachineScene::createTransitionEdge(const StateMachineTransition &transition)
@@ -394,6 +657,116 @@ void StateMachineScene::createTransitionEdge(const StateMachineTransition &trans
     TransitionEdge *edge = new TransitionEdge(transition, fromNode, toNode);
     addItem(edge);
     m_transitionEdges[transition.transitionId] = edge;
+}
+
+void StateMachineScene::startConnection(StateNode *fromNode, const QPointF &startPos)
+{
+    if (!fromNode) return;
+    
+    m_connectionFromNode = fromNode;
+    m_isConnecting = true;
+    
+    // 创建临时连接线
+    m_tempConnectionLine = new QGraphicsLineItem();
+    m_tempConnectionLine->setPen(QPen(Qt::gray, 2, Qt::DashLine));
+    addItem(m_tempConnectionLine);
+    
+    setupConnectionMode();
+}
+
+void StateMachineScene::updateConnection(const QPointF &mousePos)
+{
+    if (m_isConnecting && m_tempConnectionLine && m_connectionFromNode) {
+        QPointF fromPos = m_connectionFromNode->getConnectionPoint(mousePos);
+        QLineF line(fromPos, mousePos);
+        m_tempConnectionLine->setLine(line);
+    }
+}
+
+void StateMachineScene::finishConnection(StateNode *toNode)
+{
+    if (!m_isConnecting || !m_connectionFromNode || !toNode || m_connectionFromNode == toNode) {
+        cancelConnection();
+        return;
+    }
+    
+    // 创建转换
+    StateMachineTransition transition;
+    transition.fromStateId = m_connectionFromNode->state().stateId;
+    transition.toStateId = toNode->state().stateId;
+    transition.eventName = "点击事件"; // 默认事件
+    
+    // 添加到状态机
+    if (m_stateMachine) {
+        m_stateMachine->addTransition(transition);
+        
+        // 创建图形化转换边
+        TransitionEdge *edge = new TransitionEdge(transition, m_connectionFromNode, toNode);
+        addItem(edge);
+        m_transitionEdges[transition.transitionId] = edge;
+        
+        // 动画效果
+        edge->animateTransition();
+        m_connectionFromNode->animateConnection();
+        toNode->animateConnection();
+        
+        emit stateMachineChanged();
+    }
+    
+    cleanupConnectionMode();
+}
+
+void StateMachineScene::cancelConnection()
+{
+    if (m_tempConnectionLine) {
+        removeItem(m_tempConnectionLine);
+        delete m_tempConnectionLine;
+        m_tempConnectionLine = nullptr;
+    }
+    
+    m_connectionFromNode = nullptr;
+    m_isConnecting = false;
+    
+    cleanupConnectionMode();
+}
+
+void StateMachineScene::setupConnectionMode()
+{
+    // 设置连接模式下的光标（通过视图）
+    QList<QGraphicsView*> views = this->views();
+    for (QGraphicsView *view : views) {
+        view->setCursor(Qt::CrossCursor);
+    }
+    
+    // 高亮可连接的状态节点
+    for (StateNode *node : m_stateNodes) {
+        if (node != m_connectionFromNode) {
+            node->setHighlighted(true);
+        }
+    }
+}
+
+void StateMachineScene::cleanupConnectionMode()
+{
+    // 恢复默认光标（通过视图）
+    QList<QGraphicsView*> views = this->views();
+    for (QGraphicsView *view : views) {
+        view->unsetCursor();
+    }
+    
+    // 取消高亮
+    for (StateNode *node : m_stateNodes) {
+        node->setHighlighted(false);
+    }
+    
+    m_connectionFromNode = nullptr;
+    m_isConnecting = false;
+    
+    if (m_tempConnectionLine) {
+        removeItem(m_tempConnectionLine);
+        delete m_tempConnectionLine;
+        m_tempConnectionLine = nullptr;
+    }
 }
 
 void StateMachineScene::clearScene()
@@ -409,6 +782,15 @@ void StateMachineScene::clearScene()
         delete edge;
     }
     m_transitionEdges.clear();
+    
+    // 清理连接模式相关资源
+    if (m_tempConnectionLine) {
+        removeItem(m_tempConnectionLine);
+        delete m_tempConnectionLine;
+        m_tempConnectionLine = nullptr;
+    }
+    m_connectionFromNode = nullptr;
+    m_isConnecting = false;
 }
 
 // StateMachineView 实现
@@ -619,9 +1001,18 @@ void StateMachineEditor::editTransitionProperties()
     m_currentTransition.eventType = static_cast<StateMachineEventType>(m_transitionEventTypeCombo->currentIndex());
     m_currentTransition.actionScript = m_transitionActionEdit->toPlainText();
     
+    // 更新条件配置
+    m_currentTransition.condition.variable = m_conditionVariableEdit->text();
+    m_currentTransition.condition.operatorType = static_cast<ConditionOperator>(m_conditionOperatorCombo->currentIndex());
+    m_currentTransition.condition.value = m_conditionValueEdit->text();
+    m_currentTransition.condition.logic = static_cast<ConditionLogic>(m_conditionLogicCombo->currentIndex());
+    m_currentTransition.eventSource = m_transitionSourceEdit->text();
+    
     if (m_stateMachineManager && m_stateMachineManager->currentStateMachine()) {
         m_stateMachineManager->currentStateMachine()->updateTransition(m_currentTransition);
         m_scene->refreshScene();
+        
+        QMessageBox::information(this, "转换设置", "转换属性已成功更新！");
     }
 }
 
@@ -728,22 +1119,62 @@ void StateMachineEditor::createPropertiesPanel()
     stateLayout->addRow(applyStateBtn);
     connect(applyStateBtn, &QPushButton::clicked, this, &StateMachineEditor::editStateProperties);
     
-    // 转换属性组
+    // 转换属性组 - 增强版
     QGroupBox *transitionGroup = new QGroupBox("转换属性");
-    QFormLayout *transitionLayout = new QFormLayout(transitionGroup);
+    QVBoxLayout *transitionMainLayout = new QVBoxLayout(transitionGroup);
+    
+    // 基础事件设置
+    QGroupBox *eventGroup = new QGroupBox("事件设置");
+    QFormLayout *eventLayout = new QFormLayout(eventGroup);
     
     m_transitionEventEdit = new QLineEdit();
     m_transitionEventTypeCombo = new QComboBox();
     m_transitionEventTypeCombo->addItems({"按钮点击", "菜单操作", "定时器触发", "数据变更", "自定义事件"});
+    m_transitionSourceEdit = new QLineEdit();
+    m_transitionSourceEdit->setPlaceholderText("例如：button1, menuItem2");
+    
+    eventLayout->addRow("事件名称:", m_transitionEventEdit);
+    eventLayout->addRow("事件类型:", m_transitionEventTypeCombo);
+    eventLayout->addRow("事件源:", m_transitionSourceEdit);
+    
+    // 条件配置
+    QGroupBox *conditionGroup = new QGroupBox("条件配置");
+    QFormLayout *conditionLayout = new QFormLayout(conditionGroup);
+    
+    m_conditionVariableEdit = new QLineEdit();
+    m_conditionOperatorCombo = new QComboBox();
+    m_conditionOperatorCombo->addItems({"等于", "不等于", "大于", "小于", "包含", "为空"});
+    m_conditionValueEdit = new QLineEdit();
+    m_conditionLogicCombo = new QComboBox();
+    m_conditionLogicCombo->addItems({"与", "或"});
+    
+    conditionLayout->addRow("条件变量:", m_conditionVariableEdit);
+    conditionLayout->addRow("操作符:", m_conditionOperatorCombo);
+    conditionLayout->addRow("比较值:", m_conditionValueEdit);
+    conditionLayout->addRow("逻辑关系:", m_conditionLogicCombo);
+    
+    // 动作脚本
+    QGroupBox *actionGroup = new QGroupBox("动作脚本");
+    QVBoxLayout *actionLayout = new QVBoxLayout(actionGroup);
+    
     m_transitionActionEdit = new QTextEdit();
-    m_transitionActionEdit->setMaximumHeight(80);
+    m_transitionActionEdit->setMaximumHeight(120);
+    m_transitionActionEdit->setPlaceholderText("输入转换时执行的脚本代码...");
     
-    transitionLayout->addRow("事件名称:", m_transitionEventEdit);
-    transitionLayout->addRow("事件类型:", m_transitionEventTypeCombo);
-    transitionLayout->addRow("动作脚本:", m_transitionActionEdit);
+    QLabel *actionHint = new QLabel("支持JavaScript语法，可访问全局变量和UI组件");
+    actionHint->setStyleSheet("color: gray; font-size: 10px;");
     
-    QPushButton *applyTransitionBtn = new QPushButton("应用");
-    transitionLayout->addRow(applyTransitionBtn);
+    actionLayout->addWidget(m_transitionActionEdit);
+    actionLayout->addWidget(actionHint);
+    
+    // 应用按钮
+    QPushButton *applyTransitionBtn = new QPushButton("应用转换设置");
+    
+    transitionMainLayout->addWidget(eventGroup);
+    transitionMainLayout->addWidget(conditionGroup);
+    transitionMainLayout->addWidget(actionGroup);
+    transitionMainLayout->addWidget(applyTransitionBtn);
+    
     connect(applyTransitionBtn, &QPushButton::clicked, this, &StateMachineEditor::editTransitionProperties);
     
     layout->addWidget(stateGroup);
@@ -781,6 +1212,13 @@ void StateMachineEditor::updatePropertiesPanel()
     m_transitionEventEdit->setText(m_currentTransition.eventName);
     m_transitionEventTypeCombo->setCurrentIndex(static_cast<int>(m_currentTransition.eventType));
     m_transitionActionEdit->setPlainText(m_currentTransition.actionScript);
+    
+    // 更新条件配置
+    m_transitionSourceEdit->setText(m_currentTransition.eventSource);
+    m_conditionVariableEdit->setText(m_currentTransition.condition.variable);
+    m_conditionOperatorCombo->setCurrentIndex(static_cast<int>(m_currentTransition.condition.operatorType));
+    m_conditionValueEdit->setText(m_currentTransition.condition.value);
+    m_conditionLogicCombo->setCurrentIndex(static_cast<int>(m_currentTransition.condition.logic));
 }
 
 void StateMachineEditor::setupRuntime()

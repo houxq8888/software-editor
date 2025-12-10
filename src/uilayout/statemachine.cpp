@@ -40,6 +40,13 @@ QJsonObject StateMachineTransition::toJson() const
     json["actionScript"] = actionScript;
     json["isEnabled"] = isEnabled;
     
+    // 新增条件配置字段
+    json["eventSource"] = eventSource;
+    json["conditionVariable"] = condition.variable;
+    json["conditionOperator"] = static_cast<int>(condition.operatorType);
+    json["conditionValue"] = condition.value;
+    json["conditionLogic"] = static_cast<int>(condition.logic);
+    
     QJsonArray conditionsArray;
     for (const auto &condition : conditions) {
         conditionsArray.append(condition.toJson());
@@ -60,6 +67,13 @@ bool StateMachineTransition::fromJson(const QJsonObject &json)
     eventType = static_cast<StateMachineEventType>(json["eventType"].toInt());
     actionScript = json["actionScript"].toString();
     isEnabled = json["isEnabled"].toBool(true);
+    
+    // 新增条件配置字段
+    eventSource = json["eventSource"].toString();
+    condition.variable = json["conditionVariable"].toString();
+    condition.operatorType = static_cast<ConditionOperator>(json["conditionOperator"].toInt());
+    condition.value = json["conditionValue"].toString();
+    condition.logic = static_cast<ConditionLogic>(json["conditionLogic"].toInt());
     
     conditions.clear();
     QJsonArray conditionsArray = json["conditions"].toArray();
