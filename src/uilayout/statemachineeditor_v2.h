@@ -55,9 +55,17 @@ public:
     QString fileName() const { return m_uiFile.name; }
     
     void updatePreviewInfo();
+    void setMainInterface(bool isMain);
+    bool isMainInterface() const { return m_uiFile.isMain; }
     
     // 重写sizeHint方法以提供合适的大小
     QSize sizeHint() const override;
+
+signals:
+    void setAsMainInterfaceRequested(const QString &filePath);
+    
+private slots:
+    void onSetMainButtonClicked();
     
 private:
     ProductUIFile m_uiFile;
@@ -66,6 +74,8 @@ private:
     QLabel *m_typeLabel;
     QLabel *m_controlsLabel;
     QLabel *m_previewLabel;
+    QLabel *m_mainInterfaceLabel;
+    QPushButton *m_setMainButton;
     
     void createPreviewIcon();
     void parseUIFileForPreview();
@@ -571,6 +581,9 @@ private slots:
     void onWizardNextPage();
     void onWizardPreviousPage();
     void onWizardPreviewClosed();
+    
+    // 属性标签页切换
+    void onPropertiesTabChanged(int index);
 
 private:
     void createToolbar();
@@ -692,6 +705,10 @@ private:
     void addControlEventDefinition(QComboBox *controlComboBox, QComboBox *eventComboBox, 
                                    QLineEdit *eventNameEdit, QComboBox *targetUIComboBox); // 添加控件事件定义
     void updateDefinedEventsList(const QString &uiFilePath = QString()); // 更新已定义事件列表显示，支持按UI文件路径过滤
+    
+    // 主界面设置相关方法
+    void onSetAsMainInterfaceRequested(const QString &filePath); // 处理设置主界面请求
+    void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
 
 };
 

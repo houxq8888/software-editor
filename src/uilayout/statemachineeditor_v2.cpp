@@ -1419,6 +1419,8 @@ void StateMachineEditorV2::createModeSelector()
         if (m_currentMode != StateMachineMode::LogicSequenceMode) {
             switchMode(StateMachineMode::LogicSequenceMode);
         }
+        // 更新逻辑属性页的使能状态
+        updatePropertiesPanelAvailability();
     });
 }
 
@@ -1532,6 +1534,9 @@ void StateMachineEditorV2::createPropertiesPanel()
     
     m_propertiesTab->addTab(m_uiFlowProperties, "向导编辑");
     m_propertiesTab->addTab(m_logicProperties, "逻辑属性");
+    
+    // 连接标签页切换事件，添加保护机制
+    connect(m_propertiesTab, &QTabWidget::currentChanged, this, &StateMachineEditorV2::onPropertiesTabChanged);
     
     layout->addWidget(m_propertiesTab);
 }
@@ -1715,6 +1720,7 @@ void StateMachineEditorV2::updatePropertiesPanelAvailability()
         // UI流模式下显示向导编辑界面
         m_propertiesTab->show();
         m_propertiesTab->setTabEnabled(0, true);  // UI流属性页
+        // 当步骤2没有被激活时，逻辑属性页也不应该使能
         m_propertiesTab->setTabEnabled(1, false); // 逻辑属性页
         m_propertiesTab->setCurrentIndex(0);      // 切换到UI流属性页
         
@@ -1725,9 +1731,34 @@ void StateMachineEditorV2::updatePropertiesPanelAvailability()
         // 逻辑时序模式下显示逻辑属性页，隐藏UI流属性页
         m_propertiesTab->show();
         m_propertiesTab->setTabEnabled(0, false); // UI流属性页
-        m_propertiesTab->setTabEnabled(1, true);  // 逻辑属性页
+        // 只有当步骤2被激活时，逻辑属性页才使能
+        m_propertiesTab->setTabEnabled(1, m_step2Button->isChecked()); // 逻辑属性页
         m_propertiesTab->setCurrentIndex(1);      // 切换到逻辑属性页
         break;
+    }
+}
+
+void StateMachineEditorV2::onPropertiesTabChanged(int index)
+{
+    // 防止用户切换到禁用的标签页
+    if (index >= 0 && !m_propertiesTab->isTabEnabled(index)) {
+        // 如果尝试切换到禁用的标签页，恢复到当前有效的标签页
+        int currentValidIndex = -1;
+        
+        // 查找第一个可用的标签页
+        for (int i = 0; i < m_propertiesTab->count(); ++i) {
+            if (m_propertiesTab->isTabEnabled(i)) {
+                currentValidIndex = i;
+                break;
+            }
+        }
+        
+        if (currentValidIndex >= 0) {
+            // 使用单次触发机制，避免递归调用
+            QTimer::singleShot(0, this, [this, currentValidIndex]() {
+                m_propertiesTab->setCurrentIndex(currentValidIndex);
+            });
+        }
     }
 }
 
@@ -3582,6 +3613,10 @@ void StateMachineEditorV2::updateUIFilesList()
         // 创建自定义预览项
         UIFilePreviewItem *previewItem = new UIFilePreviewItem(uiFile);
         
+        // 连接主界面设置信号
+        connect(previewItem, &UIFilePreviewItem::setAsMainInterfaceRequested,
+                this, &StateMachineEditorV2::onSetAsMainInterfaceRequested);
+        
         // 创建列表项并设置自定义widget
         QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(previewItem->sizeHint());
@@ -4036,13 +4071,29 @@ UIFilePreviewItem::UIFilePreviewItem(const ProductUIFile &uiFile, QWidget *paren
     m_previewLabel->setWordWrap(false);
     m_previewLabel->setMinimumHeight(10);
     
+    // 主界面标识标签
+    m_mainInterfaceLabel = new QLabel("", this);
+    m_mainInterfaceLabel->setStyleSheet("font-size: 8px; color: #e74c3c; font-weight: bold; margin: 0; padding: 0;");
+    m_mainInterfaceLabel->setWordWrap(false);
+    m_mainInterfaceLabel->setMinimumHeight(10);
+    
     infoLayout->addWidget(m_nameLabel);
     infoLayout->addWidget(m_typeLabel);
     infoLayout->addWidget(m_controlsLabel);
     infoLayout->addWidget(m_previewLabel);
+    infoLayout->addWidget(m_mainInterfaceLabel);
     
     mainLayout->addWidget(m_iconLabel);
     mainLayout->addLayout(infoLayout);
+    
+    // 创建设置主界面按钮
+    m_setMainButton = new QPushButton("设为主界面", this);
+    m_setMainButton->setStyleSheet("QPushButton { font-size: 8px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; background-color: #f8f9fa; }"
+                                    "QPushButton:hover { background-color: #e9ecef; }"
+                                    "QPushButton:pressed { background-color: #dee2e6; }");
+    m_setMainButton->setFixedSize(50, 20);
+    
+    mainLayout->addWidget(m_setMainButton);
     
     // 设置样式 - 移除固定高度，使用sizeHint
     setStyleSheet("UIFilePreviewItem { border: 1px solid #ddd; border-radius: 4px; background-color: #fafafa; margin: 1px; }"
@@ -4053,6 +4104,9 @@ UIFilePreviewItem::UIFilePreviewItem(const ProductUIFile &uiFile, QWidget *paren
     
     // 异步更新预览信息
     QTimer::singleShot(0, this, &UIFilePreviewItem::updatePreviewInfo);
+    
+    // 连接设置主界面按钮信号
+    connect(m_setMainButton, &QPushButton::clicked, this, &UIFilePreviewItem::onSetMainButtonClicked);
 }
 
 void UIFilePreviewItem::updatePreviewInfo()
@@ -4195,7 +4249,44 @@ void UIFilePreviewItem::createPreviewIcon()
     painter.setPen(QPen(Qt::white, 1));
     painter.drawLine(6, 7, 18, 7);  // 更新位置
     
+    // 如果是主界面，添加特殊标识
+    if (m_uiFile.isMain) {
+        painter.setBrush(QColor(231, 76, 60)); // 红色
+        painter.setPen(Qt::NoPen);
+        painter.drawEllipse(2, 2, 6, 6); // 左上角红色圆点
+    }
+    
     m_iconLabel->setPixmap(pixmap);
+}
+
+void UIFilePreviewItem::setMainInterface(bool isMain)
+{
+    m_uiFile.isMain = isMain;
+    
+    // 更新显示
+    if (isMain) {
+        m_mainInterfaceLabel->setText("★ 主界面");
+        m_mainInterfaceLabel->setStyleSheet("font-size: 8px; color: #e74c3c; font-weight: bold; margin: 0; padding: 0;");
+        m_setMainButton->setText("已设为主界面");
+        m_setMainButton->setStyleSheet("QPushButton { font-size: 8px; padding: 2px 4px; border: 1px solid #e74c3c; border-radius: 3px; background-color: #e74c3c; color: white; }"
+                                        "QPushButton:hover { background-color: #c0392b; }"
+                                        "QPushButton:pressed { background-color: #a93226; }");
+    } else {
+        m_mainInterfaceLabel->setText("");
+        m_setMainButton->setText("设为主界面");
+        m_setMainButton->setStyleSheet("QPushButton { font-size: 8px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; background-color: #f8f9fa; }"
+                                        "QPushButton:hover { background-color: #e9ecef; }"
+                                        "QPushButton:pressed { background-color: #dee2e6; }");
+    }
+    
+    // 更新图标
+    createPreviewIcon();
+}
+
+void UIFilePreviewItem::onSetMainButtonClicked()
+{
+    // 发出信号通知状态机编辑器设置主界面
+    emit setAsMainInterfaceRequested(m_uiFile.filePath);
 }
 
 void StateMachineEditorV2::onWizardNextPage()
@@ -4243,4 +4334,79 @@ void StateMachineEditorV2::onWizardPreviewClosed()
         m_wizardPreviewWidget->hide();
         qDebug() << "Wizard preview closed";
     }
+}
+
+// 处理设置主界面请求
+void StateMachineEditorV2::onSetAsMainInterfaceRequested(const QString &filePath)
+{
+    qDebug() << "Setting UI file as main interface:" << filePath;
+    
+    // 检查文件路径是否有效
+    if (filePath.isEmpty()) {
+        qWarning() << "Empty file path provided for main interface setting";
+        return;
+    }
+    
+    // 查找对应的UI文件
+    bool found = false;
+    for (auto &uiFile : m_productUiFiles) {
+        if (uiFile.filePath == filePath) {
+            // 设置为主界面
+            uiFile.isMain = true;
+            found = true;
+            qDebug() << "Set UI file as main interface:" << uiFile.name;
+        } else {
+            // 取消其他文件的主界面状态
+            uiFile.isMain = false;
+        }
+    }
+    
+    if (!found) {
+        qWarning() << "UI file not found in product UI files:" << filePath;
+        return;
+    }
+    
+    // 更新UI文件列表显示
+    updateMainInterfaceStatus();
+    
+    // 显示成功消息
+    QMessageBox::information(this, "主界面设置", 
+                             QString("已将 %1 设置为主界面").arg(QFileInfo(filePath).fileName()));
+}
+
+// 更新所有UI文件的主界面状态显示
+void StateMachineEditorV2::updateMainInterfaceStatus()
+{
+    if (!m_uiFilesListWidget) {
+        qWarning() << "UI files list widget is null";
+        return;
+    }
+    
+    qDebug() << "Updating main interface status for" << m_uiFilesListWidget->count() << "items";
+    
+    // 遍历所有列表项，更新主界面状态显示
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *item = m_uiFilesListWidget->item(i);
+        if (!item) continue;
+        
+        // 获取自定义预览项
+        UIFilePreviewItem *previewItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(item));
+        if (!previewItem) continue;
+        
+        // 查找对应的UI文件信息
+        QString filePath = item->data(Qt::UserRole).toString();
+        bool isMain = false;
+        
+        for (const auto &uiFile : m_productUiFiles) {
+            if (uiFile.filePath == filePath) {
+                isMain = uiFile.isMain;
+                break;
+            }
+        }
+        
+        // 更新预览项的主界面状态
+        previewItem->setMainInterface(isMain);
+    }
+    
+    qDebug() << "Main interface status update completed";
 }
