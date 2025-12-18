@@ -195,13 +195,13 @@ void UIInterface::setIsMainWindow(bool isMain)
 // 事件处理方法实现
 void UIInterface::triggerButtonClick(const QString &buttonName)
 {
-    qDebug() << "UIInterface: 触发按钮点击事件:" << buttonName;
+    qDebug() << "UIInterface: Triggering button click event:" << buttonName;
     emit buttonClicked(buttonName);
 }
 
 void UIInterface::triggerMenuAction(const QString &actionName)
 {
-    qDebug() << "UIInterface: 触发菜单操作事件:" << actionName;
+    qDebug() << "UIInterface: Triggering menu action event:" << actionName;
     emit menuActionTriggered(actionName);
 }
 

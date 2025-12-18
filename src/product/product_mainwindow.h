@@ -18,7 +18,6 @@
 #include "packagemanager.h"
 #include "productconfigmanager.h"
 #include "../uilayout/statemachine.h"
-#include "../uilayout/statemachineeditor.h"
 #include "../uilayout/statemachineeditor_v2.h"
 #include "../uilayout/uiflowstatemachine.h"
 #include "../uilayout/logicsequencestatemachine.h"
@@ -149,6 +148,15 @@ private:
     // UI文件类型识别和描述生成函数
     QString detectUiFileType(const QString &filePath) const;
     QString generateUiFileDescription(const QString &filePath, const QString &type) const;
+    
+    // 默认产品配置加载函数
+    void loadDefaultProductConfig();
+    
+    // 状态机编辑器辅助函数
+    void passUiFilesToStateMachineEditor();
+    void createStateMachineEditor();
+    QString handleStateMachineFile();
+    void setupStateMachineEditorWindow();
 };
 
 #endif // PRODUCT_MAINWINDOW_H

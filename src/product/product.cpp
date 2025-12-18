@@ -21,7 +21,13 @@ QString Product::toAbsolutePath(const QString &relativePath) const
         return relativePath;
     }
     
-    // Convert relative path to absolute path based on current working directory
+    // 优先使用产品配置包根路径进行转换
+    if (!m_configPackageRootPath.isEmpty()) {
+        QDir configDir(m_configPackageRootPath);
+        return configDir.absoluteFilePath(relativePath);
+    }
+    
+    // 如果没有配置包根路径，使用当前工作目录作为后备方案
     return QDir::current().absoluteFilePath(relativePath);
 }
 
@@ -173,7 +179,19 @@ void Product::removeFeature(int index) {
 
 // State machine management
 QString Product::stateMachinePath() const { 
-    return m_stateMachinePath; 
+    // 返回当前产品的配置目录路径
+    // 优先使用配置包根路径
+    if (!m_configPackageRootPath.isEmpty()) {
+        return m_configPackageRootPath;
+    }
+    
+    // 如果没有配置包根路径，使用m_stateMachinePath作为后备方案
+    if (!m_stateMachinePath.isEmpty()) {
+        return m_stateMachinePath;
+    }
+    
+    // 如果都没有设置，返回空字符串
+    return QString(); 
 }
 
 void Product::setStateMachinePath(const QString &stateMachinePath) { 
@@ -182,6 +200,89 @@ void Product::setStateMachinePath(const QString &stateMachinePath) {
 
 bool Product::hasStateMachine() const { 
     return !m_stateMachinePath.isEmpty(); 
+}
+
+// State machine configuration management
+QList<StateMachineConfig> Product::stateMachineConfigs() const { 
+    return m_stateMachineConfigs; 
+}
+
+void Product::setStateMachineConfigs(const QList<StateMachineConfig> &configs) { 
+    m_stateMachineConfigs = configs; 
+}
+
+void Product::addStateMachineConfig(const StateMachineConfig &config) {
+    m_stateMachineConfigs.append(config);
+}
+
+void Product::removeStateMachineConfig(int index) {
+    if (index >= 0 && index < m_stateMachineConfigs.size()) {
+        m_stateMachineConfigs.removeAt(index);
+    }
+}
+
+StateMachineConfig Product::getStateMachineConfig(const QString &name) const {
+    for (const auto &config : m_stateMachineConfigs) {
+        if (config.name == name) {
+            return config;
+        }
+    }
+    return StateMachineConfig();
+}
+
+bool Product::hasStateMachineConfig(const QString &name) const {
+    for (const auto &config : m_stateMachineConfigs) {
+        if (config.name == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Product::hasStateMachineConfig() const {
+    return !m_stateMachineConfigs.isEmpty();
+}
+
+QString Product::getWizardJsonPath() const {
+    // 从状态机文件中读取wizard JSON路径
+    if (!m_stateMachineConfigs.isEmpty()) {
+        // 获取第一个状态机配置的文件路径
+        QString stateMachinePath = m_stateMachineConfigs.first().fileName;
+        
+        // 如果路径是相对路径，转换为绝对路径
+        if (QDir::isRelativePath(stateMachinePath)) {
+            if (!m_configPackageRootPath.isEmpty()) {
+                stateMachinePath = QDir(m_configPackageRootPath).absoluteFilePath(stateMachinePath);
+            } else {
+                stateMachinePath = QDir::currentPath() + "/" + stateMachinePath;
+            }
+        }
+        
+        // 读取状态机文件并获取wizardJsonPath
+        QFile file(stateMachinePath);
+        if (file.open(QIODevice::ReadOnly)) {
+            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+            file.close();
+            
+            if (!doc.isNull()) {
+                QJsonObject json = doc.object();
+                if (json.contains("wizardJsonPath") && json["wizardJsonPath"].isString()) {
+                    QString wizardPath = json["wizardJsonPath"].toString();
+                    
+                    // 如果向导路径是相对路径，转换为相对于状态机文件的路径
+                    if (QDir::isRelativePath(wizardPath)) {
+                        QFileInfo stateMachineFileInfo(stateMachinePath);
+                        QDir stateMachineDir = stateMachineFileInfo.dir();
+                        wizardPath = stateMachineDir.absoluteFilePath(wizardPath);
+                    }
+                    
+                    return wizardPath;
+                }
+            }
+        }
+    }
+    
+    return QString();
 }
 
 QJsonObject Product::toJson() const {
@@ -236,8 +337,11 @@ QJsonObject Product::toJson() const {
         fileStructure["stateMachinesPath"] = "state_machines";
         fileStructure["resourcesPath"] = "resources";
     } else {
-        // 默认文件结构
-        fileStructure["basePath"] = "product_configurations/product_" + m_uniqueId.mid(0, 5);
+        // 默认文件结构 - 使用配置包根路径
+        QString basePath = m_configPackageRootPath.isEmpty() ? 
+            QString("product_" + m_uniqueId.mid(0, 5)) : m_configPackageRootPath;
+        
+        fileStructure["basePath"] = basePath;
         fileStructure["uiLayoutsPath"] = "ui_layouts";
         fileStructure["stateMachinesPath"] = "state_machines";
         fileStructure["resourcesPath"] = "resources";
@@ -279,7 +383,21 @@ QJsonObject Product::toJson() const {
     
     // 状态机文件信息
     QJsonArray stateMachinesArray;
-    if (!m_stateMachinePath.isEmpty()) {
+    
+    // 优先使用新的状态机配置格式
+    if (!m_stateMachineConfigs.isEmpty()) {
+        for (const auto &config : m_stateMachineConfigs) {
+            QJsonObject stateMachine;
+            stateMachine["name"] = config.name;
+            stateMachine["description"] = config.description;
+            stateMachine["fileName"] = config.fileName;
+            stateMachine["wizardJsonPath"] = config.wizardJsonPath;
+            stateMachine["logicJsonPath"] = config.logicJsonPath;
+            stateMachinesArray.append(stateMachine);
+        }
+    }
+    // 向后兼容：如果只有单个状态机路径
+    else if (!m_stateMachinePath.isEmpty()) {
         QJsonObject stateMachine;
         
         // 提取文件名
@@ -294,12 +412,19 @@ QJsonObject Product::toJson() const {
         stateMachine["description"] = "主状态机文件";
         stateMachinesArray.append(stateMachine);
     }
+    
     json["stateMachines"] = stateMachinesArray;
 
     return json;
 }
 
 bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
+    // 设置产品配置包根路径
+    if (!configFilePath.isEmpty()) {
+        QFileInfo configFileInfo(configFilePath);
+        m_configPackageRootPath = configFileInfo.dir().absolutePath();
+    }
+    
     // 检查新结构（包含productInfo字段）
     if (json.contains("productInfo") && json["productInfo"].isObject()) {
         // 新结构：从productInfo对象中读取基本信息
@@ -327,12 +452,40 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
             m_screenshotPath = productInfo.value("screenshotPath").toString();
         }
         
-        // 从stateMachines字段读取状态机路径
+        // 从stateMachines字段读取状态机配置
         if (json.contains("stateMachines") && json["stateMachines"].isArray()) {
             QJsonArray stateMachines = json["stateMachines"].toArray();
-            if (!stateMachines.isEmpty()) {
-                QJsonObject firstStateMachine = stateMachines.first().toObject();
-                QString fileName = firstStateMachine.value("fileName").toString();
+            m_stateMachineConfigs.clear();
+            
+            for (const auto &stateMachineValue : stateMachines) {
+                if (stateMachineValue.isObject()) {
+                    QJsonObject stateMachineObj = stateMachineValue.toObject();
+                    StateMachineConfig config;
+                    config.name = stateMachineObj.value("name").toString();
+                    config.description = stateMachineObj.value("description").toString();
+                    config.fileName = stateMachineObj.value("fileName").toString();
+                    config.wizardJsonPath = stateMachineObj.value("wizardJsonPath").toString();
+                    config.logicJsonPath = stateMachineObj.value("logicJsonPath").toString();
+                    
+                    // 构建完整路径并转换为绝对路径
+                    if (!config.fileName.isEmpty() && QDir::isRelativePath(config.fileName)) {
+                        if (!configFilePath.isEmpty()) {
+                            QFileInfo configFileInfo(configFilePath);
+                            QDir configDir = configFileInfo.dir();
+                            config.fileName = configDir.absoluteFilePath(config.fileName);
+                        } else {
+                            // 如果没有提供配置文件路径，使用当前工作目录作为后备方案
+                            config.fileName = QDir::currentPath() + "/" + config.fileName;
+                        }
+                    }
+                    
+                    m_stateMachineConfigs.append(config);
+                }
+            }
+            
+            // 向后兼容：如果没有新的状态机配置，但存在单个状态机路径
+            if (m_stateMachineConfigs.isEmpty() && json.contains("stateMachinePath")) {
+                m_stateMachinePath = json.value("stateMachinePath").toString();
             }
         }
     } else {
@@ -363,6 +516,8 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
     if (json.contains("uiFiles") && json["uiFiles"].isArray()) {
         // 新结构：从uiFiles数组读取
         const QJsonArray uiFilesArray = json["uiFiles"].toArray();
+        qDebug() << "Found" << uiFilesArray.size() << "UI files in product configuration";
+        
         for (const auto &uiFileValue : uiFilesArray) {
             if (uiFileValue.isObject()) {
                 const QJsonObject uiFileObj = uiFileValue.toObject();
@@ -374,21 +529,39 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
                 uiFile.description = uiFileObj.value("description").toString();
                 uiFile.order = uiFileObj.value("order").toInt(0);
                 
+                qDebug() << "Processing UI file:" << uiFile.name << "with path:" << uiFile.filePath;
+                
                 // 构建完整路径并转换为绝对路径
                 if (!uiFile.filePath.isEmpty() && QDir::isRelativePath(uiFile.filePath)) {
                     if (!configFilePath.isEmpty()) {
                         QFileInfo configFileInfo(configFilePath);
                         QDir configDir = configFileInfo.dir();
+                        QString originalPath = uiFile.filePath;
                         uiFile.filePath = configDir.absoluteFilePath(uiFile.filePath);
+                        qDebug() << "Converted relative path:" << originalPath << "->" << uiFile.filePath;
                     } else {
                         // 如果没有提供配置文件路径，使用当前工作目录作为后备方案
+                        QString originalPath = uiFile.filePath;
                         uiFile.filePath = QDir::currentPath() + "/" + uiFile.filePath;
+                        qDebug() << "Converted relative path (fallback):" << originalPath << "->" << uiFile.filePath;
                     }
+                } else {
+                    qDebug() << "UI file path is absolute:" << uiFile.filePath;
+                }
+                
+                // 检查文件是否存在
+                QFileInfo fileInfo(uiFile.filePath);
+                if (fileInfo.exists()) {
+                    qDebug() << "UI file exists:" << uiFile.filePath;
+                } else {
+                    qWarning() << "UI file does not exist:" << uiFile.filePath;
                 }
                 
                 m_uiFiles.append(uiFile);
             }
         }
+        
+        qDebug() << "Successfully loaded" << m_uiFiles.size() << "UI files from product configuration";
     } else if (!m_uiLayoutPath.isEmpty()) {
         // 向后兼容：如果只有单个UI文件路径，自动创建UI文件结构
         ProductUIFile mainUiFile;
@@ -432,5 +605,51 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
         }
     }
 
+    return true;
+}
+
+// Product configuration package root path management
+QString Product::configPackageRootPath() const {
+    return m_configPackageRootPath;
+}
+
+void Product::setConfigPackageRootPath(const QString &rootPath) {
+    m_configPackageRootPath = rootPath;
+}
+
+// Product configuration package validation
+bool Product::isValidProductConfigPackage() const {
+    // 检查基本产品信息是否完整
+    if (m_name.isEmpty() || m_version.isEmpty()) {
+        return false;
+    }
+    
+    // 检查产品配置包根路径是否有效
+    if (m_configPackageRootPath.isEmpty()) {
+        return false;
+    }
+    
+    QDir configDir(m_configPackageRootPath);
+    if (!configDir.exists()) {
+        return false;
+    }
+    
+    // 检查产品配置文件是否存在
+    QString configFilePath = configDir.absoluteFilePath("product_config.json");
+    if (!QFile::exists(configFilePath)) {
+        return false;
+    }
+    
+    // 检查是否有至少一个UI文件
+    if (m_uiFiles.isEmpty()) {
+        return false;
+    }
+    
+    // 检查主UI文件是否存在
+    ProductUIFile mainUiFile = getMainUiFile();
+    if (!mainUiFile.filePath.isEmpty() && !QFile::exists(mainUiFile.filePath)) {
+        return false;
+    }
+    
     return true;
 }

@@ -40,6 +40,13 @@ file(GLOB DESIGNER_SOURCES
 )
 list(REMOVE_ITEM DESIGNER_SOURCES "${PROJECT_SOURCE_DIR}/src/designer/main.cpp")
 
+# Windows应用图标设置
+if(WIN32)
+    # 注意：要在Windows上设置EXE图标，需要使用ICO格式的图标文件
+    # 并通过资源文件(.rc)将其添加到项目中
+    # 目前main.cpp中已设置窗口图标，但EXE图标需要ICO格式文件
+endif()
+
 add_executable(software-editor
     src/main.cpp
     ${DESIGNER_SOURCES}
@@ -70,8 +77,6 @@ add_executable(software-editor
     src/uilayout/layoutitem.h
     src/uilayout/statemachine.cpp
     src/uilayout/statemachine.h
-    src/uilayout/statemachineeditor.cpp
-    src/uilayout/statemachineeditor.h
     src/uilayout/statemachineeditor_v2.cpp
     src/uilayout/statemachineeditor_v2.h
     src/uilayout/statemachineruntime.cpp
@@ -82,6 +87,9 @@ add_executable(software-editor
     src/uilayout/logicsequencestatemachine.h
     src/uilayout/statemachineintegrationmanager.cpp
     src/uilayout/statemachineintegrationmanager.h
+    # 向导功能模块
+    src/uilayout/wizard.cpp
+    src/uilayout/wizard.h
     
     # 智能打包模块
     src/package/packagemanager.cpp
@@ -108,7 +116,49 @@ target_link_libraries(software-editor PRIVATE
 # Test configuration (暂时移除)
 # add_executable(test_menu test_menu.cpp uilayoutwindow.cpp editareawidget.cpp mainwindow.cpp product.cpp previewwindow.cpp customtreewidget.cpp)
 # target_link_libraries(test_menu PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml Qt6::Test)
+
+# Wizard example configuration
+add_executable(wizardexample
+    src/uilayout/wizardexample.cpp
+    resources.qrc
+    
+    # 产品配置编辑模块
+    src/product/product.cpp
+    src/product/product.h
+    src/product/productstate.cpp
+    src/product/productstate.h
+    
+    # UI布局编辑器模块
+    src/uilayout/uiinterfacemanager.cpp
+    src/uilayout/uiinterfacemanager.h
+    src/uilayout/uiinterface.cpp
+    src/uilayout/uiinterface.h
+    src/uilayout/layoutitem.cpp
+    src/uilayout/layoutitem.h
+    src/uilayout/statemachine.cpp
+    src/uilayout/statemachine.h
+    src/uilayout/uiflowstatemachine.cpp
+    src/uilayout/uiflowstatemachine.h
+    src/uilayout/logicsequencestatemachine.cpp
+    src/uilayout/logicsequencestatemachine.h
+    src/uilayout/statemachineintegrationmanager.cpp
+    src/uilayout/statemachineintegrationmanager.h
+    # 向导功能模块
+    src/uilayout/wizard.cpp
+    src/uilayout/wizard.h
+)
+
+target_link_libraries(wizardexample PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Designer
+    Qt6::Network
+    D:/Qt/6.9.1/mingw_64/lib/libQt6DesignerComponents.a
+    Qt6::Xml
+)
+
 # Install configuration
-install(TARGETS software-editor
+install(TARGETS software-editor wizardexample
     RUNTIME DESTINATION ${INSTALL_BINDIR}
 )

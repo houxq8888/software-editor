@@ -1,12 +1,12 @@
 {
-    "created": "2025-12-10T11:58:58",
+    "created": "2025-12-17T10:37:21",
     "integrationManager": {
-        "integrationMode": 2,
+        "integrationMode": 0,
         "logicSequenceStateMachine": {
             "currentStateId": "default_logic_state",
             "globalData": {
             },
-            "id": "97eec985-13a0-47a0-9f92-b1be16acfbdb",
+            "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
             "initialStateId": "default_logic_state",
             "name": "LogicSequenceStateMachine",
             "states": [
@@ -31,8 +31,8 @@
             }
         ],
         "uiFlowStateMachine": {
-            "currentStateId": "ui_state_14477178285115710256",
-            "id": "7994b0af-648f-4076-b9d0-2467c3c6b8b5",
+            "currentStateId": "ui_state_2328423560029440786",
+            "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
             "initialStateId": "default_ui_state",
             "name": "UIFlowStateMachine",
             "states": [
@@ -40,43 +40,43 @@
                     "isFinalState": false,
                     "isInitialState": true,
                     "name": "43214",
-                    "stateId": "ui_state_14477178285115710256",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/43214.ui"
+                    "stateId": "ui_state_2328423560029440786",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/43214.ui"
                 },
                 {
                     "isFinalState": false,
                     "isInitialState": false,
                     "name": "1208",
-                    "stateId": "ui_state_7196698971376659576",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1208.ui"
+                    "stateId": "ui_state_5472672769731363090",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1208.ui"
                 },
                 {
                     "isFinalState": false,
                     "isInitialState": false,
                     "name": "1209",
-                    "stateId": "ui_state_7082120446084594182",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209.ui"
+                    "stateId": "ui_state_2040222986157367542",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209.ui"
                 },
                 {
                     "isFinalState": false,
                     "isInitialState": false,
                     "name": "1209-1",
-                    "stateId": "ui_state_16938523400926986498",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-1.ui"
+                    "stateId": "ui_state_4559034508663888610",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209-1.ui"
                 },
                 {
                     "isFinalState": false,
                     "isInitialState": false,
                     "name": "1209-2",
-                    "stateId": "ui_state_12779142625252973823",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-2.ui"
+                    "stateId": "ui_state_6694692780791296077",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209-2.ui"
                 },
                 {
                     "isFinalState": true,
                     "isInitialState": false,
                     "name": "untitled",
-                    "stateId": "ui_state_1965989114434212728",
-                    "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/untitled.ui"
+                    "stateId": "ui_state_15303431538171684971",
+                    "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/untitled.ui"
                 },
                 {
                     "isFinalState": true,
@@ -90,36 +90,36 @@
                 {
                     "eventSource": "next_button",
                     "eventType": "click",
-                    "fromStateId": "ui_state_14477178285115710256",
-                    "toStateId": "ui_state_7196698971376659576",
+                    "fromStateId": "ui_state_2328423560029440786",
+                    "toStateId": "ui_state_5472672769731363090",
                     "transitionId": "trans_0_to_1"
                 },
                 {
                     "eventSource": "next_button",
                     "eventType": "click",
-                    "fromStateId": "ui_state_7196698971376659576",
-                    "toStateId": "ui_state_7082120446084594182",
+                    "fromStateId": "ui_state_5472672769731363090",
+                    "toStateId": "ui_state_2040222986157367542",
                     "transitionId": "trans_1_to_2"
                 },
                 {
                     "eventSource": "next_button",
                     "eventType": "click",
-                    "fromStateId": "ui_state_7082120446084594182",
-                    "toStateId": "ui_state_16938523400926986498",
+                    "fromStateId": "ui_state_2040222986157367542",
+                    "toStateId": "ui_state_4559034508663888610",
                     "transitionId": "trans_2_to_3"
                 },
                 {
                     "eventSource": "next_button",
                     "eventType": "click",
-                    "fromStateId": "ui_state_16938523400926986498",
-                    "toStateId": "ui_state_12779142625252973823",
+                    "fromStateId": "ui_state_4559034508663888610",
+                    "toStateId": "ui_state_6694692780791296077",
                     "transitionId": "trans_3_to_4"
                 },
                 {
                     "eventSource": "next_button",
                     "eventType": "click",
-                    "fromStateId": "ui_state_12779142625252973823",
-                    "toStateId": "ui_state_1965989114434212728",
+                    "fromStateId": "ui_state_6694692780791296077",
+                    "toStateId": "ui_state_15303431538171684971",
                     "transitionId": "trans_4_to_5"
                 }
             ]
@@ -129,7 +129,7 @@
         "currentStateId": "default_logic_state",
         "globalData": {
         },
-        "id": "97eec985-13a0-47a0-9f92-b1be16acfbdb",
+        "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
         "initialStateId": "default_logic_state",
         "name": "LogicSequenceStateMachine",
         "states": [
@@ -148,8 +148,8 @@
     },
     "type": "decoupled_state_machine",
     "uiFlowStateMachine": {
-        "currentStateId": "ui_state_14477178285115710256",
-        "id": "7994b0af-648f-4076-b9d0-2467c3c6b8b5",
+        "currentStateId": "ui_state_2328423560029440786",
+        "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
         "initialStateId": "default_ui_state",
         "name": "UIFlowStateMachine",
         "states": [
@@ -157,43 +157,43 @@
                 "isFinalState": false,
                 "isInitialState": true,
                 "name": "43214",
-                "stateId": "ui_state_14477178285115710256",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/43214.ui"
+                "stateId": "ui_state_2328423560029440786",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/43214.ui"
             },
             {
                 "isFinalState": false,
                 "isInitialState": false,
                 "name": "1208",
-                "stateId": "ui_state_7196698971376659576",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1208.ui"
+                "stateId": "ui_state_5472672769731363090",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1208.ui"
             },
             {
                 "isFinalState": false,
                 "isInitialState": false,
                 "name": "1209",
-                "stateId": "ui_state_7082120446084594182",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209.ui"
+                "stateId": "ui_state_2040222986157367542",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209.ui"
             },
             {
                 "isFinalState": false,
                 "isInitialState": false,
                 "name": "1209-1",
-                "stateId": "ui_state_16938523400926986498",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-1.ui"
+                "stateId": "ui_state_4559034508663888610",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209-1.ui"
             },
             {
                 "isFinalState": false,
                 "isInitialState": false,
                 "name": "1209-2",
-                "stateId": "ui_state_12779142625252973823",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/1209-2.ui"
+                "stateId": "ui_state_6694692780791296077",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/1209-2.ui"
             },
             {
                 "isFinalState": true,
                 "isInitialState": false,
                 "name": "untitled",
-                "stateId": "ui_state_1965989114434212728",
-                "uiInterfaceId": "D:/virtualMachine/github/20251203/software-editor-04/product_configurations/product_12345/../product_12345/ui_layouts/untitled.ui"
+                "stateId": "ui_state_15303431538171684971",
+                "uiInterfaceId": "D:/virtualMachine/github/software-editor/ui_layouts/untitled.ui"
             },
             {
                 "isFinalState": true,
@@ -207,36 +207,36 @@
             {
                 "eventSource": "next_button",
                 "eventType": "click",
-                "fromStateId": "ui_state_14477178285115710256",
-                "toStateId": "ui_state_7196698971376659576",
+                "fromStateId": "ui_state_2328423560029440786",
+                "toStateId": "ui_state_5472672769731363090",
                 "transitionId": "trans_0_to_1"
             },
             {
                 "eventSource": "next_button",
                 "eventType": "click",
-                "fromStateId": "ui_state_7196698971376659576",
-                "toStateId": "ui_state_7082120446084594182",
+                "fromStateId": "ui_state_5472672769731363090",
+                "toStateId": "ui_state_2040222986157367542",
                 "transitionId": "trans_1_to_2"
             },
             {
                 "eventSource": "next_button",
                 "eventType": "click",
-                "fromStateId": "ui_state_7082120446084594182",
-                "toStateId": "ui_state_16938523400926986498",
+                "fromStateId": "ui_state_2040222986157367542",
+                "toStateId": "ui_state_4559034508663888610",
                 "transitionId": "trans_2_to_3"
             },
             {
                 "eventSource": "next_button",
                 "eventType": "click",
-                "fromStateId": "ui_state_16938523400926986498",
-                "toStateId": "ui_state_12779142625252973823",
+                "fromStateId": "ui_state_4559034508663888610",
+                "toStateId": "ui_state_6694692780791296077",
                 "transitionId": "trans_3_to_4"
             },
             {
                 "eventSource": "next_button",
                 "eventType": "click",
-                "fromStateId": "ui_state_12779142625252973823",
-                "toStateId": "ui_state_1965989114434212728",
+                "fromStateId": "ui_state_6694692780791296077",
+                "toStateId": "ui_state_15303431538171684971",
                 "transitionId": "trans_4_to_5"
             }
         ]

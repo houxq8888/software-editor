@@ -1,0 +1,39 @@
+// Windows 资源文件，用于设置应用程序图标
+#include <windows.h>
+
+// 定义应用程序信息
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName", "软件工作室"
+            VALUE "FileDescription", "软件编辑器"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "software-editor"
+            VALUE "LegalCopyright", "Copyright (C) 2024"
+            VALUE "OriginalFilename", "software-editor.exe"
+            VALUE "ProductName", "软件编辑器"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+// 设置应用程序图标
+IDI_ICON1               ICON    DISCARDABLE     "D:\\virtualMachine\\github\\software-editor\\config\\icon.png"

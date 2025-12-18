@@ -24,6 +24,15 @@ struct ProductUIFile
     int order = 0;          // 显示顺序
 };
 
+struct StateMachineConfig
+{
+    QString name;           // 状态机名称
+    QString description;    // 状态机描述
+    QString fileName;       // 状态机配置文件路径
+    QString wizardJsonPath; // wizard JSON文件路径
+    QString logicJsonPath;  // 逻辑JSON文件路径
+};
+
 class Product
 {
 public:
@@ -70,10 +79,27 @@ public:
     QString stateMachinePath() const;
     void setStateMachinePath(const QString &stateMachinePath);
     bool hasStateMachine() const;
+    
+    // State machine configuration management
+    QList<StateMachineConfig> stateMachineConfigs() const;
+    void setStateMachineConfigs(const QList<StateMachineConfig> &configs);
+    void addStateMachineConfig(const StateMachineConfig &config);
+    void removeStateMachineConfig(int index);
+    StateMachineConfig getStateMachineConfig(const QString &name) const;
+    bool hasStateMachineConfig(const QString &name) const;
+    bool hasStateMachineConfig() const; // 检查是否有任何状态机配置
+    QString getWizardJsonPath() const; // 获取wizard JSON文件路径
 
     // Serialization
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject &json, const QString &configFilePath = QString());
+
+    // Product configuration package root path management
+    QString configPackageRootPath() const;
+    void setConfigPackageRootPath(const QString &rootPath);
+
+    // Product configuration package validation
+    bool isValidProductConfigPackage() const;
 
 private:
     QString m_name;
@@ -87,8 +113,10 @@ private:
     QString m_uniqueId;      // Unique identifier for product distinction
     QString m_uiLayoutPath;  // UI layout file path (backward compatibility)
     QString m_stateMachinePath; // State machine file path
+    QString m_configPackageRootPath; // Product configuration package root path
     QList<ProductUIFile> m_uiFiles; // Multiple UI files
     QList<ProductFeature> m_features;
+    QList<StateMachineConfig> m_stateMachineConfigs; // Multiple state machine configurations
 };
 
 #endif // PRODUCT_H

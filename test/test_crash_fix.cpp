@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    qDebug() << "开始测试事件-动作编辑器崩溃修复...";
+    qDebug() << "Starting event-action editor crash fix test...";
     
     // 测试新建产品状态
     {

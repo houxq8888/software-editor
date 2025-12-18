@@ -27,18 +27,19 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QLabel>
+#include <QListWidget>
 #include "statemachine.h"
 #include "product.h"
 #include "statemachineruntime.h"
 #include "uiflowstatemachine.h"
 #include "logicsequencestatemachine.h"
 #include "statemachineintegrationmanager.h"
+#include "wizard.h"
 
 // 状态机模式枚举
 enum class StateMachineMode {
-    UIFlowOnly,           // 仅UI流模式
-    LogicSequenceOnly,    // 仅逻辑时序模式
-    Integrated            // 集成模式
+    UIFlowMode,           // UI流模式：编辑UI界面交互流程
+    LogicSequenceMode     // 逻辑时序模式：编辑业务逻辑运行流程
 };
 
 // UI流状态节点
@@ -403,7 +404,13 @@ public:
     void loadStateMachine(const QString &filePath);
     void saveStateMachine(const QString &filePath);
     
+    // 向导文件自动加载
+    void loadWizardsFromProductConfig();
+    void updateWizardFilePathLabel(QLabel *label);
+    
     StateMachineMode currentMode() const;
+
+    void printUiInterfaceComboCount();
     
 public slots:
     void createNewStateMachine();
@@ -414,7 +421,15 @@ public slots:
     void showRuntimePreview();
     void switchToUIFlowMode();
     void switchToLogicSequenceMode();
-    void switchToIntegratedMode();
+    
+    // 向导操作
+    void createNewWizard();
+    void editWizard();
+    void deleteWizard();
+    void runWizard();
+    void saveCurrentWizard();
+    void switchWizardFile();
+    void updateWindowTitle();
 
 private slots:
     void onStateSelected(const UIFlowStateMachine::UIFlowState &state);
@@ -435,10 +450,11 @@ private:
     void switchMode(StateMachineMode newMode);
     void setupUIFlowMode();
     void setupLogicSequenceMode();
-    void setupIntegratedMode();
+
     void updateModeUI();
     void updateToolbarAvailability();
     void updatePropertiesPanelAvailability();
+    void updateWizardEditorInterface();
     
     StateMachineManager *m_stateMachineManager;
     StateMachineIntegrationManager *m_integrationManager;
@@ -451,9 +467,8 @@ private:
     
     // 模式选择器
     QGroupBox *m_modeGroup;
-    QRadioButton *m_uiFlowModeRadio;
-    QRadioButton *m_logicSequenceModeRadio;
-    QRadioButton *m_integratedModeRadio;
+    QPushButton *m_step1Button;
+    QPushButton *m_step2Button;
     QLabel *m_modeDescription;
     
     // 运行时预览
@@ -464,6 +479,16 @@ private:
     // 产品UI文件信息
     QList<ProductUIFile> m_productUiFiles;
     Product *m_product;
+    
+    // 缓存的状态机配置信息（避免重复读取文件）
+    QString m_cachedWizardJsonPath; // 缓存的向导文件路径
+    QString m_cachedLogicJsonPath;  // 缓存的逻辑文件路径
+    
+    // 工具栏操作指针
+    QList<QAction*> m_fileActions;
+    QList<QAction*> m_editActions;
+    QList<QAction*> m_toolActions;
+    QList<QAction*> m_wizardActions;
     
     // UI元素
     QTabWidget *m_propertiesTab;
@@ -496,6 +521,38 @@ private:
     
     // 当前模式
     StateMachineMode m_currentMode;
+    
+    // 向导管理器
+    WizardManager *m_wizardManager;
+    
+    // 当前向导状态跟踪
+    QString m_currentWizardName;          // 当前打开的向导名称
+    QString m_currentWizardFilePath;      // 当前向导文件路径（如果已保存）
+    bool m_isWizardModified;              // 向导是否已修改但未保存
+
+    // UI文件列表显示相关
+    QListWidget *m_uiFilesListWidget;    // UI文件列表控件
+    QTextEdit *m_uiFileDetailsTextEdit;  // UI文件详情显示控件
+    QLabel *m_uiFilesLabel;              // UI文件列表标题
+    bool m_uiFilesDataPendingUpdate;     // UI文件数据待更新标志
+    
+    // 控件事件定义相关
+    QString m_currentUIFilePath;         // 当前选中的UI文件路径
+    QMap<QString, QStringList> m_currentUIFileControls; // 当前UI文件的控件信息（控件名 -> 支持的事件列表）
+    QMap<QString, QStringList> m_controlEventMap; // 控件类型到支持的事件映射
+    QList<QString> m_definedControlEvents; // 已定义的控件事件列表（事件名称 -> 控件名 -> 事件类型）
+    
+    void createUIFilesDisplay();         // 创建UI文件显示界面
+    void updateUIFilesList();            // 更新UI文件列表
+    void parseUIFile(const QString &filePath); // 解析UI文件获取控件信息
+    void displayUIFileDetails(const QString &filePath); // 显示UI文件详情
+    
+    // 控件事件定义相关方法
+    void updateControlComboBox(QComboBox *controlComboBox); // 更新控件选择下拉框
+    void updateEventComboBox(QComboBox *eventComboBox, const QString &controlName); // 更新事件类型下拉框
+    void addControlEventDefinition(QComboBox *controlComboBox, QComboBox *eventComboBox, 
+                                  QLineEdit *eventNameEdit, QListWidget *definedEventsList); // 添加控件事件定义
+
 };
 
 #endif // STATEMACHINEEDITOR_V2_H

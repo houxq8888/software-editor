@@ -1,0 +1,2 @@
+// 简单的Windows资源文件，只包含图标定义
+IDI_ICON1 ICON DISCARDABLE "config/icon.png"

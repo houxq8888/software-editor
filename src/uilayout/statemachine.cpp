@@ -1,4 +1,5 @@
 #include "statemachine.h"
+#include "wizard.h"
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QFile>
@@ -583,6 +584,7 @@ StateMachineManager::StateMachineManager(QObject *parent)
     : QObject(parent)
     , m_currentStateMachine(nullptr)
     , m_uiInterfaceManager(nullptr)
+    , m_wizardManager(nullptr)
 {
 }
 
@@ -590,6 +592,10 @@ StateMachineManager::~StateMachineManager()
 {
     qDeleteAll(m_stateMachines);
     m_stateMachines.clear();
+    if (m_wizardManager) {
+        m_wizardManager->deleteLater();
+        m_wizardManager = nullptr;
+    }
 }
 
 QList<StateMachine*> StateMachineManager::stateMachines() const
@@ -687,6 +693,18 @@ QString StateMachineManager::getStateForUiInterface(const QString &uiInterfaceId
     return state ? state->stateId : QString();
 }
 
+WizardManager* StateMachineManager::wizardManager() const
+{
+    return m_wizardManager;
+}
+
+void StateMachineManager::setWizardManager(WizardManager *manager)
+{
+    if (m_wizardManager != manager) {
+        m_wizardManager = manager;
+    }
+}
+
 QJsonObject StateMachineManager::toJson() const
 {
     QJsonObject json;
@@ -699,6 +717,11 @@ QJsonObject StateMachineManager::toJson() const
     
     if (m_currentStateMachine) {
         json["currentStateMachineId"] = m_currentStateMachine->id();
+    }
+    
+    // 添加向导配置
+    if (m_wizardManager) {
+        json["wizards"] = m_wizardManager->toJson();
     }
     
     return json;
@@ -724,6 +747,19 @@ bool StateMachineManager::fromJson(const QJsonObject &json)
     QString currentStateMachineId = json["currentStateMachineId"].toString();
     if (!currentStateMachineId.isEmpty()) {
         m_currentStateMachine = findStateMachine(currentStateMachineId);
+    }
+    
+    // 恢复向导配置
+    if (json.contains("wizards")) {
+        if (!m_wizardManager) {
+            m_wizardManager = new WizardManager(this);
+        }
+        m_wizardManager->fromJson(json["wizards"].toObject());
+        
+        // 为每个向导设置状态机管理器
+        for (Wizard* wizard : m_wizardManager->wizards()) {
+            wizard->setStateMachineManager(this);
+        }
     }
     
     return true;

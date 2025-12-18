@@ -4,6 +4,7 @@
 #include <QFormLayout>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QInputDialog>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -14,6 +15,19 @@
 #include <QKeyEvent>
 #include <QWheelEvent>
 #include <QRandomGenerator>
+#include <QListWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QListWidgetItem>
+#include <QXmlStreamReader>
+#include <QScrollArea>
+#include <QFrame>
+#include <QGroupBox>
+
+// 产品相关头文件
+#include "../product/product.h"
+#include "../product/productconfigmanager.h"
 
 // UIFlowStateNode 实现
 UIFlowStateNode::UIFlowStateNode(const UIFlowStateMachine::UIFlowState &state, QGraphicsItem *parent)
@@ -160,10 +174,20 @@ void UIFlowStateNode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void UIFlowStateNode::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
-    menu.addAction("编辑状态");
-    menu.addAction("删除状态");
-    menu.addSeparator();
-    menu.addAction("添加转换");
+    
+    // 获取状态编辑器
+    StateMachineEditorV2 *editor = qobject_cast<StateMachineEditorV2*>(scene()->parent());
+    
+    if (editor && editor->currentMode() == StateMachineMode::UIFlowMode) {
+        // UI流模式下只显示向导相关菜单项
+        menu.addAction("运行向导");
+    } else {
+        // 其他模式下显示完整菜单
+        menu.addAction("编辑状态");
+        menu.addAction("删除状态");
+        menu.addSeparator();
+        menu.addAction("添加转换");
+    }
     
     QAction *selectedAction = menu.exec(event->screenPos());
     if (selectedAction) {
@@ -235,18 +259,26 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_toolbar(nullptr)
     , m_undoStack(nullptr)
     , m_modeGroup(nullptr)
-    , m_uiFlowModeRadio(nullptr)
-    , m_logicSequenceModeRadio(nullptr)
-    , m_integratedModeRadio(nullptr)
+    , m_step1Button(nullptr)
+    , m_step2Button(nullptr)
     , m_modeDescription(nullptr)
     , m_runtime(nullptr)
     , m_runtimeView(nullptr)
     , m_runtimeDock(nullptr)
+    , m_productUiFiles()  // 显式初始化QList
     , m_product(nullptr)
     , m_propertiesTab(nullptr)
     , m_uiFlowProperties(nullptr)
     , m_logicProperties(nullptr)
-    , m_currentMode(StateMachineMode::UIFlowOnly)
+    , m_currentMode(StateMachineMode::UIFlowMode)
+    , m_wizardManager(nullptr)
+    , m_currentWizardName("")
+    , m_currentWizardFilePath("")
+    , m_isWizardModified(false)
+    , m_uiFilesListWidget(nullptr)
+    , m_uiFileDetailsTextEdit(nullptr)
+    , m_uiFilesLabel(nullptr)
+    , m_uiFilesDataPendingUpdate(false)
 {
     // 创建集成管理器
     m_integrationManager = new StateMachineIntegrationManager(this);
@@ -257,43 +289,95 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     createPropertiesPanel();
     createRuntimePreview();
     
+    qDebug()<<"createStateMachineEditor()";
     // 设置布局
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    qDebug()<<"mainLayout";
     mainLayout->addWidget(m_modeGroup);
     mainLayout->addWidget(m_toolbar);
     
     QHBoxLayout *contentLayout = new QHBoxLayout();
+    qDebug()<<"contentLayout";
     contentLayout->addWidget(m_view, 3);
+    qDebug()<<"m_view";
     contentLayout->addWidget(m_propertiesPanel, 1);
+    qDebug()<<"m_propertiesPanel";
     
     mainLayout->addLayout(contentLayout);
+    qDebug()<<"mainLayout";
     
-    // 初始模式设置
-    switchToUIFlowMode();
+    // 初始模式设置 - 立即应用UI流模式的显示设置
+    switchMode(StateMachineMode::UIFlowMode);
+    
+    // 确保属性面板在初始状态下正确隐藏
+    // updatePropertiesPanelAvailability();
 }
 
 void StateMachineEditorV2::setStateMachineManager(StateMachineManager *manager)
 {
     m_stateMachineManager = manager;
+    
+    // 设置向导管理器
+    if (manager) {
+        qDebug() << "State machine manager is not empty, getting wizard manager...";
+        m_wizardManager = manager->wizardManager();
+        if (m_wizardManager) {
+            qDebug() << "Wizard manager successfully set, number of wizards:" << m_wizardManager->wizards().size();
+        } else {
+            qDebug() << "Warning: Wizard manager in state machine manager is empty!";
+        }
+    } else {
+        qDebug() << "Error: State machine manager is empty!";
+    }
 }
 
 void StateMachineEditorV2::setProductUiFiles(const QList<ProductUIFile> &uiFiles)
 {
-    m_productUiFiles = uiFiles;
+    qDebug() << "setProductUiFiles() called with" << uiFiles.size() << "UI files";
+    
+    // 使用深拷贝确保数据安全，避免引用问题
+    m_productUiFiles.clear();
+    for (const auto &uiFile : uiFiles) {
+        m_productUiFiles.append(uiFile);
+    }
+    
+    qDebug() << "m_productUiFiles size after assignment:" << m_productUiFiles.size();
     
     // 更新UI界面下拉框
     if (m_uiInterfaceCombo) {
+        qDebug() << "Updating UI interface combo box";
         m_uiInterfaceCombo->clear();
         for (const auto &uiFile : uiFiles) {
             // 使用文件路径作为标识符，因为ProductUIFile没有id成员
             m_uiInterfaceCombo->addItem(uiFile.name, uiFile.filePath);
+            qDebug() << "Added UI file to combo:" << uiFile.name << "path:" << uiFile.filePath;
         }
+        qDebug() << "UI interface combo box updated, item count:" << m_uiInterfaceCombo->count();
+    } else {
+        qWarning() << "m_uiInterfaceCombo is null, cannot update UI interface combo box";
+    }
+    
+    // 更新UI文件列表显示 - 只有在控件已创建时才调用
+    qDebug() << "Calling updateUIFilesList() from setProductUiFiles";
+    qDebug() << "m_uiFilesListWidget pointer:" << m_uiFilesListWidget;
+    
+    if (m_uiFilesListWidget) {
+        updateUIFilesList();
+    } else {
+        qDebug() << "UI files list widget not yet created, UI files data saved for later initialization";
+        // 设置标志，等待控件创建后自动更新
+        m_uiFilesDataPendingUpdate = true;
     }
 }
 
 void StateMachineEditorV2::setProduct(Product *product)
 {
     m_product = product;
+    
+    // 设置产品后立即加载向导文件
+    if (m_product) {
+        loadWizardsFromProductConfig();
+    }
 }
 
 void StateMachineEditorV2::loadStateMachine(const QString &filePath)
@@ -314,30 +398,56 @@ void StateMachineEditorV2::loadStateMachine(const QString &filePath)
         return;
     }
     
-    // 根据文件内容判断模式并加载
     QJsonObject json = doc.object();
     
-    if (json.contains("integrationMode")) {
-        // 集成模式文件
-        m_integrationManager->fromJson(json);
-        switchToIntegratedMode();
-    } else if (json.contains("logicStates")) {
-        // 逻辑时序状态机文件
-        if (!m_integrationManager->logicSequenceStateMachine()) {
-            m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
-        }
-        m_integrationManager->logicSequenceStateMachine()->fromJson(json);
-        switchToLogicSequenceMode();
-    } else {
-        // UI流状态机文件
+    // 检查是否为解耦合状态机格式
+    if (json.contains("uiFlowStateMachine") && 
+        json.contains("logicSequenceStateMachine") &&
+        json.contains("integrationManager")) {
+        
+        // 加载UI流状态机
+        QJsonObject uiFlowObj = json["uiFlowStateMachine"].toObject();
         if (!m_integrationManager->uiFlowStateMachine()) {
             m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
         }
-        m_integrationManager->uiFlowStateMachine()->fromJson(json);
-        switchToUIFlowMode();
+        if (!m_integrationManager->uiFlowStateMachine()->fromJson(uiFlowObj)) {
+            QMessageBox::warning(this, "错误", "加载UI流状态机失败");
+            return;
+        }
+        
+        // 加载逻辑时序状态机
+        QJsonObject logicObj = json["logicSequenceStateMachine"].toObject();
+        if (!m_integrationManager->logicSequenceStateMachine()) {
+            m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
+        }
+        if (!m_integrationManager->logicSequenceStateMachine()->fromJson(logicObj)) {
+            QMessageBox::warning(this, "错误", "加载逻辑时序状态机失败");
+            return;
+        }
+        
+        // 加载集成管理器
+        QJsonObject integrationObj = json["integrationManager"].toObject();
+        if (!m_integrationManager->fromJson(integrationObj)) {
+            QMessageBox::warning(this, "错误", "加载集成管理器失败");
+            return;
+        }
+        
+        // 设置向导状态
+        m_currentWizardName = QFileInfo(filePath).baseName();
+        m_currentWizardFilePath = filePath;
+        m_isWizardModified = false;
+        updateWindowTitle();
+        
+        // 状态机文件加载完成后，加载向导文件
+        if (m_product) {
+            loadWizardsFromProductConfig();
+        }
+        
+        QMessageBox::information(this, "成功", "解耦合状态机文件已加载: " + filePath);
+    } else {
+        QMessageBox::warning(this, "错误", "状态机文件不是解耦合格式，只支持解耦合格式: " + filePath);
+        return;
     }
-    
-    QMessageBox::information(this, "成功", "状态机文件已加载: " + filePath);
 }
 
 void StateMachineEditorV2::saveStateMachine(const QString &filePath)
@@ -347,18 +457,15 @@ void StateMachineEditorV2::saveStateMachine(const QString &filePath)
     QJsonObject json;
     
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (m_integrationManager->uiFlowStateMachine()) {
             json = m_integrationManager->uiFlowStateMachine()->toJson();
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (m_integrationManager->logicSequenceStateMachine()) {
             json = m_integrationManager->logicSequenceStateMachine()->toJson();
         }
-        break;
-    case StateMachineMode::Integrated:
-        json = m_integrationManager->toJson();
         break;
     }
     
@@ -387,57 +494,235 @@ StateMachineMode StateMachineEditorV2::currentMode() const
 
 void StateMachineEditorV2::createNewStateMachine()
 {
+    QString message;
+    
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
-        if (!m_integrationManager->uiFlowStateMachine()) {
-            m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
-        }
-        // 通过创建新的状态机来"清除"现有内容
-        m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
-        break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::UIFlowMode: {
+        // 在UI流模式下，直接创建向导
+        createNewWizard();
+        return;
+    }
+    case StateMachineMode::LogicSequenceMode:
         if (!m_integrationManager->logicSequenceStateMachine()) {
             m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
         }
-        // 通过创建新的状态机来"清除"现有内容
         m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
-        break;
-    case StateMachineMode::Integrated:
-        if (!m_integrationManager->uiFlowStateMachine()) {
-            m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
-        }
-        if (!m_integrationManager->logicSequenceStateMachine()) {
-            m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
-        }
-        // 通过创建新的状态机来"清除"现有内容
-        m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
-        m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
-        m_integrationManager->mappings().clear();
+        message = "已成功创建新的状态机";
         break;
     }
     
     if (m_uiFlowScene) m_uiFlowScene->refreshScene();
     if (m_logicScene) m_logicScene->refreshScene();
     
-    QMessageBox::information(this, "成功", "已创建新的状态机");
+    QMessageBox::information(this, "成功", message);
+}
+
+void StateMachineEditorV2::switchWizardFile()
+{
+    qDebug() << "switchWizardFile() called";
+    
+    // 检查是否需要保存当前向导
+    if (m_isWizardModified && !m_currentWizardName.isEmpty()) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存向导", 
+            "向导 \"" + m_currentWizardName + "\" 已修改但未保存，是否先保存？",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        
+        if (reply == QMessageBox::Cancel) {
+            return; // 用户取消操作
+        } else if (reply == QMessageBox::Save) {
+            // 保存当前向导
+            saveCurrentWizard();
+        }
+    }
+    
+    // 打开文件对话框选择新的向导文件
+    QString filePath = QFileDialog::getOpenFileName(this, "选择向导文件", 
+        QDir::currentPath(), "向导文件 (*.json)");
+    
+    if (!filePath.isEmpty()) {
+        qDebug() << "User selected wizard file:" << filePath;
+        
+        // 更新state_machine.json中的wizardJsonPath
+    if (m_product && m_product->hasStateMachine()) {
+        // 这里需要实现更新state_machine.json的逻辑
+        // 由于Product类没有直接提供stateMachine()方法，需要从文件系统读取和更新
+        QString configRootPath = m_product->configPackageRootPath();
+        if (!configRootPath.isEmpty()) {
+            QString stateMachinePath = configRootPath + "/state_machine.json";
+            QFile file(stateMachinePath);
+            if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+                QJsonObject config = doc.object();
+                config["wizardJsonPath"] = filePath;
+                
+                file.seek(0);
+                file.write(QJsonDocument(config).toJson());
+                file.resize(file.pos());
+                
+                // 同时更新缓存信息
+                m_cachedWizardJsonPath = filePath;
+                
+                qDebug() << "Updated wizardJsonPath in state_machine.json to:" << filePath;
+            }
+        }
+    }
+        
+        // 重新加载向导
+        loadWizardsFromProductConfig();
+        
+        QMessageBox::information(this, "切换向导文件", "向导文件已成功切换到: " + filePath);
+    }
+}
+
+void StateMachineEditorV2::createNewWizard()
+{
+    qDebug() << "createNewWizard() called";
+    qDebug() << "m_wizardManager:" << m_wizardManager;
+    
+    // 防止重复调用
+    static bool isCreating = false;
+    if (isCreating) {
+        qDebug() << "createNewWizard() already in progress, ignoring duplicate call";
+        return;
+    }
+    
+    isCreating = true;
+    
+    // 检查是否需要保存当前向导
+    if (m_isWizardModified && !m_currentWizardName.isEmpty()) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存向导", 
+            "向导 \"" + m_currentWizardName + "\" 已修改但未保存，是否先保存？",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        
+        if (reply == QMessageBox::Cancel) {
+            isCreating = false;
+            return; // 用户取消操作
+        } else if (reply == QMessageBox::Save) {
+            // 保存当前向导
+            saveCurrentWizard();
+        }
+    }
+    
+    // 创建新向导
+    if (m_wizardManager) {
+        QString name = QInputDialog::getText(this, "创建新向导", "请输入向导名称:");
+        if (!name.isEmpty()) {
+            QString description = QInputDialog::getText(this, "创建新向导", "请输入向导描述:");
+            Wizard* wizard = m_wizardManager->createWizard(name, description);
+            
+            // 创建并显示向导界面
+            if (wizard) {
+                // 设置当前向导状态
+                m_currentWizardName = name;
+                m_currentWizardFilePath = ""; // 新创建，未保存
+                m_isWizardModified = true;
+                
+                qDebug() << "Wizard created successfully, calling updateWindowTitle()";
+                
+                // 更新标题栏显示
+                updateWindowTitle();
+                
+                QMessageBox::information(this, "创建向导", "向导已成功创建!");
+                
+                // 切换到向导模式
+                switchMode(StateMachineMode::UIFlowMode);
+                
+                // 启动向导
+                if (wizard->start()) {
+                    qDebug() << "Wizard started";
+                } else {
+                    qWarning() << "向导启动失败";
+                }
+            }
+        }
+    } else {
+        qDebug() << "m_wizardManager is nullptr, cannot create wizard";
+        QMessageBox::warning(this, "创建向导", "向导管理器未初始化，无法创建向导。");
+    }
+    
+    isCreating = false;
+}
+
+void StateMachineEditorV2::editWizard()
+{
+    // 编辑向导
+    if (m_wizardManager) {
+        if (m_currentWizardName.isEmpty()) {
+            QMessageBox::warning(this, "编辑向导", "没有可编辑的向导，请先创建向导。");
+            return;
+        }
+        
+        // 这里可以添加编辑向导的UI界面
+        // 暂时使用简单的输入对话框
+        QString newName = QInputDialog::getText(this, "编辑向导名称", "请输入新的向导名称:", QLineEdit::Normal, m_currentWizardName);
+        if (!newName.isEmpty() && newName != m_currentWizardName) {
+            m_currentWizardName = newName;
+            m_isWizardModified = true;
+            updateWindowTitle();
+            
+            QMessageBox::information(this, "编辑向导", "向导名称已更新为: " + newName);
+        }
+    }
+}
+
+void StateMachineEditorV2::deleteWizard()
+{
+    // 删除向导
+    if (m_wizardManager) {
+        // 这里可以添加删除向导的UI界面
+        QMessageBox::information(this, "删除向导", "删除向导功能将在后续版本中实现。");
+    }
+}
+
+void StateMachineEditorV2::runWizard()
+{
+    // 运行向导
+    if (m_wizardManager) {
+        Wizard* wizard = nullptr;
+        
+        // 优先使用当前向导管理器中的向导
+        wizard = m_wizardManager->currentWizard();
+        
+        // 如果没有当前向导，但已经通过文件加载了向导名称，则尝试查找对应的向导
+        if (!wizard && !m_currentWizardName.isEmpty()) {
+            wizard = m_wizardManager->findWizard(m_currentWizardName);
+            
+            // 如果找到了向导，将其设置为当前向导
+            if (wizard) {
+                m_wizardManager->setCurrentWizard(wizard);
+                qDebug() << "Found and set current wizard:" << m_currentWizardName;
+            }
+        }
+        
+        if (wizard) {
+            // 切换到向导模式
+            switchToUIFlowMode();
+            
+            // 启动向导
+            if (wizard->start()) {
+                qDebug() << "Wizard started";
+            } else {
+                qWarning() << "向导启动失败";
+            }
+        } else {
+            QMessageBox::warning(this, "运行向导", "没有可运行的向导，请先创建向导。");
+        }
+    }
 }
 
 void StateMachineEditorV2::editStateProperties()
 {
     // 根据当前模式编辑状态属性
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (!m_currentUIFlowState.stateId.isEmpty()) {
             // 打开UI流状态属性编辑器
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (!m_currentLogicState.stateId.isEmpty()) {
             // 打开逻辑状态属性编辑器
         }
-        break;
-    case StateMachineMode::Integrated:
-        // 集成模式下需要同时编辑两个状态
         break;
     }
 }
@@ -446,18 +731,15 @@ void StateMachineEditorV2::editTransitionProperties()
 {
     // 根据当前模式编辑转换属性
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (!m_currentUIFlowTransition.transitionId.isEmpty()) {
             // 打开UI流转换属性编辑器
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (!m_currentLogicTransition.transitionId.isEmpty()) {
             // 打开逻辑转换属性编辑器
         }
-        break;
-    case StateMachineMode::Integrated:
-        // 集成模式下需要同时编辑两个转换
         break;
     }
 }
@@ -466,20 +748,17 @@ void StateMachineEditorV2::setInitialState()
 {
     // 根据当前模式设置初始状态
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (!m_currentUIFlowState.stateId.isEmpty()) {
             m_integrationManager->uiFlowStateMachine()->setInitialState(m_currentUIFlowState.stateId);
             if (m_uiFlowScene) m_uiFlowScene->refreshScene();
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (!m_currentLogicState.stateId.isEmpty()) {
             m_integrationManager->logicSequenceStateMachine()->setInitialState(m_currentLogicState.stateId);
             if (m_logicScene) m_logicScene->refreshScene();
         }
-        break;
-    case StateMachineMode::Integrated:
-        // 集成模式下需要同时设置两个状态机
         break;
     }
 }
@@ -490,21 +769,17 @@ void StateMachineEditorV2::validateStateMachine()
     QString message;
     
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (m_integrationManager->uiFlowStateMachine()) {
             valid = m_integrationManager->uiFlowStateMachine()->validate();
             message = valid ? "UI流状态机验证通过" : "UI流状态机验证失败";
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (m_integrationManager->logicSequenceStateMachine()) {
             valid = m_integrationManager->logicSequenceStateMachine()->validate();
             message = valid ? "逻辑时序状态机验证通过" : "逻辑时序状态机验证失败";
         }
-        break;
-    case StateMachineMode::Integrated:
-        valid = m_integrationManager->synchronizeStates();
-        message = valid ? "集成状态机验证通过" : "集成状态机验证失败";
         break;
     }
     
@@ -521,17 +796,12 @@ void StateMachineEditorV2::showRuntimePreview()
 
 void StateMachineEditorV2::switchToUIFlowMode()
 {
-    switchMode(StateMachineMode::UIFlowOnly);
+    switchMode(StateMachineMode::UIFlowMode);
 }
 
 void StateMachineEditorV2::switchToLogicSequenceMode()
 {
-    switchMode(StateMachineMode::LogicSequenceOnly);
-}
-
-void StateMachineEditorV2::switchToIntegratedMode()
-{
-    switchMode(StateMachineMode::Integrated);
+    switchMode(StateMachineMode::LogicSequenceMode);
 }
 
 void StateMachineEditorV2::onStateSelected(const UIFlowStateMachine::UIFlowState &state)
@@ -572,7 +842,7 @@ void StateMachineEditorV2::onUiInterfaceChanged(int index)
     QString uiInterfaceId = m_uiInterfaceCombo->currentData().toString();
     
     if (m_currentUIFlowState.stateId.isEmpty()) {
-        qDebug() << "当前没有选中任何UI流状态，UI界面选择不会生效";
+        qDebug() << "No UI flow state is currently selected, UI interface selection will not take effect";
         return;
     }
     
@@ -582,47 +852,71 @@ void StateMachineEditorV2::onUiInterfaceChanged(int index)
     
     if (m_uiFlowScene) {
         m_uiFlowScene->refreshScene();
-        qDebug() << "UI流状态" << m_currentUIFlowState.name << "的UI界面已更新为:" 
+        qDebug() << "UI flow state" << m_currentUIFlowState.name << "UI interface updated to:" 
                  << m_uiInterfaceCombo->currentText() << "(" << uiInterfaceId << ")";
     }
 }
 
 void StateMachineEditorV2::onModeChanged()
 {
-    if (m_uiFlowModeRadio->isChecked()) {
-        switchToUIFlowMode();
-    } else if (m_logicSequenceModeRadio->isChecked()) {
-        switchToLogicSequenceMode();
-    } else if (m_integratedModeRadio->isChecked()) {
-        switchToIntegratedMode();
+    // 更新步骤按钮状态
+    if (m_currentMode == StateMachineMode::UIFlowMode) {
+        m_step1Button->setChecked(true);
+        m_step2Button->setChecked(false);
+        m_step2Button->setEnabled(true); // 完成步骤1后启用步骤2
+    } else if (m_currentMode == StateMachineMode::LogicSequenceMode) {
+        m_step1Button->setChecked(false);
+        m_step2Button->setChecked(true);
     }
 }
 
 void StateMachineEditorV2::createModeSelector()
 {
-    m_modeGroup = new QGroupBox("状态机模式", this);
+    m_modeGroup = new QGroupBox("状态机编辑步骤", this);
     QVBoxLayout *modeLayout = new QVBoxLayout(m_modeGroup);
     
-    // 创建模式选择按钮
-    m_uiFlowModeRadio = new QRadioButton("UI流模式", m_modeGroup);
-    m_logicSequenceModeRadio = new QRadioButton("逻辑时序模式", m_modeGroup);
-    m_integratedModeRadio = new QRadioButton("集成模式", m_modeGroup);
+    // 创建步骤指示器
+    QHBoxLayout *stepLayout = new QHBoxLayout();
     
-    m_uiFlowModeRadio->setChecked(true);
+    // 步骤1：UI流模式
+    m_step1Button = new QPushButton("步骤1：UI流模式", m_modeGroup);
+    m_step1Button->setCheckable(true);
+    m_step1Button->setChecked(true);
+    m_step1Button->setStyleSheet("QPushButton:checked { background-color: #4CAF50; color: white; }");
     
-    modeLayout->addWidget(m_uiFlowModeRadio);
-    modeLayout->addWidget(m_logicSequenceModeRadio);
-    modeLayout->addWidget(m_integratedModeRadio);
+    // 步骤箭头
+    QLabel *arrowLabel1 = new QLabel("→", m_modeGroup);
+    arrowLabel1->setAlignment(Qt::AlignCenter);
     
-    // 模式描述标签
-    m_modeDescription = new QLabel("专注于UI界面的串联和跳转", m_modeGroup);
+    // 步骤2：逻辑时序模式
+    m_step2Button = new QPushButton("步骤2：逻辑时序模式", m_modeGroup);
+    m_step2Button->setCheckable(true);
+    m_step2Button->setEnabled(false); // 初始禁用，需要先完成步骤1
+    m_step2Button->setStyleSheet("QPushButton:checked { background-color: #2196F3; color: white; }");
+    
+    stepLayout->addWidget(m_step1Button);
+    stepLayout->addWidget(arrowLabel1);
+    stepLayout->addWidget(m_step2Button);
+    
+    modeLayout->addLayout(stepLayout);
+    
+    // 步骤描述标签
+    m_modeDescription = new QLabel("步骤1：UI流模式 - 串联多个UI界面，实现界面交互流程", m_modeGroup);
     m_modeDescription->setWordWrap(true);
     modeLayout->addWidget(m_modeDescription);
     
     // 连接信号
-    connect(m_uiFlowModeRadio, &QRadioButton::toggled, this, &StateMachineEditorV2::onModeChanged);
-    connect(m_logicSequenceModeRadio, &QRadioButton::toggled, this, &StateMachineEditorV2::onModeChanged);
-    connect(m_integratedModeRadio, &QRadioButton::toggled, this, &StateMachineEditorV2::onModeChanged);
+    connect(m_step1Button, &QPushButton::clicked, this, [this]() {
+        if (m_currentMode != StateMachineMode::UIFlowMode) {
+            switchMode(StateMachineMode::UIFlowMode);
+        }
+    });
+    
+    connect(m_step2Button, &QPushButton::clicked, this, [this]() {
+        if (m_currentMode != StateMachineMode::LogicSequenceMode) {
+            switchMode(StateMachineMode::LogicSequenceMode);
+        }
+    });
 }
 
 void StateMachineEditorV2::createToolbar()
@@ -643,29 +937,64 @@ void StateMachineEditorV2::createToolbar()
     QAction *validateAction = new QAction("验证", this);
     QAction *previewAction = new QAction("预览", this);
     
+    // 向导操作
+    QAction *newWizardAction = new QAction("新建向导", this);
+    QAction *editWizardAction = new QAction("编辑向导", this);
+    QAction *deleteWizardAction = new QAction("删除向导", this);
+    QAction *runWizardAction = new QAction("运行向导", this);
+    
+    // 添加所有操作到工具栏
     m_toolbar->addAction(newAction);
     m_toolbar->addAction(openAction);
     m_toolbar->addAction(saveAction);
-    m_toolbar->addSeparator();
-    m_toolbar->addAction(addStateAction);
-    m_toolbar->addAction(addTransitionAction);
-    m_toolbar->addAction(deleteAction);
-    m_toolbar->addSeparator();
-    m_toolbar->addAction(validateAction);
-    m_toolbar->addAction(previewAction);
+    
+    // 保存操作指针以便后续控制可见性
+    m_fileActions = {newAction, openAction, saveAction};
+    m_editActions = {addStateAction, addTransitionAction, deleteAction};
+    m_toolActions = {validateAction, previewAction};
+    m_wizardActions = {newWizardAction, editWizardAction, deleteWizardAction, runWizardAction};
     
     // 连接信号
     connect(newAction, &QAction::triggered, this, &StateMachineEditorV2::createNewStateMachine);
     connect(openAction, &QAction::triggered, this, [this]() {
-        QString filePath = QFileDialog::getOpenFileName(this, "打开状态机文件", "", "状态机文件 (*.json)");
+        QString title = "打开状态机文件";
+        QString filter = "状态机文件 (*.json)";
+        
+        // 根据当前模式设置不同的标题和过滤器
+        if (m_currentMode == StateMachineMode::UIFlowMode) {
+            title = "打开向导文件";
+            filter = "向导文件 (*.json)";
+        }
+        
+        QString filePath = QFileDialog::getOpenFileName(this, title, "", filter);
         if (!filePath.isEmpty()) loadStateMachine(filePath);
     });
     connect(saveAction, &QAction::triggered, this, [this]() {
-        QString filePath = QFileDialog::getSaveFileName(this, "保存状态机文件", "", "状态机文件 (*.json)");
+        QString title = "保存状态机文件";
+        QString filter = "状态机文件 (*.json)";
+        
+        // 根据当前模式设置不同的保存逻辑
+        if (m_currentMode == StateMachineMode::UIFlowMode) {
+            // UI流模式下保存向导
+            saveCurrentWizard();
+            return;
+        } else {
+            // 逻辑时序模式下保存状态机
+            title = "保存状态机文件";
+            filter = "状态机文件 (*.json)";
+        }
+        
+        QString filePath = QFileDialog::getSaveFileName(this, title, "", filter);
         if (!filePath.isEmpty()) saveStateMachine(filePath);
     });
     connect(validateAction, &QAction::triggered, this, &StateMachineEditorV2::validateStateMachine);
     connect(previewAction, &QAction::triggered, this, &StateMachineEditorV2::showRuntimePreview);
+    
+    // 连接向导信号
+    connect(newWizardAction, &QAction::triggered, this, &StateMachineEditorV2::createNewWizard);
+    connect(editWizardAction, &QAction::triggered, this, &StateMachineEditorV2::editWizard);
+    connect(deleteWizardAction, &QAction::triggered, this, &StateMachineEditorV2::deleteWizard);
+    connect(runWizardAction, &QAction::triggered, this, &StateMachineEditorV2::runWizard);
 }
 
 void StateMachineEditorV2::createPropertiesPanel()
@@ -736,12 +1065,18 @@ void StateMachineEditorV2::createRuntimePreview()
     m_runtimeDock->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     m_runtimeDock->hide();
 }
-
+void StateMachineEditorV2::printUiInterfaceComboCount() {
+    qDebug()<<"ui interface combo count:"<<m_uiInterfaceCombo->count();
+    for (int i = 0; i < m_uiInterfaceCombo->count(); ++i) {
+        qDebug()<<"ui interface combo item:"<<m_uiInterfaceCombo->itemText(i);
+    }
+    qDebug()<<"current uiFiles List count:"<<m_uiFilesListWidget->count();
+}
 void StateMachineEditorV2::updatePropertiesPanel()
 {
     // 根据当前模式更新属性面板
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         m_propertiesTab->setCurrentWidget(m_uiFlowProperties);
         
         if (!m_currentUIFlowState.stateId.isEmpty()) {
@@ -755,7 +1090,7 @@ void StateMachineEditorV2::updatePropertiesPanel()
             if (index >= 0) m_uiInterfaceCombo->setCurrentIndex(index);
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         m_propertiesTab->setCurrentWidget(m_logicProperties);
         
         if (!m_currentLogicState.stateId.isEmpty()) {
@@ -768,9 +1103,6 @@ void StateMachineEditorV2::updatePropertiesPanel()
             // TODO: 实现逻辑类型选择
         }
         break;
-    case StateMachineMode::Integrated:
-        // 集成模式下显示两个属性页
-        break;
     }
 }
 
@@ -781,15 +1113,12 @@ void StateMachineEditorV2::setupRuntime()
         // 根据当前模式设置运行时状态机
         // TODO: 需要适配不同类型的状态机到运行时引擎
         switch (m_currentMode) {
-        case StateMachineMode::UIFlowOnly:
+        case StateMachineMode::UIFlowMode:
             // UIFlowStateMachine 不兼容 StateMachineRuntime，需要适配器
             // m_runtime->setStateMachine(m_integrationManager->uiFlowStateMachine());
             break;
-        case StateMachineMode::LogicSequenceOnly:
+        case StateMachineMode::LogicSequenceMode:
             // 逻辑时序状态机可能需要特殊的运行时处理
-            break;
-        case StateMachineMode::Integrated:
-            // 集成模式下使用集成管理器
             break;
         }
     }
@@ -802,14 +1131,11 @@ void StateMachineEditorV2::switchMode(StateMachineMode newMode)
     m_currentMode = newMode;
     
     switch (newMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         setupUIFlowMode();
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         setupLogicSequenceMode();
-        break;
-    case StateMachineMode::Integrated:
-        setupIntegratedMode();
         break;
     }
     
@@ -829,11 +1155,11 @@ void StateMachineEditorV2::setupUIFlowMode()
     
     if (m_view) {
         m_view->setUIFlowScene(m_uiFlowScene);
-        m_view->setCurrentMode(StateMachineMode::UIFlowOnly);
+        m_view->setCurrentMode(StateMachineMode::UIFlowMode);
     }
     
     // 设置集成管理器为UI流模式
-    m_integrationManager->setIntegrationMode(StateMachineIntegrationManager::IntegrationMode::UIFlowOnly);
+    m_integrationManager->setIntegrationMode(StateMachineIntegrationManager::IntegrationMode::UIFlowMode);
 }
 
 void StateMachineEditorV2::setupLogicSequenceMode()
@@ -848,54 +1174,24 @@ void StateMachineEditorV2::setupLogicSequenceMode()
     
     if (m_view) {
         m_view->setLogicScene(m_logicScene);
-        m_view->setCurrentMode(StateMachineMode::LogicSequenceOnly);
+        m_view->setCurrentMode(StateMachineMode::LogicSequenceMode);
     }
     
     // 设置集成管理器为逻辑时序模式
-    m_integrationManager->setIntegrationMode(StateMachineIntegrationManager::IntegrationMode::LogicSequenceOnly);
+    m_integrationManager->setIntegrationMode(StateMachineIntegrationManager::IntegrationMode::LogicSequenceMode);
 }
 
-void StateMachineEditorV2::setupIntegratedMode()
-{
-    // 集成模式下需要同时显示两个场景
-    if (!m_uiFlowScene) {
-        m_uiFlowScene = new UIFlowStateMachineScene(this);
-    }
-    
-    if (!m_logicScene) {
-        m_logicScene = new LogicStateMachineScene(this);
-    }
-    
-    if (m_integrationManager->uiFlowStateMachine()) {
-        m_uiFlowScene->setStateMachine(m_integrationManager->uiFlowStateMachine());
-    }
-    
-    if (m_integrationManager->logicSequenceStateMachine()) {
-        m_logicScene->setStateMachine(m_integrationManager->logicSequenceStateMachine());
-    }
-    
-    if (m_view) {
-        m_view->setUIFlowScene(m_uiFlowScene);
-        m_view->setLogicScene(m_logicScene);
-        m_view->setCurrentMode(StateMachineMode::Integrated);
-    }
-    
-    // 设置集成管理器为集成模式
-    m_integrationManager->setIntegrationMode(StateMachineIntegrationManager::IntegrationMode::Integrated);
-}
+
 
 void StateMachineEditorV2::updateModeUI()
 {
     // 更新模式描述
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
-        m_modeDescription->setText("专注于UI界面的串联和跳转，实现用户界面之间的导航流程");
+    case StateMachineMode::UIFlowMode:
+        m_modeDescription->setText("步骤1：UI流模式 - 串联多个UI界面，实现界面交互流程");
         break;
-    case StateMachineMode::LogicSequenceOnly:
-        m_modeDescription->setText("专注于软件内部逻辑时序，处理业务逻辑和数据处理流程");
-        break;
-    case StateMachineMode::Integrated:
-        m_modeDescription->setText("集成UI流和逻辑时序，实现完整的软件状态管理");
+    case StateMachineMode::LogicSequenceMode:
+        m_modeDescription->setText("步骤2：逻辑时序模式 - 定义软件业务逻辑运行流程");
         break;
     }
     
@@ -907,24 +1203,43 @@ void StateMachineEditorV2::updateModeUI()
 void StateMachineEditorV2::updateToolbarAvailability()
 {
     // 根据当前模式更新工具栏按钮的可用性
-    // TODO: 实现工具栏按钮的可用性控制
+    bool isUIFlowMode = (m_currentMode == StateMachineMode::UIFlowMode);
+    
+    // 在UI流模式下只显示向导相关操作
+    for (QAction *action : m_fileActions) {
+        action->setVisible(!isUIFlowMode);
+    }
+    for (QAction *action : m_editActions) {
+        action->setVisible(!isUIFlowMode);
+    }
+    for (QAction *action : m_toolActions) {
+        action->setVisible(!isUIFlowMode);
+    }
+    for (QAction *action : m_wizardActions) {
+        action->setVisible(true);
+    }
 }
 
 void StateMachineEditorV2::updatePropertiesPanelAvailability()
 {
     // 根据当前模式更新属性面板的可用性
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
+        // UI流模式下显示向导编辑界面
+        m_propertiesTab->show();
         m_propertiesTab->setTabEnabled(0, true);  // UI流属性页
         m_propertiesTab->setTabEnabled(1, false); // 逻辑属性页
+        m_propertiesTab->setCurrentIndex(0);      // 切换到UI流属性页
+        
+        // 更新UI流属性页的内容为向导编辑界面
+        updateWizardEditorInterface();
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
+        // 逻辑时序模式下显示逻辑属性页，隐藏UI流属性页
+        m_propertiesTab->show();
         m_propertiesTab->setTabEnabled(0, false); // UI流属性页
         m_propertiesTab->setTabEnabled(1, true);  // 逻辑属性页
-        break;
-    case StateMachineMode::Integrated:
-        m_propertiesTab->setTabEnabled(0, true);  // UI流属性页
-        m_propertiesTab->setTabEnabled(1, true);  // 逻辑属性页
+        m_propertiesTab->setCurrentIndex(1);      // 切换到逻辑属性页
         break;
     }
 }
@@ -1404,7 +1719,7 @@ StateMachineViewV2::StateMachineViewV2(QWidget *parent)
     : QGraphicsView(parent)
     , m_uiFlowScene(nullptr)
     , m_logicScene(nullptr)
-    , m_currentMode(StateMachineMode::UIFlowOnly)
+    , m_currentMode(StateMachineMode::UIFlowMode)
     , m_isPanning(false)
     , m_panStartX(0)
     , m_panStartY(0)
@@ -1440,19 +1755,15 @@ void StateMachineViewV2::setCurrentMode(StateMachineMode mode)
 void StateMachineViewV2::updateCurrentScene()
 {
     switch (m_currentMode) {
-    case StateMachineMode::UIFlowOnly:
+    case StateMachineMode::UIFlowMode:
         if (m_uiFlowScene) {
             setScene(m_uiFlowScene);
         }
         break;
-    case StateMachineMode::LogicSequenceOnly:
+    case StateMachineMode::LogicSequenceMode:
         if (m_logicScene) {
             setScene(m_logicScene);
         }
-        break;
-    case StateMachineMode::Integrated:
-        // 集成模式下需要特殊处理
-        // TODO: 实现集成模式下的场景显示
         break;
     }
     
@@ -1864,4 +2175,981 @@ void LogicStateMachineScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void StateMachineEditorV2::updateWizardEditorInterface()
+{
+    // 在UI流模式下更新属性面板为向导编辑界面
+    if (m_currentMode != StateMachineMode::UIFlowMode) {
+        return;
+    }
+    
+    qDebug() << "Starting to update wizard editing interface...";
+    
+    // 清空UI流属性面板的内容 - 使用Qt自动清理机制
+    if (m_uiFlowProperties) {
+        // 删除现有布局及其所有子组件
+        QLayout *existingLayout = m_uiFlowProperties->layout();
+        if (existingLayout) {
+            qDebug() << "Clearing existing layout...";
+            QLayoutItem *item;
+            while ((item = existingLayout->takeAt(0)) != nullptr) {
+                if (item->widget()) {
+                    item->widget()->deleteLater();
+                }
+                delete item;
+            }
+            delete existingLayout;
+        }
+    }
+    
+    qDebug() << "Creating new wizard editing interface layout...";
+    
+    // 创建滚动区域和滚动内容
+    QScrollArea *scrollArea = new QScrollArea(m_uiFlowProperties);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    
+    // 创建滚动内容容器
+    QWidget *scrollContent = new QWidget();
+    scrollContent->setMinimumWidth(400); // 设置最小宽度以确保内容正常显示
+    
+    // 创建向导编辑界面
+    QVBoxLayout *wizardLayout = new QVBoxLayout(scrollContent);
+    wizardLayout->setSpacing(15);  // 增加整体间距
+    wizardLayout->setContentsMargins(15, 15, 15, 15);  // 增加边距
+    
+    // 1. 当前向导文件区域 - 添加分组框（压缩布局）
+    QGroupBox *fileGroup = new QGroupBox("当前向导文件", m_uiFlowProperties);
+    fileGroup->setStyleSheet("QGroupBox { font-weight: bold; font-size: 10pt; margin-top: 5px; }");
+    
+    QVBoxLayout *fileLayout = new QVBoxLayout(fileGroup);
+    fileLayout->setSpacing(4);
+    fileLayout->setContentsMargins(8, 8, 8, 8);
+    
+    QLabel *wizardFilePathLabel = new QLabel("", m_uiFlowProperties);
+    wizardFilePathLabel->setObjectName("wizardFilePathLabel");
+    wizardFilePathLabel->setWordWrap(true);
+    wizardFilePathLabel->setStyleSheet("border: 1px solid #ddd; padding: 4px; background-color: #f8f9fa; border-radius: 3px; font-size: 9pt;");
+    
+    // 显示当前向导文件路径
+    updateWizardFilePathLabel(wizardFilePathLabel);
+    
+    fileLayout->addWidget(wizardFilePathLabel);
+    
+    // 2. 向导操作按钮区域 - 添加分组框（压缩布局）
+    QGroupBox *actionGroup = new QGroupBox("向导操作", m_uiFlowProperties);
+    actionGroup->setStyleSheet("QGroupBox { font-weight: bold; font-size: 10pt; margin-top: 5px; }");
+    
+    QHBoxLayout *buttonLayout = new QHBoxLayout(actionGroup);
+    buttonLayout->setSpacing(6);
+    buttonLayout->setContentsMargins(8, 8, 8, 8);
+    
+    QPushButton *runWizardButton = new QPushButton("运行向导", m_uiFlowProperties);
+    runWizardButton->setMinimumHeight(28);
+    runWizardButton->setStyleSheet("QPushButton { font-size: 9pt; padding: 4px 12px; }");
+    
+    buttonLayout->addWidget(runWizardButton);
+    buttonLayout->addStretch();
+    
+    // 3. 向导属性编辑区域 - 添加分组框（压缩布局）
+    QGroupBox *propertyGroup = new QGroupBox("向导属性", m_uiFlowProperties);
+    propertyGroup->setStyleSheet("QGroupBox { font-weight: bold; font-size: 10pt; margin-top: 5px; }");
+    
+    QFormLayout *propertyLayout = new QFormLayout(propertyGroup);
+    propertyLayout->setSpacing(6);
+    propertyLayout->setContentsMargins(8, 8, 8, 8);
+    propertyLayout->setLabelAlignment(Qt::AlignRight);
+    
+    QLineEdit *wizardNameEdit = new QLineEdit(m_uiFlowProperties);
+    wizardNameEdit->setMinimumHeight(25);
+    wizardNameEdit->setStyleSheet("QLineEdit { font-size: 9pt; padding: 3px; }");
+    
+    QTextEdit *wizardDescriptionEdit = new QTextEdit(m_uiFlowProperties);
+    wizardDescriptionEdit->setMinimumHeight(60);
+    wizardDescriptionEdit->setMaximumHeight(80);
+    wizardDescriptionEdit->setStyleSheet("QTextEdit { font-size: 9pt; padding: 3px; }");
+    
+    // 如果当前有向导，填充属性
+    if (!m_currentWizardName.isEmpty()) {
+        wizardNameEdit->setText(m_currentWizardName);
+        
+        // 如果有向导管理器，获取描述
+        if (m_wizardManager && !m_wizardManager->wizards().isEmpty()) {
+            Wizard* wizard = m_wizardManager->wizards().first();
+            if (wizard) {
+                wizardDescriptionEdit->setText(wizard->description());
+            }
+        }
+    }
+    
+    propertyLayout->addRow("名称:", wizardNameEdit);
+    propertyLayout->addRow("描述:", wizardDescriptionEdit);
+    
+    // 布局设置 - 使用水平布局合并三个区域，进一步压缩空间
+    QHBoxLayout *combinedLayout = new QHBoxLayout();
+    combinedLayout->setSpacing(8);
+    combinedLayout->setContentsMargins(0, 0, 0, 0);
+    
+    // 设置三个分组框的固定宽度比例
+    fileGroup->setFixedWidth(250);
+    actionGroup->setFixedWidth(120);
+    propertyGroup->setFixedWidth(280);
+    
+    combinedLayout->addWidget(fileGroup);
+    combinedLayout->addWidget(actionGroup);
+    combinedLayout->addWidget(propertyGroup);
+    combinedLayout->addStretch();
+    
+    wizardLayout->addLayout(combinedLayout);
+    wizardLayout->addStretch();
+    
+    // 连接信号槽
+    connect(runWizardButton, &QPushButton::clicked, this, &StateMachineEditorV2::runWizard);
+    
+    // 向导属性编辑
+    connect(wizardNameEdit, &QLineEdit::textChanged, this, 
+            [=](const QString &text) {
+                // 更新当前向导名称
+                m_currentWizardName = text;
+                m_isWizardModified = true;
+                updateWindowTitle();
+            });
+    
+    connect(wizardDescriptionEdit, &QTextEdit::textChanged, this, 
+            [=]() {
+                // 标记向导已修改
+                m_isWizardModified = true;
+                updateWindowTitle();
+            });
+    
+    // 设置滚动内容
+    scrollArea->setWidget(scrollContent);
+    
+    // 添加UI文件列表显示区域（必须在设置滚动内容之后调用）
+    createUIFilesDisplay();
+    
+    // 创建主布局并添加滚动区域
+    QVBoxLayout *mainLayout = new QVBoxLayout(m_uiFlowProperties);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->addWidget(scrollArea);
+    
+    m_propertiesTab->setTabText(0, "向导编辑");
+}
+
+void StateMachineEditorV2::saveCurrentWizard()
+{
+    if (m_currentWizardName.isEmpty()) {
+        QMessageBox::warning(this, "保存向导", "没有可保存的向导");
+        return;
+    }
+    
+    // 检查是否有产品配置目录
+    if (!m_product) {
+        QMessageBox::warning(this, "保存向导", "没有加载产品配置，无法保存向导文件");
+        return;
+    }
+    
+    QString filePath;
+    if (m_currentWizardFilePath.isEmpty()) {
+        // 新向导，保存到产品配置包根目录下的state_machines/wizards子目录
+        QString productConfigRootDir = m_product->configPackageRootPath();
+        
+        if (productConfigRootDir.isEmpty()) {
+            QMessageBox::warning(this, "保存向导", "产品配置包根路径未设置，无法保存向导文件");
+            return;
+        }
+        
+        QString stateMachinesDir = productConfigRootDir + "/state_machines";
+        QString wizardsDir = stateMachinesDir + "/wizards";
+        
+        // 创建state_machines和wizards目录（如果不存在）
+        QDir stateMachinesDirObj(stateMachinesDir);
+        if (!stateMachinesDirObj.exists()) {
+            stateMachinesDirObj.mkpath(".");
+        }
+        
+        QDir wizardsDirObj(wizardsDir);
+        if (!wizardsDirObj.exists()) {
+            wizardsDirObj.mkpath(".");
+        }
+        
+        // 生成默认文件名
+        QString defaultFileName = m_currentWizardName + ".json";
+        QString defaultFilePath = wizardsDir + "/" + defaultFileName;
+        
+        // 如果文件已存在，询问是否覆盖
+        if (QFile::exists(defaultFilePath)) {
+            QMessageBox::StandardButton reply = QMessageBox::question(this, 
+                "保存向导", 
+                "向导文件 \"" + defaultFileName + "\" 已存在，是否覆盖？",
+                QMessageBox::Yes | QMessageBox::No);
+            
+            if (reply == QMessageBox::No) {
+                // 用户选择不覆盖，让用户选择其他路径
+                filePath = QFileDialog::getSaveFileName(this, 
+                    "保存向导文件", 
+                    wizardsDir, 
+                    "向导文件 (*.json)");
+                if (filePath.isEmpty()) {
+                    return; // 用户取消
+                }
+            } else {
+                filePath = defaultFilePath;
+            }
+        } else {
+            filePath = defaultFilePath;
+        }
+        
+        // 确保文件扩展名
+        if (!filePath.endsWith(".json")) {
+            filePath += ".json";
+        }
+        
+        m_currentWizardFilePath = filePath;
+    } else {
+        filePath = m_currentWizardFilePath;
+    }
+    
+    // 保存向导数据到文件
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, "保存向导", "无法保存向导文件: " + filePath);
+        return;
+    }
+    
+    // 保存向导的实际数据
+    QJsonObject wizardData;
+    wizardData["name"] = m_currentWizardName;
+    wizardData["type"] = "wizard";
+    wizardData["created"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    
+    // 保存控件事件定义
+    QJsonArray controlEventsArray;
+    for (const QString &eventData : m_definedControlEvents) {
+        QStringList parts = eventData.split("|");
+        if (parts.size() == 3) {
+            QJsonObject eventObj;
+            eventObj["eventName"] = parts[0];
+            eventObj["controlName"] = parts[1];
+            eventObj["eventType"] = parts[2];
+            controlEventsArray.append(eventObj);
+        }
+    }
+    wizardData["controlEvents"] = controlEventsArray;
+    
+    QJsonDocument doc(wizardData);
+    file.write(doc.toJson());
+    file.close();
+    
+    m_isWizardModified = false;
+    updateWindowTitle();
+    
+    QMessageBox::information(this, "保存向导", "向导 \"" + m_currentWizardName + "\" 已成功保存到产品配置目录");
+}
+
+void StateMachineEditorV2::updateWindowTitle()
+{
+    QString title = "软件编辑器";
+    
+    // 优先显示当前向导名称
+    if (!m_currentWizardName.isEmpty()) {
+        title += " - " + m_currentWizardName;
+        if (m_isWizardModified) {
+            title += " *"; // 表示未保存
+        }
+    }
+    // 如果没有当前向导，但产品配置中有wizards，显示第一个wizard文件名称
+    else if (m_product && m_product->hasStateMachineConfig()) {
+        QString wizardJsonPath = m_cachedWizardJsonPath;
+        
+        // 如果缓存为空，则回退到从产品配置中读取（兼容旧代码）
+        if (wizardJsonPath.isEmpty()) {
+            wizardJsonPath = m_product->getWizardJsonPath();
+        }
+        
+        if (!wizardJsonPath.isEmpty()) {
+            // 将相对路径转换为绝对路径以正确获取文件名
+            if (QDir::isRelativePath(wizardJsonPath)) {
+                QString configPackageRootPath = m_product->configPackageRootPath();
+                if (!configPackageRootPath.isEmpty()) {
+                    wizardJsonPath = QDir(configPackageRootPath).absoluteFilePath(wizardJsonPath);
+                }
+            }
+            
+            QFileInfo fileInfo(wizardJsonPath);
+            QString wizardFileName = fileInfo.fileName();
+            if (!wizardFileName.isEmpty()) {
+                title += " - " + wizardFileName;
+            }
+        }
+    }
+    
+    qDebug() << "updateWindowTitle() called, setting title to:" << title;
+    qDebug() << "m_currentWizardName:" << m_currentWizardName;
+    qDebug() << "m_isWizardModified:" << m_isWizardModified;
+    qDebug() << "parentWidget():" << parentWidget();
+    
+    setWindowTitle(title);
+    
+    // 更新状态栏提示（如果有状态栏）
+    if (parentWidget()) {
+        parentWidget()->setWindowTitle(title);
+    }
+}
+
+void StateMachineEditorV2::updateWizardFilePathLabel(QLabel *label)
+{
+    if (!label) {
+        return;
+    }
+    
+    // 显示当前向导文件路径
+    if (!m_currentWizardFilePath.isEmpty()) {
+        label->setText(m_currentWizardFilePath);
+    } else {
+        label->setText("未指定向导文件");
+    }
+}
+
+void StateMachineEditorV2::loadWizardsFromProductConfig()
+{
+    if (!m_product) {
+        qDebug() << "loadWizardsFromProductConfig: No product configuration, cannot load wizard files";
+        return;
+    }
+    
+    // 优先使用缓存的向导文件路径（避免重复读取state_machine.json文件）
+    QString wizardJsonPath = m_cachedWizardJsonPath;
+    
+    // 如果缓存为空，则回退到从产品配置中读取（兼容旧代码）
+    if (wizardJsonPath.isEmpty()) {
+        wizardJsonPath = m_product->getWizardJsonPath();
+        qDebug() << "Using fallback method to get wizard path from product config";
+    }
+    
+    if (wizardJsonPath.isEmpty()) {
+        qDebug() << "loadWizardsFromProductConfig: No wizard file path specified in state_machine.json";
+        return;
+    }
+    
+    // 将相对路径转换为绝对路径
+    if (QDir::isRelativePath(wizardJsonPath)) {
+        QString configPackageRootPath = m_product->configPackageRootPath();
+        if (!configPackageRootPath.isEmpty()) {
+            wizardJsonPath = QDir(configPackageRootPath).absoluteFilePath(wizardJsonPath);
+            qDebug() << "Converting to absolute path:" << wizardJsonPath;
+        }
+    }
+    
+    qDebug() << "Loading specified wizard file:" << wizardJsonPath;
+    
+    // 检查向导文件是否存在
+    QFileInfo fileInfo(wizardJsonPath);
+    if (!fileInfo.exists()) {
+        qDebug() << "Specified wizard file does not exist:" << wizardJsonPath;
+        return;
+    }
+    
+    // 加载指定的向导文件
+    QFile file(wizardJsonPath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "无法打开向导文件:" << wizardJsonPath;
+        return;
+    }
+    
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    file.close();
+    
+    if (doc.isNull()) {
+        qWarning() << "向导文件格式错误:" << wizardJsonPath;
+        return;
+    }
+    
+    QJsonObject json = doc.object();
+    
+    // 检查是否为向导文件
+    if (json.contains("type") && json["type"].toString() == "wizard") {
+        QString wizardName = json["name"].toString();
+        
+        if (!wizardName.isEmpty()) {
+            qDebug() << "Loading wizard:" << wizardName << "from" << wizardJsonPath;
+            
+            // 创建向导对象
+            if (m_wizardManager) {
+                QString description = json.contains("description") ? json["description"].toString() : "";
+                Wizard* wizard = m_wizardManager->createWizard(wizardName, description);
+                
+                if (wizard) {
+                    // 设置向导文件路径
+                    m_currentWizardName = wizardName;
+                    m_currentWizardFilePath = wizardJsonPath;
+                    m_isWizardModified = false;
+                    
+                    // 加载控件事件定义
+                    m_definedControlEvents.clear();
+                    if (json.contains("controlEvents")) {
+                        QJsonArray controlEventsArray = json["controlEvents"].toArray();
+                        for (const QJsonValue &eventValue : controlEventsArray) {
+                            QJsonObject eventObj = eventValue.toObject();
+                            QString eventName = eventObj["eventName"].toString();
+                            QString controlName = eventObj["controlName"].toString();
+                            QString eventType = eventObj["eventType"].toString();
+                            
+                            if (!eventName.isEmpty() && !controlName.isEmpty() && !eventType.isEmpty()) {
+                                QString eventData = QString("%1|%2|%3").arg(eventName).arg(controlName).arg(eventType);
+                                m_definedControlEvents.append(eventData);
+                                qDebug() << "Loaded control event:" << eventData;
+                            }
+                        }
+                        qDebug() << "Loaded" << m_definedControlEvents.size() << "control events";
+                    }
+                    
+                    // 将新创建的向导设置为当前向导
+                    m_wizardManager->setCurrentWizard(wizard);
+                    
+                    qDebug() << "Wizard loaded successfully:" << wizardName;
+                }
+            }
+        }
+    } else {
+        qWarning() << "文件不是有效的向导文件:" << wizardJsonPath;
+    }
+    
+    // 更新窗口标题
+    updateWindowTitle();
+    
+    // 更新向导文件路径标签
+    if (m_uiFlowProperties) {
+        // 查找向导文件路径标签（在整个对象树中查找）
+        QLabel *wizardFilePathLabel = m_uiFlowProperties->findChild<QLabel*>(QString("wizardFilePathLabel"));
+        if (wizardFilePathLabel) {
+            updateWizardFilePathLabel(wizardFilePathLabel);
+        } else {
+            qDebug() << "wizardFilePathLabel not found in m_uiFlowProperties";
+        }
+        
+        // 更新已定义事件列表显示
+        QListWidget *definedEventsList = m_uiFlowProperties->findChild<QListWidget*>();
+        if (definedEventsList) {
+            definedEventsList->clear();
+            for (const QString &eventData : m_definedControlEvents) {
+                QStringList parts = eventData.split("|");
+                if (parts.size() == 3) {
+                    QString eventDefinition = QString("%1 - %2 (%3)").arg(parts[0]).arg(parts[1]).arg(parts[2]);
+                    QListWidgetItem *item = new QListWidgetItem(eventDefinition);
+                    definedEventsList->addItem(item);
+                }
+            }
+            qDebug() << "Updated defined events list with" << m_definedControlEvents.size() << "events";
+        } else {
+            qDebug() << "definedEventsList not found in m_uiFlowProperties";
+        }
+    }
+    
+    qDebug() << "Wizard file loading completed";
+}
+
+void StateMachineEditorV2::createUIFilesDisplay()
+{
+    // 创建UI文件列表显示区域
+    QLabel *uiFilesLabel = new QLabel("产品UI文件列表:", m_uiFlowProperties);
+    uiFilesLabel->setStyleSheet("font-weight: bold; font-size: 12pt; margin-top: 20px;");
+    
+    // 创建水平布局来容纳UI文件列表和详情
+    QHBoxLayout *uiFilesLayout = new QHBoxLayout();
+    uiFilesLayout->setSpacing(10);
+    uiFilesLayout->setContentsMargins(0, 0, 0, 0);
+    
+    // 创建UI文件列表控件
+    m_uiFilesListWidget = new QListWidget(m_uiFlowProperties);
+    m_uiFilesListWidget->setMinimumWidth(200);
+    m_uiFilesListWidget->setMaximumWidth(300);
+    m_uiFilesListWidget->setStyleSheet("border: 1px solid #ccc; background-color: #f9f9f9;");
+    
+    // 创建UI文件详情显示控件
+    m_uiFileDetailsTextEdit = new QTextEdit(m_uiFlowProperties);
+    m_uiFileDetailsTextEdit->setMinimumHeight(200);
+    m_uiFileDetailsTextEdit->setReadOnly(true);
+    m_uiFileDetailsTextEdit->setStyleSheet("border: 1px solid #ccc; background-color: #f9f9f9; font-family: 'Courier New'; font-size: 10pt;");
+    
+    // 添加到布局
+    uiFilesLayout->addWidget(m_uiFilesListWidget);
+    uiFilesLayout->addWidget(m_uiFileDetailsTextEdit);
+    
+    // 创建控件事件定义区域
+    QLabel *controlEventsLabel = new QLabel("控件事件定义:", m_uiFlowProperties);
+    controlEventsLabel->setStyleSheet("font-weight: bold; font-size: 12pt; margin-top: 20px;");
+    
+    QGroupBox *controlEventsGroup = new QGroupBox("控件事件关联", m_uiFlowProperties);
+    controlEventsGroup->setStyleSheet("QGroupBox { font-weight: normal; font-size: 10pt; margin-top: 10px; }");
+    
+    QVBoxLayout *controlEventsLayout = new QVBoxLayout(controlEventsGroup);
+    controlEventsLayout->setSpacing(15);
+    controlEventsLayout->setContentsMargins(15, 20, 15, 15);
+    
+    // 第一行：控件选择和事件类型选择（水平布局）
+    QHBoxLayout *firstRowLayout = new QHBoxLayout();
+    firstRowLayout->setSpacing(20);
+    
+    // 控件选择区域
+    QVBoxLayout *controlLayout = new QVBoxLayout();
+    controlLayout->setSpacing(5);
+    QLabel *controlLabel = new QLabel("选择控件:", controlEventsGroup);
+    QComboBox *controlComboBox = new QComboBox(controlEventsGroup);
+    controlComboBox->setMinimumHeight(35);
+    controlComboBox->setStyleSheet("QComboBox { font-size: 10pt; padding: 8px; }");
+    controlComboBox->addItem("请先选择UI文件查看可用控件");
+    controlLayout->addWidget(controlLabel);
+    controlLayout->addWidget(controlComboBox);
+    
+    // 事件类型选择区域
+    QVBoxLayout *eventTypeLayout = new QVBoxLayout();
+    eventTypeLayout->setSpacing(5);
+    QLabel *eventLabel = new QLabel("事件类型:", controlEventsGroup);
+    QComboBox *eventComboBox = new QComboBox(controlEventsGroup);
+    eventComboBox->setMinimumHeight(35);
+    eventComboBox->setStyleSheet("QComboBox { font-size: 10pt; padding: 8px; }");
+    eventComboBox->addItem("请先选择控件");
+    eventTypeLayout->addWidget(eventLabel);
+    eventTypeLayout->addWidget(eventComboBox);
+    
+    firstRowLayout->addLayout(controlLayout);
+    firstRowLayout->addLayout(eventTypeLayout);
+    firstRowLayout->addStretch(); // 添加拉伸因子
+    
+    // 第二行：事件名称输入和添加按钮（水平布局）
+    QHBoxLayout *secondRowLayout = new QHBoxLayout();
+    secondRowLayout->setSpacing(15);
+    
+    // 事件名称输入区域
+    QVBoxLayout *eventNameLayout = new QVBoxLayout();
+    eventNameLayout->setSpacing(5);
+    QLabel *eventNameLabel = new QLabel("事件名称:", controlEventsGroup);
+    QLineEdit *eventNameEdit = new QLineEdit(controlEventsGroup);
+    eventNameEdit->setMinimumHeight(35);
+    eventNameEdit->setStyleSheet("QLineEdit { font-size: 10pt; padding: 8px; }");
+    eventNameEdit->setPlaceholderText("输入事件名称（如：button1_clicked）");
+    eventNameLayout->addWidget(eventNameLabel);
+    eventNameLayout->addWidget(eventNameEdit);
+    
+    // 添加事件按钮
+    QPushButton *addEventButton = new QPushButton("添加事件定义", controlEventsGroup);
+    addEventButton->setMinimumHeight(35);
+    addEventButton->setMinimumWidth(120);
+    addEventButton->setStyleSheet("QPushButton { font-size: 10pt; padding: 8px 16px; background-color: #4CAF50; color: white; }");
+    
+    secondRowLayout->addLayout(eventNameLayout);
+    secondRowLayout->addWidget(addEventButton);
+    secondRowLayout->addStretch(); // 添加拉伸因子
+    
+    // 已定义事件列表
+    QLabel *definedEventsLabel = new QLabel("已定义的事件:", controlEventsGroup);
+    definedEventsLabel->setStyleSheet("font-weight: bold; margin-top: 15px;");
+    QListWidget *definedEventsList = new QListWidget(controlEventsGroup);
+    definedEventsList->setMinimumHeight(150);
+    definedEventsList->setStyleSheet("border: 1px solid #ccc; background-color: #f9f9f9;");
+    
+    // 添加到控件事件布局
+    controlEventsLayout->addLayout(firstRowLayout);
+    controlEventsLayout->addLayout(secondRowLayout);
+    controlEventsLayout->addWidget(definedEventsLabel);
+    controlEventsLayout->addWidget(definedEventsList);
+    
+    // 添加到向导布局（滚动内容中）
+    QScrollArea *scrollArea = m_uiFlowProperties->findChild<QScrollArea*>();
+    if (scrollArea && scrollArea->widget()) {
+        qDebug()<<"scrollArea widget layout:"<<scrollArea->widget()->layout();
+        QVBoxLayout *wizardLayout = qobject_cast<QVBoxLayout*>(scrollArea->widget()->layout());
+        if (wizardLayout) {
+            qDebug()<<"wizardLayout count:"<<wizardLayout->count();
+            wizardLayout->insertWidget(wizardLayout->count() - 1, uiFilesLabel); // 在stretch之前添加
+            wizardLayout->insertLayout(wizardLayout->count() - 1, uiFilesLayout);
+            wizardLayout->insertWidget(wizardLayout->count() - 1, controlEventsLabel);
+            wizardLayout->insertWidget(wizardLayout->count() - 1, controlEventsGroup);
+        } else {
+            qDebug()<<"scrollArea widget layout is not QVBoxLayout";
+        }
+    } else {
+        qDebug()<<"scrollArea widget layout is null";
+    }
+    
+    // 连接信号槽：当选择UI文件时显示详情
+    connect(m_uiFilesListWidget, &QListWidget::itemSelectionChanged, this, 
+            [=]() {
+                QList<QListWidgetItem*> selectedItems = m_uiFilesListWidget->selectedItems();
+                if (!selectedItems.isEmpty()) {
+                    QString filePath = selectedItems.first()->data(Qt::UserRole).toString();
+                    displayUIFileDetails(filePath);
+                    
+                    // 更新控件选择下拉框
+                    updateControlComboBox(controlComboBox);
+                }
+            });
+    
+    // 连接信号槽：当选择控件时更新事件类型
+    connect(controlComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
+            [=](int index) {
+                if (index > 0) {
+                    QString controlName = controlComboBox->currentText();
+                    updateEventComboBox(eventComboBox, controlName);
+                } else {
+                    eventComboBox->clear();
+                    eventComboBox->addItem("请先选择控件");
+                }
+            });
+    
+    // 连接信号槽：添加事件定义
+    connect(addEventButton, &QPushButton::clicked, this, 
+            [=]() {
+                addControlEventDefinition(controlComboBox, eventComboBox, eventNameEdit, definedEventsList);
+            });
+    
+    // 检查是否有待更新的UI文件数据
+    qDebug() << "createUIFilesDisplay() completed, m_productUiFiles size:" << m_productUiFiles.size();
+    qDebug() << "UI files list widget created, checking pending update flag:" << m_uiFilesDataPendingUpdate;
+    
+    // 修复时序问题：无论数据是否先于控件设置，只要控件已创建且有数据，就立即更新列表
+    if (m_uiFilesListWidget) {
+        if (!m_productUiFiles.isEmpty()) {
+            qDebug() << "UI files list widget created and data available, updating list now";
+            updateUIFilesList();
+            m_uiFilesDataPendingUpdate = false;
+            qDebug() << "UI files list updated after widget creation, current count:" << m_uiFilesListWidget->count();
+        } else if (m_uiFilesDataPendingUpdate) {
+            qDebug() << "Pending UI files data found, updating list widget now";
+            updateUIFilesList();
+            m_uiFilesDataPendingUpdate = false;
+            qDebug() << "UI files list updated after widget creation, current count:" << m_uiFilesListWidget->count();
+        } else {
+            qDebug() << "UI files list widget created but no data available yet, current count:" << m_uiFilesListWidget->count();
+        }
+    } else {
+        qDebug() << "UI files list widget not ready, current count: 0";
+    }
+}
+
+void StateMachineEditorV2::updateUIFilesList()
+{
+    qDebug() << "updateUIFilesList() called, m_uiFilesListWidget:" << m_uiFilesListWidget;
+    
+    if (!m_uiFilesListWidget) {
+        qWarning() << "m_uiFilesListWidget is null, cannot update UI file list";
+        return;
+    }
+    
+    qDebug() << "m_productUiFiles size:" << m_productUiFiles.size();
+    
+    m_uiFilesListWidget->clear();
+    qDebug() << "Cleared UI files list widget";
+
+    // 添加产品配置中的UI文件
+    int addedCount = 0;
+    for (const auto &uiFile : m_productUiFiles) {
+        qDebug() << "Adding UI file to list:" << uiFile.name << "path:" << uiFile.filePath;
+        QListWidgetItem *item = new QListWidgetItem(uiFile.name);
+        item->setData(Qt::UserRole, uiFile.filePath);
+        item->setToolTip(uiFile.filePath);
+        m_uiFilesListWidget->addItem(item);
+        addedCount++;
+        qDebug() << "Item added, current count:" << m_uiFilesListWidget->count();
+    }
+    
+    qDebug() << "UI file list updated, total" << m_productUiFiles.size() << "files, added:" << addedCount;
+    qDebug() << "List widget item count:" << m_uiFilesListWidget->count();
+}
+
+void StateMachineEditorV2::displayUIFileDetails(const QString &filePath)
+{
+    if (!m_uiFileDetailsTextEdit) {
+        return;
+    }
+    
+    if (filePath.isEmpty()) {
+        m_uiFileDetailsTextEdit->setText("请选择一个UI文件查看详情");
+        return;
+    }
+    
+    // 解析UI文件并显示控件信息
+    parseUIFile(filePath);
+}
+
+void StateMachineEditorV2::parseUIFile(const QString &filePath)
+{
+    if (filePath.isEmpty()) {
+        m_uiFileDetailsTextEdit->setText("文件路径为空");
+        return;
+    }
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        m_uiFileDetailsTextEdit->setText("无法打开文件: " + filePath);
+        return;
+    }
+    
+    QString content = file.readAll();
+    file.close();
+    
+    // 解析UI文件内容，提取控件信息
+    QString details = "文件: " + QFileInfo(filePath).fileName() + "\n";
+    details += "路径: " + filePath + "\n\n";
+    details += "控件列表 (支持事件定义):\n";
+    details += QString("=").repeated(50) + "\n";
+    
+    // 使用XML解析来提取详细的控件信息
+    QXmlStreamReader xml(content);
+    int controlCount = 0;
+    QMap<QString, QStringList> controlEvents; // 存储控件支持的事件类型
+    
+    // 定义常见Qt控件及其支持的事件
+    QMap<QString, QStringList> standardControlEvents = {
+        {"QPushButton", {"clicked()", "pressed()", "released()"}},
+        {"QCheckBox", {"stateChanged(int)", "toggled(bool)"}},
+        {"QRadioButton", {"toggled(bool)"}},
+        {"QLineEdit", {"textChanged(const QString&)", "editingFinished()", "returnPressed()"}},
+        {"QComboBox", {"currentIndexChanged(int)", "currentTextChanged(const QString&)"}},
+        {"QSlider", {"valueChanged(int)", "sliderMoved(int)"}},
+        {"QSpinBox", {"valueChanged(int)", "valueChanged(const QString&)"}},
+        {"QDoubleSpinBox", {"valueChanged(double)"}},
+        {"QTabWidget", {"currentChanged(int)"}},
+        {"QListWidget", {"currentItemChanged(QListWidgetItem*,QListWidgetItem*)", "itemClicked(QListWidgetItem*)"}},
+        {"QTreeWidget", {"itemClicked(QTreeWidgetItem*,int)", "itemDoubleClicked(QTreeWidgetItem*,int)"}},
+        {"QTableWidget", {"cellClicked(int,int)", "cellDoubleClicked(int,int)"}}
+    };
+    
+    while (!xml.atEnd() && !xml.hasError()) {
+        QXmlStreamReader::TokenType token = xml.readNext();
+        
+        if (token == QXmlStreamReader::StartElement) {
+            QString elementName = xml.name().toString();
+            
+            // 检查是否是widget元素
+            if (elementName == "widget") {
+                // 获取控件类名
+                QString widgetClass = xml.attributes().value("class").toString();
+                
+                // 检查是否是Qt控件类（排除容器控件）
+                if (widgetClass.startsWith("Q") && widgetClass.length() > 1 && 
+                    widgetClass != "QWidget" && widgetClass != "QMainWindow" && 
+                    widgetClass != "QDialog" && widgetClass != "QFrame" && 
+                    widgetClass != "QGroupBox" && widgetClass != "QTabWidget" &&
+                    widgetClass != "QScrollArea" && widgetClass != "QSplitter" &&
+                    widgetClass != "QStackedWidget" && widgetClass != "QDockWidget") {
+                    controlCount++;
+                    
+                    // 获取控件名称
+                    QString controlName = xml.attributes().value("name").toString();
+                    if (controlName.isEmpty()) {
+                        controlName = "未命名控件" + QString::number(controlCount);
+                    }
+                    
+                    // 读取widget元素内的属性
+                    QString controlText;
+                    QString geometry;
+                    
+                    // 读取widget内的所有property元素
+                    while (!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "widget") && !xml.atEnd()) {
+                        xml.readNext();
+                        
+                        if (xml.tokenType() == QXmlStreamReader::StartElement && xml.name() == "property") {
+                            QString propertyName = xml.attributes().value("name").toString();
+                            
+                            if (propertyName == "text") {
+                                xml.readNext(); // 读取<string>元素
+                                if (xml.tokenType() == QXmlStreamReader::StartElement && xml.name() == "string") {
+                                    xml.readNext(); // 读取文本内容
+                                    if (xml.tokenType() == QXmlStreamReader::Characters) {
+                                        controlText = xml.text().toString();
+                                    }
+                                }
+                            } else if (propertyName == "geometry") {
+                                xml.readNext(); // 读取<rect>元素
+                                if (xml.tokenType() == QXmlStreamReader::StartElement && xml.name() == "rect") {
+                                    // 读取几何信息
+                                    QString x, y, width, height;
+                                    while (!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "rect") && !xml.atEnd()) {
+                                        xml.readNext();
+                                        if (xml.tokenType() == QXmlStreamReader::StartElement) {
+                                            if (xml.name() == "x") {
+                                                xml.readNext();
+                                                if (xml.tokenType() == QXmlStreamReader::Characters) x = xml.text().toString();
+                                            } else if (xml.name() == "y") {
+                                                xml.readNext();
+                                                if (xml.tokenType() == QXmlStreamReader::Characters) y = xml.text().toString();
+                                            } else if (xml.name() == "width") {
+                                                xml.readNext();
+                                                if (xml.tokenType() == QXmlStreamReader::Characters) width = xml.text().toString();
+                                            } else if (xml.name() == "height") {
+                                                xml.readNext();
+                                                if (xml.tokenType() == QXmlStreamReader::Characters) height = xml.text().toString();
+                                            }
+                                        }
+                                    }
+                                    if (!x.isEmpty() && !y.isEmpty() && !width.isEmpty() && !height.isEmpty()) {
+                                        geometry = QString("x:%1, y:%2, w:%3, h:%4").arg(x).arg(y).arg(width).arg(height);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    details += QString("%1. %2 (%3)\n").arg(controlCount).arg(controlName).arg(widgetClass);
+                    
+                    // 显示控件基本信息
+                    if (!controlText.isEmpty()) {
+                        details += "   文本: " + controlText + "\n";
+                    }
+                    
+                    // 显示几何信息
+                    if (!geometry.isEmpty()) {
+                        details += "   几何: " + geometry + "\n";
+                    }
+                    
+                    // 显示控件支持的事件类型
+                    if (standardControlEvents.contains(widgetClass)) {
+                        details += "   支持的事件类型:\n";
+                        QStringList events = standardControlEvents[widgetClass];
+                        for (const QString &event : events) {
+                            details += "     - " + event + "\n";
+                        }
+                        controlEvents[controlName] = events;
+                    } else {
+                        details += "   支持的事件类型: 通用事件\n";
+                        controlEvents[controlName] = {"clicked()", "pressed()", "released()"};
+                    }
+                    
+                    details += "\n";
+                }
+            }
+        }
+    }
+    
+    if (xml.hasError()) {
+        details += "解析错误: " + xml.errorString() + "\n";
+    }
+    
+    if (controlCount == 0) {
+        details += "未找到控件信息\n";
+    } else {
+        details += QString("=").repeated(50) + "\n";
+        details += QString("总计: %1 个控件\n").arg(controlCount);
+        details += "\n提示: 您可以为上述控件定义向导事件，关联到状态机转换\n";
+    }
+    
+    m_uiFileDetailsTextEdit->setText(details);
+    
+    // 保存控件事件信息，供后续事件定义使用
+    m_currentUIFileControls = controlEvents;
+    m_currentUIFilePath = filePath;
+}
+
+void StateMachineEditorV2::updateControlComboBox(QComboBox *controlComboBox)
+{
+    if (!controlComboBox) {
+        return;
+    }
+    
+    controlComboBox->clear();
+    
+    if (m_currentUIFileControls.isEmpty()) {
+        controlComboBox->addItem("请先选择UI文件查看可用控件");
+        return;
+    }
+    
+    controlComboBox->addItem("请选择控件");
+    
+    // 添加当前UI文件中的所有控件
+    for (const QString &controlName : m_currentUIFileControls.keys()) {
+        controlComboBox->addItem(controlName);
+    }
+    
+    qDebug() << "controls choice update，total: " << m_currentUIFileControls.size();
+}
+
+void StateMachineEditorV2::updateEventComboBox(QComboBox *eventComboBox, const QString &controlName)
+{
+    if (!eventComboBox || controlName.isEmpty()) {
+        return;
+    }
+    
+    eventComboBox->clear();
+    
+    if (!m_currentUIFileControls.contains(controlName)) {
+        eventComboBox->addItem("该控件无可用事件");
+        return;
+    }
+    
+    eventComboBox->addItem("请选择事件类型");
+    
+    // 添加该控件支持的事件类型
+    QStringList events = m_currentUIFileControls[controlName];
+    for (const QString &event : events) {
+        eventComboBox->addItem(event);
+    }
+    
+    qDebug() << "event choice update，control: " << controlName << "total: " << events.size();
+}
+
+void StateMachineEditorV2::addControlEventDefinition(QComboBox *controlComboBox, 
+                                                     QComboBox *eventComboBox, 
+                                                     QLineEdit *eventNameEdit, 
+                                                     QListWidget *definedEventsList)
+{
+    if (!controlComboBox || !eventComboBox || !eventNameEdit || !definedEventsList) {
+        return;
+    }
+    
+    // 检查输入有效性
+    QString controlName = controlComboBox->currentText();
+    QString eventType = eventComboBox->currentText();
+    QString eventName = eventNameEdit->text().trimmed();
+    
+    if (controlComboBox->currentIndex() <= 0) {
+        QMessageBox::warning(this, "添加事件定义", "请先选择控件");
+        return;
+    }
+    
+    if (eventComboBox->currentIndex() <= 0) {
+        QMessageBox::warning(this, "添加事件定义", "请先选择事件类型");
+        return;
+    }
+    
+    if (eventName.isEmpty()) {
+        QMessageBox::warning(this, "添加事件定义", "请输入事件名称");
+        return;
+    }
+    
+    // 检查事件名称是否已存在
+    for (int i = 0; i < definedEventsList->count(); i++) {
+        QListWidgetItem *item = definedEventsList->item(i);
+        if (item->text().contains(eventName)) {
+            QMessageBox::warning(this, "添加事件定义", "事件名称已存在，请使用其他名称");
+            return;
+        }
+    }
+    
+    // 添加事件定义到列表
+    QString eventDefinition = QString("%1 - %2 (%3)").arg(eventName).arg(controlName).arg(eventType);
+    QListWidgetItem *item = new QListWidgetItem(eventDefinition);
+    definedEventsList->addItem(item);
+    
+    // 保存事件定义到数据结构中
+    QString eventData = QString("%1|%2|%3").arg(eventName).arg(controlName).arg(eventType);
+    m_definedControlEvents.append(eventData);
+    
+    // 清空输入框
+    eventNameEdit->clear();
+    
+    // 显示成功消息
+    QMessageBox::information(this, "添加事件定义", 
+                            QString("事件定义已添加:\n控件: %1\n事件类型: %2\n事件名称: %3")
+                            .arg(controlName).arg(eventType).arg(eventName));
+    
+    qDebug() << "control event add，definition: " << eventDefinition;
+    
+    // 标记向导已修改
+    m_isWizardModified = true;
+    updateWindowTitle();
 }

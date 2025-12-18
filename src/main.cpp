@@ -43,7 +43,7 @@ void setupPowerShellEncoding() {
     // 设置Qt文本编码（Qt6中默认使用UTF-8）
     // QTextCodec在Qt6中已被移除，Qt6默认使用UTF-8编码
     
-    qDebug() << "PowerShell编码设置完成：UTF-8";
+    qDebug() << "PowerShell encoding setup completed: UTF-8";
 }
 
 // 加载应用程序配置
@@ -69,7 +69,7 @@ void loadApplicationConfig() {
         settings.setValue("Settings/force_console_utf8", true);
         settings.sync();
         
-        qDebug() << "创建默认配置文件:" << configPath;
+        qDebug() << "Created default configuration file:" << configPath;
     }
     
     // 加载配置
@@ -80,7 +80,7 @@ void loadApplicationConfig() {
         setupPowerShellEncoding();
     }
     
-    qDebug() << "应用程序配置加载完成";
+    qDebug() << "Application configuration loaded successfully";
 }
 
 static const char rhiBackEndVar[] = "QSG_RHI_BACKEND";
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
     } else {
         // 如果日志文件打开失败，清理资源
         delete logFile;
-        qDebug() << "无法打开日志文件:" << logPath;
+        qDebug() << "Failed to open log file:" << logPath;
     }
     
     // Enable the QWebEngineView, QQuickWidget plugins on Windows.
@@ -119,7 +119,10 @@ int main(int argc, char *argv[]) {
     // required for QWebEngineView
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
-    // 先实例化QApplication，确保applicationDirPath()可以正常调用
+    // 先加载配置并设置PowerShell编码（在QApplication实例化之前）
+    loadApplicationConfig();
+    
+    // 实例化QApplication
     QDesigner app(argc, argv);
     
     // 设置应用程序属性
@@ -130,24 +133,21 @@ int main(int argc, char *argv[]) {
     // 设置应用程序图标
     QIcon appIcon(":/config/icon.png");
     app.setWindowIcon(appIcon);
-    
-    // 加载配置并设置PowerShell编码
-    loadApplicationConfig();
 
     ProductMainWindow w;
     w.show();
     
     // 连接应用程序退出信号，用于调试
     QObject::connect(qApp, &QApplication::aboutToQuit, []() {
-        qDebug() << "应用程序即将退出，开始清理资源";
+        qDebug() << "Application is about to exit, starting resource cleanup";
     });
     
     // QGuiApplication::setQuitOnLastWindowClosed(false);
 
     int result = QApplication::exec();
     
-    qDebug() << "QApplication::exec() 返回，退出码:" << result;
-    qDebug() << "应用程序主循环结束";
+    qDebug() << "QApplication::exec() returned, exit code:" << result;
+    qDebug() << "Application main loop ended";
     
     return result;
 }

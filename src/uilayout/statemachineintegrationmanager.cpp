@@ -29,7 +29,7 @@ bool StateMachineIntegrationManager::StateMachineMapping::fromJson(const QJsonOb
 // StateMachineIntegrationManager 实现
 StateMachineIntegrationManager::StateMachineIntegrationManager(QObject *parent)
     : QObject(parent)
-    , m_integrationMode(IntegrationMode::Integrated)
+    , m_integrationMode(IntegrationMode::UIFlowMode)
     , m_uiFlowStateMachine(nullptr)
     , m_logicSequenceStateMachine(nullptr)
 {
@@ -176,28 +176,15 @@ QString StateMachineIntegrationManager::getUIFlowStateForLogicState(const QStrin
 bool StateMachineIntegrationManager::handleUIEvent(const QString &eventSource, const QString &eventType)
 {
     switch (m_integrationMode) {
-    case IntegrationMode::UIFlowOnly:
+    case IntegrationMode::UIFlowMode:
         if (m_uiFlowStateMachine) {
             return m_uiFlowStateMachine->handleUIEvent(eventSource, eventType);
         }
         break;
         
-    case IntegrationMode::LogicSequenceOnly:
+    case IntegrationMode::LogicSequenceMode:
         // 在逻辑时序模式下，UI事件可能被忽略或转换为逻辑事件
         qDebug() << "UI event ignored in logic-only mode:" << eventSource << eventType;
-        break;
-        
-    case IntegrationMode::Integrated:
-        if (m_uiFlowStateMachine) {
-            bool uiResult = m_uiFlowStateMachine->handleUIEvent(eventSource, eventType);
-            if (uiResult && m_logicSequenceStateMachine) {
-                // UI事件成功后，可能触发相应的逻辑事件
-                QString logicEventName = QString("UI_%1_%2").arg(eventSource).arg(eventType);
-                return m_logicSequenceStateMachine->processLogicEvent(logicEventName, 
-                                                                      LogicSequenceStateMachine::LogicEventType::ExternalSignal);
-            }
-            return uiResult;
-        }
         break;
     }
     
@@ -207,26 +194,14 @@ bool StateMachineIntegrationManager::handleUIEvent(const QString &eventSource, c
 bool StateMachineIntegrationManager::handleLogicEvent(const QString &eventName, LogicSequenceStateMachine::LogicEventType eventType, const QVariantMap &context)
 {
     switch (m_integrationMode) {
-    case IntegrationMode::UIFlowOnly:
+    case IntegrationMode::UIFlowMode:
         // 在UI流模式下，逻辑事件可能被忽略
         qDebug() << "Logic event ignored in UI-only mode:" << eventName;
         break;
         
-    case IntegrationMode::LogicSequenceOnly:
+    case IntegrationMode::LogicSequenceMode:
         if (m_logicSequenceStateMachine) {
             return m_logicSequenceStateMachine->processLogicEvent(eventName, eventType, context);
-        }
-        break;
-        
-    case IntegrationMode::Integrated:
-        if (m_logicSequenceStateMachine) {
-            bool logicResult = m_logicSequenceStateMachine->processLogicEvent(eventName, eventType, context);
-            if (logicResult && m_uiFlowStateMachine) {
-                // 逻辑事件成功后，可能触发相应的UI状态更新
-                // 这里可以根据逻辑状态的变化来更新UI状态
-                return synchronizeStates();
-            }
-            return logicResult;
         }
         break;
     }
@@ -394,8 +369,8 @@ void StateMachineIntegrationManager::onUiFlowStateChanged(const QString &fromSta
 {
     emit uiFlowStateChanged(fromStateId, toStateId);
     
-    // 在集成模式下，UI状态变化可能触发逻辑状态同步
-    if (m_integrationMode == IntegrationMode::Integrated && m_logicSequenceStateMachine) {
+    // 在逻辑时序模式下，UI状态变化可能触发逻辑状态同步
+    if (m_integrationMode == IntegrationMode::LogicSequenceMode && m_logicSequenceStateMachine) {
         QString logicStateId = getLogicStateForUIFlowState(toStateId);
         if (!logicStateId.isEmpty()) {
             m_logicSequenceStateMachine->setCurrentState(logicStateId);
@@ -407,8 +382,8 @@ void StateMachineIntegrationManager::onLogicStateChanged(const LogicSequenceStat
 {
     emit logicStateChanged(fromState, toState);
     
-    // 在集成模式下，逻辑状态变化可能触发UI状态同步
-    if (m_integrationMode == IntegrationMode::Integrated && m_uiFlowStateMachine) {
+    // 在逻辑时序模式下，逻辑状态变化可能触发UI状态同步
+    if (m_integrationMode == IntegrationMode::LogicSequenceMode && m_uiFlowStateMachine) {
         QString uiFlowStateId = getUIFlowStateForLogicState(toState.stateId);
         if (!uiFlowStateId.isEmpty()) {
             m_uiFlowStateMachine->setCurrentState(uiFlowStateId);

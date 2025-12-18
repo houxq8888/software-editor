@@ -9,6 +9,9 @@
 #include "uiinterface.h"
 #include "uiinterfacemanager.h"
 
+// 前向声明
+class WizardManager;
+
 // 状态机事件类型
 enum class StateMachineEventType {
     ButtonClick,      // 按钮点击
@@ -192,6 +195,10 @@ public:
     QString getUiInterfaceForState(const QString &stateId) const;
     QString getStateForUiInterface(const QString &uiInterfaceId) const;
     
+    // 向导管理（新增）
+    WizardManager* wizardManager() const;
+    void setWizardManager(WizardManager *manager);
+    
     // 序列化和反序列化
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject &json);
@@ -209,6 +216,7 @@ private:
     QList<StateMachine*> m_stateMachines;
     StateMachine *m_currentStateMachine;
     UIInterfaceManager *m_uiInterfaceManager;
+    WizardManager *m_wizardManager; // 向导管理器（新增）
 };
 
 #endif // STATEMACHINE_H

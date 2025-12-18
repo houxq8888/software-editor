@@ -1,0 +1,91 @@
+{
+    "created": "2025-12-17T10:37:21",
+    "wizardJsonPath": "wizards/123.json",
+    "integrationManager": {
+        "integrationMode": 0,
+        "logicSequenceStateMachine": {
+            "currentStateId": "default_logic_state",
+            "globalData": {
+            },
+            "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
+            "initialStateId": "default_logic_state",
+            "name": "LogicSequenceStateMachine",
+            "states": [
+                {
+                    "data": {
+                    },
+                    "description": "应用程序默认逻辑状态",
+                    "isFinalState": true,
+                    "isInitialState": true,
+                    "name": "默认逻辑状态",
+                    "stateId": "default_logic_state"
+                }
+            ],
+            "transitions": [
+            ]
+        },
+        "mappings": [
+            {
+                "logicStateId": "default_logic_state",
+                "mappingId": "default_mapping",
+                "uiFlowStateId": "default_ui_state"
+            }
+        ],
+        "uiFlowStateMachine": {
+            "currentStateId": "default_ui_state",
+            "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
+            "initialStateId": "default_ui_state",
+            "name": "UIFlowStateMachine",
+            "states": [
+                {
+                    "isFinalState": true,
+                    "isInitialState": true,
+                    "name": "默认界面",
+                    "stateId": "default_ui_state",
+                    "uiInterfaceId": "main_window"
+                }
+            ],
+            "transitions": [
+            ]
+        }
+    },
+    "logicSequenceStateMachine": {
+        "currentStateId": "default_logic_state",
+        "globalData": {
+        },
+        "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
+        "initialStateId": "default_logic_state",
+        "name": "LogicSequenceStateMachine",
+        "states": [
+            {
+                "data": {
+                },
+                "description": "应用程序默认逻辑状态",
+                "isFinalState": true,
+                "isInitialState": true,
+                "name": "默认逻辑状态",
+                "stateId": "default_logic_state"
+            }
+        ],
+        "transitions": [
+        ]
+    },
+    "type": "decoupled_state_machine",
+    "uiFlowStateMachine": {
+        "currentStateId": "default_ui_state",
+        "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
+        "initialStateId": "default_ui_state",
+        "name": "UIFlowStateMachine",
+        "states": [
+            {
+                "isFinalState": true,
+                "isInitialState": true,
+                "name": "默认界面",
+                "stateId": "default_ui_state",
+                "uiInterfaceId": "main_window"
+            }
+        ],
+        "transitions": [
+        ]
+    }
+}

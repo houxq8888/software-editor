@@ -259,14 +259,14 @@ bool StateMachineRuntime::executeActionScript(const QString &script)
 {
     // 这里可以实现动作脚本执行逻辑
     // 暂时简单处理：输出脚本内容
-    qDebug() << "执行动作脚本:" << script;
+    qDebug() << "Executing action script:" << script;
     return true;
 }
 
 // 按钮点击事件处理
 void StateMachineRuntime::onButtonClicked(const QString &buttonName)
 {
-    qDebug() << "StateMachineRuntime: 收到按钮点击事件:" << buttonName;
+    qDebug() << "StateMachineRuntime: Received button click event:" << buttonName;
     
     if (!m_isRunning || !m_stateMachine) {
         qWarning() << "运行时未启动或状态机未设置";
@@ -281,7 +281,7 @@ void StateMachineRuntime::onButtonClicked(const QString &buttonName)
     bool success = m_stateMachine->processEvent(buttonName, StateMachineEventType::ButtonClick, context);
     
     if (success) {
-        qDebug() << "按钮点击事件处理成功，当前状态:" << m_stateMachine->currentState()->name;
+        qDebug() << "Button click event processed successfully, current state:" << m_stateMachine->currentState()->name;
     } else {
         qWarning() << "按钮点击事件处理失败";
     }
@@ -292,7 +292,7 @@ void StateMachineRuntime::onButtonClicked(const QString &buttonName)
 // 菜单操作事件处理
 void StateMachineRuntime::onMenuActionTriggered(const QString &actionName)
 {
-    qDebug() << "StateMachineRuntime: 收到菜单操作事件:" << actionName;
+    qDebug() << "StateMachineRuntime: Received menu action event:" << actionName;
     
     if (!m_isRunning || !m_stateMachine) {
         qWarning() << "运行时未启动或状态机未设置";
@@ -307,7 +307,7 @@ void StateMachineRuntime::onMenuActionTriggered(const QString &actionName)
     bool success = m_stateMachine->processEvent(actionName, StateMachineEventType::MenuAction, context);
     
     if (success) {
-        qDebug() << "菜单操作事件处理成功，当前状态:" << m_stateMachine->currentState()->name;
+        qDebug() << "Menu action event processed successfully, current state:" << m_stateMachine->currentState()->name;
     } else {
         qWarning() << "菜单操作事件处理失败";
     }
@@ -327,7 +327,7 @@ void StateMachineRuntime::connectUIInterfaceSignals(QWidget *interface)
         });
     }
     
-    qDebug() << "StateMachineRuntime: 已连接UI界面信号";
+    qDebug() << "StateMachineRuntime: UI interface signals connected";
 }
 
 void StateMachineRuntime::disconnectUIInterfaceSignals(QWidget *interface)
@@ -340,7 +340,7 @@ void StateMachineRuntime::disconnectUIInterfaceSignals(QWidget *interface)
         disconnect(button, &QPushButton::clicked, this, nullptr);
     }
     
-    qDebug() << "StateMachineRuntime: 已断开UI界面信号";
+    qDebug() << "StateMachineRuntime: UI interface signals disconnected";
 }
 
 QWidget* StateMachineRuntime::createUIInterfaceForState(const StateMachineState &state)
@@ -359,7 +359,7 @@ QWidget* StateMachineRuntime::createUIInterfaceForState(const StateMachineState 
             QPushButton *testButton = new QPushButton("测试按钮");
             layout->addWidget(testButton);
             
-            qDebug() << "从产品UI文件创建界面:" << uiFile.name << uiFile.filePath;
+            qDebug() << "Creating UI interface from product UI file:" << uiFile.name << uiFile.filePath;
             return widget;
         }
     }
@@ -535,14 +535,17 @@ void StateMachineRuntimeView::updateInterfaceDisplay()
         return;
     }
     
-    // 清空当前界面容器
-    QLayout *layout = m_interfaceContainer->layout();
-    if (layout) {
+    // 清空当前界面容器 - 使用Qt自动清理机制
+    QLayout *existingLayout = m_interfaceContainer->layout();
+    if (existingLayout) {
         QLayoutItem *item;
-        while ((item = layout->takeAt(0)) != nullptr) {
-            delete item->widget();
+        while ((item = existingLayout->takeAt(0)) != nullptr) {
+            if (item->widget()) {
+                item->widget()->deleteLater();
+            }
             delete item;
         }
+        delete existingLayout;
     }
     
     // 获取当前界面

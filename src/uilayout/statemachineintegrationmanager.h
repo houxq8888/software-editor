@@ -15,9 +15,8 @@ class StateMachineIntegrationManager : public QObject
 public:
     // 集成模式
     enum class IntegrationMode {
-        UIFlowOnly,           // 仅使用UI流状态机（第一层次）
-        LogicSequenceOnly,    // 仅使用逻辑时序状态机（第二层次）
-        Integrated            // 集成模式（两个层次协同工作）
+        UIFlowMode,           // UI流模式（第一层次）
+        LogicSequenceMode     // 逻辑时序模式（第二层次）
     };
 
     // 状态机关联映射

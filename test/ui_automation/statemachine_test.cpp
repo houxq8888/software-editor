@@ -33,7 +33,7 @@ public:
 private slots:
     void testUIFlowMode()
     {
-        qDebug() << "=== 测试UI流模式 ===";
+        qDebug() << "=== Testing UI Flow Mode ===";
         
         // 切换到UI流模式
         m_editor->switchToUIFlowMode();
@@ -93,18 +93,18 @@ private slots:
         
         // 验证状态机
         bool valid = m_uiFlowStateMachine->validate();
-        qDebug() << "UI流状态机验证结果:" << (valid ? "通过" : "失败");
+        qDebug() << "UI flow state machine validation result:" << (valid ? "Passed" : "Failed");
         
         // 测试状态切换
         QString currentState = m_uiFlowStateMachine->currentStateId();
-        qDebug() << "当前状态:" << currentState;
+        qDebug() << "Current state:" << currentState;
         
         // 触发转换
         bool success = m_uiFlowStateMachine->triggerEvent("点击设置按钮");
-        qDebug() << "触发'点击设置按钮'事件:" << (success ? "成功" : "失败");
+        qDebug() << "Trigger 'Click Settings Button' event:" << (success ? "Success" : "Failed");
         
         currentState = m_uiFlowStateMachine->currentStateId();
-        qDebug() << "当前状态:" << currentState;
+        qDebug() << "Current state:" << currentState;
         
         QMessageBox::information(this, "UI流模式测试", 
             QString("UI流模式测试完成！\n"
@@ -116,7 +116,7 @@ private slots:
     
     void testLogicSequenceMode()
     {
-        qDebug() << "=== 测试逻辑时序模式 ===";
+        qDebug() << "=== Testing Logic Sequence Mode ===";
         
         // 切换到逻辑时序模式
         m_editor->switchToLogicSequenceMode();
@@ -175,18 +175,18 @@ private slots:
         
         // 验证状态机
         bool valid = m_logicStateMachine->validate();
-        qDebug() << "逻辑时序状态机验证结果:" << (valid ? "通过" : "失败");
+        qDebug() << "Logic sequence state machine validation result:" << (valid ? "Passed" : "Failed");
         
         // 测试状态切换
         QString currentState = m_logicStateMachine->currentStateId();
-        qDebug() << "当前状态:" << currentState;
+        qDebug() << "Current state:" << currentState;
         
         // 触发转换
         bool success = m_logicStateMachine->triggerEvent("初始化完成");
-        qDebug() << "触发'初始化完成'事件:" << (success ? "成功" : "失败");
+        qDebug() << "Trigger 'Initialization Complete' event:" << (success ? "Success" : "Failed");
         
         currentState = m_logicStateMachine->currentStateId();
-        qDebug() << "当前状态:" << currentState;
+        qDebug() << "Current state:" << currentState;
         
         QMessageBox::information(this, "逻辑时序模式测试", 
             QString("逻辑时序模式测试完成！\n"
@@ -198,7 +198,7 @@ private slots:
     
     void testIntegratedMode()
     {
-        qDebug() << "=== 测试集成模式 ===";
+        qDebug() << "=== Testing Integrated Mode ===";
         
         // 切换到集成模式
         m_editor->switchToIntegratedMode();
@@ -230,17 +230,17 @@ private slots:
         
         // 测试状态同步
         bool syncSuccess = m_integrationManager->synchronizeStates();
-        qDebug() << "状态同步结果:" << (syncSuccess ? "成功" : "失败");
+        qDebug() << "State synchronization result:" << (syncSuccess ? "Success" : "Failed");
         
         // 测试集成事件处理
         bool success = m_integrationManager->handleEvent("UI_EVENT", "点击设置按钮");
-        qDebug() << "处理UI事件'点击设置按钮':" << (success ? "成功" : "失败");
+        qDebug() << "Handle UI event 'Click Settings Button':" << (success ? "Success" : "Failed");
         
         QString uiCurrentState = m_uiFlowStateMachine->currentStateId();
         QString logicCurrentState = m_logicStateMachine->currentStateId();
         
-        qDebug() << "UI流当前状态:" << uiCurrentState;
-        qDebug() << "逻辑时序当前状态:" << logicCurrentState;
+        qDebug() << "UI flow current state:" << uiCurrentState;
+        qDebug() << "Logic sequence current state:" << logicCurrentState;
         
         QMessageBox::information(this, "集成模式测试", 
             QString("集成模式测试完成！\n"
@@ -254,14 +254,14 @@ private slots:
     
     void testSaveLoad()
     {
-        qDebug() << "=== 测试保存和加载功能 ===";
+        qDebug() << "=== Testing Save and Load Functionality ===";
         
         // 测试UI流状态机保存
         QJsonObject uiFlowJson = m_uiFlowStateMachine->toJson();
         QJsonDocument uiFlowDoc(uiFlowJson);
         QString uiFlowJsonStr = uiFlowDoc.toJson(QJsonDocument::Indented);
         
-        qDebug() << "UI流状态机JSON:";
+        qDebug() << "UI flow state machine JSON:";
         qDebug().noquote() << uiFlowJsonStr;
         
         // 测试逻辑时序状态机保存
@@ -269,7 +269,7 @@ private slots:
         QJsonDocument logicDoc(logicJson);
         QString logicJsonStr = logicDoc.toJson(QJsonDocument::Indented);
         
-        qDebug() << "逻辑时序状态机JSON:";
+        qDebug() << "Logic sequence state machine JSON:";
         qDebug().noquote() << logicJsonStr;
         
         // 测试集成管理器保存
@@ -277,7 +277,7 @@ private slots:
         QJsonDocument integrationDoc(integrationJson);
         QString integrationJsonStr = integrationDoc.toJson(QJsonDocument::Indented);
         
-        qDebug() << "集成管理器JSON:";
+        qDebug() << "Integration manager JSON:";
         qDebug().noquote() << integrationJsonStr;
         
         // 测试加载功能
@@ -290,9 +290,9 @@ private slots:
         StateMachineIntegrationManager loadedIntegration;
         loadedIntegration.fromJson(integrationJson);
         
-        qDebug() << "加载UI流状态机状态数量:" << loadedUIFlow.states().size();
-        qDebug() << "加载逻辑时序状态机状态数量:" << loadedLogic.states().size();
-        qDebug() << "加载集成管理器映射数量:" << loadedIntegration.mappings().size();
+        qDebug() << "Loaded UI flow state machine state count:" << loadedUIFlow.states().size();
+        qDebug() << "Loaded logic sequence state machine state count:" << loadedLogic.states().size();
+        qDebug() << "Loaded integration manager mapping count:" << loadedIntegration.mappings().size();
         
         QMessageBox::information(this, "保存加载测试", 
             QString("保存加载测试完成！\n"
@@ -306,28 +306,28 @@ private slots:
     
     void testEditorFunctionality()
     {
-        qDebug() << "=== 测试编辑器功能 ===";
+        qDebug() << "=== Testing Editor Functionality ===";
         
         // 测试模式切换
         m_editor->switchToUIFlowMode();
-        qDebug() << "切换到UI流模式";
+        qDebug() << "Switched to UI flow mode";
         
         m_editor->switchToLogicSequenceMode();
-        qDebug() << "切换到逻辑时序模式";
+        qDebug() << "Switched to logic sequence mode";
         
         m_editor->switchToIntegratedMode();
-        qDebug() << "切换到集成模式";
+        qDebug() << "Switched to integrated mode";
         
         // 测试属性面板
         m_editor->editStateProperties();
-        qDebug() << "测试状态属性编辑";
+        qDebug() << "Testing state property editing";
         
         m_editor->editTransitionProperties();
-        qDebug() << "测试转换属性编辑";
+        qDebug() << "Testing transition property editing";
         
         // 测试验证功能
         m_editor->validateStateMachine();
-        qDebug() << "测试状态机验证";
+        qDebug() << "Testing state machine validation";
         
         QMessageBox::information(this, "编辑器功能测试", 
             "编辑器功能测试完成！\n"
@@ -336,7 +336,7 @@ private slots:
     
     void runAllTests()
     {
-        qDebug() << "开始运行所有状态机测试...";
+        qDebug() << "Starting all state machine tests...";
         
         testUIFlowMode();
         testLogicSequenceMode();
@@ -344,7 +344,7 @@ private slots:
         testSaveLoad();
         testEditorFunctionality();
         
-        qDebug() << "所有测试完成！";
+        qDebug() << "All tests completed!";
         
         QMessageBox::information(this, "测试完成", 
             "所有状态机测试已完成！\n"
@@ -407,17 +407,17 @@ private:
         // 连接状态机变化信号
         connect(m_uiFlowStateMachine, &UIFlowStateMachine::stateChanged, 
                 this, [this](const QString &stateId) {
-                    qDebug() << "UI流状态变化:" << stateId;
+                    qDebug() << "UI flow state changed:" << stateId;
                 });
         
         connect(m_logicStateMachine, &LogicSequenceStateMachine::stateChanged, 
                 this, [this](const QString &stateId) {
-                    qDebug() << "逻辑时序状态变化:" << stateId;
+                    qDebug() << "Logic sequence state changed:" << stateId;
                 });
         
         connect(m_integrationManager, &StateMachineIntegrationManager::statesSynchronized, 
                 this, [this]() {
-                    qDebug() << "状态同步完成";
+                    qDebug() << "State synchronization completed";
                 });
     }
 
