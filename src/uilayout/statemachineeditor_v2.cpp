@@ -578,7 +578,14 @@ void WizardPreviewWidget::createNavigationControls()
 
 void WizardPreviewWidget::loadWizard(Wizard *wizard)
 {
-    clearPreview();
+    qDebug() << "Entering WizardPreviewWidget::loadWizard()";
+    
+    // 简化的 clearPreview()，避免访问可能未初始化的控件
+    clearCurrentPage();
+    m_currentWizard = nullptr;
+    m_currentPageIndex = -1;
+    m_totalPages = 0;
+    qDebug() << "Simplified clearPreview() completed";
     
     if (!wizard) {
         qDebug() << "向导为空，无法加载预览";
@@ -586,8 +593,12 @@ void WizardPreviewWidget::loadWizard(Wizard *wizard)
         return;
     }
     
+    qDebug() << "Wizard is valid, name:" << wizard->name();
     m_currentWizard = wizard;
+    qDebug() << "m_currentWizard set";
+    
     m_totalPages = wizard->allPages().size();
+    qDebug() << "m_totalPages set to:" << m_totalPages;
     
     if (m_totalPages == 0) {
         qDebug() << "向导没有页面，无法预览";
@@ -595,15 +606,14 @@ void WizardPreviewWidget::loadWizard(Wizard *wizard)
         return;
     }
     
-    // 显示导航控件
-    m_pageTitleLabel->show();
-    m_pageDescriptionLabel->show();
-    m_navigationLabel->show();
-    
-    // 加载第一页
-    goToPage(0);
+    qDebug() << "About to load first page";
+    // 直接加载第一页，避免复杂的导航控件初始化
+    m_currentPageIndex = 0;
+    loadCurrentPage();
+    qDebug() << "loadCurrentPage() completed";
     
     qDebug() << "向导预览加载成功，总页数:" << m_totalPages;
+    qDebug() << "Exiting WizardPreviewWidget::loadWizard()";
 }
 
 void WizardPreviewWidget::clearPreview()
@@ -647,21 +657,30 @@ void WizardPreviewWidget::previousPage()
 
 void WizardPreviewWidget::goToPage(int pageIndex)
 {
+    qDebug() << "Entering WizardPreviewWidget::goToPage() with pageIndex:" << pageIndex;
+    
     if (!m_currentWizard || pageIndex < 0 || pageIndex >= m_totalPages) {
+        qDebug() << "Invalid parameters for goToPage()";
         return;
     }
     
     clearCurrentPage();
+    qDebug() << "clearCurrentPage() completed";
     
     m_currentPageIndex = pageIndex;
+    qDebug() << "m_currentPageIndex set to:" << m_currentPageIndex;
     
     // 加载当前页面内容
     loadCurrentPage();
+    qDebug() << "loadCurrentPage() completed";
     
     // 更新导航控件
     updateNavigationControls();
+    qDebug() << "updateNavigationControls() completed";
     
     emit pageChanged(pageIndex, currentPageTitle());
+    qDebug() << "pageChanged signal emitted";
+    qDebug() << "Exiting WizardPreviewWidget::goToPage()";
 }
 
 void WizardPreviewWidget::showPage(int pageIndex)
@@ -685,23 +704,37 @@ QString WizardPreviewWidget::currentPageTitle() const
 
 void WizardPreviewWidget::updateNavigationControls()
 {
-    if (!m_currentWizard) return;
+    qDebug() << "Entering WizardPreviewWidget::updateNavigationControls()";
+    
+    if (!m_currentWizard) {
+        qDebug() << "m_currentWizard is null, returning";
+        return;
+    }
     
     // 更新页面标题和描述
     QList<WizardPage*> pages = m_currentWizard->allPages();
+    qDebug() << "pages.size() =" << pages.size();
+    
     if (m_currentPageIndex < pages.size()) {
         WizardPage *currentPage = pages[m_currentPageIndex];
+        qDebug() << "currentPage =" << currentPage;
+        
         if (currentPage) {
+            qDebug() << "Updating page title to:" << currentPage->title;
             m_pageTitleLabel->setText(currentPage->title);
+            qDebug() << "Updating page description to:" << currentPage->description;
             m_pageDescriptionLabel->setText(currentPage->description);
             
             // 添加到主布局（如果尚未添加）
             if (m_mainLayout->indexOf(m_pageTitleLabel) == -1) {
+                qDebug() << "Adding page title label to main layout";
                 m_mainLayout->insertWidget(0, m_pageTitleLabel);
+                qDebug() << "Adding page description label to main layout";
                 m_mainLayout->insertWidget(1, m_pageDescriptionLabel);
             }
         }
     }
+    qDebug() << "Exiting WizardPreviewWidget::updateNavigationControls()";
     
     // 更新导航标签
     m_navigationLabel->setText(QString("第 %1 页 / 共 %2 页").arg(m_currentPageIndex + 1).arg(m_totalPages));
@@ -725,27 +758,44 @@ void WizardPreviewWidget::updateNavigationControls()
 
 void WizardPreviewWidget::loadCurrentPage()
 {
-    if (!m_currentWizard || m_currentPageIndex < 0) return;
+    qDebug() << "Entering WizardPreviewWidget::loadCurrentPage()";
+    
+    if (!m_currentWizard || m_currentPageIndex < 0) {
+        qDebug() << "Invalid parameters for loadCurrentPage()";
+        return;
+    }
     
     QList<WizardPage*> pages = m_currentWizard->allPages();
-    if (m_currentPageIndex >= pages.size()) return;
+    qDebug() << "pages.size() =" << pages.size();
+    
+    if (m_currentPageIndex >= pages.size()) {
+        qDebug() << "m_currentPageIndex is out of bounds";
+        return;
+    }
     
     WizardPage *currentPage = pages[m_currentPageIndex];
-    if (!currentPage) return;
+    qDebug() << "currentPage =" << currentPage;
     
+    if (!currentPage) {
+        qDebug() << "currentPage is null";
+        return;
+    }
     // 创建预览容器
     QWidget *containerWidget = new QWidget(this);
     containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
+    qDebug() << "containerWidget created";
     
     QVBoxLayout *containerLayout = new QVBoxLayout(containerWidget);
     containerLayout->setContentsMargins(20, 20, 20, 20);
     containerLayout->setSpacing(10);
+    qDebug() << "containerLayout created";
     
     // 添加页面内容预览
     QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
     contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
     contentLabel->setAlignment(Qt::AlignCenter);
     containerLayout->addWidget(contentLabel);
+    qDebug() << "contentLabel added";
     
     // 添加页面描述
     QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
@@ -753,6 +803,7 @@ void WizardPreviewWidget::loadCurrentPage()
     descriptionLabel->setWordWrap(true);
     descriptionLabel->setAlignment(Qt::AlignCenter);
     containerLayout->addWidget(descriptionLabel);
+    qDebug() << "descriptionLabel added";
     
     // 添加页面类型指示
     QString pageType = "向导页面";
@@ -1156,55 +1207,152 @@ void StateMachineEditorV2::deleteWizard()
 
 void StateMachineEditorV2::runWizard()
 {
-    // 运行向导并显示UI串联预览
-    if (m_wizardManager) {
-        Wizard* wizard = nullptr;
+    qDebug()<<"runWizard() called";
+    // 检查是否有向导管理器
+    if (!m_wizardManager) {
+        QMessageBox::warning(this, "运行向导", "向导管理器未初始化，请重启应用程序。");
+        return;
+    }
+    
+    // 1. 验证主界面选择
+    UIInterface* mainInterface = nullptr;
+    UIInterfaceManager* uiManager = nullptr;
+    
+    // 从状态机管理器获取UI界面管理器
+    if (m_stateMachineManager) {
+        uiManager = m_stateMachineManager->uiInterfaceManager();
+    }
+    qDebug()<<"uiManager is "<<uiManager;
+    
+    // 尝试从UI界面管理器中查找主界面
+    if (uiManager) {
+        // 优先使用显式设置的主界面
+        mainInterface = uiManager->mainInterface();
         
-        // 优先使用当前向导管理器中的向导
-        wizard = m_wizardManager->currentWizard();
-        
-        // 如果没有当前向导，但已经通过文件加载了向导名称，则尝试查找对应的向导
-        if (!wizard && !m_currentWizardName.isEmpty()) {
-            wizard = m_wizardManager->findWizard(m_currentWizardName);
-            
-            // 如果找到了向导，将其设置为当前向导
-            if (wizard) {
-                m_wizardManager->setCurrentWizard(wizard);
-                qDebug() << "Found and set current wizard:" << m_currentWizardName;
+        // 如果没有显式设置的主界面，查找第一个标记为isMainWindow的界面
+        if (!mainInterface) {
+            QList<UIInterface*> allInterfaces = uiManager->interfaces();
+            for (UIInterface* ui : allInterfaces) {
+                if (ui->isMainWindow()) {
+                    mainInterface = ui;
+                    break;
+                }
             }
         }
         
-        if (wizard) {
-            // 切换到向导模式
-            switchToUIFlowMode();
+        // 检查是否是默认创建的空界面（没有布局项或名称为默认值）
+        if (mainInterface) {
+            // 检查界面是否有实际内容或是否是用户显式设置的
+            bool isDefaultEmptyInterface = false;
             
-            // 创建UI串联预览窗口
-            if (!m_wizardPreviewWidget) {
-                m_wizardPreviewWidget = new WizardPreviewWidget(this);
-                
-                // 连接信号槽
-                connect(m_wizardPreviewWidget, &WizardPreviewWidget::nextPageRequested, 
-                        this, &StateMachineEditorV2::onWizardNextPage);
-                connect(m_wizardPreviewWidget, &WizardPreviewWidget::previousPageRequested, 
-                        this, &StateMachineEditorV2::onWizardPreviousPage);
-                connect(m_wizardPreviewWidget, &WizardPreviewWidget::closePreviewRequested, 
-                        this, &StateMachineEditorV2::onWizardPreviewClosed);
+            // 检查界面名称是否为默认值
+            if (mainInterface->name() == "主界面" && mainInterface->layoutItems().isEmpty()) {
+                isDefaultEmptyInterface = true;
             }
             
-            // 加载向导到预览窗口
-            m_wizardPreviewWidget->loadWizard(wizard);
-            
-            // 显示预览窗口
-            m_wizardPreviewWidget->show();
-            m_wizardPreviewWidget->raise();
-            m_wizardPreviewWidget->activateWindow();
-            
-            qDebug() << "Wizard preview started for wizard:" << wizard->name();
-        } else {
-            QMessageBox::warning(this, "运行向导", "没有可运行的向导，请先创建向导。");
+            // 如果是默认创建的空界面，视为没有主界面
+            if (isDefaultEmptyInterface) {
+                mainInterface = nullptr;
+            }
         }
     }
+    
+    // 如果没有找到主界面，提示用户选择
+    if (!mainInterface) {
+        QMessageBox::warning(this, "运行向导", "请先选择一个主界面作为应用程序的第一个窗口。");
+        return;
+    }
+    qDebug()<<"mainInterface is "<<mainInterface;
+    qDebug()<<"has main window";    
+    // 2. 查找可运行的向导
+    Wizard* wizard = nullptr;
+    
+    // 检查向导管理器是否为空
+    if (!m_wizardManager) {
+        qDebug() << "m_wizardManager is null";
+        QMessageBox::warning(this, "运行向导", "向导管理器未初始化。");
+        return;
+    }
+    
+    qDebug() << "m_wizardManager is valid, number of wizards:" << m_wizardManager->wizards().size();
+    
+    // 优先使用当前向导管理器中的向导
+    wizard = m_wizardManager->currentWizard();
+    qDebug() << "currentWizard() returned:" << wizard;
+    
+    // 如果没有当前向导，尝试使用第一个可用向导
+    if (!wizard) {
+        QList<Wizard*> allWizards = m_wizardManager->wizards();
+        qDebug() << "allWizards size:" << allWizards.size();
+        
+        if (!allWizards.isEmpty()) {
+            wizard = allWizards.first();
+            m_wizardManager->setCurrentWizard(wizard);
+            qDebug() << "Using first wizard:" << wizard->name();
+        }
+    }
+    
+    // 如果没有当前向导，但已经通过文件加载了向导名称，则尝试查找对应的向导
+    if (!wizard && !m_currentWizardName.isEmpty()) {
+        qDebug() << "Looking for wizard by name:" << m_currentWizardName;
+        wizard = m_wizardManager->findWizard(m_currentWizardName);
+        
+        // 如果找到了向导，将其设置为当前向导
+        if (wizard) {
+            m_wizardManager->setCurrentWizard(wizard);
+            qDebug() << "Found and set current wizard:" << m_currentWizardName;
+        }
+    }
+    
+    if (!wizard) {
+        qDebug() << "No wizard found";
+        QMessageBox::warning(this, "运行向导", "没有可运行的向导，请先创建向导。");
+        return;
+    }
+    
+    qDebug() << "Found wizard:" << wizard->name();
+    
+    // 3. 切换到向导模式并创建预览
+    switchToUIFlowMode();
+    
+    // 创建UI串联预览窗口
+    if (!m_wizardPreviewWidget) {
+        m_wizardPreviewWidget = new WizardPreviewWidget(this);
+        
+        // 连接信号槽
+        connect(m_wizardPreviewWidget, &WizardPreviewWidget::nextPageRequested, 
+                this, &StateMachineEditorV2::onWizardNextPage);
+        connect(m_wizardPreviewWidget, &WizardPreviewWidget::previousPageRequested, 
+                this, &StateMachineEditorV2::onWizardPreviousPage);
+        connect(m_wizardPreviewWidget, &WizardPreviewWidget::closePreviewRequested, 
+                this, &StateMachineEditorV2::onWizardPreviewClosed);
+    }
+    
+    qDebug() << "About to load wizard into preview widget";
+    qDebug() << "m_wizardPreviewWidget is valid:" << (m_wizardPreviewWidget != nullptr);
+    qDebug() << "Wizard is valid:" << (wizard != nullptr);
+    
+    // 4. 加载向导并显示预览
+    m_wizardPreviewWidget->loadWizard(wizard);
+    
+    qDebug() << "Wizard loaded successfully";
+    
+    // 显示预览窗口
+    m_wizardPreviewWidget->show();
+    qDebug() << "Preview widget shown";
+    m_wizardPreviewWidget->raise();
+    qDebug() << "Preview widget raised";
+    m_wizardPreviewWidget->activateWindow();
+    qDebug() << "Preview widget activated";
+    
+    qDebug() << "Wizard preview started for wizard:" << wizard->name();
+    qDebug() << "Main interface selected:" << mainInterface->name();
+    
+    // 5. 生成并展示运行效果（这里可以添加代码生成和运行效果展示的逻辑）
+    // 例如：根据主界面和向导跳转关系生成QT代码
+    // 并展示在一个新的窗口中运行
 }
+
 
 void StateMachineEditorV2::editStateProperties()
 {
