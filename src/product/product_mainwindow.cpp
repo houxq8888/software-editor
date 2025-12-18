@@ -1261,24 +1261,28 @@ void ProductMainWindow::startStateMachineEditor()
     
     // 创建新的状态机编辑器实例
     createStateMachineEditor();
-    
+    qDebug() << "[DEBUG] State machine editor created";
+    m_stateMachineEditor->printUiInterfaceComboCount();
+
     // 传递产品对象到状态机编辑器
     m_stateMachineEditor->setProduct(&m_product);
-    
+    qDebug() << "[DEBUG] Product passed to state machine editor";
+    m_stateMachineEditor->printUiInterfaceComboCount();
+
     // 传递UI文件信息并设置UI流状态
     passUiFilesToStateMachineEditor();
-    
+    qDebug() << "[DEBUG] UI files passed to state machine editor";
+    m_stateMachineEditor->printUiInterfaceComboCount();
+
     // 处理状态机文件
     QString stateMachinePath = handleStateMachineFile();
-    
+    qDebug() << "[DEBUG] State machine file path:" << stateMachinePath;
+    m_stateMachineEditor->printUiInterfaceComboCount();
+
     // 设置窗口属性并显示
     setupStateMachineEditorWindow();
-    
-    // 加载状态机文件
-    if (!stateMachinePath.isEmpty()) {
-        m_stateMachineEditor->loadStateMachine(stateMachinePath);
-        qDebug() << "Loaded state machine file:" << stateMachinePath;
-    }
+    qDebug()<<"[DEBUG] before pass ui files to state machine editor";
+    m_stateMachineEditor->printUiInterfaceComboCount();
     
     qDebug() << "State machine editor V2 started with decoupled architecture";
     m_stateMachineEditor->printUiInterfaceComboCount();
@@ -1292,8 +1296,13 @@ void ProductMainWindow::passUiFilesToStateMachineEditor()
     
     if (!uiFiles.isEmpty()) {
         qDebug() << "[DEBUG] Before calling setProductUiFiles, m_stateMachineEditor pointer:" << m_stateMachineEditor;
-        m_stateMachineEditor->setProductUiFiles(uiFiles);
-        qDebug() << "[DEBUG] State machine editor received" << uiFiles.size() << "product UI file information";
+        if (m_stateMachineEditor) {
+            qDebug() << "[DEBUG] State machine editor is valid, calling setProductUiFiles with" << uiFiles.size() << "UI files";
+            m_stateMachineEditor->setProductUiFiles(uiFiles);
+            qDebug() << "[DEBUG] State machine editor received" << uiFiles.size() << "product UI file information";
+        } else {
+            qDebug() << "[ERROR] State machine editor is null, cannot set UI files";
+        }
         
         // 如果是新创建的状态机编辑器，还需要设置UI流状态
         if (!m_stateMachineEditorActive) {
@@ -1372,16 +1381,16 @@ QString ProductMainWindow::handleStateMachineFile()
     QFileInfo fileInfo(stateMachinePath);
     
     if (fileInfo.exists() && fileInfo.isFile()) {
-        // 文件存在，尝试加载解耦合状态机配置
+        // 文件存在，尝试加载状态机配置
         if (loadDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr)) {
             qDebug() << "Loaded decoupled state machine file:" << stateMachinePath;
         } else {
-            // 如果加载失败，创建新的解耦合状态机文件
+            // 如果加载失败，创建新的状态机文件
             createNewDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr);
             qDebug() << "Created new decoupled state machine file (replaced old format):" << stateMachinePath;
         }
     } else {
-        // 文件不存在，创建新的解耦合状态机文件
+        // 文件不存在，创建新的状态机文件
         createNewDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr);
         qDebug() << "Created new decoupled state machine file:" << stateMachinePath;
     }
@@ -1504,14 +1513,14 @@ void ProductMainWindow::setupUIFlowStatesFromProduct(UIFlowStateMachine *uiFlowS
     qDebug() << "UI flow state machine states creation completed, total" << uiFiles.size() << "states";
 }
 
-// 加载解耦合状态机配置
+// 加载状态机配置
 bool ProductMainWindow::loadDecoupledStateMachine(const QString &filePath, 
                                                   UIFlowStateMachine *uiFlowStateMachine,
                                                   LogicSequenceStateMachine *logicStateMachine,
                                                   StateMachineIntegrationManager *integrationManager)
 {
     if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法加载解耦合状态机：状态机实例为空";
+        qWarning() << "无法加载状态机：状态机实例为空";
         return false;
     }
     
@@ -1531,7 +1540,7 @@ bool ProductMainWindow::loadDecoupledStateMachine(const QString &filePath,
     
     QJsonObject rootObj = jsonDoc.object();
     
-    // 检查是否为解耦合状态机格式
+    // 检查是否为状态机格式
     if (rootObj.contains("uiFlowStateMachine") && 
         rootObj.contains("logicSequenceStateMachine") &&
         rootObj.contains("integrationManager")) {
@@ -1565,14 +1574,14 @@ bool ProductMainWindow::loadDecoupledStateMachine(const QString &filePath,
     return false;
 }
 
-// 创建新的解耦合状态机
+// 创建新的状态机
 void ProductMainWindow::createNewDecoupledStateMachine(const QString &filePath,
                                                        UIFlowStateMachine *uiFlowStateMachine,
                                                        LogicSequenceStateMachine *logicStateMachine,
                                                        StateMachineIntegrationManager *integrationManager)
 {
     if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法创建解耦合状态机：状态机实例为空";
+        qWarning() << "无法创建状态机：状态机实例为空";
         return;
     }
     
@@ -1608,14 +1617,14 @@ void ProductMainWindow::createNewDecoupledStateMachine(const QString &filePath,
     saveDecoupledStateMachine(filePath, uiFlowStateMachine, logicStateMachine, integrationManager);
 }
 
-// 保存解耦合状态机配置
+// 保存状态机配置
 bool ProductMainWindow::saveDecoupledStateMachine(const QString &filePath,
                                                   UIFlowStateMachine *uiFlowStateMachine,
                                                   LogicSequenceStateMachine *logicStateMachine,
                                                   StateMachineIntegrationManager *integrationManager)
 {
     if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法保存解耦合状态机：状态机实例为空";
+        qWarning() << "无法保存状态机：状态机实例为空";
         return false;
     }
     

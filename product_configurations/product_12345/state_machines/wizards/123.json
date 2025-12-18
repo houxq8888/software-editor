@@ -1,7 +1,28 @@
 {
     "controlEvents": [
+        {
+            "controlName": "qpushbutton0",
+            "eventName": "btn0_clicked",
+            "eventType": "clicked()",
+            "targetUIPath": "ui_layouts/1208.ui",
+            "uiFilePath": "ui_layouts/43214.ui"
+        },
+        {
+            "controlName": "qpushbutton0",
+            "eventName": "btn0_pressed",
+            "eventType": "pressed()",
+            "targetUIPath": "ui_layouts/1208.ui",
+            "uiFilePath": "ui_layouts/43214.ui"
+        },
+        {
+            "controlName": "pushButton",
+            "eventName": "pb_clicked",
+            "eventType": "clicked()",
+            "targetUIPath": "ui_layouts/1209.ui",
+            "uiFilePath": "ui_layouts/1208.ui"
+        }
     ],
-    "created": "2025-12-17T14:36:37",
+    "created": "2025-12-18T16:14:09",
     "name": "123",
     "type": "wizard"
 }

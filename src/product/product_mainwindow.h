@@ -57,7 +57,7 @@ private slots:
     void on_loadButton_clicked();
     void on_removeFeatureButton_clicked();
     void on_featuresListWidget_itemClicked(QListWidgetItem *item);
-
+    
     void updateFeatureEditors();
     void onPackageProgress(int progress, const QString &message);
     void onPackageFinished(bool success, const QString &message);

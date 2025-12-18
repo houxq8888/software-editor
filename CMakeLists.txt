@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Xml Test OpenGLWidgets Designer Network REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Xml Test OpenGLWidgets Designer Network UiTools REQUIRED)
 
 include_directories(src)
 include_directories(src/product)
@@ -109,6 +109,7 @@ target_link_libraries(software-editor PRIVATE
     Qt6::Widgets
     Qt6::Designer
     Qt6::Network
+    Qt6::UiTools
     D:/Qt/6.9.1/mingw_64/lib/libQt6DesignerComponents.a
     Qt6::Xml
 )

@@ -35,6 +35,133 @@
 #include "logicsequencestatemachine.h"
 #include "statemachineintegrationmanager.h"
 #include "wizard.h"
+#include <QWidget>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPixmap>
+#include <QPainter>
+#include <QUiLoader>
+
+// UI文件预览列表项
+class UIFilePreviewItem : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit UIFilePreviewItem(const ProductUIFile &uiFile, QWidget *parent = nullptr);
+    
+    QString filePath() const { return m_uiFile.filePath; }
+    QString fileName() const { return m_uiFile.name; }
+    
+    void updatePreviewInfo();
+    
+    // 重写sizeHint方法以提供合适的大小
+    QSize sizeHint() const override;
+    
+private:
+    ProductUIFile m_uiFile;
+    QLabel *m_iconLabel;
+    QLabel *m_nameLabel;
+    QLabel *m_typeLabel;
+    QLabel *m_controlsLabel;
+    QLabel *m_previewLabel;
+    
+    void createPreviewIcon();
+    void parseUIFileForPreview();
+    
+    int m_controlCount;
+    QString m_uiType;
+    QString m_mainWidgetClass;
+};
+
+// UI文件运行时预览窗口
+class UIRuntimePreviewWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit UIRuntimePreviewWidget(QWidget *parent = nullptr);
+    ~UIRuntimePreviewWidget();
+    
+    void loadUIFile(const QString &filePath);
+    void clearPreview();
+    bool isPreviewLoaded() const { return m_previewLoaded; }
+    
+private:
+    QWidget *m_previewWidget;
+    QLabel *m_placeholderLabel;
+    QVBoxLayout *m_mainLayout;
+    bool m_previewLoaded;
+    
+    void createPlaceholder();
+    void createPreviewLayout();
+};
+
+// 向导UI串联预览窗口
+class WizardPreviewWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit WizardPreviewWidget(QWidget *parent = nullptr);
+    ~WizardPreviewWidget();
+    
+    void loadWizard(Wizard *wizard);
+    void clearPreview();
+    bool isPreviewLoaded() const { return m_previewLoaded; }
+    
+    // 向导页面导航
+    void nextPage();
+    void previousPage();
+    void goToPage(int pageIndex);
+    void showPage(int pageIndex);
+    
+    // 获取当前页面信息
+    int currentPageIndex() const { return m_currentPageIndex; }
+    int totalPages() const { return m_totalPages; }
+    QString currentPageTitle() const;
+    
+    // 获取当前向导
+    Wizard* currentWizard() const { return m_currentWizard; }
+    
+public slots:
+    void onWizardPageChanged(int pageIndex);
+    void onWizardCompleted();
+    void onWizardCancelled();
+
+signals:
+    void pageChanged(int pageIndex, const QString &pageTitle);
+    void wizardCompleted();
+    void wizardCancelled();
+    void nextPageRequested();
+    void previousPageRequested();
+    void closePreviewRequested();
+    
+private:
+    Wizard *m_currentWizard;
+    QWidget *m_previewWidget;
+    QLabel *m_placeholderLabel;
+    QLabel *m_pageTitleLabel;
+    QLabel *m_pageDescriptionLabel;
+    QLabel *m_navigationLabel;
+    QPushButton *m_prevButton;
+    QPushButton *m_nextButton;
+    QPushButton *m_finishButton;
+    QPushButton *m_cancelButton;
+    QVBoxLayout *m_mainLayout;
+    QHBoxLayout *m_navigationLayout;
+    bool m_previewLoaded;
+    int m_currentPageIndex;
+    int m_totalPages;
+    
+    void createPreviewLayout();
+    void createPlaceholder();
+    void createNavigationControls();
+    void updateNavigationControls();
+    void loadCurrentPage();
+    void clearCurrentPage();
+};
 
 // 状态机模式枚举
 enum class StateMachineMode {
@@ -437,8 +564,13 @@ private slots:
     void onLogicStateSelected(const LogicSequenceStateMachine::LogicState &state);
     void onLogicTransitionSelected(const LogicSequenceStateMachine::LogicTransition &transition);
     void onStateMachineChanged();
-    void onUiInterfaceChanged(int index);
+    void onUiInterfaceChanged();
     void onModeChanged();
+    
+    // 向导预览相关
+    void onWizardNextPage();
+    void onWizardPreviousPage();
+    void onWizardPreviewClosed();
 
 private:
     void createToolbar();
@@ -476,6 +608,12 @@ private:
     StateMachineRuntimeView *m_runtimeView;
     QDockWidget *m_runtimeDock;
     
+    // UI文件运行时预览
+    UIRuntimePreviewWidget *m_uiRuntimePreview;
+    
+    // 向导预览窗口
+    WizardPreviewWidget *m_wizardPreviewWidget;
+    
     // 产品UI文件信息
     QList<ProductUIFile> m_productUiFiles;
     Product *m_product;
@@ -498,7 +636,6 @@ private:
     // UI流属性面板
     QLineEdit *m_uiFlowStateNameEdit;
     QTextEdit *m_uiFlowStateDescriptionEdit;
-    QComboBox *m_uiInterfaceCombo;
     QCheckBox *m_initialStateCheck;
     QCheckBox *m_finalStateCheck;
     QLineEdit *m_uiFlowTransitionEventEdit;
@@ -541,6 +678,7 @@ private:
     QMap<QString, QStringList> m_currentUIFileControls; // 当前UI文件的控件信息（控件名 -> 支持的事件列表）
     QMap<QString, QStringList> m_controlEventMap; // 控件类型到支持的事件映射
     QList<QString> m_definedControlEvents; // 已定义的控件事件列表（事件名称 -> 控件名 -> 事件类型）
+    QListWidget *m_definedEventsListWidget; // 已定义事件列表控件指针
     
     void createUIFilesDisplay();         // 创建UI文件显示界面
     void updateUIFilesList();            // 更新UI文件列表
@@ -550,8 +688,10 @@ private:
     // 控件事件定义相关方法
     void updateControlComboBox(QComboBox *controlComboBox); // 更新控件选择下拉框
     void updateEventComboBox(QComboBox *eventComboBox, const QString &controlName); // 更新事件类型下拉框
+    void updateTargetUIComboBox(QComboBox *targetUIComboBox); // 更新目标UI页面选择下拉框
     void addControlEventDefinition(QComboBox *controlComboBox, QComboBox *eventComboBox, 
-                                  QLineEdit *eventNameEdit, QListWidget *definedEventsList); // 添加控件事件定义
+                                   QLineEdit *eventNameEdit, QComboBox *targetUIComboBox); // 添加控件事件定义
+    void updateDefinedEventsList(const QString &uiFilePath = QString()); // 更新已定义事件列表显示，支持按UI文件路径过滤
 
 };
 
