@@ -709,6 +709,9 @@ private:
     // 主界面设置相关方法
     void onSetAsMainInterfaceRequested(const QString &filePath); // 处理设置主界面请求
     void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
+    
+    // QT代码生成方法
+    QString generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem);
 
 };
 

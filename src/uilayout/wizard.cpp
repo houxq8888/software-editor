@@ -106,10 +106,15 @@ bool Wizard::start() {
 
     // 显示当前页面
     WizardPage* currentPage = findPage(m_currentPageId);
-    if (currentPage && currentPage->uiInterface) {
-        QWidget* widget = currentPage->uiInterface->widget();
-        if (widget) {
-            widget->show();
+    if (currentPage) {
+        // 只有当 uiInterface 不为空时才尝试显示
+        if (currentPage->uiInterface) {
+            QWidget* widget = currentPage->uiInterface->widget();
+            if (widget) {
+                widget->show();
+            }
+        } else {
+            qDebug() << "[DEBUG] Current page has no uiInterface: " << currentPage->pageId;
         }
     }
 

@@ -1102,17 +1102,13 @@ void StateMachineEditorV2::createNewWizard()
                 // 更新标题栏显示
                 updateWindowTitle();
                 
-                QMessageBox::information(this, "创建向导", "向导已成功创建!");
+                QMessageBox::information(this, "创建向导", "向导已成功创建!\n\n注意：新向导需要至少添加一个页面才能运行。");
                 
                 // 切换到向导模式
                 switchMode(StateMachineMode::UIFlowMode);
                 
-                // 启动向导
-                if (wizard->start()) {
-                    qDebug() << "Wizard started";
-                } else {
-                    qWarning() << "向导启动失败";
-                }
+                // 不要立即启动空向导
+                qDebug() << "New wizard created, ready for configuration";
             }
         }
     } else {
@@ -1161,6 +1157,7 @@ void StateMachineEditorV2::runWizard()
     // 首先检查所有关键指针是否有效
     qDebug() << "[DEBUG] m_uiFilesListWidget: " << m_uiFilesListWidget;
     qDebug() << "[DEBUG] m_wizardManager: " << m_wizardManager;
+    qDebug() << "[DEBUG] m_wizardPreviewWidget: " << m_wizardPreviewWidget;
     
     if (!m_uiFilesListWidget) {
         qDebug() << "[ERROR] m_uiFilesListWidget is null";
@@ -1171,6 +1168,12 @@ void StateMachineEditorV2::runWizard()
     if (!m_wizardManager) {
         qDebug() << "[ERROR] m_wizardManager is null";
         QMessageBox::critical(this, "错误", "向导管理器未初始化");
+        return;
+    }
+    
+    if (!m_wizardPreviewWidget) {
+        qDebug() << "[ERROR] m_wizardPreviewWidget is null";
+        QMessageBox::critical(this, "错误", "向导预览窗口未初始化");
         return;
     }
     
@@ -1209,7 +1212,7 @@ void StateMachineEditorV2::runWizard()
     }
     
     if (!hasMainUi) {
-        QMessageBox::warning(this, "运行向导", "请先选择一个主界面，作为程序的第一个窗口。");
+        QMessageBox::critical(this, "运行向导", "请先选择一个主界面，作为程序的第一个窗口。\n\n您可以在UI文件列表中点击'设为主界面'按钮来设置主界面。");
         return;
     }
     
@@ -1275,16 +1278,148 @@ void StateMachineEditorV2::runWizard()
         qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
     }
     
-    // 7. 启动向导
+    // 7. 检查向导是否有足够的页面
+    if (wizard->allPages().isEmpty()) {
+        qDebug() << "[ERROR] Wizard has no pages";
+        QMessageBox::critical(this, "错误", "向导未初始化，至少需要一个页面才能运行。");
+        return;
+    }
+    
+    // 7. 生成QT代码
+    qDebug() << "[DEBUG] Generating QT code for wizard flow...";
+    QString qtCode = generateQtCodeForWizard(wizard, mainUiItem, nextUiItem);
+    
+    // 保存生成的代码到临时文件或显示给用户
+    if (!qtCode.isEmpty()) {
+        qDebug() << "[DEBUG] QT code generated successfully";
+        
+        // 这里可以选择将代码保存到文件或显示在对话框中
+        // 暂时保存到临时文件
+        QString tempFile = QDir::tempPath() + "/wizard_generated_code.cpp";
+        QFile file(tempFile);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << qtCode;
+            file.close();
+            qDebug() << "[DEBUG] Generated code saved to: " << tempFile;
+        }
+    }
+    
+    // 8. 启动向导
     if (wizard->start()) {
         qDebug() << "[DEBUG] Wizard started successfully";
-        QMessageBox::information(this, "运行向导", "向导已成功启动！\n\n当前已实现基本的界面跳转功能，主界面是起始页，点击'下一步'按钮将跳转到下一个界面。");
+        
+        // 弹出向导运行效果
+        m_wizardPreviewWidget->loadWizard(wizard);
+        m_wizardPreviewWidget->show();
+        m_wizardPreviewWidget->raise();
+        m_wizardPreviewWidget->activateWindow();
+        
+        QMessageBox::information(this, "运行向导", "向导已成功启动！\n\n向导运行效果已弹出，您可以在新窗口中体验向导流程。\n\n主界面是起始页，点击'下一步'按钮将跳转到下一个界面。\n\nQT代码已生成并保存到临时文件。");
     } else {
         qDebug() << "[ERROR] Failed to start wizard";
-        QMessageBox::critical(this, "错误", "无法启动向导");
+        QMessageBox::critical(this, "错误", "无法启动向导，向导可能未正确初始化。");
     }
     
     qDebug() << "[DEBUG] runWizard() function completed successfully";
+}
+
+QString StateMachineEditorV2::generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem)
+{
+    if (!wizard) {
+        qDebug() << "[ERROR] Invalid wizard parameter for generateQtCodeForWizard";
+        return QString();
+    }
+    
+    QStringList codeLines;
+    
+    // 头文件包含
+    codeLines << "#include <QApplication>";
+    codeLines << "#include <QMainWindow>";
+    codeLines << "#include <QDialog>";
+    codeLines << "#include <QWizard>";
+    codeLines << "#include <QWizardPage>";
+    codeLines << "#include <QPushButton>";
+    codeLines << "#include <QVBoxLayout>";
+    codeLines << "#include <QLabel>";
+    codeLines << "#include <QMessageBox>";
+    codeLines << "#include <QFile>";
+    codeLines << "#include <QTextStream>";
+    codeLines << "";
+    
+    // 命名空间
+    codeLines << "using namespace std;";
+    codeLines << "";
+    
+    // 主函数
+    codeLines << "int main(int argc, char *argv[])";
+    codeLines << "{";
+    codeLines << "    QApplication app(argc, argv);";
+    codeLines << "    ";
+    codeLines << "    // 设置应用程序信息";
+    codeLines << QString("    app.setApplicationName(\"%1\");").arg(wizard->name().isEmpty() ? "Wizard Application" : wizard->name());
+    codeLines << "    app.setApplicationVersion(\"1.0\");";
+    codeLines << "    ";
+    
+    // 创建向导对象
+    codeLines << "    // 创建向导";
+    codeLines << QString("    QWizard *wizard = new QWizard();");
+    codeLines << QString("    wizard->setWindowTitle(\"%1\");").arg(wizard->name().isEmpty() ? "Wizard Application" : wizard->name());
+    if (!wizard->description().isEmpty()) {
+        codeLines << QString("    // 向导描述: %1").arg(wizard->description());
+    }
+    codeLines << "    wizard->resize(800, 600);";
+    codeLines << "    ";
+    
+    // 生成向导页面代码
+    QList<WizardPage*> pages = wizard->allPages();
+    for (int i = 0; i < pages.size(); ++i) {
+        WizardPage *page = pages[i];
+        codeLines << QString("    // 创建向导页面 %1: %2").arg(i+1).arg(page->title.isEmpty() ? "Untitled Page" : page->title);
+        codeLines << QString("    QWizardPage *page%1 = new QWizardPage(wizard);").arg(i+1);
+        codeLines << QString("    page%1->setTitle(\"%2\");").arg(i+1).arg(page->title.isEmpty() ? QString("Page %1").arg(i+1) : page->title);
+        
+        if (!page->description.isEmpty()) {
+            codeLines << QString("    page%1->setSubTitle(\"%2\");").arg(i+1).arg(page->description);
+        }
+        
+        // 添加页面内容布局
+        codeLines << QString("    QVBoxLayout *layout%1 = new QVBoxLayout(page%1);").arg(i+1);
+        
+        // 如果有UI界面信息，添加说明
+         if (page->uiInterface) {
+             codeLines << QString("    // 该页面关联UI界面: %1").arg(page->uiInterface->name());
+             codeLines << QString("    QLabel *uiLabel%1 = new QLabel(\"UI界面: %2\", page%1);").arg(i+1).arg(page->uiInterface->name());
+             if (!page->uiInterface->description().isEmpty()) {
+                 codeLines << QString("    QLabel *descLabel%1 = new QLabel(\"%2\", page%1);").arg(i+1).arg(page->uiInterface->description());
+                 codeLines << QString("    layout%1->addWidget(descLabel%1);").arg(i+1);
+             }
+             codeLines << QString("    layout%1->addWidget(uiLabel%1);").arg(i+1);
+         }
+        
+        // 添加页面完成
+        codeLines << QString("    wizard->addPage(page%1);").arg(i+1);
+        codeLines << "    ";
+    }
+    
+    // 设置向导按钮
+    codeLines << "    // 设置向导按钮";
+    codeLines << "    wizard->setOption(QWizard::HaveNextButton, true);";
+    codeLines << "    wizard->setOption(QWizard::HaveBackButton, true);";
+    codeLines << "    wizard->setOption(QWizard::HaveFinishButton, true);";
+    codeLines << "    wizard->setOption(QWizard::HaveCancelButton, true);";
+    codeLines << "    ";
+    
+    // 显示向导
+    codeLines << "    // 显示向导";
+    codeLines << "    wizard->show();";
+    codeLines << "    ";
+    
+    // 执行应用程序
+    codeLines << "    return app.exec();";
+    codeLines << "}";
+    
+    return codeLines.join("\n");
 }
 
 void StateMachineEditorV2::editStateProperties()
