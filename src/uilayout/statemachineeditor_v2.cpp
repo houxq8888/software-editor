@@ -1348,9 +1348,156 @@ void StateMachineEditorV2::runWizard()
     qDebug() << "Wizard preview started for wizard:" << wizard->name();
     qDebug() << "Main interface selected:" << mainInterface->name();
     
-    // 5. 生成并展示运行效果（这里可以添加代码生成和运行效果展示的逻辑）
-    // 例如：根据主界面和向导跳转关系生成QT代码
-    // 并展示在一个新的窗口中运行
+    // 5. 生成并展示运行效果
+    qDebug() << "Generating and displaying runtime effect...";
+    
+    // 生成向导代码
+    QString generatedCode = generateWizardCode(wizard, mainInterface);
+    
+    // 显示生成的代码
+    showGeneratedCode(generatedCode);
+    
+    // 展示运行效果预览
+    showWizardRuntimePreview(wizard, mainInterface);
+    
+    qDebug() << "Runtime effect display completed";
+}
+
+QString StateMachineEditorV2::generateWizardCode(Wizard *wizard, UIInterface *mainInterface)
+{
+    if (!wizard || !mainInterface) return QString();
+    
+    QString code;
+    QTextStream stream(&code);
+    
+    // 生成头文件包含
+    stream << "#include <QApplication>" << Qt::endl;
+    stream << "#include <QWizard>" << Qt::endl;
+    stream << "#include <QWizardPage>" << Qt::endl;
+    stream << "#include <QVBoxLayout>" << Qt::endl;
+    stream << "#include <QLabel>" << Qt::endl;
+    stream << "#include <QPushButton>" << Qt::endl;
+    stream << "#include <QMessageBox>" << Qt::endl;
+    stream << Qt::endl;
+    
+    // 生成向导类定义
+    stream << "// 向导类定义" << Qt::endl;
+    stream << QString("class %1Wizard : public QWizard").arg(wizard->name()) << Qt::endl;
+    stream << "{" << Qt::endl;
+    stream << "    Q_OBJECT" << Qt::endl;
+    stream << "public:" << Qt::endl;
+    stream << QString("    %1Wizard(QWidget *parent = nullptr) : QWizard(parent)").arg(wizard->name()) << Qt::endl;
+    stream << "    {" << Qt::endl;
+    stream << QString("        setWindowTitle(\"%1\");").arg(wizard->name()) << Qt::endl;
+    stream << Qt::endl;
+    
+    // 生成向导页面
+    QList<WizardPage*> pages = wizard->allPages();
+    for (int i = 0; i < pages.size(); ++i) {
+        WizardPage *page = pages.at(i);
+        stream << QString("        // 第 %1 页: %2").arg(i+1).arg(page->title) << Qt::endl;
+        stream << QString("        QWizardPage *page%1 = new QWizardPage(this);").arg(i+1) << Qt::endl;
+        stream << QString("        page%1->setTitle(\"%2\");").arg(i+1).arg(page->title) << Qt::endl;
+        if (!page->description.isEmpty()) {
+            stream << QString("        page%1->setSubTitle(\"%2\");").arg(i+1).arg(page->description) << Qt::endl;
+        }
+        stream << Qt::endl;
+        
+        // 添加布局和内容
+        stream << QString("        QVBoxLayout *layout%1 = new QVBoxLayout(page%1);").arg(i+1) << Qt::endl;
+        stream << QString("        QLabel *label%1 = new QLabel(\"这是向导页面 %2: %3\", page%1);").arg(i+1).arg(i+1).arg(page->title) << Qt::endl;
+        stream << QString("        layout%1->addWidget(label%1);").arg(i+1) << Qt::endl;
+        stream << Qt::endl;
+        
+        // 添加到向导
+        stream << QString("        addPage(page%1);").arg(i+1) << Qt::endl;
+        stream << Qt::endl;
+    }
+    
+    stream << "    }" << Qt::endl;
+    stream << "};" << Qt::endl;
+    stream << Qt::endl;
+    
+    // 生成 main 函数
+    stream << "// 主函数" << Qt::endl;
+    stream << "int main(int argc, char *argv[])" << Qt::endl;
+    stream << "{" << Qt::endl;
+    stream << "    QApplication app(argc, argv);" << Qt::endl;
+    stream << Qt::endl;
+    stream << QString("    %1Wizard wizard;").arg(wizard->name()) << Qt::endl;
+    stream << "    wizard.show();" << Qt::endl;
+    stream << Qt::endl;
+    stream << "    return app.exec();" << Qt::endl;
+    stream << "}" << Qt::endl;
+    
+    return code;
+}
+
+void StateMachineEditorV2::showGeneratedCode(const QString &code)
+{
+    // 创建代码显示对话框
+    QDialog *codeDialog = new QDialog(this);
+    codeDialog->setWindowTitle("生成的向导代码");
+    codeDialog->resize(800, 600);
+    
+    QVBoxLayout *layout = new QVBoxLayout(codeDialog);
+    
+    QTextEdit *codeTextEdit = new QTextEdit(codeDialog);
+    codeTextEdit->setPlainText(code);
+    codeTextEdit->setReadOnly(true);
+    codeTextEdit->setFontFamily("Consolas");
+    codeTextEdit->setFontPointSize(10);
+    layout->addWidget(codeTextEdit);
+    
+    QPushButton *closeButton = new QPushButton("关闭", codeDialog);
+    layout->addWidget(closeButton);
+    
+    connect(closeButton, &QPushButton::clicked, codeDialog, &QDialog::close);
+    
+    codeDialog->show();
+}
+
+void StateMachineEditorV2::showWizardRuntimePreview(Wizard *wizard, UIInterface *mainInterface)
+{
+    if (!wizard || !mainInterface) return;
+    
+    // 创建运行效果预览对话框
+    QDialog *previewDialog = new QDialog(this);
+    previewDialog->setWindowTitle("向导运行效果预览");
+    previewDialog->resize(600, 400);
+    
+    QVBoxLayout *layout = new QVBoxLayout(previewDialog);
+    
+    // 显示向导信息
+    QLabel *infoLabel = new QLabel(previewDialog);
+    infoLabel->setAlignment(Qt::AlignCenter);
+    infoLabel->setWordWrap(true);
+    infoLabel->setText(QString(
+        "<h3>向导运行效果预览</h3>"
+        "<p><strong>向导名称:</strong> %1</p>"
+        "<p><strong>主界面:</strong> %2</p>"
+        "<p><strong>页面数量:</strong> %3</p>"
+        "<p>这是向导的运行效果预览。在实际应用中，向导将按照定义的页面顺序和跳转关系执行。</p>"
+    ).arg(wizard->name()).arg(mainInterface->name()).arg(wizard->allPages().size()));
+    layout->addWidget(infoLabel);
+    
+    // 显示向导页面列表
+    QListWidget *pageList = new QListWidget(previewDialog);
+    QList<WizardPage*> pages = wizard->allPages();
+    for (WizardPage *page : pages) {
+        QListWidgetItem *item = new QListWidgetItem(
+            QString("%1 (%2)").arg(page->title).arg(page->isStartPage ? "开始页" : page->isFinalPage ? "结束页" : "中间页")
+        );
+        pageList->addItem(item);
+    }
+    layout->addWidget(pageList);
+    
+    QPushButton *closeButton = new QPushButton("关闭", previewDialog);
+    layout->addWidget(closeButton);
+    
+    connect(closeButton, &QPushButton::clicked, previewDialog, &QDialog::close);
+    
+    previewDialog->show();
 }
 
 

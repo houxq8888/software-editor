@@ -567,6 +567,12 @@ public slots:
     void saveCurrentWizard();
     void switchWizardFile();
     void updateWindowTitle();
+    
+private:
+    // 代码生成和运行效果展示
+    QString generateWizardCode(Wizard *wizard, UIInterface *mainInterface);
+    void showGeneratedCode(const QString &code);
+    void showWizardRuntimePreview(Wizard *wizard, UIInterface *mainInterface);
 
 private slots:
     void onStateSelected(const UIFlowStateMachine::UIFlowState &state);
