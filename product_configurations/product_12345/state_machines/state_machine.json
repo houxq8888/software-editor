@@ -1,91 +1,117 @@
 {
     "created": "2025-12-17T10:37:21",
+    "version": "2.0",
+    "type": "two_phase_state_machine",
     "wizardJsonPath": "wizards/123.json",
-    "integrationManager": {
-        "integrationMode": 0,
-        "logicSequenceStateMachine": {
-            "currentStateId": "default_logic_state",
-            "globalData": {
-            },
-            "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
-            "initialStateId": "default_logic_state",
-            "name": "LogicSequenceStateMachine",
-            "states": [
-                {
-                    "data": {
-                    },
-                    "description": "应用程序默认逻辑状态",
-                    "isFinalState": true,
-                    "isInitialState": true,
-                    "name": "默认逻辑状态",
-                    "stateId": "default_logic_state"
-                }
-            ],
-            "transitions": [
-            ]
-        },
-        "mappings": [
-            {
-                "logicStateId": "default_logic_state",
-                "mappingId": "default_mapping",
-                "uiFlowStateId": "default_ui_state"
-            }
-        ],
-        "uiFlowStateMachine": {
-            "currentStateId": "default_ui_state",
-            "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
-            "initialStateId": "default_ui_state",
-            "name": "UIFlowStateMachine",
-            "states": [
-                {
-                    "isFinalState": true,
-                    "isInitialState": true,
-                    "name": "默认界面",
-                    "stateId": "default_ui_state",
-                    "uiInterfaceId": "main_window"
-                }
-            ],
-            "transitions": [
-            ]
+    
+    "phaseControl": {
+        "currentPhase": "ui_flow_phase",
+        "uiFlowPhaseCompleted": false,
+        "logicSequencePhaseEnabled": false,
+        "validationRules": {
+            "minUIFlowStates": 1,
+            "minUIFlowTransitions": 0,
+            "requireInitialState": true,
+            "requireFinalState": true
         }
     },
-    "logicSequenceStateMachine": {
-        "currentStateId": "default_logic_state",
-        "globalData": {
+    
+    "uiFlowPhase": {
+        "stateMachine": {
+            "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
+            "name": "UI流状态机",
+            "description": "第一阶段：向导编辑模式，处理界面跳转关系",
+            "initialStateId": "",
+            "currentStateId": "",
+            "states": [
+                {
+                    "stateId": "main_interface",
+                    "name": "主界面",
+                    "description": "应用程序的主界面",
+                    "isInitialState": true,
+                    "isFinalState": false,
+                    "uiInterfaceId": "main_window",
+                    "properties": {
+                        "windowType": "main_window",
+                        "canClose": false,
+                        "modal": false
+                    }
+                }
+            ],
+            "transitions": [],
+            "metadata": {
+                "created": "2025-12-17T10:37:21",
+                "lastModified": "2025-12-17T10:37:21",
+                "stateCount": 1,
+                "transitionCount": 0
+            }
         },
-        "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
-        "initialStateId": "default_logic_state",
-        "name": "LogicSequenceStateMachine",
-        "states": [
-            {
-                "data": {
-                },
-                "description": "应用程序默认逻辑状态",
-                "isFinalState": true,
-                "isInitialState": true,
-                "name": "默认逻辑状态",
-                "stateId": "default_logic_state"
-            }
-        ],
-        "transitions": [
-        ]
+        "wizardIntegration": {
+            "wizardName": "",
+            "wizardDescription": "",
+            "mainInterfaceInfo": {
+                "name": "",
+                "description": "",
+                "uiFilePath": "",
+                "type": "",
+                "properties": {}
+            },
+            "uiFlowMapping": {}
+        }
     },
-    "type": "decoupled_state_machine",
-    "uiFlowStateMachine": {
-        "currentStateId": "default_ui_state",
-        "id": "99b500db-fe77-4f76-adb6-24eef9091f20",
-        "initialStateId": "default_ui_state",
-        "name": "UIFlowStateMachine",
-        "states": [
-            {
-                "isFinalState": true,
-                "isInitialState": true,
-                "name": "默认界面",
-                "stateId": "default_ui_state",
-                "uiInterfaceId": "main_window"
+    
+    "logicSequencePhase": {
+        "enabled": false,
+        "stateMachine": {
+            "id": "ce0ffc56-55a2-407b-87f0-71bbe30709a5",
+            "name": "逻辑时序状态机",
+            "description": "第二阶段：逻辑处理模式，处理业务逻辑流程",
+            "initialStateId": "",
+            "currentStateId": "",
+            "globalData": {},
+            "states": [
+                {
+                    "stateId": "initial_logic_state",
+                    "name": "初始逻辑状态",
+                    "description": "逻辑时序的初始状态",
+                    "isInitialState": true,
+                    "isFinalState": false,
+                    "data": {},
+                    "actions": {
+                        "onEnter": [],
+                        "onExit": [],
+                        "onUpdate": []
+                    }
+                }
+            ],
+            "transitions": [],
+            "mappings": {},
+            "metadata": {
+                "created": "2025-12-17T10:37:21",
+                "lastModified": "2025-12-17T10:37:21",
+                "stateCount": 1,
+                "transitionCount": 0,
+                "mappingCount": 0
             }
-        ],
-        "transitions": [
-        ]
+        }
+    },
+    
+    "integration": {
+        "uiFlowToLogicMapping": {},
+        "validation": {
+            "uiFlowPhaseValid": false,
+            "logicSequencePhaseValid": false,
+            "mappingConsistency": false
+        }
+    },
+    
+    "metadata": {
+        "author": "",
+        "description": "两段式状态机：第一阶段UI流模式，第二阶段逻辑时序模式",
+        "tags": ["two-phase", "ui-flow", "logic-sequence"],
+        "dependencies": {
+            "uiFiles": [],
+            "wizards": ["wizards/123.json"]
+        }
     }
 }

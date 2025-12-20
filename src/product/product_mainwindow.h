@@ -130,33 +130,14 @@ private:
     void stopStateMachineEditor();
     void onStateMachineEditorClosed();
     
-    // 解耦状态机管理函数
-    void setupUIFlowStatesFromProduct(UIFlowStateMachine *uiFlowStateMachine, const QList<ProductUIFile> &uiFiles);
-    bool loadDecoupledStateMachine(const QString &filePath, 
-                                   UIFlowStateMachine *uiFlowStateMachine,
-                                   LogicSequenceStateMachine *logicStateMachine,
-                                   StateMachineIntegrationManager *integrationManager);
-    void createNewDecoupledStateMachine(const QString &filePath,
-                                        UIFlowStateMachine *uiFlowStateMachine,
-                                        LogicSequenceStateMachine *logicStateMachine,
-                                        StateMachineIntegrationManager *integrationManager);
-    bool saveDecoupledStateMachine(const QString &filePath,
-                                   UIFlowStateMachine *uiFlowStateMachine,
-                                   LogicSequenceStateMachine *logicStateMachine,
-                                   StateMachineIntegrationManager *integrationManager);
-    
-    // UI文件类型识别和描述生成函数
-    QString detectUiFileType(const QString &filePath) const;
-    QString generateUiFileDescription(const QString &filePath, const QString &type) const;
-    
     // 默认产品配置加载函数
     void loadDefaultProductConfig();
     
     // 状态机编辑器辅助函数
     void passUiFilesToStateMachineEditor();
     void createStateMachineEditor();
-    QString handleStateMachineFile();
     void setupStateMachineEditorWindow();
+    
 };
 
 #endif // PRODUCT_MAINWINDOW_H

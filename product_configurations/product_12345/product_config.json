@@ -25,7 +25,6 @@
         {
             "description": "UI布局文件: 43214",
             "fileName": "ui_layouts/43214.ui",
-            "isMain": true,
             "name": "43214",
             "order": 0,
             "type": "ui_layout"
@@ -33,7 +32,6 @@
         {
             "description": "UI布局文件: 1208",
             "fileName": "ui_layouts/1208.ui",
-            "isMain": false,
             "name": "1208",
             "order": 1,
             "type": "ui_layout"
@@ -41,7 +39,6 @@
         {
             "description": "UI布局文件: 1209",
             "fileName": "ui_layouts/1209.ui",
-            "isMain": false,
             "name": "1209",
             "order": 2,
             "type": "ui_layout"
@@ -49,7 +46,6 @@
         {
             "description": "UI布局文件: 1209-1",
             "fileName": "ui_layouts/1209-1.ui",
-            "isMain": false,
             "name": "1209-1",
             "order": 3,
             "type": "ui_layout"
@@ -57,7 +53,6 @@
         {
             "description": "UI布局文件: 1209-2",
             "fileName": "ui_layouts/1209-2.ui",
-            "isMain": false,
             "name": "1209-2",
             "order": 4,
             "type": "ui_layout"
@@ -65,7 +60,6 @@
         {
             "description": "UI布局文件: untitled",
             "fileName": "ui_layouts/untitled.ui",
-            "isMain": false,
             "name": "untitled",
             "order": 5,
             "type": "ui_layout"

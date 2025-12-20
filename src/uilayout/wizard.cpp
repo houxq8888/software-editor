@@ -500,10 +500,10 @@ QJsonObject WizardManager::toJson() const {
     for (Wizard* wizard : m_wizards) {
         wizardsArray.append(wizard->toJson());
     }
-
-    json["wizards"] = wizardsArray;
-    if (m_currentWizard) {
-        json["currentWizardId"] = m_currentWizard->id();
+    
+    // 添加主界面信息
+    if (hasMainInterface()) {
+        json["mainInterface"] = m_mainInterfaceInfo.toJson();
     }
 
     return json;
@@ -518,22 +518,10 @@ bool WizardManager::fromJson(const QJsonObject &json) {
     qDeleteAll(m_wizards);
     m_wizards.clear();
     m_currentWizard = nullptr;
-
-    QJsonArray wizardsArray = json["wizards"].toArray();
-    for (const QJsonValue &wizardValue : wizardsArray) {
-        QJsonObject wizardJson = wizardValue.toObject();
-        Wizard* newWizard = new Wizard(this);
-        if (newWizard->fromJson(wizardJson)) {
-            m_wizards.append(newWizard);
-        } else {
-            delete newWizard;
-        }
-    }
-
-    // 恢复当前向导
-    QString currentWizardId = json["currentWizardId"].toString();
-    if (!currentWizardId.isEmpty()) {
-        m_currentWizard = findWizard(currentWizardId);
+    
+    // 加载主界面信息
+    if (json.contains("mainInterface") && json["mainInterface"].isObject()) {
+        m_mainInterfaceInfo.fromJson(json["mainInterface"].toObject());
     }
 
     return true;
@@ -566,4 +554,33 @@ bool WizardManager::loadFromFile(const QString &filePath) {
     }
 
     return fromJson(doc.object());
+}
+
+// 主界面信息管理方法实现
+MainInterfaceInfo WizardManager::mainInterfaceInfo() const {
+    return m_mainInterfaceInfo;
+}
+
+void WizardManager::setMainInterfaceInfo(const MainInterfaceInfo &info) {
+    if (m_mainInterfaceInfo.name != info.name ||
+        m_mainInterfaceInfo.description != info.description ||
+        m_mainInterfaceInfo.uiFilePath != info.uiFilePath ||
+        m_mainInterfaceInfo.type != info.type ||
+        m_mainInterfaceInfo.properties != info.properties) {
+        
+        m_mainInterfaceInfo = info;
+        emit mainInterfaceInfoChanged(info);
+    }
+}
+
+bool WizardManager::hasMainInterface() const {
+    return !m_mainInterfaceInfo.uiFilePath.isEmpty();
+}
+
+void WizardManager::clearMainInterface() {
+    MainInterfaceInfo emptyInfo;
+    if (m_mainInterfaceInfo.uiFilePath != emptyInfo.uiFilePath) {
+        m_mainInterfaceInfo = emptyInfo;
+        emit mainInterfaceInfoChanged(emptyInfo);
+    }
 }

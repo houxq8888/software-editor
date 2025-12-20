@@ -73,7 +73,6 @@ void Product::setUiLayoutPath(const QString &uiLayoutPath) {
         mainUiFile.name = "主窗口";
         mainUiFile.filePath = uiLayoutPath;
         mainUiFile.type = "main_window";
-        mainUiFile.isMain = true;
         mainUiFile.description = "产品主界面窗口";
         mainUiFile.order = 0;
         
@@ -115,22 +114,6 @@ void Product::removeUiFile(const QString &filePath) {
     }
 }
 
-ProductUIFile Product::getMainUiFile() const {
-    for (const auto &uiFile : m_uiFiles) {
-        if (uiFile.isMain) {
-            return uiFile;
-        }
-    }
-    
-    // 如果没有设置主UI文件，返回第一个文件
-    if (!m_uiFiles.isEmpty()) {
-        return m_uiFiles.first();
-    }
-    
-    // 返回空的UI文件结构
-    return ProductUIFile();
-}
-
 ProductUIFile Product::getUiFile(const QString &filePath) const {
     for (const auto &uiFile : m_uiFiles) {
         if (uiFile.filePath == filePath) {
@@ -147,21 +130,6 @@ bool Product::hasUiFile(const QString &filePath) const {
         }
     }
     return false;
-}
-
-void Product::setMainUiFile(const QString &filePath) {
-    // 先取消所有UI文件的主文件标记
-    for (auto &uiFile : m_uiFiles) {
-        uiFile.isMain = false;
-    }
-    
-    // 设置指定文件为主文件
-    for (auto &uiFile : m_uiFiles) {
-        if (uiFile.filePath == filePath) {
-            uiFile.isMain = true;
-            break;
-        }
-    }
 }
 
 QList<ProductFeature> Product::features() const { return m_features; }
@@ -202,52 +170,23 @@ bool Product::hasStateMachine() const {
     return !m_stateMachinePath.isEmpty(); 
 }
 
-// State machine configuration management
-QList<StateMachineConfig> Product::stateMachineConfigs() const { 
-    return m_stateMachineConfigs; 
+// State machine configuration management (single configuration per product)
+StateMachineConfig Product::stateMachineConfig() const { 
+    return m_stateMachineConfig; 
 }
 
-void Product::setStateMachineConfigs(const QList<StateMachineConfig> &configs) { 
-    m_stateMachineConfigs = configs; 
-}
-
-void Product::addStateMachineConfig(const StateMachineConfig &config) {
-    m_stateMachineConfigs.append(config);
-}
-
-void Product::removeStateMachineConfig(int index) {
-    if (index >= 0 && index < m_stateMachineConfigs.size()) {
-        m_stateMachineConfigs.removeAt(index);
-    }
-}
-
-StateMachineConfig Product::getStateMachineConfig(const QString &name) const {
-    for (const auto &config : m_stateMachineConfigs) {
-        if (config.name == name) {
-            return config;
-        }
-    }
-    return StateMachineConfig();
-}
-
-bool Product::hasStateMachineConfig(const QString &name) const {
-    for (const auto &config : m_stateMachineConfigs) {
-        if (config.name == name) {
-            return true;
-        }
-    }
-    return false;
+void Product::setStateMachineConfig(const StateMachineConfig &config) { 
+    m_stateMachineConfig = config; 
 }
 
 bool Product::hasStateMachineConfig() const {
-    return !m_stateMachineConfigs.isEmpty();
+    return !m_stateMachineConfig.name.isEmpty();
 }
 
 QString Product::getWizardJsonPath() const {
     // 从状态机文件中读取wizard JSON路径
-    if (!m_stateMachineConfigs.isEmpty()) {
-        // 获取第一个状态机配置的文件路径
-        QString stateMachinePath = m_stateMachineConfigs.first().fileName;
+    if (!m_stateMachineConfig.fileName.isEmpty()) {
+        QString stateMachinePath = m_stateMachineConfig.fileName;
         
         // 如果路径是相对路径，转换为绝对路径
         if (QDir::isRelativePath(stateMachinePath)) {
@@ -283,6 +222,32 @@ QString Product::getWizardJsonPath() const {
     }
     
     return QString();
+}
+
+QString Product::getWizardAbsolutePath() const {
+    // 获取向导JSON文件的绝对路径
+    QString wizardPath = getWizardJsonPath();
+    
+    if (wizardPath.isEmpty()) {
+        return QString();
+    }
+    
+    // 如果已经是绝对路径，直接返回
+    if (QFileInfo(wizardPath).isAbsolute()) {
+        return wizardPath;
+    }
+    
+    // 如果是相对路径，转换为绝对路径
+    if (!m_configPackageRootPath.isEmpty()) {
+        return QDir(m_configPackageRootPath).absoluteFilePath(wizardPath);
+    } else {
+        return QDir::currentPath() + "/" + wizardPath;
+    }
+}
+
+QString Product::getWizardName() const
+{
+    return m_stateMachineConfig.wizardData.name;
 }
 
 QJsonObject Product::toJson() const {
@@ -374,27 +339,24 @@ QJsonObject Product::toJson() const {
         uiFileObj["fileName"] = fileName;  // 保存相对于产品目录的相对路径
         
         uiFileObj["type"] = uiFile.type;
-        uiFileObj["isMain"] = uiFile.isMain;
         uiFileObj["description"] = uiFile.description;
         uiFileObj["order"] = uiFile.order;
         uiFilesArray.append(uiFileObj);
     }
     json["uiFiles"] = uiFilesArray;
     
-    // 状态机文件信息
+    // 状态机文件信息（单个状态机配置）
     QJsonArray stateMachinesArray;
     
-    // 优先使用新的状态机配置格式
-    if (!m_stateMachineConfigs.isEmpty()) {
-        for (const auto &config : m_stateMachineConfigs) {
-            QJsonObject stateMachine;
-            stateMachine["name"] = config.name;
-            stateMachine["description"] = config.description;
-            stateMachine["fileName"] = config.fileName;
-            stateMachine["wizardJsonPath"] = config.wizardJsonPath;
-            stateMachine["logicJsonPath"] = config.logicJsonPath;
-            stateMachinesArray.append(stateMachine);
-        }
+    // 使用单个状态机配置
+    if (!m_stateMachineConfig.name.isEmpty()) {
+        QJsonObject stateMachine;
+        stateMachine["name"] = m_stateMachineConfig.name;
+        stateMachine["description"] = m_stateMachineConfig.description;
+        stateMachine["fileName"] = m_stateMachineConfig.fileName;
+        stateMachine["wizardJsonPath"] = m_stateMachineConfig.wizardJsonPath;
+        stateMachine["logicJsonPath"] = m_stateMachineConfig.logicJsonPath;
+        stateMachinesArray.append(stateMachine);
     }
     // 向后兼容：如果只有单个状态机路径
     else if (!m_stateMachinePath.isEmpty()) {
@@ -418,7 +380,7 @@ QJsonObject Product::toJson() const {
     return json;
 }
 
-bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
+bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {                                        
     // 设置产品配置包根路径
     if (!configFilePath.isEmpty()) {
         QFileInfo configFileInfo(configFilePath);
@@ -452,39 +414,37 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
             m_screenshotPath = productInfo.value("screenshotPath").toString();
         }
         
-        // 从stateMachines字段读取状态机配置
+        // 从stateMachines字段读取状态机配置（只取第一个配置）
         if (json.contains("stateMachines") && json["stateMachines"].isArray()) {
             QJsonArray stateMachines = json["stateMachines"].toArray();
-            m_stateMachineConfigs.clear();
             
-            for (const auto &stateMachineValue : stateMachines) {
+            // 只取第一个状态机配置
+            if (!stateMachines.isEmpty()) {
+                const auto &stateMachineValue = stateMachines.first();
                 if (stateMachineValue.isObject()) {
                     QJsonObject stateMachineObj = stateMachineValue.toObject();
-                    StateMachineConfig config;
-                    config.name = stateMachineObj.value("name").toString();
-                    config.description = stateMachineObj.value("description").toString();
-                    config.fileName = stateMachineObj.value("fileName").toString();
-                    config.wizardJsonPath = stateMachineObj.value("wizardJsonPath").toString();
-                    config.logicJsonPath = stateMachineObj.value("logicJsonPath").toString();
+                    m_stateMachineConfig.name = stateMachineObj.value("name").toString();
+                    m_stateMachineConfig.description = stateMachineObj.value("description").toString();
+                    m_stateMachineConfig.fileName = stateMachineObj.value("fileName").toString();
+                    m_stateMachineConfig.wizardJsonPath = stateMachineObj.value("wizardJsonPath").toString();
+                    m_stateMachineConfig.logicJsonPath = stateMachineObj.value("logicJsonPath").toString();
                     
                     // 构建完整路径并转换为绝对路径
-                    if (!config.fileName.isEmpty() && QDir::isRelativePath(config.fileName)) {
+                    if (!m_stateMachineConfig.fileName.isEmpty() && QDir::isRelativePath(m_stateMachineConfig.fileName)) {
                         if (!configFilePath.isEmpty()) {
                             QFileInfo configFileInfo(configFilePath);
                             QDir configDir = configFileInfo.dir();
-                            config.fileName = configDir.absoluteFilePath(config.fileName);
+                            m_stateMachineConfig.fileName = configDir.absoluteFilePath(m_stateMachineConfig.fileName);
                         } else {
                             // 如果没有提供配置文件路径，使用当前工作目录作为后备方案
-                            config.fileName = QDir::currentPath() + "/" + config.fileName;
+                            m_stateMachineConfig.fileName = QDir::currentPath() + "/" + m_stateMachineConfig.fileName;
                         }
                     }
-                    
-                    m_stateMachineConfigs.append(config);
                 }
             }
             
             // 向后兼容：如果没有新的状态机配置，但存在单个状态机路径
-            if (m_stateMachineConfigs.isEmpty() && json.contains("stateMachinePath")) {
+            if (m_stateMachineConfig.name.isEmpty() && json.contains("stateMachinePath")) {
                 m_stateMachinePath = json.value("stateMachinePath").toString();
             }
         }
@@ -525,7 +485,7 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
                 uiFile.name = uiFileObj.value("name").toString();
                 uiFile.filePath = uiFileObj.value("fileName").toString(); // 新结构使用fileName
                 uiFile.type = uiFileObj.value("type").toString();
-                uiFile.isMain = uiFileObj.value("isMain").toBool(false);
+                // uiFile.isMain = false; // 不再从配置文件读取，主界面信息由状态机配置管理
                 uiFile.description = uiFileObj.value("description").toString();
                 uiFile.order = uiFileObj.value("order").toInt(0);
                 
@@ -568,7 +528,6 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
         mainUiFile.name = "主窗口";
         mainUiFile.filePath = m_uiLayoutPath;
         mainUiFile.type = "main_window";
-        mainUiFile.isMain = true;
         mainUiFile.description = "产品主界面窗口";
         mainUiFile.order = 0;
         m_uiFiles.append(mainUiFile);
@@ -605,6 +564,235 @@ bool Product::fromJson(const QJsonObject &json, const QString &configFilePath) {
         }
     }
 
+    // 一次性加载状态机、向导、逻辑数据（单个配置）
+    if (!m_stateMachineConfig.name.isEmpty()) {
+        // 加载状态机JSON数据
+        if (!m_stateMachineConfig.fileName.isEmpty()) {
+            QFile stateMachineFile(m_stateMachineConfig.fileName);
+            if (stateMachineFile.exists() && stateMachineFile.open(QIODevice::ReadOnly)) {
+                QJsonDocument doc = QJsonDocument::fromJson(stateMachineFile.readAll());
+                stateMachineFile.close();
+                if (!doc.isNull() && doc.isObject()) {
+                    m_stateMachineConfig.stateMachineJson = doc.object();
+                    
+                    // 从状态机JSON中读取wizardJsonPath字段
+                    if (m_stateMachineConfig.stateMachineJson.contains("wizardJsonPath") && 
+                        m_stateMachineConfig.stateMachineJson["wizardJsonPath"].isString()) {
+                        
+                        QString wizardJsonPath = m_stateMachineConfig.stateMachineJson["wizardJsonPath"].toString();
+                        qDebug() << "从状态机JSON中读取到wizardJsonPath:" << wizardJsonPath;
+                        
+                        // 构建完整的wizard文件路径
+                        if (!wizardJsonPath.isEmpty() && QDir::isRelativePath(wizardJsonPath)) {
+                            // 相对于状态机文件的位置构建路径
+                            QFileInfo stateMachineFileInfo(m_stateMachineConfig.fileName);
+                            QDir stateMachineDir = stateMachineFileInfo.dir();
+                            QString originalPath = wizardJsonPath;
+                            m_stateMachineConfig.wizardJsonPath = stateMachineDir.absoluteFilePath(wizardJsonPath);
+                            qDebug() << "转换相对路径(相对于状态机文件):" << originalPath << "->" << m_stateMachineConfig.wizardJsonPath;
+                        } else {
+                            m_stateMachineConfig.wizardJsonPath = wizardJsonPath;
+                            qDebug() << "wizardJsonPath是绝对路径:" << m_stateMachineConfig.wizardJsonPath;
+                        }
+                    } else {
+                        qDebug() << "状态机JSON中未找到wizardJsonPath字段或字段类型不正确";
+                    }
+                }
+            }
+        }
+        
+        // 加载向导JSON数据
+        qDebug()<<"wizardpath:"<<m_stateMachineConfig.wizardJsonPath;
+                if (!m_stateMachineConfig.wizardJsonPath.isEmpty()) {
+                    QFile wizardFile(m_stateMachineConfig.wizardJsonPath);
+                    if (wizardFile.exists() && wizardFile.open(QIODevice::ReadOnly)) {
+                        QJsonDocument doc = QJsonDocument::fromJson(wizardFile.readAll());
+                        wizardFile.close();
+                        if (!doc.isNull() && doc.isObject()) {
+                            m_stateMachineConfig.wizardData.jsonData = doc.object();
+                            // 根级别读取name
+                            if (m_stateMachineConfig.wizardData.jsonData.contains("name") && m_stateMachineConfig.wizardData.jsonData["name"].isString()) {
+                                m_stateMachineConfig.wizardData.name = m_stateMachineConfig.wizardData.jsonData["name"].toString();
+                                qDebug() << "Set wizard name from root level:" << m_stateMachineConfig.wizardData.name;
+                            } else {
+                                qDebug() << "No valid wizard name found in JSON data";
+                            }
+                            // 解析主界面信息
+                            if (m_stateMachineConfig.wizardData.jsonData.contains("mainInterface") && m_stateMachineConfig.wizardData.jsonData["mainInterface"].isObject()) {
+                                QJsonObject mainInterface = m_stateMachineConfig.wizardData.jsonData["mainInterface"].toObject();
+                                if (mainInterface.contains("name") && mainInterface["name"].isString()) {
+                                    m_stateMachineConfig.wizardData.mainInterfaceName = mainInterface["name"].toString();
+                                }
+                                if (mainInterface.contains("uiFilePath") && mainInterface["uiFilePath"].isString()) {
+                                    m_stateMachineConfig.wizardData.mainInterfacePath = mainInterface["uiFilePath"].toString();
+                                }
+                            }
+                        }
+                    }
+                }
+        
+        // 加载逻辑JSON数据
+        if (!m_stateMachineConfig.logicJsonPath.isEmpty()) {
+            QFile logicFile(m_stateMachineConfig.logicJsonPath);
+            if (logicFile.exists() && logicFile.open(QIODevice::ReadOnly)) {
+                QJsonDocument doc = QJsonDocument::fromJson(logicFile.readAll());
+                logicFile.close();
+                if (!doc.isNull() && doc.isObject()) {
+                    m_stateMachineConfig.logicData.jsonData = doc.object();
+                    // 解析逻辑基本信息
+                    if (m_stateMachineConfig.logicData.jsonData.contains("name") && m_stateMachineConfig.logicData.jsonData["name"].isString()) {
+                        m_stateMachineConfig.logicData.name = m_stateMachineConfig.logicData.jsonData["name"].toString();
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+// 向导文件加载接口实现
+bool Product::loadWizardFile(const QString &filePath)
+{
+    if (filePath.isEmpty()) {
+        qWarning() << "向导文件路径为空";
+        return false;
+    }
+    
+    QFile wizardFile(filePath);
+    if (!wizardFile.exists()) {
+        qWarning() << "向导文件不存在:" << filePath;
+        return false;
+    }
+    
+    if (!wizardFile.open(QIODevice::ReadOnly)) {
+        qWarning() << "无法打开向导文件:" << filePath;
+        return false;
+    }
+    
+    QJsonDocument doc = QJsonDocument::fromJson(wizardFile.readAll());
+    wizardFile.close();
+    
+    if (doc.isNull() || !doc.isObject()) {
+        qWarning() << "向导文件格式错误:" << filePath;
+        return false;
+    }
+    
+    QJsonObject json = doc.object();
+    
+    // 验证向导类型
+    if (!json.contains("type") || json["type"].toString() != "wizard") {
+        qWarning() << "文件不是有效的向导类型:" << filePath;
+        return false;
+    }
+    
+    // 保存当前向导文件路径
+    m_currentWizardFilePath = filePath;
+    
+    // 更新状态机配置中的向导数据
+    m_stateMachineConfig.wizardData.jsonData = json;
+    
+    // 从根级别读取向导名称
+    if (json.contains("name") && json["name"].isString()) {
+        m_stateMachineConfig.wizardData.name = json["name"].toString();
+        qDebug() << "加载向导名称:" << m_stateMachineConfig.wizardData.name;
+    }
+    
+    // 解析主界面信息
+    if (json.contains("mainInterface") && json["mainInterface"].isObject()) {
+        QJsonObject mainInterface = json["mainInterface"].toObject();
+        if (mainInterface.contains("name") && mainInterface["name"].isString()) {
+            m_stateMachineConfig.wizardData.mainInterfaceName = mainInterface["name"].toString();
+        }
+        if (mainInterface.contains("uiFilePath") && mainInterface["uiFilePath"].isString()) {
+            m_stateMachineConfig.wizardData.mainInterfacePath = mainInterface["uiFilePath"].toString();
+        }
+    }
+    
+    // 加载控件事件
+    m_controlEvents.clear();
+    if (json.contains("controlEvents") && json["controlEvents"].isArray()) {
+        QJsonArray controlEventsArray = json["controlEvents"].toArray();
+        for (const auto &eventValue : controlEventsArray) {
+            if (eventValue.isObject()) {
+                QJsonObject eventObj = eventValue.toObject();
+                
+                // 构建事件信息字符串
+                QString eventInfo;
+                if (eventObj.contains("eventName") && eventObj["eventName"].isString()) {
+                    eventInfo += "事件: " + eventObj["eventName"].toString();
+                }
+                if (eventObj.contains("controlName") && eventObj["controlName"].isString()) {
+                    eventInfo += ", 控件: " + eventObj["controlName"].toString();
+                }
+                if (eventObj.contains("eventType") && eventObj["eventType"].isString()) {
+                    eventInfo += ", 类型: " + eventObj["eventType"].toString();
+                }
+                if (eventObj.contains("targetUIPage") && eventObj["targetUIPage"].isString()) {
+                    eventInfo += ", 目标页面: " + eventObj["targetUIPage"].toString();
+                }
+                
+                if (!eventInfo.isEmpty()) {
+                    m_controlEvents.append(eventInfo);
+                }
+            }
+        }
+        qDebug() << "加载了" << m_controlEvents.size() << "个控件事件";
+    }
+    
+    qDebug() << "向导文件加载成功:" << filePath;
+    return true;
+}
+
+QList<QString> Product::getControlEvents() const
+{
+    return m_controlEvents;
+}
+
+QString Product::getCurrentWizardName() const
+{
+    return m_stateMachineConfig.wizardData.name;
+}
+
+QString Product::getCurrentWizardFilePath() const
+{
+    return m_currentWizardFilePath;
+}
+
+// 内存缓存管理实现
+
+
+QString Product::getWizardMainInterfaceName() const
+{
+    return m_stateMachineConfig.wizardData.mainInterfaceName;
+}
+
+QString Product::getWizardMainInterfacePath() const
+{
+    return m_stateMachineConfig.wizardData.mainInterfacePath;
+}
+
+bool Product::updateWizardMainInterface(const QString &uiFileName, const QString &uiFilePath)
+{
+    if (m_stateMachineConfig.name.isEmpty()) {
+        qWarning() << "未找到状态机配置";
+        return false;
+    }
+    
+    // 创建主界面信息JSON对象
+    QJsonObject mainInterfaceObj;
+    mainInterfaceObj["name"] = uiFileName;
+    mainInterfaceObj["description"] = QString("应用程序的主界面 - %1").arg(uiFileName);
+    mainInterfaceObj["file"] = uiFilePath;
+    mainInterfaceObj["type"] = "main_window";
+    
+    // 更新向导数据中的主界面信息
+    m_stateMachineConfig.wizardData.jsonData["mainInterface"] = mainInterfaceObj;
+    m_stateMachineConfig.wizardData.mainInterfaceName = uiFileName;
+    m_stateMachineConfig.wizardData.mainInterfacePath = uiFilePath;
+    
+    qDebug() << "向导主界面信息已更新:" << uiFileName;
+    
     return true;
 }
 
@@ -645,11 +833,7 @@ bool Product::isValidProductConfigPackage() const {
         return false;
     }
     
-    // 检查主UI文件是否存在
-    ProductUIFile mainUiFile = getMainUiFile();
-    if (!mainUiFile.filePath.isEmpty() && !QFile::exists(mainUiFile.filePath)) {
-        return false;
-    }
+    // 主界面信息由状态机配置管理，不再检查主UI文件
     
     return true;
 }

@@ -19,18 +19,36 @@ struct ProductUIFile
     QString name;           // UI文件名称（如：主窗口、设置对话框等）
     QString filePath;       // UI文件路径
     QString type;           // UI文件类型（如：main_window、dialog、widget等）
-    bool isMain = false;    // 是否为主UI文件
     QString description;    // UI文件描述
     int order = 0;          // 显示顺序
 };
 
+// 向导数据结构
+struct WizardData
+{
+    QString name;                   // 向导名称
+    QJsonObject jsonData;           // 向导JSON数据
+    QString mainInterfaceName;      // 主界面名称
+    QString mainInterfacePath;      // 主界面文件路径
+};
+
+// 逻辑数据结构
+struct LogicData
+{
+    QString name;                   // 逻辑名称
+    QJsonObject jsonData;           // 逻辑JSON数据
+};
+
 struct StateMachineConfig
 {
-    QString name;           // 状态机名称
-    QString description;    // 状态机描述
-    QString fileName;       // 状态机配置文件路径
-    QString wizardJsonPath; // wizard JSON文件路径
-    QString logicJsonPath;  // 逻辑JSON文件路径
+    QString name;                   // 状态机名称
+    QString description;            // 状态机描述
+    QString fileName;               // 状态机配置文件路径
+    QString wizardJsonPath;         // wizard JSON文件路径
+    QString logicJsonPath;          // 逻辑JSON文件路径
+    QJsonObject stateMachineJson;   // 状态机JSON数据
+    WizardData wizardData;          // 向导数据
+    LogicData logicData;            // 逻辑数据
 };
 
 class Product
@@ -65,10 +83,8 @@ public:
     void addUiFile(const ProductUIFile &uiFile);
     void removeUiFile(int index);
     void removeUiFile(const QString &filePath);
-    ProductUIFile getMainUiFile() const;
     ProductUIFile getUiFile(const QString &filePath) const;
     bool hasUiFile(const QString &filePath) const;
-    void setMainUiFile(const QString &filePath);
 
     QList<ProductFeature> features() const;
     void setFeatures(const QList<ProductFeature> &features);
@@ -80,15 +96,26 @@ public:
     void setStateMachinePath(const QString &stateMachinePath);
     bool hasStateMachine() const;
     
-    // State machine configuration management
-    QList<StateMachineConfig> stateMachineConfigs() const;
-    void setStateMachineConfigs(const QList<StateMachineConfig> &configs);
-    void addStateMachineConfig(const StateMachineConfig &config);
-    void removeStateMachineConfig(int index);
-    StateMachineConfig getStateMachineConfig(const QString &name) const;
-    bool hasStateMachineConfig(const QString &name) const;
-    bool hasStateMachineConfig() const; // 检查是否有任何状态机配置
+    // State machine configuration management (single configuration per product)
+    StateMachineConfig stateMachineConfig() const;
+    void setStateMachineConfig(const StateMachineConfig &config);
+    bool hasStateMachineConfig() const; // 检查是否有状态机配置
     QString getWizardJsonPath() const; // 获取wizard JSON文件路径
+    QString getWizardAbsolutePath() const; // 获取wizard JSON文件的绝对路径
+    
+    // 只读数据访问接口
+    QString getWizardName() const; // 获取向导名称
+    QString getWizardMainInterfaceName() const; // 获取向导主界面名称
+    QString getWizardMainInterfacePath() const; // 获取向导主界面文件路径
+    
+    // 向导数据更新接口 - 基于业务逻辑而不是直接操作JSON
+    bool updateWizardMainInterface(const QString &uiFileName, const QString &uiFilePath); // 更新向导主界面信息
+    
+    // 向导文件加载接口
+    bool loadWizardFile(const QString &filePath); // 加载向导文件
+    QList<QString> getControlEvents() const; // 获取加载的控件事件列表
+    QString getCurrentWizardName() const; // 获取当前向导名称
+    QString getCurrentWizardFilePath() const; // 获取当前向导文件路径
 
     // Serialization
     QJsonObject toJson() const;
@@ -116,7 +143,11 @@ private:
     QString m_configPackageRootPath; // Product configuration package root path
     QList<ProductUIFile> m_uiFiles; // Multiple UI files
     QList<ProductFeature> m_features;
-    QList<StateMachineConfig> m_stateMachineConfigs; // Multiple state machine configurations
+    StateMachineConfig m_stateMachineConfig; // Single state machine configuration per product
+    
+    // 向导文件加载相关数据
+    QString m_currentWizardFilePath; // 当前加载的向导文件路径
+    QList<QString> m_controlEvents; // 加载的控件事件列表
 };
 
 #endif // PRODUCT_H

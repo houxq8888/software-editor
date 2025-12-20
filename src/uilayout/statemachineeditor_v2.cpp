@@ -281,6 +281,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_uiFilesLabel(nullptr)
     , m_uiFilesDataPendingUpdate(false)
     , m_definedEventsListWidget(nullptr)
+    , m_wizardFilePathLabel(nullptr)
 {
     qDebug() << "[DEBUG] StateMachineEditorV2 constructor started";
     
@@ -511,7 +512,9 @@ void WizardPreviewWidget::createPreviewLayout()
 void WizardPreviewWidget::createPlaceholder()
 {
     if (m_placeholderLabel) {
-        m_mainLayout->removeWidget(m_placeholderLabel);
+        if (m_mainLayout) {
+            m_mainLayout->removeWidget(m_placeholderLabel);
+        }
         delete m_placeholderLabel;
     }
     
@@ -520,7 +523,9 @@ void WizardPreviewWidget::createPlaceholder()
     m_placeholderLabel->setText("请加载向导以查看UI串联预览");
     m_placeholderLabel->setStyleSheet("QLabel { color: #666; font-size: 16px; padding: 80px; background-color: #f8f8f8; border: 2px dashed #ccc; border-radius: 8px; }");
     
-    m_mainLayout->addWidget(m_placeholderLabel, 1);
+    if (m_mainLayout) {
+        m_mainLayout->addWidget(m_placeholderLabel, 1);
+    }
 }
 
 void WizardPreviewWidget::createNavigationControls()
@@ -579,7 +584,7 @@ void WizardPreviewWidget::createNavigationControls()
 void WizardPreviewWidget::loadWizard(Wizard *wizard)
 {
     qDebug() << "Entering WizardPreviewWidget::loadWizard()";
-    
+    return;
     // 简化的 clearPreview()，避免访问可能未初始化的控件
     clearCurrentPage();
     m_currentWizard = nullptr;
@@ -625,14 +630,14 @@ void WizardPreviewWidget::clearPreview()
     m_totalPages = 0;
     m_previewLoaded = false;
     
-    // 隐藏导航控件
-    m_pageTitleLabel->hide();
-    m_pageDescriptionLabel->hide();
-    m_navigationLabel->hide();
-    m_prevButton->hide();
-    m_nextButton->hide();
-    m_finishButton->hide();
-    m_cancelButton->hide();
+    // 隐藏导航控件（添加空指针检查）
+    if (m_pageTitleLabel) m_pageTitleLabel->hide();
+    if (m_pageDescriptionLabel) m_pageDescriptionLabel->hide();
+    if (m_navigationLabel) m_navigationLabel->hide();
+    if (m_prevButton) m_prevButton->hide();
+    if (m_nextButton) m_nextButton->hide();
+    if (m_finishButton) m_finishButton->hide();
+    if (m_cancelButton) m_cancelButton->hide();
     
     // 显示占位符
     if (!m_previewWidget && m_placeholderLabel) {
@@ -711,7 +716,7 @@ void WizardPreviewWidget::updateNavigationControls()
         return;
     }
     
-    // 更新页面标题和描述
+    // 更新页面标题和描述（添加空指针检查）
     QList<WizardPage*> pages = m_currentWizard->allPages();
     qDebug() << "pages.size() =" << pages.size();
     
@@ -719,7 +724,7 @@ void WizardPreviewWidget::updateNavigationControls()
         WizardPage *currentPage = pages[m_currentPageIndex];
         qDebug() << "currentPage =" << currentPage;
         
-        if (currentPage) {
+        if (currentPage && m_pageTitleLabel && m_pageDescriptionLabel) {
             qDebug() << "Updating page title to:" << currentPage->title;
             m_pageTitleLabel->setText(currentPage->title);
             qDebug() << "Updating page description to:" << currentPage->description;
@@ -736,22 +741,24 @@ void WizardPreviewWidget::updateNavigationControls()
     }
     qDebug() << "Exiting WizardPreviewWidget::updateNavigationControls()";
     
-    // 更新导航标签
-    m_navigationLabel->setText(QString("第 %1 页 / 共 %2 页").arg(m_currentPageIndex + 1).arg(m_totalPages));
+    // 更新导航标签（添加空指针检查）
+    if (m_navigationLabel) {
+        m_navigationLabel->setText(QString("第 %1 页 / 共 %2 页").arg(m_currentPageIndex + 1).arg(m_totalPages));
+    }
     
-    // 更新按钮状态
-    m_prevButton->setEnabled(m_currentPageIndex > 0);
-    m_nextButton->setEnabled(m_currentPageIndex < m_totalPages - 1);
-    m_finishButton->setEnabled(m_currentPageIndex == m_totalPages - 1);
+    // 更新按钮状态（添加空指针检查）
+    if (m_prevButton) m_prevButton->setEnabled(m_currentPageIndex > 0);
+    if (m_nextButton) m_nextButton->setEnabled(m_currentPageIndex < m_totalPages - 1);
+    if (m_finishButton) m_finishButton->setEnabled(m_currentPageIndex == m_totalPages - 1);
     
-    // 显示导航控件
-    m_prevButton->show();
-    m_nextButton->show();
-    m_finishButton->show();
-    m_cancelButton->show();
+    // 显示导航控件（添加空指针检查）
+    if (m_prevButton) m_prevButton->show();
+    if (m_nextButton) m_nextButton->show();
+    if (m_finishButton) m_finishButton->show();
+    if (m_cancelButton) m_cancelButton->show();
     
     // 添加导航布局（如果尚未添加）
-    if (m_mainLayout->indexOf(m_navigationLayout) == -1) {
+    if (m_navigationLayout && m_mainLayout->indexOf(m_navigationLayout) == -1) {
         m_mainLayout->addLayout(m_navigationLayout);
     }
 }
@@ -903,21 +910,113 @@ void StateMachineEditorV2::setProductUiFiles(const QList<ProductUIFile> &uiFiles
 
 void StateMachineEditorV2::setProduct(Product *product)
 {
+    qDebug() << "[DEBUG] setProduct() called, product pointer:" << product;
     m_product = product;
     
-    // 设置产品后立即加载向导文件
+    // 设置产品后立即加载向导文件和UI文件列表
     if (m_product) {
-        loadWizardsFromProductConfig();
+        qDebug() << "[DEBUG] m_product is valid, loading wizard and UI files from product config";
+        
+        // 1. 从产品信息中获取向导文件并显示到界面
+        QString wizardFilePath = m_product->getWizardAbsolutePath();
+        if (!wizardFilePath.isEmpty()) {
+            qDebug() << "[DEBUG] Got wizard absolute file path from product config:" << wizardFilePath;
+            
+            // 设置当前向导文件路径
+            m_currentWizardFilePath = wizardFilePath;
+            // 从产品缓存中获取向导信息
+            QString wizardName = m_product->getWizardName();
+                
+            if (!wizardName.isEmpty()) {
+                m_currentWizardName = wizardName;
+                qDebug() << "[DEBUG] Got wizard name from product:" << wizardName;
+            } else qDebug() << "[DEBUG] Product does not have a valid wizard name";
+            
+            // 更新界面显示
+            updateWindowTitle();
+            if (m_wizardFilePathLabel) updateWizardFilePathLabel(m_wizardFilePathLabel);
+            
+            qDebug() << "[DEBUG] Wizard information loaded and displayed successfully";
+        } else {
+            qDebug() << "[DEBUG] No wizard file path found in product config";
+        }
+        
+        // 2. 从产品信息中获取UI文件列表
+        QList<ProductUIFile> uiFiles = m_product->uiFiles();
+        qDebug() << "[DEBUG] Loaded" << uiFiles.size() << "UI files from product config";
+        
+        // 3. 设置产品UI文件到状态机编辑器
+        setProductUiFiles(uiFiles);
+        updateMainInterfaceStatus();
+        qDebug() << "[DEBUG] Product configuration loaded successfully - wizard and UI files ready";
+    } else {
+        qDebug() << "[DEBUG] m_product is null after assignment";
     }
 }
 
-void StateMachineEditorV2::loadStateMachine(const QString &filePath)
+void StateMachineEditorV2::loadWizardFile(const QString &filePath)
 {
     if (filePath.isEmpty()) return;
     
+    qDebug() << "[DEBUG] loadWizardFile() called with file:" << filePath;
+    
+    // 使用Product类加载向导文件
+    if (!m_product) {
+        QMessageBox::warning(this, "错误", "未设置产品对象，无法加载向导文件");
+        return;
+    }
+    
+    if (!m_product->loadWizardFile(filePath)) {
+        QMessageBox::warning(this, "错误", "无法加载向导文件: " + filePath);
+        return;
+    }
+    
+    // 获取向导名称和文件路径
+    QString wizardName = m_product->getCurrentWizardName();
+    m_currentWizardName = wizardName;
+    m_currentWizardFilePath = m_product->getCurrentWizardFilePath();
+    m_isWizardModified = false;
+    
+    // 加载控件事件定义
+    m_definedControlEvents.clear();
+    QList<QString> controlEvents = m_product->getControlEvents();
+    for (const QString &eventInfo : controlEvents) {
+        m_definedControlEvents.append(eventInfo);
+        qDebug() << "Loaded control event from Product:" << eventInfo;
+    }
+    
+    qDebug() << "Loaded" << m_definedControlEvents.size() << "control events from Product";
+    
+    // 创建向导对象（如果需要）
+    if (m_wizardManager && !wizardName.isEmpty()) {
+        Wizard* wizard = m_wizardManager->createWizard(wizardName, "");
+        if (wizard) {
+            m_wizardManager->setCurrentWizard(wizard);
+            qDebug() << "Wizard created and set as current:" << wizardName;
+        }
+    }
+    
+    // 更新窗口标题
+    updateWindowTitle();
+    
+    // 更新主界面状态显示
+    updateMainInterfaceStatus();
+    
+    // 更新已定义事件列表显示
+    updateDefinedEventsList();
+    
+    QMessageBox::information(this, "成功", "向导文件已加载: " + filePath);
+}
+
+void StateMachineEditorV2::loadLogicStateMachineFile(const QString &filePath)
+{
+    if (filePath.isEmpty()) return;
+    
+    qDebug() << "[DEBUG] loadLogicStateMachineFile() called with file:" << filePath;
+    
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(this, "错误", "无法打开状态机文件: " + filePath);
+        QMessageBox::warning(this, "错误", "无法打开逻辑状态机文件: " + filePath);
         return;
     }
     
@@ -925,61 +1024,58 @@ void StateMachineEditorV2::loadStateMachine(const QString &filePath)
     file.close();
     
     if (doc.isNull()) {
-        QMessageBox::warning(this, "错误", "状态机文件格式错误: " + filePath);
+        QMessageBox::warning(this, "错误", "无效的JSON文档: " + filePath);
         return;
     }
     
     QJsonObject json = doc.object();
     
-    // 检查是否为状态机格式
-    if (json.contains("uiFlowStateMachine") && 
-        json.contains("logicSequenceStateMachine") &&
-        json.contains("integrationManager")) {
+    // 检查是否为逻辑状态机文件
+    if (json.contains("type") && json["type"].toString() == "logic_sequence_state_machine") {
+        QString stateMachineName = json["name"].toString();
         
-        // 加载UI流状态机
-        QJsonObject uiFlowObj = json["uiFlowStateMachine"].toObject();
-        if (!m_integrationManager->uiFlowStateMachine()) {
-            m_integrationManager->setUiFlowStateMachine(new UIFlowStateMachine("UI流状态机", this));
+        if (!stateMachineName.isEmpty()) {
+            qDebug() << "Loading logic state machine:" << stateMachineName << "from" << filePath;
+            
+            // 创建逻辑状态机对象
+            if (m_integrationManager) {
+                LogicSequenceStateMachine* stateMachine = new LogicSequenceStateMachine(stateMachineName, this);
+                
+                if (stateMachine->fromJson(json)) {
+                    m_integrationManager->setLogicSequenceStateMachine(stateMachine);
+                    qDebug() << "Logic state machine loaded successfully:" << stateMachineName;
+                } else {
+                    delete stateMachine;
+                    QMessageBox::warning(this, "错误", "无法加载逻辑状态机数据: " + filePath);
+                    return;
+                }
+            }
         }
-        if (!m_integrationManager->uiFlowStateMachine()->fromJson(uiFlowObj)) {
-            QMessageBox::warning(this, "错误", "加载UI流状态机失败");
-            return;
-        }
-        
-        // 加载逻辑时序状态机
-        QJsonObject logicObj = json["logicSequenceStateMachine"].toObject();
-        if (!m_integrationManager->logicSequenceStateMachine()) {
-            m_integrationManager->setLogicSequenceStateMachine(new LogicSequenceStateMachine("逻辑时序状态机", this));
-        }
-        if (!m_integrationManager->logicSequenceStateMachine()->fromJson(logicObj)) {
-            QMessageBox::warning(this, "错误", "加载逻辑时序状态机失败");
-            return;
-        }
-        
-        // 加载集成管理器
-        QJsonObject integrationObj = json["integrationManager"].toObject();
-        if (!m_integrationManager->fromJson(integrationObj)) {
-            QMessageBox::warning(this, "错误", "加载集成管理器失败");
-            return;
-        }
-        
-        // 设置向导状态
-        m_currentWizardName = QFileInfo(filePath).baseName();
-        m_currentWizardFilePath = filePath;
-        m_isWizardModified = false;
-        updateWindowTitle();
-        
-        // 状态机文件加载完成后，加载向导文件
-        if (m_product) {
-            loadWizardsFromProductConfig();
-        }
-        
-        QMessageBox::information(this, "成功", "状态机文件已加载: " + filePath);
     } else {
-        QMessageBox::warning(this, "错误", "状态机文件不是正确格式，只支持状态机格式: " + filePath);
+        QMessageBox::warning(this, "错误", "文件不是有效的逻辑状态机文件: " + filePath);
         return;
     }
+    
+    QMessageBox::information(this, "成功", "逻辑状态机文件已加载: " + filePath);
 }
+
+void StateMachineEditorV2::loadStateMachine(const QString &filePath)
+{
+    if (filePath.isEmpty()) return;
+    
+    // 根据当前模式加载不同的状态机文件
+    switch (m_currentMode) {
+    case StateMachineMode::UIFlowMode:
+        // UI流模式下加载向导文件
+        loadWizardFile(filePath);
+        break;
+    case StateMachineMode::LogicSequenceMode:
+        // 逻辑时序模式下加载逻辑状态机文件
+        loadLogicStateMachineFile(filePath);
+        break;
+    }
+}
+
 
 void StateMachineEditorV2::saveStateMachine(const QString &filePath)
 {
@@ -1048,62 +1144,6 @@ void StateMachineEditorV2::createNewStateMachine()
     QMessageBox::information(this, "成功", message);
 }
 
-void StateMachineEditorV2::switchWizardFile()
-{
-    qDebug() << "switchWizardFile() called";
-    
-    // 检查是否需要保存当前向导
-    if (m_isWizardModified && !m_currentWizardName.isEmpty()) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存向导", 
-            "向导 \"" + m_currentWizardName + "\" 已修改但未保存，是否先保存？",
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        
-        if (reply == QMessageBox::Cancel) {
-            return; // 用户取消操作
-        } else if (reply == QMessageBox::Save) {
-            // 保存当前向导
-            saveCurrentWizard();
-        }
-    }
-    
-    // 打开文件对话框选择新的向导文件
-    QString filePath = QFileDialog::getOpenFileName(this, "选择向导文件", 
-        QDir::currentPath(), "向导文件 (*.json)");
-    
-    if (!filePath.isEmpty()) {
-        qDebug() << "User selected wizard file:" << filePath;
-        
-        // 更新state_machine.json中的wizardJsonPath
-    if (m_product && m_product->hasStateMachine()) {
-        // 这里需要实现更新state_machine.json的逻辑
-        // 由于Product类没有直接提供stateMachine()方法，需要从文件系统读取和更新
-        QString configRootPath = m_product->configPackageRootPath();
-        if (!configRootPath.isEmpty()) {
-            QString stateMachinePath = configRootPath + "/state_machine.json";
-            QFile file(stateMachinePath);
-            if (file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-                QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-                QJsonObject config = doc.object();
-                config["wizardJsonPath"] = filePath;
-                
-                file.seek(0);
-                file.write(QJsonDocument(config).toJson());
-                file.resize(file.pos());
-                
-                // 同时更新缓存信息
-                m_cachedWizardJsonPath = filePath;
-                
-                qDebug() << "Updated wizardJsonPath in state_machine.json to:" << filePath;
-            }
-        }
-    }
-        
-        // 重新加载向导
-        loadWizardsFromProductConfig();
-        
-        QMessageBox::information(this, "切换向导文件", "向导文件已成功切换到: " + filePath);
-    }
-}
 
 void StateMachineEditorV2::createNewWizard()
 {
@@ -1224,35 +1264,43 @@ void StateMachineEditorV2::runWizard()
     }
     qDebug()<<"uiManager is "<<uiManager;
     
-    // 尝试从UI界面管理器中查找主界面
+    // 查找主界面
     if (uiManager) {
-        // 优先使用显式设置的主界面
-        mainInterface = uiManager->mainInterface();
-        
-        // 如果没有显式设置的主界面，查找第一个标记为isMainWindow的界面
-        if (!mainInterface) {
-            QList<UIInterface*> allInterfaces = uiManager->interfaces();
-            for (UIInterface* ui : allInterfaces) {
-                if (ui->isMainWindow()) {
-                    mainInterface = ui;
-                    break;
+        // 优先从状态机配置中获取主界面信息（通过向导配置）
+        if (m_integrationManager && m_integrationManager->uiFlowStateMachine()) {
+            auto uiFlowStateMachine = m_integrationManager->uiFlowStateMachine();
+            auto initialStateObj = uiFlowStateMachine->initialState();
+            
+            if (initialStateObj && !initialStateObj->uiInterfaceId.isEmpty()) {
+                QString mainInterfaceId = initialStateObj->uiInterfaceId;
+                qDebug() << "Found main interface from state machine:" << mainInterfaceId;
+                
+                // 通过界面ID查找对应的UIInterface
+                mainInterface = uiManager->findInterface(mainInterfaceId);
+                if (mainInterface) {
+                    qDebug() << "Main interface found from state machine:" << mainInterface->name();
                 }
             }
         }
         
-        // 检查是否是默认创建的空界面（没有布局项或名称为默认值）
-        if (mainInterface) {
-            // 检查界面是否有实际内容或是否是用户显式设置的
-            bool isDefaultEmptyInterface = false;
-            
-            // 检查界面名称是否为默认值
-            if (mainInterface->name() == "主界面" && mainInterface->layoutItems().isEmpty()) {
-                isDefaultEmptyInterface = true;
+        // 主界面必须显式指定：如果产品内存中没有主界面信息，则无法运行向导
+        if (!mainInterface) {
+            // 使用Product类提供的只读接口获取主界面信息
+            QString mainInterfaceFilePath;
+            if (m_product && m_product->hasStateMachineConfig()) {
+                mainInterfaceFilePath = m_product->getWizardMainInterfacePath();
             }
             
-            // 如果是默认创建的空界面，视为没有主界面
-            if (isDefaultEmptyInterface) {
-                mainInterface = nullptr;
+            if (!mainInterfaceFilePath.isEmpty()) {
+                // 产品内存中指定了主界面，但状态机中没有对应的界面，需要提示用户
+                QMessageBox::warning(this, "运行向导", 
+                    QString("产品中指定的主界面文件 '%1' 在状态机中未找到对应的界面。请确保产品和状态机中的主界面配置一致。").arg(mainInterfaceFilePath));
+                return;
+            } else {
+                // 产品内存中没有指定主界面，无法运行向导
+                QMessageBox::warning(this, "运行向导", 
+                    "产品中没有指定主界面信息，无法运行向导。请先在产品中显式指定主界面。");
+                return;
             }
         }
     }
@@ -1262,8 +1310,11 @@ void StateMachineEditorV2::runWizard()
         QMessageBox::warning(this, "运行向导", "请先选择一个主界面作为应用程序的第一个窗口。");
         return;
     }
+    
+    // 只有在成功找到主界面时才打印这些日志
     qDebug()<<"mainInterface is "<<mainInterface;
     qDebug()<<"has main window";    
+    
     // 2. 查找可运行的向导
     Wizard* wizard = nullptr;
     
@@ -2894,15 +2945,15 @@ void StateMachineEditorV2::updateWizardEditorInterface()
     QVBoxLayout *fileLayout = new QVBoxLayout(fileGroup);
     fileLayout->setSpacing(4);
     
-    QLabel *wizardFilePathLabel = new QLabel("", m_uiFlowProperties);
-    wizardFilePathLabel->setObjectName("wizardFilePathLabel");
-    wizardFilePathLabel->setWordWrap(true);
-    wizardFilePathLabel->setStyleSheet("border: 1px solid #ddd; padding: 4px; background-color: #f8f9fa; border-radius: 3px; font-size: 9pt;");
+    m_wizardFilePathLabel = new QLabel("", m_uiFlowProperties);
+    m_wizardFilePathLabel->setObjectName("wizardFilePathLabel");
+    m_wizardFilePathLabel->setWordWrap(true);
+    m_wizardFilePathLabel->setStyleSheet("border: 1px solid #ddd; padding: 4px; background-color: #f8f9fa; border-radius: 3px; font-size: 9pt;");
     
     // 显示当前向导文件路径
-    updateWizardFilePathLabel(wizardFilePathLabel);
+    updateWizardFilePathLabel(m_wizardFilePathLabel);
     
-    fileLayout->addWidget(wizardFilePathLabel);
+    fileLayout->addWidget(m_wizardFilePathLabel);
     
     // 2. 向导操作按钮区域 - 添加分组框（压缩布局）
     QGroupBox *actionGroup = new QGroupBox("向导操作", m_uiFlowProperties);
@@ -3000,6 +3051,15 @@ void StateMachineEditorV2::updateWizardEditorInterface()
     mainLayout->addWidget(scrollArea);
     
     m_propertiesTab->setTabText(0, "向导编辑");
+    
+    // UI创建完成后，立即更新向导文件路径标签
+    QLabel *existingWizardFilePathLabel = m_uiFlowProperties->findChild<QLabel*>(QString("wizardFilePathLabel"));
+    if (existingWizardFilePathLabel) {
+        updateWizardFilePathLabel(existingWizardFilePathLabel);
+        qDebug() << "向导文件路径标签在UI创建后成功更新";
+    } else {
+        qDebug() << "警告：向导文件路径标签在UI创建后仍未找到";
+    }
 }
 
 void StateMachineEditorV2::saveCurrentWizard()
@@ -3017,42 +3077,8 @@ void StateMachineEditorV2::saveCurrentWizard()
     
     QString filePath;
     
-    // 优先使用state_machine.json中指定的wizardJsonPath路径
-    QString wizardJsonPath = m_product->getWizardJsonPath();
-    if (!wizardJsonPath.isEmpty() && m_currentWizardFilePath.isEmpty()) {
-        qDebug() << "Using wizardJsonPath from state_machine.json:" << wizardJsonPath;
-        
-        // 将相对路径转换为绝对路径
-        if (QDir::isRelativePath(wizardJsonPath)) {
-            QString configPackageRootPath = m_product->configPackageRootPath();
-            if (!configPackageRootPath.isEmpty()) {
-                filePath = QDir(configPackageRootPath).absoluteFilePath(wizardJsonPath);
-                qDebug() << "Converted to absolute path:" << filePath;
-            } else {
-                QMessageBox::warning(this, "保存向导", "产品配置包根路径未设置，无法转换相对路径");
-                return;
-            }
-        } else {
-            filePath = wizardJsonPath;
-        }
-        
-        // 确保文件扩展名
-        if (!filePath.endsWith(".json")) {
-            filePath += ".json";
-        }
-        
-        // 创建目录（如果不存在）
-        QFileInfo fileInfo(filePath);
-        QDir dir = fileInfo.absoluteDir();
-        if (!dir.exists()) {
-            dir.mkpath(".");
-            qDebug() << "Created directory:" << dir.absolutePath();
-        }
-        
-        m_currentWizardFilePath = filePath;
-        qDebug() << "Set current wizard file path to:" << m_currentWizardFilePath;
-    }
-    else if (m_currentWizardFilePath.isEmpty()) {
+    // 如果当前向导文件路径为空，说明是新建向导
+    if (m_currentWizardFilePath.isEmpty()) {
         // 新向导，保存到产品配置包根目录下的state_machines/wizards子目录
         QString productConfigRootDir = m_product->configPackageRootPath();
         
@@ -3109,8 +3135,9 @@ void StateMachineEditorV2::saveCurrentWizard()
         
         m_currentWizardFilePath = filePath;
     } else {
-        filePath = m_currentWizardFilePath;
-    }
+        // 已有向导文件路径，直接使用
+         filePath = m_currentWizardFilePath;
+     }
     
     // 保存向导数据到文件
     QFile file(filePath);
@@ -3124,6 +3151,15 @@ void StateMachineEditorV2::saveCurrentWizard()
     wizardData["name"] = m_currentWizardName;
     wizardData["type"] = "wizard";
     wizardData["created"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    
+    // 保存向导的完整结构 - 只保存mainInterface字段，不保存wizards和currentWizardId
+    if (m_wizardManager) {
+        QJsonObject wizardManagerJson = m_wizardManager->toJson();
+        // 只保存mainInterface字段，删除wizards和currentWizardId字段
+        if (wizardManagerJson.contains("mainInterface")) {
+            wizardData["mainInterface"] = wizardManagerJson["mainInterface"];
+        }
+    }
     
     // 保存控件事件定义 - 先检查JSON文件中是否已存在对应事件
     QJsonArray controlEventsArray;
@@ -3233,7 +3269,7 @@ void StateMachineEditorV2::saveCurrentWizard()
 
 void StateMachineEditorV2::updateWindowTitle()
 {
-    QString title = "软件编辑器";
+    QString title = "状态机编辑器";
     
     // 优先显示当前向导名称
     if (!m_currentWizardName.isEmpty()) {
@@ -3287,171 +3323,18 @@ void StateMachineEditorV2::updateWizardFilePathLabel(QLabel *label)
         return;
     }
     
-    // 显示当前向导文件路径
+    qDebug() << "[DEBUG] updateWizardFilePathLabel called";
+
+    // 显示向导文件路径
     if (!m_currentWizardFilePath.isEmpty()) {
         label->setText(m_currentWizardFilePath);
+        qDebug() << "[DEBUG] Set label text to:" << m_currentWizardFilePath;
     } else {
         label->setText("未指定向导文件");
+        qDebug()<<"updateWizardFilePathLabel: No wizard file path specified";
     }
 }
 
-void StateMachineEditorV2::loadWizardsFromProductConfig()
-{
-    if (!m_product) {
-        qDebug() << "loadWizardsFromProductConfig: No product configuration, cannot load wizard files";
-        return;
-    }
-    
-    // 优先使用缓存的向导文件路径（避免重复读取state_machine.json文件）
-    QString wizardJsonPath = m_cachedWizardJsonPath;
-    
-    // 如果缓存为空，则回退到从产品配置中读取（兼容旧代码）
-    if (wizardJsonPath.isEmpty()) {
-        wizardJsonPath = m_product->getWizardJsonPath();
-        qDebug() << "Using fallback method to get wizard path from product config";
-    }
-    
-    if (wizardJsonPath.isEmpty()) {
-        qDebug() << "loadWizardsFromProductConfig: No wizard file path specified in state_machine.json";
-        return;
-    }
-    
-    // 将相对路径转换为绝对路径
-    if (QDir::isRelativePath(wizardJsonPath)) {
-        QString configPackageRootPath = m_product->configPackageRootPath();
-        if (!configPackageRootPath.isEmpty()) {
-            wizardJsonPath = QDir(configPackageRootPath).absoluteFilePath(wizardJsonPath);
-            qDebug() << "Converting to absolute path:" << wizardJsonPath;
-        }
-    }
-    
-    qDebug() << "Loading specified wizard file:" << wizardJsonPath;
-    
-    // 检查向导文件是否存在
-    QFileInfo fileInfo(wizardJsonPath);
-    if (!fileInfo.exists()) {
-        qDebug() << "Specified wizard file does not exist:" << wizardJsonPath;
-        return;
-    }
-    
-    // 加载指定的向导文件
-    QFile file(wizardJsonPath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "无法打开向导文件:" << wizardJsonPath;
-        return;
-    }
-    
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    file.close();
-    
-    if (doc.isNull()) {
-        qWarning() << "向导文件格式错误:" << wizardJsonPath;
-        return;
-    }
-    
-    QJsonObject json = doc.object();
-    
-    // 检查是否为向导文件
-    if (json.contains("type") && json["type"].toString() == "wizard") {
-        QString wizardName = json["name"].toString();
-        
-        if (!wizardName.isEmpty()) {
-            qDebug() << "Loading wizard:" << wizardName << "from" << wizardJsonPath;
-            
-            // 创建向导对象
-            if (m_wizardManager) {
-                QString description = json.contains("description") ? json["description"].toString() : "";
-                Wizard* wizard = m_wizardManager->createWizard(wizardName, description);
-                
-                if (wizard) {
-                    // 设置向导文件路径
-                    m_currentWizardName = wizardName;
-                    m_currentWizardFilePath = wizardJsonPath;
-                    m_isWizardModified = false;
-                    
-                    // 加载控件事件定义
-                    m_definedControlEvents.clear();
-                    if (json.contains("controlEvents")) {
-                        QJsonArray controlEventsArray = json["controlEvents"].toArray();
-                        for (const QJsonValue &eventValue : controlEventsArray) {
-                            QJsonObject eventObj = eventValue.toObject();
-                            QString eventName = eventObj["eventName"].toString();
-                            QString controlName = eventObj["controlName"].toString();
-                            QString eventType = eventObj["eventType"].toString();
-                            QString uiFilePath = eventObj["uiFilePath"].toString(); // 读取UI文件路径
-                            
-                            if (!eventName.isEmpty() && !controlName.isEmpty() && !eventType.isEmpty()) {
-                                QString eventData;
-                                QString targetUIPath = eventObj["targetUIPath"].toString(); // 读取目标UI文件路径
-                                
-                                if (!uiFilePath.isEmpty()) {
-                                    // 将相对路径转换为绝对路径
-                                    QString absoluteUiFilePath = uiFilePath;
-                                    if (m_product && !uiFilePath.isEmpty()) {
-                                        QString configPackageRootPath = m_product->configPackageRootPath();
-                                        if (!configPackageRootPath.isEmpty() && QDir::isRelativePath(uiFilePath)) {
-                                            QDir configDir(configPackageRootPath);
-                                            absoluteUiFilePath = configDir.absoluteFilePath(uiFilePath);
-                                        }
-                                    }
-                                    
-                                    if (!targetUIPath.isEmpty()) {
-                                        // 将目标UI文件路径转换为绝对路径
-                                        QString absoluteTargetUIPath = targetUIPath;
-                                        if (m_product && !targetUIPath.isEmpty()) {
-                                            QString configPackageRootPath = m_product->configPackageRootPath();
-                                            if (!configPackageRootPath.isEmpty() && QDir::isRelativePath(targetUIPath)) {
-                                                QDir configDir(configPackageRootPath);
-                                                absoluteTargetUIPath = configDir.absoluteFilePath(targetUIPath);
-                                            }
-                                        }
-                                        // 包含UI文件路径和目标UI路径的新格式
-                                        eventData = QString("%1|%2|%3|%4|%5").arg(eventName).arg(controlName).arg(eventType).arg(absoluteUiFilePath).arg(absoluteTargetUIPath);
-                                    } else {
-                                        // 包含UI文件路径但没有目标UI路径的格式
-                                        eventData = QString("%1|%2|%3|%4").arg(eventName).arg(controlName).arg(eventType).arg(absoluteUiFilePath);
-                                    }
-                                } else {
-                                    // 兼容旧格式（没有UI文件路径）
-                                    eventData = QString("%1|%2|%3").arg(eventName).arg(controlName).arg(eventType);
-                                }
-                                m_definedControlEvents.append(eventData);
-                                qDebug() << "Loaded control event:" << eventData;
-                            }
-                        }
-                        qDebug() << "Loaded" << m_definedControlEvents.size() << "control events";
-                    }
-                    
-                    // 将新创建的向导设置为当前向导
-                    m_wizardManager->setCurrentWizard(wizard);
-                    
-                    qDebug() << "Wizard loaded successfully:" << wizardName;
-                }
-            }
-        }
-    } else {
-        qWarning() << "文件不是有效的向导文件:" << wizardJsonPath;
-    }
-    
-    // 更新窗口标题
-    updateWindowTitle();
-    
-    // 更新向导文件路径标签
-    if (m_uiFlowProperties) {
-        // 查找向导文件路径标签（在整个对象树中查找）
-        QLabel *wizardFilePathLabel = m_uiFlowProperties->findChild<QLabel*>(QString("wizardFilePathLabel"));
-        if (wizardFilePathLabel) {
-            updateWizardFilePathLabel(wizardFilePathLabel);
-        } else {
-            qDebug() << "wizardFilePathLabel not found in m_uiFlowProperties";
-        }
-        
-        // 更新已定义事件列表显示（初始化时保持列表为空）
-        updateDefinedEventsList("");
-    }
-    
-    qDebug() << "Wizard file loading completed";
-}
 
 void StateMachineEditorV2::createUIFilesDisplay()
 {
@@ -3751,7 +3634,6 @@ void StateMachineEditorV2::updateUIFilesList()
     m_uiFilesListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     m_uiFilesListWidget->setResizeMode(QListView::Adjust);
     m_uiFilesListWidget->setViewMode(QListView::ListMode);
-    m_uiFilesListWidget->setSpacing(2);
     
     // 添加产品配置中的UI文件
     int addedCount = 0;
@@ -4248,7 +4130,7 @@ UIFilePreviewItem::UIFilePreviewItem(const ProductUIFile &uiFile, QWidget *paren
                   "UIFilePreviewItem:hover { border-color: #aaa; background-color: #f0f0f0; }");
     
     // 设置合适的最小高度
-    setMinimumHeight(48);
+    setMinimumHeight(68);
     
     // 异步更新预览信息
     QTimer::singleShot(0, this, &UIFilePreviewItem::updatePreviewInfo);
@@ -4397,19 +4279,13 @@ void UIFilePreviewItem::createPreviewIcon()
     painter.setPen(QPen(Qt::white, 1));
     painter.drawLine(6, 7, 18, 7);  // 更新位置
     
-    // 如果是主界面，添加特殊标识
-    if (m_uiFile.isMain) {
-        painter.setBrush(QColor(231, 76, 60)); // 红色
-        painter.setPen(Qt::NoPen);
-        painter.drawEllipse(2, 2, 6, 6); // 左上角红色圆点
-    }
-    
     m_iconLabel->setPixmap(pixmap);
 }
 
 void UIFilePreviewItem::setMainInterface(bool isMain)
 {
-    m_uiFile.isMain = isMain;
+    // 主界面信息现在由状态机配置管理，不再需要设置isMain字段
+    // m_uiFile.isMain = isMain;
     
     // 更新显示
     if (isMain) {
@@ -4497,15 +4373,13 @@ void StateMachineEditorV2::onSetAsMainInterfaceRequested(const QString &filePath
     
     // 查找对应的UI文件
     bool found = false;
+    QString uiFileName;
     for (auto &uiFile : m_productUiFiles) {
         if (uiFile.filePath == filePath) {
-            // 设置为主界面
-            uiFile.isMain = true;
             found = true;
-            qDebug() << "Set UI file as main interface:" << uiFile.name;
-        } else {
-            // 取消其他文件的主界面状态
-            uiFile.isMain = false;
+            uiFileName = uiFile.name;
+            qDebug() << "Found UI file for main interface:" << uiFileName;
+            break;
         }
     }
     
@@ -4514,12 +4388,36 @@ void StateMachineEditorV2::onSetAsMainInterfaceRequested(const QString &filePath
         return;
     }
     
-    // 更新UI文件列表显示
+    // 使用Product类提供的业务逻辑接口来更新向导数据
+    if (m_product && m_product->hasStateMachineConfig()) {
+        // 使用业务逻辑接口更新主界面信息
+        if (m_product->updateWizardMainInterface(uiFileName, filePath)) {
+            qDebug() << "Main interface info updated successfully via Product API:" << uiFileName;
+        } else {
+            qWarning() << "Failed to update main interface info via Product API:" << uiFileName;
+        }
+    } else {
+        qWarning() << "Product not available or has no state machine configuration";
+    }
+    
+    // 同时更新向导管理器中的主界面信息
+    if (m_wizardManager) {
+        MainInterfaceInfo mainInterfaceInfo;
+        mainInterfaceInfo.name = uiFileName;
+        mainInterfaceInfo.description = QString("应用程序的主界面 - %1").arg(uiFileName);
+        mainInterfaceInfo.uiFilePath = filePath;
+        mainInterfaceInfo.type = "main_window";
+        
+        m_wizardManager->setMainInterfaceInfo(mainInterfaceInfo);
+        qDebug() << "Wizard manager main interface info updated:" << uiFileName;
+    }
+    
+    // 更新主界面显示
     updateMainInterfaceStatus();
     
     // 显示成功消息
     QMessageBox::information(this, "主界面设置", 
-                             QString("已将 %1 设置为主界面").arg(QFileInfo(filePath).fileName()));
+                             QString("已将 %1 设置为主界面").arg(uiFileName));
 }
 
 // 更新所有UI文件的主界面状态显示
@@ -4532,6 +4430,21 @@ void StateMachineEditorV2::updateMainInterfaceStatus()
     
     qDebug() << "Updating main interface status for" << m_uiFilesListWidget->count() << "items";
     
+    // 使用Product类提供的只读接口获取当前主界面信息
+    QString mainInterfaceFilePath;
+    if (m_product && m_product->hasStateMachineConfig()) {
+        // 使用只读接口获取主界面文件路径
+        mainInterfaceFilePath = m_product->getWizardMainInterfacePath();
+        qDebug()<<"mainInterfaceFilePath:"<<mainInterfaceFilePath;
+        if (!mainInterfaceFilePath.isEmpty()) {
+            qDebug() << "Current main interface file from product memory:" << mainInterfaceFilePath;
+        } else {
+            qDebug() << "No main interface information found in product memory cache";
+        }
+    } else {
+        qDebug() << "Product not available or has no state machine configuration";
+    }
+    
     // 遍历所有列表项，更新主界面状态显示
     for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
         QListWidgetItem *item = m_uiFilesListWidget->item(i);
@@ -4541,15 +4454,10 @@ void StateMachineEditorV2::updateMainInterfaceStatus()
         UIFilePreviewItem *previewItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(item));
         if (!previewItem) continue;
         
-        // 查找对应的UI文件信息
-        QString filePath = item->data(Qt::UserRole).toString();
+        // 检查该UI文件是否为主界面
         bool isMain = false;
-        
-        for (const auto &uiFile : m_productUiFiles) {
-            if (uiFile.filePath == filePath) {
-                isMain = uiFile.isMain;
-                break;
-            }
+        if (!mainInterfaceFilePath.isEmpty() && !previewItem->filePath().isEmpty()) {
+            isMain = (previewItem->filePath() == mainInterfaceFilePath);
         }
         
         // 更新预览项的主界面状态

@@ -56,7 +56,7 @@ public:
     
     void updatePreviewInfo();
     void setMainInterface(bool isMain);
-    bool isMainInterface() const { return m_uiFile.isMain; }
+    bool isMainInterface() const { return false; } // 主界面信息现在由状态机配置管理
     
     // 重写sizeHint方法以提供合适的大小
     QSize sizeHint() const override;
@@ -535,20 +535,18 @@ public:
     explicit StateMachineEditorV2(QWidget *parent = nullptr);
     
     void setStateMachineManager(StateMachineManager *manager);
-    void setProductUiFiles(const QList<ProductUIFile> &uiFiles);
     void setProduct(Product *product);
     
     void loadStateMachine(const QString &filePath);
     void saveStateMachine(const QString &filePath);
     
-    // 向导文件自动加载
-    void loadWizardsFromProductConfig();
     void updateWizardFilePathLabel(QLabel *label);
     
     StateMachineMode currentMode() const;
 
     void printUiInterfaceComboCount();
     
+    void setProductUiFiles(const QList<ProductUIFile> &uiFiles);
 public slots:
     void createNewStateMachine();
     void editStateProperties();
@@ -565,7 +563,6 @@ public slots:
     void deleteWizard();
     void runWizard();
     void saveCurrentWizard();
-    void switchWizardFile();
     void updateWindowTitle();
 
 private slots:
@@ -630,6 +627,7 @@ private:
     // 产品UI文件信息
     QList<ProductUIFile> m_productUiFiles;
     Product *m_product;
+    QLabel *m_wizardFilePathLabel;
     
     // 缓存的状态机配置信息（避免重复读取文件）
     QString m_cachedWizardJsonPath; // 缓存的向导文件路径
@@ -709,6 +707,10 @@ private:
     // 主界面设置相关方法
     void onSetAsMainInterfaceRequested(const QString &filePath); // 处理设置主界面请求
     void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
+    
+    // 文件加载方法
+    void loadWizardFile(const QString &filePath); // 加载向导文件
+    void loadLogicStateMachineFile(const QString &filePath); // 加载逻辑状态机文件
 
 };
 

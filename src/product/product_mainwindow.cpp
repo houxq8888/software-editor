@@ -616,7 +616,7 @@ void ProductMainWindow::startUIEditor()
                     }
                     
                     filesToOpen << uiPath;
-                    qDebug() << "Add UI file to open list:" << uiPath << "(Main:" << uiFile.isMain << ")";
+                    qDebug() << "Add UI file to open list:" << uiPath;
                 }
             } else {
                 // 向后兼容：如果没有uiFiles数组，使用单个UI文件路径
@@ -691,7 +691,7 @@ void ProductMainWindow::startUIEditor()
             for (const auto &uiFile : uiFiles) {
                 QString uiPath = uiFile.filePath;
                 filesToOpen << uiPath;
-                qDebug() << "Add UI file to open list:" << uiPath << "(Main:" << uiFile.isMain << ")";
+                qDebug() << "Add UI file to open list:" << uiPath;
             }
         } else {
             // 向后兼容：如果没有uiFiles数组，使用单个UI文件路径
@@ -790,20 +790,15 @@ void ProductMainWindow::onQDesignerFinished()
                 uiFile.filePath = fileName;
                 uiFile.type = "ui_layout";
                 
-                // 检查是否是主UI文件（基于文件路径匹配）
-                // 这里可以根据业务逻辑调整判断条件
-                if (fileName.contains("main") || i == 0) {
-                    uiFile.isMain = true;
-                } else {
-                    uiFile.isMain = false;
-                }
+                // 主界面信息现在由状态机配置管理
+                // 不再需要设置isMain字段
                 
                 uiFile.description = QString("UI布局文件: %1").arg(uiFile.name);
                 uiFile.order = i;
                 
                 currentUiFiles.append(uiFile);
                 
-                qDebug() << "before close QDesigner, save UI file info:" << uiFile.name << "path:" << uiFile.filePath << "is main file:" << uiFile.isMain;
+                qDebug() << "before close QDesigner, save UI file info:" << uiFile.name << "path:" << uiFile.filePath;
             }
         }
         
@@ -1244,14 +1239,18 @@ void ProductMainWindow::on_actionOpen_State_Machine_Editor_triggered()
 
 void ProductMainWindow::startStateMachineEditor()
 {
-    qDebug() << "Starting state machine editor";
+    qDebug() << "[DEBUG] ========== startStateMachineEditor() called ==========";
+    qDebug() << "[DEBUG] m_product pointer:" << &m_product;
+    qDebug() << "[DEBUG] m_product name:" << m_product.name();
+    qDebug() << "[DEBUG] m_stateMachineEditorActive:" << m_stateMachineEditorActive;
     
-    // 如果状态机编辑器已经打开，则将其置顶并重新传递UI文件信息
+    // 如果状态机编辑器已经打开，则将其置顶
     if (m_stateMachineEditorActive && m_stateMachineEditor) {
-        qDebug() << "[DEBUG] State machine editor already exists, re-passing UI files";
+        qDebug() << "[DEBUG] State machine editor already exists, raising and activating";
         
-        // 重新传递UI文件信息
-        passUiFilesToStateMachineEditor();
+        // 注意：不再重新传递UI文件信息，因为产品对象已经包含UI文件
+        // 只有在外部UI文件发生变化时才需要调用passUiFilesToStateMachineEditor()
+        qDebug() << "[DEBUG] UI files are already available in product object, no need to re-pass UI files";
         
         m_stateMachineEditor->raise();
         m_stateMachineEditor->activateWindow();
@@ -1264,25 +1263,23 @@ void ProductMainWindow::startStateMachineEditor()
     qDebug() << "[DEBUG] State machine editor created";
     m_stateMachineEditor->printUiInterfaceComboCount();
 
-    // 传递产品对象到状态机编辑器
-    m_stateMachineEditor->setProduct(&m_product);
-    qDebug() << "[DEBUG] Product passed to state machine editor";
-    m_stateMachineEditor->printUiInterfaceComboCount();
-
-    // 传递UI文件信息并设置UI流状态
-    passUiFilesToStateMachineEditor();
-    qDebug() << "[DEBUG] UI files passed to state machine editor";
-    m_stateMachineEditor->printUiInterfaceComboCount();
-
-    // 处理状态机文件
-    QString stateMachinePath = handleStateMachineFile();
-    qDebug() << "[DEBUG] State machine file path:" << stateMachinePath;
+    // 传递产品对象到状态机编辑器（产品对象已包含UI文件信息）
+    qDebug() << "[DEBUG] About to call setProduct() with m_product pointer:" << &m_product;
+    
+    // 检查m_stateMachineEditor是否有效
+    if (m_stateMachineEditor) {
+        qDebug() << "[DEBUG] m_stateMachineEditor is valid, calling setProduct()";
+        m_stateMachineEditor->setProduct(&m_product);
+        qDebug() << "[DEBUG] Product passed to state machine editor";
+        qDebug() << "[DEBUG] Product contains" << m_product.uiFiles().size() << "UI files";
+    } else {
+        qDebug() << "[ERROR] m_stateMachineEditor is null, cannot call setProduct()";
+    }
+    
     m_stateMachineEditor->printUiInterfaceComboCount();
 
     // 设置窗口属性并显示
     setupStateMachineEditorWindow();
-    qDebug()<<"[DEBUG] before pass ui files to state machine editor";
-    m_stateMachineEditor->printUiInterfaceComboCount();
     
     qDebug() << "State machine editor V2 started with decoupled architecture";
     m_stateMachineEditor->printUiInterfaceComboCount();
@@ -1348,65 +1345,12 @@ void ProductMainWindow::createStateMachineEditor()
     connect(m_stateMachineEditor, &StateMachineEditorV2::destroyed, this, &ProductMainWindow::onStateMachineEditorClosed);
 }
 
-// 辅助函数：处理状态机文件
-QString ProductMainWindow::handleStateMachineFile()
-{
-    QString productConfigDir = m_product.configPackageRootPath();
-    QString stateMachinePath;
-    
-    qDebug() << "Product config package root path:" << productConfigDir;
-    qDebug() << "Current working directory:" << QDir::currentPath();
-    
-    // 确定状态机文件路径
-    if (!productConfigDir.isEmpty()) {
-        // 使用产品配置目录
-        QDir stateMachineDir(productConfigDir + "/state_machines");
-        if (!stateMachineDir.exists()) {
-            stateMachineDir.mkpath(".");
-        }
-        stateMachinePath = stateMachineDir.absolutePath() + "/state_machine.json";
-        qDebug() << "State machine file path (product config):" << stateMachinePath;
-    } else {
-        // 使用默认目录
-        qWarning() << "无法确定产品配置目录，使用默认状态机路径";
-        QDir stateMachineDir(QDir::currentPath() + "/state_machines");
-        if (!stateMachineDir.exists()) {
-            stateMachineDir.mkpath(".");
-        }
-        stateMachinePath = stateMachineDir.absolutePath() + "/state_machine.json";
-        qDebug() << "State machine file path (default):" << stateMachinePath;
-    }
-    
-    // 处理状态机文件
-    QFileInfo fileInfo(stateMachinePath);
-    
-    if (fileInfo.exists() && fileInfo.isFile()) {
-        // 文件存在，尝试加载状态机配置
-        if (loadDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr)) {
-            qDebug() << "Loaded decoupled state machine file:" << stateMachinePath;
-        } else {
-            // 如果加载失败，创建新的状态机文件
-            createNewDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr);
-            qDebug() << "Created new decoupled state machine file (replaced old format):" << stateMachinePath;
-        }
-    } else {
-        // 文件不存在，创建新的状态机文件
-        createNewDecoupledStateMachine(stateMachinePath, nullptr, nullptr, nullptr);
-        qDebug() << "Created new decoupled state machine file:" << stateMachinePath;
-    }
-    
-    // 更新产品配置中的状态机路径
-    m_product.setStateMachinePath(stateMachinePath);
-    
-    return stateMachinePath;
-}
+
 
 // 辅助函数：设置状态机编辑器窗口属性
 void ProductMainWindow::setupStateMachineEditorWindow()
 {
     // 设置窗口标题
-    QString windowTitle = "状态机编辑器V2 - " + (m_product.name().isEmpty() ? "未命名产品" : m_product.name());
-    m_stateMachineEditor->setWindowTitle(windowTitle);
     m_stateMachineEditor->setAttribute(Qt::WA_DeleteOnClose);
     
     // 设置窗口大小和位置
@@ -1455,319 +1399,6 @@ void ProductMainWindow::onStateMachineEditorClosed()
     updateStatusBar();
 }
 
-// 根据产品UI文件自动创建UI流状态机状态
-void ProductMainWindow::setupUIFlowStatesFromProduct(UIFlowStateMachine *uiFlowStateMachine, const QList<ProductUIFile> &uiFiles)
-{
-    if (!uiFlowStateMachine || uiFiles.isEmpty()) {
-        return;
-    }
-    
-    qDebug() << "Starting to create UI flow state machine states from product UI files";
-    
-    // 清空现有状态 - 通过移除所有状态和转换
-    QList<UIFlowStateMachine::UIFlowState> states = uiFlowStateMachine->states();
-    for (const auto &state : states) {
-        uiFlowStateMachine->removeState(state.stateId);
-    }
-    
-    QList<UIFlowStateMachine::UIFlowTransition> transitions = uiFlowStateMachine->transitions();
-    for (const auto &transition : transitions) {
-        uiFlowStateMachine->removeTransition(transition.transitionId);
-    }
-    
-    // 为每个UI文件创建状态
-    for (int i = 0; i < uiFiles.size(); i++) {
-        const ProductUIFile &uiFile = uiFiles[i];
-        UIFlowStateMachine::UIFlowState state;
-        state.stateId = QString("ui_state_%1").arg(QString::number(qHash(uiFile.filePath)));
-        state.name = uiFile.name;
-        state.uiInterfaceId = uiFile.filePath;
-        
-        // 设置初始状态（第一个文件）
-        if (i == 0) {
-            state.isInitialState = true;
-        }
-        
-        // 设置最终状态（最后一个文件）
-        if (i == uiFiles.size() - 1) {
-            state.isFinalState = true;
-        }
-        
-        uiFlowStateMachine->addState(state);
-        qDebug() << "Creating UI flow state:" << state.name;
-    }
-    
-    // 创建状态之间的转换
-    for (int i = 0; i < uiFiles.size() - 1; i++) {
-        UIFlowStateMachine::UIFlowTransition transition;
-        transition.transitionId = QString("trans_%1_to_%2").arg(i).arg(i+1);
-        transition.fromStateId = QString("ui_state_%1").arg(QString::number(qHash(uiFiles[i].filePath)));
-        transition.toStateId = QString("ui_state_%1").arg(QString::number(qHash(uiFiles[i+1].filePath)));
-        transition.eventSource = "next_button";
-        transition.eventType = "click";
-        
-        uiFlowStateMachine->addTransition(transition);
-        qDebug() << "Creating UI flow transition:" << transition.transitionId;
-    }
-    
-    qDebug() << "UI flow state machine states creation completed, total" << uiFiles.size() << "states";
-}
-
-// 加载状态机配置
-bool ProductMainWindow::loadDecoupledStateMachine(const QString &filePath, 
-                                                  UIFlowStateMachine *uiFlowStateMachine,
-                                                  LogicSequenceStateMachine *logicStateMachine,
-                                                  StateMachineIntegrationManager *integrationManager)
-{
-    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法加载状态机：状态机实例为空";
-        return false;
-    }
-    
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "无法打开状态机文件:" << filePath;
-        return false;
-    }
-    
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-    file.close();
-    
-    if (!jsonDoc.isObject()) {
-        qWarning() << "状态机文件格式无效:" << filePath;
-        return false;
-    }
-    
-    QJsonObject rootObj = jsonDoc.object();
-    
-    // 检查是否为状态机格式
-    if (rootObj.contains("uiFlowStateMachine") && 
-        rootObj.contains("logicSequenceStateMachine") &&
-        rootObj.contains("integrationManager")) {
-        
-        // 加载UI流状态机
-        QJsonObject uiFlowObj = rootObj["uiFlowStateMachine"].toObject();
-        if (!uiFlowStateMachine->fromJson(uiFlowObj)) {
-            qWarning() << "加载UI流状态机失败";
-            return false;
-        }
-        
-        // 加载逻辑时序状态机
-        QJsonObject logicObj = rootObj["logicSequenceStateMachine"].toObject();
-        if (!logicStateMachine->fromJson(logicObj)) {
-            qWarning() << "加载逻辑时序状态机失败";
-            return false;
-        }
-        
-        // 加载集成管理器
-        QJsonObject integrationObj = rootObj["integrationManager"].toObject();
-        if (!integrationManager->fromJson(integrationObj)) {
-            qWarning() << "加载集成管理器失败";
-            return false;
-        }
-        
-        qDebug() << "Successfully loaded decoupled state machine configuration";
-        return true;
-    }
-    
-    qDebug() << "State machine file is not in decoupled format, only decoupled format is supported";
-    return false;
-}
-
-// 创建新的状态机
-void ProductMainWindow::createNewDecoupledStateMachine(const QString &filePath,
-                                                       UIFlowStateMachine *uiFlowStateMachine,
-                                                       LogicSequenceStateMachine *logicStateMachine,
-                                                       StateMachineIntegrationManager *integrationManager)
-{
-    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法创建状态机：状态机实例为空";
-        return;
-    }
-    
-    // 创建默认的UI流状态机状态
-    UIFlowStateMachine::UIFlowState defaultState;
-    defaultState.stateId = "default_ui_state";
-    defaultState.name = "默认界面";
-    defaultState.uiInterfaceId = "main_window";
-    defaultState.isInitialState = true;
-    defaultState.isFinalState = true;
-    
-    uiFlowStateMachine->addState(defaultState);
-    
-    // 创建默认的逻辑时序状态机状态
-    LogicSequenceStateMachine::LogicState logicState;
-    logicState.stateId = "default_logic_state";
-    logicState.name = "默认逻辑状态";
-    logicState.description = "应用程序默认逻辑状态";
-    logicState.isInitialState = true;
-    logicState.isFinalState = true;
-    
-    logicStateMachine->addState(logicState);
-    
-    // 创建默认的状态映射
-    StateMachineIntegrationManager::StateMachineMapping mapping;
-    mapping.uiFlowStateId = "default_ui_state";
-    mapping.logicStateId = "default_logic_state";
-    mapping.mappingId = "default_mapping";
-    
-    integrationManager->addMapping(mapping);
-    
-    // 保存到文件
-    saveDecoupledStateMachine(filePath, uiFlowStateMachine, logicStateMachine, integrationManager);
-}
-
-// 保存状态机配置
-bool ProductMainWindow::saveDecoupledStateMachine(const QString &filePath,
-                                                  UIFlowStateMachine *uiFlowStateMachine,
-                                                  LogicSequenceStateMachine *logicStateMachine,
-                                                  StateMachineIntegrationManager *integrationManager)
-{
-    if (!uiFlowStateMachine || !logicStateMachine || !integrationManager) {
-        qWarning() << "无法保存状态机：状态机实例为空";
-        return false;
-    }
-    
-    QJsonObject rootObj;
-    
-    // 添加UI流状态机配置
-    rootObj["uiFlowStateMachine"] = uiFlowStateMachine->toJson();
-    
-    // 添加逻辑时序状态机配置
-    rootObj["logicSequenceStateMachine"] = logicStateMachine->toJson();
-    
-    // 添加集成管理器配置
-    rootObj["integrationManager"] = integrationManager->toJson();
-    
-    // 添加元数据
-    rootObj["version"] = "2.0";
-    rootObj["created"] = QDateTime::currentDateTime().toString(Qt::ISODate);
-    rootObj["type"] = "decoupled_state_machine";
-    
-    QJsonDocument jsonDoc(rootObj);
-    
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << "无法创建状态机文件:" << filePath;
-        return false;
-    }
-    
-    file.write(jsonDoc.toJson(QJsonDocument::Indented));
-    file.close();
-    
-    return true;
-}
-
-// UI文件类型识别函数
-QString ProductMainWindow::detectUiFileType(const QString &filePath) const
-{
-    QFileInfo fileInfo(filePath);
-    QString fileName = fileInfo.fileName().toLower();
-    QString baseName = fileInfo.baseName().toLower();
-    
-    // 基于文件名关键字识别UI类型
-    if (fileName.contains("main") || fileName.contains("主窗口") || 
-        fileName.contains("primary") || baseName.contains("main") ||
-        baseName.contains("主窗口") || baseName.contains("primary")) {
-        return "main_window";
-    }
-    else if (fileName.contains("dialog") || fileName.contains("对话框") || 
-             baseName.contains("dialog") || baseName.contains("对话框")) {
-        return "dialog";
-    }
-    else if (fileName.contains("widget") || fileName.contains("控件") || 
-             baseName.contains("widget") || baseName.contains("控件")) {
-        return "widget";
-    }
-    else if (fileName.contains("settings") || fileName.contains("设置") || 
-             baseName.contains("settings") || baseName.contains("设置")) {
-        return "settings";
-    }
-    else if (fileName.contains("config") || fileName.contains("配置") || 
-             baseName.contains("config") || baseName.contains("配置")) {
-        return "config";
-    }
-    else if (fileName.contains("about") || fileName.contains("关于") || 
-             baseName.contains("about") || baseName.contains("关于")) {
-        return "about";
-    }
-    else if (fileName.contains("login") || fileName.contains("登录") || 
-             baseName.contains("login") || baseName.contains("登录")) {
-        return "login";
-    }
-    else if (fileName.contains("register") || fileName.contains("注册") || 
-             baseName.contains("register") || baseName.contains("注册")) {
-        return "register";
-    }
-    else if (fileName.contains("wizard") || fileName.contains("向导") || 
-             baseName.contains("wizard") || baseName.contains("向导")) {
-        return "wizard";
-    }
-    else if (fileName.contains("toolbar") || fileName.contains("工具栏") || 
-             baseName.contains("toolbar") || baseName.contains("工具栏")) {
-        return "toolbar";
-    }
-    else if (fileName.contains("statusbar") || fileName.contains("状态栏") || 
-             baseName.contains("statusbar") || baseName.contains("状态栏")) {
-        return "statusbar";
-    }
-    else if (fileName.contains("menu") || fileName.contains("菜单") || 
-             baseName.contains("menu") || baseName.contains("菜单")) {
-        return "menu";
-    }
-    else {
-        // 默认类型
-        return "custom";
-    }
-}
-
-// UI文件描述生成函数
-QString ProductMainWindow::generateUiFileDescription(const QString &filePath, const QString &type) const
-{
-    QFileInfo fileInfo(filePath);
-    QString baseName = fileInfo.baseName();
-    
-    // 基于类型生成描述
-    if (type == "main_window") {
-        return QString("主窗口界面 - %1").arg(baseName);
-    }
-    else if (type == "dialog") {
-        return QString("对话框界面 - %1").arg(baseName);
-    }
-    else if (type == "widget") {
-        return QString("控件界面 - %1").arg(baseName);
-    }
-    else if (type == "settings") {
-        return QString("设置界面 - %1").arg(baseName);
-    }
-    else if (type == "config") {
-        return QString("配置界面 - %1").arg(baseName);
-    }
-    else if (type == "about") {
-        return QString("关于界面 - %1").arg(baseName);
-    }
-    else if (type == "login") {
-        return QString("登录界面 - %1").arg(baseName);
-    }
-    else if (type == "register") {
-        return QString("注册界面 - %1").arg(baseName);
-    }
-    else if (type == "wizard") {
-        return QString("向导界面 - %1").arg(baseName);
-    }
-    else if (type == "toolbar") {
-        return QString("工具栏界面 - %1").arg(baseName);
-    }
-    else if (type == "statusbar") {
-        return QString("状态栏界面 - %1").arg(baseName);
-    }
-    else if (type == "menu") {
-        return QString("菜单界面 - %1").arg(baseName);
-    }
-    else {
-        return QString("自定义界面 - %1").arg(baseName);
-    }
-}
 
 // 加载默认产品配置
 void ProductMainWindow::loadDefaultProductConfig()
@@ -1831,8 +1462,8 @@ void ProductMainWindow::loadDefaultProductConfig()
         return;
     }
     
-    // 如果产品配置中没有向导文件路径，尝试添加默认的向导文件路径
-    if (defaultProduct.stateMachineConfigs().isEmpty()) {
+    // 如果产品配置中没有状态机配置，尝试添加默认的状态机配置
+    if (!defaultProduct.hasStateMachineConfig()) {
         qDebug() << "No state machine configuration found in product configuration, adding default state machine configuration";
         
         // 创建默认的状态机配置
@@ -1841,15 +1472,10 @@ void ProductMainWindow::loadDefaultProductConfig()
         defaultStateMachine.description = "默认状态机";
         defaultStateMachine.fileName = "state_machines/state_machine.json";
         
-        // 添加默认的向导文件路径
-        QString defaultWizardPath = QDir::currentPath() + "/wizards/wizard.json";
-        if (QFile::exists(defaultWizardPath)) {
-            defaultStateMachine.wizardJsonPath = defaultWizardPath;
-        }
+        // 向导文件路径应该从状态机文件中读取，这里不需要手动设置
+        // getWizardJsonPath()方法会自动从状态机文件中读取wizardJsonPath字段
         
-        QList<StateMachineConfig> stateMachineConfigs;
-        stateMachineConfigs.append(defaultStateMachine);
-        defaultProduct.setStateMachineConfigs(stateMachineConfigs);
+        defaultProduct.setStateMachineConfig(defaultStateMachine);
     }
     
     // 加载产品数据
@@ -1857,6 +1483,11 @@ void ProductMainWindow::loadDefaultProductConfig()
     m_currentFile = defaultProductConfigPath;
     
     qDebug() << "Default product configuration loaded successfully:" << defaultProduct.name();
+    
+    // 状态机数据已经在fromJson方法中一次性加载完成，无需额外操作
+    if (defaultProduct.hasStateMachineConfig()) {
+        qDebug() << "状态机数据已通过fromJson方法一次性加载完成";
+    }
     
     // 更新窗口标题
     setWindowTitle(QString("软件编辑器 - 产品配置 - %1").arg(QFileInfo(defaultProductConfigPath).fileName()));

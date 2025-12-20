@@ -8,21 +8,22 @@
             "uiFilePath": "ui_layouts/43214.ui"
         },
         {
-            "controlName": "qpushbutton0",
-            "eventName": "btn0_pressed",
-            "eventType": "pressed()",
-            "targetUIPath": "ui_layouts/1208.ui",
-            "uiFilePath": "ui_layouts/43214.ui"
-        },
-        {
             "controlName": "pushButton",
             "eventName": "pb_clicked",
             "eventType": "clicked()",
-            "targetUIPath": "ui_layouts/1209.ui",
+            "targetUIPath": "ui_layouts/1209-1.ui",
             "uiFilePath": "ui_layouts/1208.ui"
         }
     ],
-    "created": "2025-12-18T16:14:09",
+    "created": "2025-12-19T17:07:32",
+    "mainInterface": {
+        "description": "应用程序的主界面 - 43214",
+        "name": "43214",
+        "properties": {
+        },
+        "type": "main_window",
+        "uiFilePath": "D:/virtualMachine/github/software-editor/product_configurations/product_12345/ui_layouts/43214.ui"
+    },
     "name": "123",
     "type": "wizard"
 }

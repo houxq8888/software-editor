@@ -125,6 +125,47 @@ private:
     QStack<QString> m_pageHistory;
 };
 
+// 主界面信息结构
+struct MainInterfaceInfo
+{
+    QString name;           // 主界面名称
+    QString description;    // 主界面描述
+    QString uiFilePath;     // 主界面UI文件路径
+    QString type;           // 主界面类型（如：main_window、dialog等）
+    QJsonObject properties; // 主界面属性（如：窗口大小、位置等）
+    
+    MainInterfaceInfo() : name("主界面"), description("应用程序的主界面"), type("main_window") {}
+    
+    QJsonObject toJson() const {
+        QJsonObject json;
+        json["name"] = name;
+        json["description"] = description;
+        json["uiFilePath"] = uiFilePath;
+        json["type"] = type;
+        json["properties"] = properties;
+        return json;
+    }
+    
+    bool fromJson(const QJsonObject &json) {
+        if (json.contains("name") && json["name"].isString()) {
+            name = json["name"].toString();
+        }
+        if (json.contains("description") && json["description"].isString()) {
+            description = json["description"].toString();
+        }
+        if (json.contains("uiFilePath") && json["uiFilePath"].isString()) {
+            uiFilePath = json["uiFilePath"].toString();
+        }
+        if (json.contains("type") && json["type"].isString()) {
+            type = json["type"].toString();
+        }
+        if (json.contains("properties") && json["properties"].isObject()) {
+            properties = json["properties"].toObject();
+        }
+        return true;
+    }
+};
+
 class WizardManager : public QObject
 {
     Q_OBJECT
@@ -143,6 +184,12 @@ public:
     Wizard* currentWizard() const;
     void setCurrentWizard(Wizard *wizard);
 
+    // 主界面信息管理
+    MainInterfaceInfo mainInterfaceInfo() const;
+    void setMainInterfaceInfo(const MainInterfaceInfo &info);
+    bool hasMainInterface() const;
+    void clearMainInterface();
+
     // 序列化和反序列化
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject &json);
@@ -155,10 +202,12 @@ signals:
     void wizardAdded(Wizard *wizard);
     void wizardRemoved(Wizard *wizard);
     void currentWizardChanged(Wizard *wizard);
+    void mainInterfaceInfoChanged(const MainInterfaceInfo &info);
 
 private:
     QList<Wizard*> m_wizards;
     Wizard *m_currentWizard;
+    MainInterfaceInfo m_mainInterfaceInfo; // 主界面信息
 };
 
 #endif // WIZARD_H
