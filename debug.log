@@ -772,3 +772,49 @@
 2025-12-18 17:00:15.168 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
 2025-12-18 17:00:20.205 PowerShell encoding setup completed: UTF-8
 2025-12-18 17:00:20.206 Application configuration loaded successfully
+2025-12-18 17:15:30.435 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 17:15:35.619 PowerShell encoding setup completed: UTF-8
+2025-12-18 17:15:35.620 Application configuration loaded successfully
+2025-12-18 17:29:14.749 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 17:29:19.998 PowerShell encoding setup completed: UTF-8
+2025-12-18 17:29:19.999 Application configuration loaded successfully
+2025-12-18 17:29:20.013 "Unable to open monitor interface to \\\\.\\DISPLAY1:" "Unknown error 0xe0000225."
+2025-12-18 22:27:46.595 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:28:02.634 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:28:02.636 Application configuration loaded successfully
+2025-12-18 22:40:37.061 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:40:42.664 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:40:42.665 Application configuration loaded successfully
+2025-12-18 22:41:55.792 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:42:00.629 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:42:00.629 Application configuration loaded successfully
+2025-12-18 22:45:09.618 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:45:14.404 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:45:14.405 Application configuration loaded successfully
+2025-12-18 22:45:40.308 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:45:45.280 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:45:45.281 Application configuration loaded successfully
+2025-12-18 22:51:02.596 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:51:07.481 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:51:07.481 Application configuration loaded successfully
+2025-12-18 22:59:03.198 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-18 22:59:08.485 PowerShell encoding setup completed: UTF-8
+2025-12-18 22:59:08.486 Application configuration loaded successfully
+2025-12-20 20:48:47.940 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 20:48:53.288 PowerShell encoding setup completed: UTF-8
+2025-12-20 20:48:53.289 Application configuration loaded successfully
+2025-12-20 20:55:12.615 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 20:55:17.797 PowerShell encoding setup completed: UTF-8
+2025-12-20 20:55:17.798 Application configuration loaded successfully
+2025-12-20 20:59:10.348 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 20:59:15.768 PowerShell encoding setup completed: UTF-8
+2025-12-20 20:59:15.769 Application configuration loaded successfully
+2025-12-20 21:06:05.360 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 21:06:10.671 PowerShell encoding setup completed: UTF-8
+2025-12-20 21:06:10.672 Application configuration loaded successfully
+2025-12-20 21:10:21.935 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 21:10:27.249 PowerShell encoding setup completed: UTF-8
+2025-12-20 21:10:27.250 Application configuration loaded successfully
+2025-12-20 21:18:53.017 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2025-12-20 21:18:58.990 PowerShell encoding setup completed: UTF-8
+2025-12-20 21:18:58.990 Application configuration loaded successfully

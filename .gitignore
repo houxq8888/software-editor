@@ -18,7 +18,8 @@ env/
 # Build directories
 build
 build/
-
+build_linux/
+.history/
 # Screenshots directory
 screenshots/
 
