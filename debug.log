@@ -818,3 +818,12 @@
 2025-12-20 21:18:53.017 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
 2025-12-20 21:18:58.990 PowerShell encoding setup completed: UTF-8
 2025-12-20 21:18:58.990 Application configuration loaded successfully
+2026-01-17 11:43:31.395 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-17 11:43:52.516 PowerShell encoding setup completed: UTF-8
+2026-01-17 11:43:52.518 Application configuration loaded successfully
+2026-01-17 12:30:28.778 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-17 12:30:34.352 PowerShell encoding setup completed: UTF-8
+2026-01-17 12:30:34.353 Application configuration loaded successfully
+2026-01-17 12:41:55.276 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-17 12:42:01.295 PowerShell encoding setup completed: UTF-8
+2026-01-17 12:42:01.296 Application configuration loaded successfully

@@ -121,6 +121,9 @@ public:
     void clearPreview();
     bool isPreviewLoaded() const { return m_previewLoaded; }
     
+    // 设置UI文件路径映射
+    void setUIFilePathMap(const QMap<QString, QString> &map) { m_uiFilePathMap = map; }
+    
     // 向导页面导航
     void nextPage();
     void previousPage();
@@ -164,6 +167,7 @@ private:
     bool m_previewLoaded;
     int m_currentPageIndex;
     int m_totalPages;
+    QMap<QString, QString> m_uiFilePathMap; // 页面ID到UI文件路径的映射
     
     void createPreviewLayout();
     void createPlaceholder();
@@ -171,6 +175,7 @@ private:
     void updateNavigationControls();
     void loadCurrentPage();
     void clearCurrentPage();
+    void showPlaceholderContent(QVBoxLayout *containerLayout, WizardPage *currentPage);
 };
 
 // 状态机模式枚举
@@ -709,6 +714,18 @@ private:
     // 主界面设置相关方法
     void onSetAsMainInterfaceRequested(const QString &filePath); // 处理设置主界面请求
     void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
+    
+    // UI跳转关系构建相关
+    struct UITransition {
+        QString sourceUIPath;    // 源UI文件路径
+        QString eventName;        // 事件名称
+        QString controlName;      // 控件名称
+        QString eventType;        // 事件类型
+        QString targetUIPath;     // 目标UI文件路径（空表示无跳转）
+    };
+    
+    QList<UITransition> parseUITransitions(); // 解析所有UI跳转关系
+    QList<QString> buildWizardPageOrder(const QString &mainUIPath, const QList<UITransition> &transitions); // 构建向导页面顺序
     
     // QT代码生成方法
     QString generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem);

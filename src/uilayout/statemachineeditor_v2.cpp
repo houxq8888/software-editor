@@ -287,6 +287,9 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     // 创建集成管理器
     m_integrationManager = new StateMachineIntegrationManager(this);
     
+    // 创建向导管理器
+    m_wizardManager = new WizardManager(this);
+    
     // 创建UI
     createModeSelector();
     createToolbar();
@@ -295,6 +298,11 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     
     // 创建UI运行时预览窗口
     m_uiRuntimePreview = new UIRuntimePreviewWidget(this);
+    
+    // 创建向导预览窗口
+    m_wizardPreviewWidget = new WizardPreviewWidget(this);
+    m_wizardPreviewWidget->setWindowFlags(Qt::Window);
+    m_wizardPreviewWidget->resize(800, 600);
     
     qDebug()<<"createStateMachineEditor()";
     // 设置布局
@@ -741,25 +749,44 @@ void WizardPreviewWidget::loadCurrentPage()
     containerLayout->setContentsMargins(20, 20, 20, 20);
     containerLayout->setSpacing(10);
     
-    // 添加页面内容预览
-    QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
-    contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
-    contentLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(contentLabel);
+    // 尝试加载UI文件
+    QString uiFilePath = m_uiFilePathMap.value(currentPage->pageId);
     
-    // 添加页面描述
-    QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
-    descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
-    descriptionLabel->setWordWrap(true);
-    descriptionLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(descriptionLabel);
-    
-    // 添加页面类型指示
-    QString pageType = "向导页面";
-    QLabel *typeLabel = new QLabel("类型: " + pageType, containerWidget);
-    typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
-    typeLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(typeLabel);
+    if (!uiFilePath.isEmpty() && QFile::exists(uiFilePath)) {
+        qDebug() << "[DEBUG] Loading UI file for page:" << currentPage->pageId << "path:" << uiFilePath;
+        
+        try {
+            QUiLoader loader;
+            QFile uiFile(uiFilePath);
+            
+            if (uiFile.open(QFile::ReadOnly)) {
+                QWidget *uiWidget = loader.load(&uiFile, containerWidget);
+                uiFile.close();
+                
+                if (uiWidget) {
+                    // 设置UI控件的样式
+                    uiWidget->setStyleSheet("QWidget { background-color: white; }");
+                    
+                    // 添加到容器
+                    containerLayout->addWidget(uiWidget, 1);
+                    
+                    qDebug() << "[DEBUG] UI file loaded successfully for page:" << currentPage->pageId;
+                } else {
+                    qDebug() << "[ERROR] Failed to load UI widget from file:" << uiFilePath;
+                    showPlaceholderContent(containerLayout, currentPage);
+                }
+            } else {
+                qDebug() << "[ERROR] Failed to open UI file:" << uiFilePath;
+                showPlaceholderContent(containerLayout, currentPage);
+            }
+        } catch (const std::exception &e) {
+            qDebug() << "[ERROR] Exception while loading UI file:" << e.what();
+            showPlaceholderContent(containerLayout, currentPage);
+        }
+    } else {
+        qDebug() << "[DEBUG] No UI file path found for page:" << currentPage->pageId;
+        showPlaceholderContent(containerLayout, currentPage);
+    }
     
     m_previewWidget = containerWidget;
     m_mainLayout->insertWidget(2, m_previewWidget, 1);
@@ -770,6 +797,29 @@ void WizardPreviewWidget::loadCurrentPage()
         m_mainLayout->removeWidget(m_placeholderLabel);
         m_placeholderLabel->hide();
     }
+}
+
+void WizardPreviewWidget::showPlaceholderContent(QVBoxLayout *containerLayout, WizardPage *currentPage)
+{
+    // 添加页面内容预览
+    QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, nullptr);
+    contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
+    contentLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(contentLabel);
+    
+    // 添加页面描述
+    QLabel *descriptionLabel = new QLabel(currentPage->description, nullptr);
+    descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
+    descriptionLabel->setWordWrap(true);
+    descriptionLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(descriptionLabel);
+    
+    // 添加页面类型指示
+    QString pageType = "向导页面";
+    QLabel *typeLabel = new QLabel("类型: " + pageType, nullptr);
+    typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
+    typeLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(typeLabel);
 }
 
 void WizardPreviewWidget::clearCurrentPage()
@@ -1218,7 +1268,23 @@ void StateMachineEditorV2::runWizard()
     
     qDebug() << "[DEBUG] Main interface found, proceeding to create wizard flow";
     
-    // 3. 创建向导并添加页面
+    // 3. 解析UI跳转关系
+    qDebug() << "[DEBUG] Parsing UI transitions...";
+    QList<UITransition> transitions = parseUITransitions();
+    
+    // 4. 根据跳转关系构建向导页面顺序
+    qDebug() << "[DEBUG] Building wizard page order...";
+    QList<QString> pageOrder = buildWizardPageOrder(mainUiItem->filePath(), transitions);
+    
+    if (pageOrder.isEmpty()) {
+        qDebug() << "[ERROR] No pages in wizard order";
+        QMessageBox::critical(this, "错误", "无法构建向导页面顺序，请检查UI文件和跳转关系。");
+        return;
+    }
+    
+    qDebug() << "[DEBUG] Total pages in wizard order:" << pageOrder.size();
+    
+    // 5. 创建向导并添加所有页面
     Wizard *wizard = m_wizardManager->createWizard("MainApplicationWizard", "主应用程序向导");
     
     if (!wizard) {
@@ -1230,55 +1296,57 @@ void StateMachineEditorV2::runWizard()
     // 设置当前向导
     m_wizardManager->setCurrentWizard(wizard);
     
-    // 4. 创建主界面向导页
-    WizardPage mainPage;
-    mainPage.pageId = "main_page";
-    mainPage.title = "主界面";
-    mainPage.description = "应用程序的起始界面";
-    mainPage.isStartPage = true;
-    mainPage.isFinalPage = false;
-    mainPage.enableNextButton = true;
-    mainPage.enableBackButton = false;
-    mainPage.enableFinishButton = false;
+    // 6. 根据页面顺序为每个UI文件创建向导页面
+    QMap<QString, UIFilePreviewItem*> uiItemMap; // UI文件路径到UIFilePreviewItem的映射
     
-    // 5. 查找下一个界面
-    QString nextPageId;
-    UIFilePreviewItem *nextUiItem = nullptr;
-    
+    // 构建UI文件路径到UIFilePreviewItem的映射
     for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
         QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
-        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        if (!listItem) continue;
         
-        if (uiItem && uiItem != mainUiItem) {
-            nextPageId = "next_page_" + QString::number(i);
-            nextUiItem = uiItem;
-            mainPage.nextPageId = nextPageId;
-            qDebug() << "[DEBUG] Next page found: " << uiItem->fileName() << " with ID: " << nextPageId;
-            break;
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        if (uiItem) {
+            uiItemMap[uiItem->filePath()] = uiItem;
         }
     }
     
-    // 添加主页面到向导
-    wizard->addPage(mainPage);
-    
-    // 6. 添加下一个界面到向导
-    if (nextUiItem) {
-        WizardPage nextPage;
-        nextPage.pageId = nextPageId;
-        nextPage.title = "下一个界面";
-        nextPage.description = "应用程序的第二个界面";
-        nextPage.isStartPage = false;
-        nextPage.isFinalPage = true;
-        nextPage.enableNextButton = false;
-        nextPage.enableBackButton = true;
-        nextPage.enableFinishButton = true;
-        nextPage.previousPageId = "main_page";
+    // 根据页面顺序创建向导页面
+    for (int i = 0; i < pageOrder.size(); ++i) {
+        QString uiFilePath = pageOrder[i];
+        UIFilePreviewItem *uiItem = uiItemMap.value(uiFilePath);
         
-        wizard->addPage(nextPage);
-        qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
+        if (!uiItem) {
+            qDebug() << "[WARNING] UI item not found for path:" << uiFilePath;
+            continue;
+        }
+        
+        WizardPage page;
+        page.pageId = QString("page_%1").arg(i);
+        page.title = uiItem->fileName();
+        page.description = QString("UI文件: %1").arg(uiItem->fileName());
+        page.isStartPage = (i == 0); // 第一个页面是起始页
+        page.isFinalPage = (i == pageOrder.size() - 1); // 最后一个页面是结束页
+        page.enableNextButton = (i < pageOrder.size() - 1); // 不是最后一页则启用下一步
+        page.enableBackButton = (i > 0); // 不是第一页则启用上一步
+        page.enableFinishButton = (i == pageOrder.size() - 1); // 最后一页启用完成按钮
+        page.enableCancelButton = true;
+        
+        // 设置页面导航关系
+        if (i > 0) {
+            page.previousPageId = QString("page_%1").arg(i - 1);
+        }
+        if (i < pageOrder.size() - 1) {
+            page.nextPageId = QString("page_%1").arg(i + 1);
+        }
+        
+        // 存储UI文件路径到页面数据中（使用description字段临时存储）
+        page.description = uiItem->filePath();
+        
+        wizard->addPage(page);
+        qDebug() << "[DEBUG] Added wizard page:" << page.pageId << "for UI:" << uiItem->fileName();
     }
     
-    // 7. 检查向导是否有足够的页面
+    // 6. 检查向导是否有足够的页面
     if (wizard->allPages().isEmpty()) {
         qDebug() << "[ERROR] Wizard has no pages";
         QMessageBox::critical(this, "错误", "向导未初始化，至少需要一个页面才能运行。");
@@ -1287,7 +1355,7 @@ void StateMachineEditorV2::runWizard()
     
     // 7. 生成QT代码
     qDebug() << "[DEBUG] Generating QT code for wizard flow...";
-    QString qtCode = generateQtCodeForWizard(wizard, mainUiItem, nextUiItem);
+    QString qtCode = generateQtCodeForWizard(wizard, mainUiItem, nullptr);
     
     // 保存生成的代码到临时文件或显示给用户
     if (!qtCode.isEmpty()) {
@@ -1305,7 +1373,19 @@ void StateMachineEditorV2::runWizard()
         }
     }
     
-    // 8. 启动向导
+    // 8. 创建UI文件路径映射
+    QMap<QString, QString> uiFilePathMap;
+    for (int i = 0; i < pageOrder.size(); ++i) {
+        QString uiFilePath = pageOrder[i];
+        QString pageId = QString("page_%1").arg(i);
+        uiFilePathMap[pageId] = uiFilePath;
+        qDebug() << "[DEBUG] Mapping page" << pageId << "to UI file:" << uiFilePath;
+    }
+    
+    // 设置UI文件路径映射到预览窗口
+    m_wizardPreviewWidget->setUIFilePathMap(uiFilePathMap);
+    
+    // 9. 启动向导
     if (wizard->start()) {
         qDebug() << "[DEBUG] Wizard started successfully";
         
@@ -4625,4 +4705,91 @@ void StateMachineEditorV2::updateMainInterfaceStatus()
     }
     
     qDebug() << "Main interface status update completed";
+}
+
+QList<StateMachineEditorV2::UITransition> StateMachineEditorV2::parseUITransitions()
+{
+    QList<UITransition> transitions;
+    
+    // 解析所有已定义的控件事件
+    for (const QString &eventData : m_definedControlEvents) {
+        QStringList parts = eventData.split('|');
+        if (parts.size() >= 5) {
+            UITransition transition;
+            transition.eventName = parts[0];
+            transition.controlName = parts[1];
+            transition.eventType = parts[2];
+            transition.sourceUIPath = parts[3];
+            transition.targetUIPath = parts[4];
+            
+            transitions.append(transition);
+            qDebug() << "[DEBUG] Parsed transition:" << transition.eventName 
+                     << "from" << transition.sourceUIPath 
+                     << "to" << transition.targetUIPath;
+        }
+    }
+    
+    qDebug() << "[DEBUG] Total transitions parsed:" << transitions.size();
+    return transitions;
+}
+
+QList<QString> StateMachineEditorV2::buildWizardPageOrder(const QString &mainUIPath, const QList<UITransition> &transitions)
+{
+    QList<QString> pageOrder;
+    QSet<QString> visitedUIs;
+    QSet<QString> allUIs;
+    
+    // 收集所有UI文件路径
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+        if (!listItem) continue;
+        
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        if (uiItem) {
+            allUIs.insert(uiItem->filePath());
+        }
+    }
+    
+    // 构建跳转关系图：sourceUIPath -> targetUIPath
+    QMap<QString, QString> transitionMap;
+    for (const UITransition &transition : transitions) {
+        if (!transition.targetUIPath.isEmpty()) {
+            transitionMap[transition.sourceUIPath] = transition.targetUIPath;
+            qDebug() << "[DEBUG] Transition:" << transition.sourceUIPath << "->" << transition.targetUIPath;
+        }
+    }
+    
+    // 从主界面开始，按照跳转关系构建页面顺序
+    QString currentUI = mainUIPath;
+    while (!currentUI.isEmpty() && !visitedUIs.contains(currentUI)) {
+        if (allUIs.contains(currentUI)) {
+            pageOrder.append(currentUI);
+            visitedUIs.insert(currentUI);
+            qDebug() << "[DEBUG] Added to page order:" << currentUI;
+        }
+        
+        // 查找下一个UI
+        currentUI = transitionMap.value(currentUI);
+        
+        // 防止循环引用
+        if (visitedUIs.contains(currentUI)) {
+            qDebug() << "[DEBUG] Detected circular reference, stopping at:" << currentUI;
+            break;
+        }
+    }
+    
+    // 添加所有未访问的UI（孤立UI）
+    for (const QString &uiPath : allUIs) {
+        if (!visitedUIs.contains(uiPath)) {
+            pageOrder.append(uiPath);
+            qDebug() << "[DEBUG] Added isolated UI:" << uiPath;
+        }
+    }
+    
+    qDebug() << "[DEBUG] Final page order size:" << pageOrder.size();
+    for (int i = 0; i < pageOrder.size(); ++i) {
+        qDebug() << "[DEBUG] Page" << i << ":" << pageOrder[i];
+    }
+    
+    return pageOrder;
 }
