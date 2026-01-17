@@ -124,6 +124,9 @@ public:
     // 设置UI文件路径映射
     void setUIFilePathMap(const QMap<QString, QString> &map) { m_uiFilePathMap = map; }
     
+    // 设置控件事件定义
+    void setControlEvents(const QList<QString> &events) { m_controlEvents = events; }
+    
     // 向导页面导航
     void nextPage();
     void previousPage();
@@ -168,6 +171,7 @@ private:
     int m_currentPageIndex;
     int m_totalPages;
     QMap<QString, QString> m_uiFilePathMap; // 页面ID到UI文件路径的映射
+    QList<QString> m_controlEvents; // 控件事件定义列表
     
     void createPreviewLayout();
     void createPlaceholder();
@@ -176,6 +180,8 @@ private:
     void loadCurrentPage();
     void clearCurrentPage();
     void showPlaceholderContent(QVBoxLayout *containerLayout, WizardPage *currentPage);
+    void bindControlEvents(QWidget *uiWidget, const QString &uiFilePath);
+    void handleControlEvent(const QString &targetUIPath);
 };
 
 // 状态机模式枚举

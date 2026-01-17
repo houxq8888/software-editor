@@ -701,7 +701,7 @@ void WizardPreviewWidget::updateNavigationControls()
         WizardPage *currentPage = pages[m_currentPageIndex];
         if (currentPage) {
             m_pageTitleLabel->setText(currentPage->title);
-            m_pageDescriptionLabel->setText(currentPage->description);
+            m_pageDescriptionLabel->setText(QString("当前页面: %1").arg(currentPage->title));
             
             // 添加到主布局（如果尚未添加）
             if (m_mainLayout->indexOf(m_pageTitleLabel) == -1) {
@@ -714,16 +714,14 @@ void WizardPreviewWidget::updateNavigationControls()
     // 更新导航标签
     m_navigationLabel->setText(QString("第 %1 页 / 共 %2 页").arg(m_currentPageIndex + 1).arg(m_totalPages));
     
-    // 更新按钮状态
-    m_prevButton->setEnabled(m_currentPageIndex > 0);
-    m_nextButton->setEnabled(m_currentPageIndex < m_totalPages - 1);
-    m_finishButton->setEnabled(m_currentPageIndex == m_totalPages - 1);
+    // 隐藏所有导航按钮（使用控件事件进行导航）
+    if (m_prevButton) m_prevButton->hide();
+    if (m_nextButton) m_nextButton->hide();
+    if (m_finishButton) m_finishButton->hide();
+    if (m_cancelButton) m_cancelButton->hide();
     
-    // 显示导航控件
-    m_prevButton->show();
-    m_nextButton->show();
-    m_finishButton->show();
-    m_cancelButton->show();
+    // 显示导航标签
+    m_navigationLabel->show();
     
     // 添加导航布局（如果尚未添加）
     if (m_mainLayout->indexOf(m_navigationLayout) == -1) {
@@ -770,6 +768,9 @@ void WizardPreviewWidget::loadCurrentPage()
                     // 添加到容器
                     containerLayout->addWidget(uiWidget, 1);
                     
+                    // 绑定控件事件
+                    bindControlEvents(uiWidget, uiFilePath);
+                    
                     qDebug() << "[DEBUG] UI file loaded successfully for page:" << currentPage->pageId;
                 } else {
                     qDebug() << "[ERROR] Failed to load UI widget from file:" << uiFilePath;
@@ -796,6 +797,75 @@ void WizardPreviewWidget::loadCurrentPage()
     if (m_placeholderLabel) {
         m_mainLayout->removeWidget(m_placeholderLabel);
         m_placeholderLabel->hide();
+    }
+    
+    // 隐藏固定导航按钮
+    if (m_prevButton) m_prevButton->hide();
+    if (m_nextButton) m_nextButton->hide();
+    if (m_finishButton) m_finishButton->hide();
+    if (m_cancelButton) m_cancelButton->hide();
+}
+
+void WizardPreviewWidget::bindControlEvents(QWidget *uiWidget, const QString &uiFilePath)
+{
+    if (!uiWidget) return;
+    
+    // 解析控件事件定义，查找当前UI文件的事件
+    for (const QString &eventData : m_controlEvents) {
+        QStringList parts = eventData.split('|');
+        if (parts.size() >= 5) {
+            QString eventName = parts[0];
+            QString controlName = parts[1];
+            QString eventType = parts[2];
+            QString sourceUIPath = parts[3];
+            QString targetUIPath = parts[4];
+            
+            // 只处理当前UI文件的事件
+            if (sourceUIPath != uiFilePath || targetUIPath.isEmpty()) {
+                continue;
+            }
+            
+            // 查找控件
+            QObject *control = uiWidget->findChild<QObject*>(controlName);
+            if (!control) {
+                qDebug() << "[WARNING] Control not found:" << controlName;
+                continue;
+            }
+            
+            // 根据事件类型绑定事件
+            if (eventType == "clicked") {
+                QPushButton *button = qobject_cast<QPushButton*>(control);
+                if (button) {
+                    connect(button, &QPushButton::clicked, this, [this, targetUIPath]() {
+                        handleControlEvent(targetUIPath);
+                    });
+                    qDebug() << "[DEBUG] Bound clicked event for control:" << controlName << "to target:" << targetUIPath;
+                }
+            }
+        }
+    }
+}
+
+void WizardPreviewWidget::handleControlEvent(const QString &targetUIPath)
+{
+    if (targetUIPath.isEmpty()) return;
+    
+    // 查找目标UI文件对应的页面索引
+    int targetPageIndex = -1;
+    for (int i = 0; i < m_totalPages; ++i) {
+        QString pageId = QString("page_%1").arg(i);
+        QString uiPath = m_uiFilePathMap.value(pageId);
+        if (uiPath == targetUIPath) {
+            targetPageIndex = i;
+            break;
+        }
+    }
+    
+    if (targetPageIndex >= 0 && targetPageIndex < m_totalPages) {
+        qDebug() << "[DEBUG] Navigating to page:" << targetPageIndex << "for UI:" << targetUIPath;
+        goToPage(targetPageIndex);
+    } else {
+        qDebug() << "[WARNING] Target page not found for UI:" << targetUIPath;
     }
 }
 
@@ -1384,6 +1454,10 @@ void StateMachineEditorV2::runWizard()
     
     // 设置UI文件路径映射到预览窗口
     m_wizardPreviewWidget->setUIFilePathMap(uiFilePathMap);
+    
+    // 设置控件事件定义到预览窗口
+    m_wizardPreviewWidget->setControlEvents(m_definedControlEvents);
+    qDebug() << "[DEBUG] Set" << m_definedControlEvents.size() << "control events to preview widget";
     
     // 9. 启动向导
     if (wizard->start()) {
