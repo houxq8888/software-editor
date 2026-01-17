@@ -282,6 +282,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_uiFilesLabel(nullptr)
     , m_uiFilesDataPendingUpdate(false)
     , m_definedEventsListWidget(nullptr)
+    , m_wizardPreviewWidget(nullptr)
 {
     qDebug() << "[DEBUG] StateMachineEditorV2 constructor started";
     
@@ -335,6 +336,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     qDebug() << "[DEBUG] m_uiFilesListWidget pointer:" << m_uiFilesListWidget;
     qDebug() << "[DEBUG] m_productUiFiles size:" << m_productUiFiles.size();
     qDebug() << "[DEBUG] m_uiFilesDataPendingUpdate:" << m_uiFilesDataPendingUpdate;
+    qDebug() << "[DEBUG] m_wizardPreviewWidget pointer:" << m_wizardPreviewWidget;
 }
 
 // UIRuntimePreviewWidget 实现
@@ -507,6 +509,9 @@ void WizardPreviewWidget::createPreviewLayout()
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(15, 15, 15, 15);
     m_mainLayout->setSpacing(15);
+    this->setLayout(m_mainLayout);
+    this->setWindowTitle("向导预览");
+    this->resize(800, 600);
 }
 
 void WizardPreviewWidget::createPlaceholder()
@@ -575,6 +580,13 @@ void WizardPreviewWidget::createNavigationControls()
     connect(m_nextButton, &QPushButton::clicked, this, &WizardPreviewWidget::nextPage);
     connect(m_finishButton, &QPushButton::clicked, this, &WizardPreviewWidget::onWizardCompleted);
     connect(m_cancelButton, &QPushButton::clicked, this, &WizardPreviewWidget::onWizardCancelled);
+    
+    // 将导航控件添加到主布局
+    m_mainLayout->addWidget(m_pageTitleLabel);
+    m_mainLayout->addWidget(m_pageDescriptionLabel);
+    m_mainLayout->addWidget(m_navigationLabel);
+    m_mainLayout->addStretch();
+    m_mainLayout->addLayout(m_navigationLayout);
 }
 
 void WizardPreviewWidget::loadWizard(Wizard *wizard)
@@ -695,12 +707,6 @@ void WizardPreviewWidget::updateNavigationControls()
         if (currentPage) {
             m_pageTitleLabel->setText(currentPage->title);
             m_pageDescriptionLabel->setText(QString("当前页面: %1").arg(currentPage->title));
-            
-            // 添加到主布局（如果尚未添加）
-            if (m_mainLayout->indexOf(m_pageTitleLabel) == -1) {
-                m_mainLayout->insertWidget(0, m_pageTitleLabel);
-                m_mainLayout->insertWidget(1, m_pageDescriptionLabel);
-            }
         }
     }
     
@@ -716,11 +722,6 @@ void WizardPreviewWidget::updateNavigationControls()
     m_nextButton->show();
     m_finishButton->show();
     m_cancelButton->show();
-    
-    // 添加导航布局（如果尚未添加）
-    if (m_mainLayout->indexOf(m_navigationLayout) == -1) {
-        m_mainLayout->addLayout(m_navigationLayout);
-    }
 }
 
 void WizardPreviewWidget::loadCurrentPage()
@@ -1152,11 +1153,7 @@ void StateMachineEditorV2::runWizard()
 {
     qDebug() << "[DEBUG] runWizard() function started";
     
-    // 首先检查所有关键指针是否有效
-    qDebug() << "[DEBUG] m_uiFilesListWidget: " << m_uiFilesListWidget;
-    qDebug() << "[DEBUG] m_wizardManager: " << m_wizardManager;
-    qDebug() << "[DEBUG] m_wizardPreviewWidget: " << m_wizardPreviewWidget;
-    
+    // 首先检查所有关键指针是否有效（在打印之前检查，避免野指针崩溃）
     if (!m_uiFilesListWidget) {
         qDebug() << "[ERROR] m_uiFilesListWidget is null";
         QMessageBox::critical(this, "错误", "UI文件列表控件未初始化");
@@ -1170,10 +1167,15 @@ void StateMachineEditorV2::runWizard()
     }
     
     if (!m_wizardPreviewWidget) {
-        qDebug() << "[ERROR] m_wizardPreviewWidget is null";
-        QMessageBox::critical(this, "错误", "向导预览窗口未初始化");
-        return;
+        qDebug() << "[INFO] m_wizardPreviewWidget is null, creating a new one...";
+        m_wizardPreviewWidget = new WizardPreviewWidget(this);
+        qDebug() << "[INFO] m_wizardPreviewWidget created successfully";
     }
+    
+    // 现在可以安全地打印指针了
+    qDebug() << "[DEBUG] m_uiFilesListWidget: " << m_uiFilesListWidget;
+    qDebug() << "[DEBUG] m_wizardManager: " << m_wizardManager;
+    qDebug() << "[DEBUG] m_wizardPreviewWidget: " << m_wizardPreviewWidget;
     
     // 1. 检查是否有可用的UI文件
     qDebug() << "[DEBUG] Checking UI files count: " << m_uiFilesListWidget->count();
