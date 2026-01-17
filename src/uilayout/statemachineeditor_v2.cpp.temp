@@ -1,0 +1,163 @@
+#include "statemachineeditor_v2.h"
+#include "ui_statemachineeditor_v2.h"
+
+// ... 其他现有代码 ...
+
+void StateMachineEditorV2::runWizard()
+{
+    qDebug() << "[DEBUG] Starting runWizard function...";
+    
+    // 1. 查找主界面
+    ProductUIFile mainUiFile;
+    bool hasMainUi = false;
+    UIFilePreviewItem *mainUiItem = nullptr;
+    
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        
+        qDebug() << "[DEBUG] UI item " << i << ": " << uiItem;
+        
+        if (uiItem && uiItem->isMainInterface()) {
+            mainUiFile = ProductUIFile();
+            mainUiFile.name = uiItem->fileName();
+            mainUiFile.filePath = uiItem->filePath();
+            mainUiFile.isMain = true;
+            hasMainUi = true;
+            mainUiItem = uiItem;
+            qDebug() << "[DEBUG] Found main interface: " << mainUiFile.name;
+            break;
+        }
+    }
+    
+    if (!hasMainUi) {
+        QMessageBox::critical(this, "运行向导", "请先选择一个主界面，作为程序的第一个窗口。\n\n您可以在UI文件列表中点击'设为主界面'按钮来设置主界面。");
+        return;
+    }
+    
+    qDebug() << "[DEBUG] Main interface found, proceeding to create wizard flow";
+    
+    // 2. 创建向导并添加页面
+    Wizard *wizard = m_wizardManager->createWizard("MainApplicationWizard", "主应用程序向导");
+    
+    if (!wizard) {
+        qDebug() << "[ERROR] Failed to create wizard";
+        QMessageBox::critical(this, "错误", "无法创建向导实例");
+        return;
+    }
+    
+    // 设置当前向导
+    m_wizardManager->setCurrentWizard(wizard);
+    
+    // 3. 收集所有UI界面（包括主界面）
+    QList<UIFilePreviewItem*> allUiItems;
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        
+        if (uiItem) {
+            allUiItems.append(uiItem);
+        }
+    }
+    
+    qDebug() << "[DEBUG] Total UI items found: " << allUiItems.size();
+    
+    // 确保主界面在第一个位置
+    if (mainUiItem && allUiItems.contains(mainUiItem)) {
+        allUiItems.removeOne(mainUiItem);
+        allUiItems.prepend(mainUiItem);
+    }
+    
+    // 4. 添加所有UI界面到向导
+    for (int i = 0; i < allUiItems.size(); ++i) {
+        UIFilePreviewItem *uiItem = allUiItems[i];
+        
+        QString pageId = "page_" + QString::number(i);
+        
+        WizardPage page;
+        page.pageId = pageId;
+        page.title = uiItem->fileName();
+        page.description = "UI界面: " + uiItem->fileName();
+        page.isStartPage = (i == 0);
+        page.isFinalPage = (i == allUiItems.size() - 1);
+        page.enableNextButton = (i < allUiItems.size() - 1);
+        page.enableBackButton = (i > 0);
+        page.enableFinishButton = (i == allUiItems.size() - 1);
+        
+        // 设置前后页ID
+        if (i > 0) {
+            page.previousPageId = "page_" + QString::number(i - 1);
+        }
+        if (i < allUiItems.size() - 1) {
+            page.nextPageId = "page_" + QString::number(i + 1);
+        }
+        
+        // 关联UI文件
+        qDebug() << "[DEBUG] UI file path: " << uiItem->filePath();
+        
+        // 尝试从uiItem获取UIInterface
+        page.uiInterface = uiItem->uiInterface();
+        qDebug() << "[DEBUG] Page uiInterface from uiItem: " << page.uiInterface;
+        
+        // 如果uiInterface为空，创建一个空的UIInterface对象
+        if (!page.uiInterface) {
+            page.uiInterface = new UIInterface(uiItem->fileName(), uiItem->fileName());
+            qDebug() << "[DEBUG] Created empty UIInterface for page: " << uiItem->fileName();
+        }
+        
+        // 验证uiInterface是否有效
+        if (page.uiInterface) {
+            qDebug() << "[DEBUG] Page uiInterface is valid: " << page.uiInterface->name();
+        }
+        
+        wizard->addPage(page);
+        qDebug() << "[DEBUG] Page added to wizard: " << uiItem->fileName() << " with ID: " << pageId;
+    }
+    
+    // 5. 检查向导是否有足够的页面
+    if (wizard->allPages().isEmpty()) {
+        qDebug() << "[ERROR] Wizard has no pages";
+        QMessageBox::critical(this, "错误", "向导未初始化，至少需要一个页面才能运行。");
+        return;
+    }
+    
+    // 6. 生成QT代码
+    qDebug() << "[DEBUG] Generating QT code for wizard flow...";
+    QString qtCode = generateQtCodeForWizard(wizard, mainUiItem, allUiItems);
+    
+    // 保存生成的代码到临时文件或显示给用户
+    if (!qtCode.isEmpty()) {
+        qDebug() << "[DEBUG] QT code generated successfully";
+        
+        // 这里可以选择将代码保存到文件或显示在对话框中
+        // 暂时保存到临时文件
+        QString tempFile = QDir::tempPath() + "/wizard_generated_code.cpp";
+        QFile file(tempFile);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << qtCode;
+            file.close();
+            qDebug() << "[DEBUG] Generated code saved to: " << tempFile;
+        }
+    }
+    
+    // 7. 启动向导
+    if (wizard->start()) {
+        qDebug() << "[DEBUG] Wizard started successfully";
+        
+        // 弹出向导运行效果
+        m_wizardPreviewWidget->loadWizard(wizard);
+        m_wizardPreviewWidget->show();
+        m_wizardPreviewWidget->raise();
+        m_wizardPreviewWidget->activateWindow();
+        
+        QMessageBox::information(this, "运行向导", "向导已成功启动！\n\n向导运行效果已弹出，您可以在新窗口中体验向导流程。\n\n主界面是起始页，点击'下一步'按钮将跳转到下一个界面。\n\nQT代码已生成并保存到临时文件。");
+    } else {
+        qDebug() << "[ERROR] Failed to start wizard";
+        QMessageBox::critical(this, "错误", "无法启动向导，向导可能未正确初始化。");
+    }
+    
+    qDebug() << "[DEBUG] runWizard() function completed successfully";
+}
+
+// ... 其他现有函数 ...
