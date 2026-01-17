@@ -17,6 +17,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # 跨平台Qt版本检测和配置
 message(STATUS "检测到操作系统: ${CMAKE_SYSTEM_NAME}")
 
+# 设置Qt6路径
+set(Qt6_DIR "D:/Qt/6.9.1/mingw_64/lib/cmake/Qt6")
+
 find_package(Qt6 COMPONENTS Core Gui Widgets Xml Designer Network UiTools REQUIRED)
 
 

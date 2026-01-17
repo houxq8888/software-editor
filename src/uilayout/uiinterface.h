@@ -1,81 +1,60 @@
 #ifndef UIINTERFACE_H
 #define UIINTERFACE_H
 
-#include <QObject>
 #include <QString>
+#include <QWidget>
 #include <QList>
 #include <QJsonObject>
-#include "layoutitem.h"
 
-// UI界面类，表示一个完整的UI界面
 class UIInterface : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit UIInterface(const QString &name = "", const QString &description = "", QObject *parent = nullptr);
-    ~UIInterface() override = default;
+    explicit UIInterface(const QString &name, const QString &description = QString(), QObject *parent = nullptr);
+    UIInterface(); // 默认构造函数
+    ~UIInterface();
 
-    // 基本信息
-    QString name() const;
-    void setName(const QString &name);
+    QString id() const { return m_id; }
+    void setId(const QString &id) { m_id = id; }
     
-    QString description() const;
-    void setDescription(const QString &description);
+    QString name() const { return m_name; }
+    QString description() const { return m_description; }
     
-    QString id() const;
+    void setName(const QString &name) { m_name = name; }
+    void setDescription(const QString &description) { m_description = description; }
     
-    // 布局项管理
-    QList<LayoutItem*> layoutItems() const;
-    void addLayoutItem(LayoutItem *item);
-    void removeLayoutItem(LayoutItem *item);
-    void clearLayoutItems();
+    // 创建UI界面的Widget
+    QWidget* widget();
     
-    // 查找布局项
-    LayoutItem* findLayoutItem(const QString &widgetId) const;
+    // 控件事件处理
+    void handleControlEvent(const QString &controlName, const QString &eventType);
     
-    // 序列化和反序列化
+    // UI跳转逻辑
+    void setNextUI(const QString &nextUIName) { m_nextUIName = nextUIName; }
+    QString nextUI() const { return m_nextUIName; }
+    
+    // 判断是否有跳转逻辑
+    bool hasJumpLogic() const { return !m_nextUIName.isEmpty(); }
+    
+    // 是否为主窗口
+    bool isMainWindow() const { return m_isMainWindow; }
+    void setIsMainWindow(bool isMain) { m_isMainWindow = isMain; }
+    
+    // 克隆和序列化
+    UIInterface* clone() const;
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject &json);
-    
-    // 复制功能
-    UIInterface* clone() const;
-    
-    // 界面属性
-    QSize size() const;
-    void setSize(const QSize &size);
-    
-    QString title() const;
-    void setTitle(const QString &title);
-    
-    bool isMainWindow() const;
-    void setIsMainWindow(bool isMain);
-
-    // 事件处理
-    void triggerButtonClick(const QString &buttonName);
-    void triggerMenuAction(const QString &actionName);
-    
-    // 获取界面控件信息
-    QList<QString> getButtonNames() const;
-    QList<QString> getMenuActionNames() const;
-    
-    // 界面控件创建
-    QWidget* widget();
 
 signals:
-    void buttonClicked(const QString &buttonName);
-    void menuActionTriggered(const QString &actionName);
-    void interfaceActivated();
-    void interfaceDeactivated();
+    void jumpToUI(const QString &uiName);
 
 private:
-    QString m_id;
+    QString m_id; // 唯一标识符
     QString m_name;
     QString m_description;
-    QString m_title;
-    QSize m_size;
-    bool m_isMainWindow;
-    QList<LayoutItem*> m_layoutItems;
+    QString m_nextUIName; // 下一个要跳转到的UI名称
+    QWidget* m_widget; // 缓存的Widget对象
+    bool m_isMainWindow; // 是否为主窗口
 };
 
 #endif // UIINTERFACE_H

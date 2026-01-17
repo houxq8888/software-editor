@@ -58,6 +58,10 @@ public:
     void setMainInterface(bool isMain);
     bool isMainInterface() const { return m_uiFile.isMain; }
     
+    // UI界面相关
+    UIInterface* uiInterface() const { return m_uiInterface; }
+    void setUIInterface(UIInterface *interface) { m_uiInterface = interface; }
+    
     // 重写sizeHint方法以提供合适的大小
     QSize sizeHint() const override;
 
@@ -76,6 +80,9 @@ private:
     QLabel *m_previewLabel;
     QLabel *m_mainInterfaceLabel;
     QPushButton *m_setMainButton;
+    
+    // UI界面对象
+    UIInterface *m_uiInterface;
     
     void createPreviewIcon();
     void parseUIFileForPreview();
@@ -711,7 +718,7 @@ private:
     void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
     
     // QT代码生成方法
-    QString generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem);
+    QString generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, QList<UIFilePreviewItem*> allUiItems);
 
 };
 

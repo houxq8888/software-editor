@@ -106,16 +106,29 @@ bool Wizard::start() {
 
     // 显示当前页面
     WizardPage* currentPage = findPage(m_currentPageId);
+    qDebug() << "[DEBUG] Wizard::start() - currentPage: " << currentPage;
+    qDebug() << "[DEBUG] Wizard::start() - currentPageId: " << m_currentPageId;
+    qDebug() << "[DEBUG] Wizard::start() - total pages: " << m_pages.size();
+    
     if (currentPage) {
+        qDebug() << "[DEBUG] Wizard::start() - currentPage found: " << currentPage->pageId;
+        qDebug() << "[DEBUG] Wizard::start() - currentPage->uiInterface: " << currentPage->uiInterface;
+        
         // 只有当 uiInterface 不为空时才尝试显示
         if (currentPage->uiInterface) {
             QWidget* widget = currentPage->uiInterface->widget();
+            qDebug() << "[DEBUG] Wizard::start() - widget: " << widget;
             if (widget) {
+                qDebug() << "[DEBUG] Wizard::start() - showing widget: " << widget;
                 widget->show();
+            } else {
+                qDebug() << "[ERROR] Wizard::start() - widget is null for uiInterface: " << currentPage->uiInterface;
             }
         } else {
-            qDebug() << "[DEBUG] Current page has no uiInterface: " << currentPage->pageId;
+            qDebug() << "[ERROR] Wizard::start() - currentPage has no uiInterface: " << currentPage->pageId;
         }
+    } else {
+        qDebug() << "[ERROR] Wizard::start() - currentPage is null for pageId: " << m_currentPageId;
     }
 
     emit started();
