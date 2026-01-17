@@ -291,6 +291,9 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     // 创建集成管理器
     m_integrationManager = new StateMachineIntegrationManager(this);
     
+    // 创建向导管理器
+    m_wizardManager = new WizardManager(this);
+    
     // 创建UI
     createModeSelector();
     createToolbar();
@@ -871,6 +874,29 @@ void WizardPreviewWidget::loadCurrentPage()
     qDebug() << "[DEBUG] loadCurrentPage() completed successfully";
 }
 
+void WizardPreviewWidget::showPlaceholderContent(QVBoxLayout *containerLayout, WizardPage *currentPage)
+{
+    // 添加页面内容预览
+    QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, nullptr);
+    contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
+    contentLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(contentLabel);
+    
+    // 添加页面描述
+    QLabel *descriptionLabel = new QLabel(currentPage->description, nullptr);
+    descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
+    descriptionLabel->setWordWrap(true);
+    descriptionLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(descriptionLabel);
+    
+    // 添加页面类型指示
+    QString pageType = "向导页面";
+    QLabel *typeLabel = new QLabel("类型: " + pageType, nullptr);
+    typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
+    typeLabel->setAlignment(Qt::AlignCenter);
+    containerLayout->addWidget(typeLabel);
+}
+
 void WizardPreviewWidget::clearCurrentPage()
 {
     // 删除容器widget（它会自动删除所有子控件）
@@ -1430,7 +1456,6 @@ void StateMachineEditorV2::runWizard()
             qDebug() << "[DEBUG] Generated code also saved to project: " << projectFile;
         }
     }
-
     // 7. 启动向导
     if (wizard->start()) {
         qDebug() << "[DEBUG] Wizard started successfully";
@@ -4853,4 +4878,91 @@ void StateMachineEditorV2::updateMainInterfaceStatus()
     }
     
     qDebug() << "Main interface status update completed";
+}
+
+QList<StateMachineEditorV2::UITransition> StateMachineEditorV2::parseUITransitions()
+{
+    QList<UITransition> transitions;
+    
+    // 解析所有已定义的控件事件
+    for (const QString &eventData : m_definedControlEvents) {
+        QStringList parts = eventData.split('|');
+        if (parts.size() >= 5) {
+            UITransition transition;
+            transition.eventName = parts[0];
+            transition.controlName = parts[1];
+            transition.eventType = parts[2];
+            transition.sourceUIPath = parts[3];
+            transition.targetUIPath = parts[4];
+            
+            transitions.append(transition);
+            qDebug() << "[DEBUG] Parsed transition:" << transition.eventName 
+                     << "from" << transition.sourceUIPath 
+                     << "to" << transition.targetUIPath;
+        }
+    }
+    
+    qDebug() << "[DEBUG] Total transitions parsed:" << transitions.size();
+    return transitions;
+}
+
+QList<QString> StateMachineEditorV2::buildWizardPageOrder(const QString &mainUIPath, const QList<UITransition> &transitions)
+{
+    QList<QString> pageOrder;
+    QSet<QString> visitedUIs;
+    QSet<QString> allUIs;
+    
+    // 收集所有UI文件路径
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+        if (!listItem) continue;
+        
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        if (uiItem) {
+            allUIs.insert(uiItem->filePath());
+        }
+    }
+    
+    // 构建跳转关系图：sourceUIPath -> targetUIPath
+    QMap<QString, QString> transitionMap;
+    for (const UITransition &transition : transitions) {
+        if (!transition.targetUIPath.isEmpty()) {
+            transitionMap[transition.sourceUIPath] = transition.targetUIPath;
+            qDebug() << "[DEBUG] Transition:" << transition.sourceUIPath << "->" << transition.targetUIPath;
+        }
+    }
+    
+    // 从主界面开始，按照跳转关系构建页面顺序
+    QString currentUI = mainUIPath;
+    while (!currentUI.isEmpty() && !visitedUIs.contains(currentUI)) {
+        if (allUIs.contains(currentUI)) {
+            pageOrder.append(currentUI);
+            visitedUIs.insert(currentUI);
+            qDebug() << "[DEBUG] Added to page order:" << currentUI;
+        }
+        
+        // 查找下一个UI
+        currentUI = transitionMap.value(currentUI);
+        
+        // 防止循环引用
+        if (visitedUIs.contains(currentUI)) {
+            qDebug() << "[DEBUG] Detected circular reference, stopping at:" << currentUI;
+            break;
+        }
+    }
+    
+    // 添加所有未访问的UI（孤立UI）
+    for (const QString &uiPath : allUIs) {
+        if (!visitedUIs.contains(uiPath)) {
+            pageOrder.append(uiPath);
+            qDebug() << "[DEBUG] Added isolated UI:" << uiPath;
+        }
+    }
+    
+    qDebug() << "[DEBUG] Final page order size:" << pageOrder.size();
+    for (int i = 0; i < pageOrder.size(); ++i) {
+        qDebug() << "[DEBUG] Page" << i << ":" << pageOrder[i];
+    }
+    
+    return pageOrder;
 }
