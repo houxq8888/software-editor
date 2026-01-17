@@ -725,7 +725,7 @@ void WizardPreviewWidget::updateNavigationControls()
         WizardPage *currentPage = pages[m_currentPageIndex];
         if (currentPage) {
             m_pageTitleLabel->setText(currentPage->title);
-            m_pageDescriptionLabel->setText(currentPage->description);
+            m_pageDescriptionLabel->setText(QString("当前页面: %1").arg(currentPage->title));
             
             // 添加到主布局（如果尚未添加）
             if (m_mainLayout->indexOf(m_pageTitleLabel) == -1) {
@@ -738,16 +738,14 @@ void WizardPreviewWidget::updateNavigationControls()
     // 更新导航标签
     m_navigationLabel->setText(QString("第 %1 页 / 共 %2 页").arg(m_currentPageIndex + 1).arg(m_totalPages));
     
-    // 更新按钮状态
-    m_prevButton->setEnabled(m_currentPageIndex > 0);
-    m_nextButton->setEnabled(m_currentPageIndex < m_totalPages - 1);
-    m_finishButton->setEnabled(m_currentPageIndex == m_totalPages - 1);
+    // 隐藏所有导航按钮（使用控件事件进行导航）
+    if (m_prevButton) m_prevButton->hide();
+    if (m_nextButton) m_nextButton->hide();
+    if (m_finishButton) m_finishButton->hide();
+    if (m_cancelButton) m_cancelButton->hide();
     
-    // 显示导航控件
-    m_prevButton->show();
-    m_nextButton->show();
-    m_finishButton->show();
-    m_cancelButton->show();
+    // 显示导航标签
+    m_navigationLabel->show();
     
     // 添加导航布局（如果尚未添加）
     if (m_mainLayout->indexOf(m_navigationLayout) == -1) {
@@ -870,7 +868,6 @@ void WizardPreviewWidget::loadCurrentPage()
         m_placeholderLabel->hide();
         qDebug() << "[DEBUG] Placeholder hidden";
     }
-
     qDebug() << "[DEBUG] loadCurrentPage() completed successfully";
 }
 
