@@ -818,3 +818,40 @@
 2025-12-20 21:18:53.017 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
 2025-12-20 21:18:58.990 PowerShell encoding setup completed: UTF-8
 2025-12-20 21:18:58.990 Application configuration loaded successfully
+2026-01-30 15:26:36.553 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 15:26:41.442 PowerShell encoding setup completed: UTF-8
+2026-01-30 15:26:41.442 Application configuration loaded successfully
+2026-01-30 21:42:06.766 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:42:11.587 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:42:11.588 Application configuration loaded successfully
+2026-01-30 21:48:06.062 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:48:11.010 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:48:11.011 Application configuration loaded successfully
+2026-01-30 21:57:18.230 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:57:22.986 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:57:22.986 Application configuration loaded successfully
+2026-01-30 21:57:22.991 "Unable to open monitor interface to \\\\.\\DISPLAY1:" "Unknown error 0xe0000225."
+2026-01-30 23:13:49.425 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 23:13:54.847 PowerShell encoding setup completed: UTF-8
+2026-01-30 23:13:54.848 Application configuration loaded successfully
+2026-01-30 23:45:03.569 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 23:45:09.047 PowerShell encoding setup completed: UTF-8
+2026-01-30 23:45:09.047 Application configuration loaded successfully
+2026-01-30 23:52:57.917 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 23:53:03.184 PowerShell encoding setup completed: UTF-8
+2026-01-30 23:53:03.185 Application configuration loaded successfully
+2026-01-30 23:59:44.702 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 23:59:49.984 PowerShell encoding setup completed: UTF-8
+2026-01-30 23:59:49.985 Application configuration loaded successfully
+2026-01-31 00:05:09.178 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-31 00:05:14.638 PowerShell encoding setup completed: UTF-8
+2026-01-31 00:05:14.639 Application configuration loaded successfully
+2026-01-31 00:11:57.988 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-31 00:12:03.453 PowerShell encoding setup completed: UTF-8
+2026-01-31 00:12:03.454 Application configuration loaded successfully
+2026-01-31 00:19:02.792 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-31 00:19:08.287 PowerShell encoding setup completed: UTF-8
+2026-01-31 00:19:08.288 Application configuration loaded successfully
+2026-01-31 00:29:22.499 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-31 00:29:27.905 PowerShell encoding setup completed: UTF-8
+2026-01-31 00:29:27.906 Application configuration loaded successfully

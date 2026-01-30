@@ -189,7 +189,7 @@ bool Wizard::goToPage(const QString &pageId) {
     m_currentPageId = pageId;
 
     // 更新历史记录
-    if (m_pageHistory.top() != pageId) {
+    if (m_pageHistory.isEmpty() || m_pageHistory.top() != pageId) {
         m_pageHistory.push(pageId);
     }
 
