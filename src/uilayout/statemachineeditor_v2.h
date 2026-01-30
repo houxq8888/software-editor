@@ -567,6 +567,7 @@ public slots:
     void saveCurrentWizard();
     void switchWizardFile();
     void updateWindowTitle();
+    void loadUIInterfaceFromFile(UIInterface *uiInterface, const QString &filePath);
 
 private slots:
     void onStateSelected(const UIFlowStateMachine::UIFlowState &state);

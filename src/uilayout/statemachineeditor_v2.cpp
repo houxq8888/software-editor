@@ -25,6 +25,9 @@
 #include <QFrame>
 #include <QGroupBox>
 
+// UI相关头文件
+#include "uiinterface.h"
+
 // 产品相关头文件
 #include "../product/product.h"
 #include "../product/productconfigmanager.h"
@@ -748,10 +751,12 @@ void WizardPreviewWidget::loadCurrentPage()
         QFile uiFile(currentPage->filePath);
         
         if (uiFile.open(QFile::ReadOnly)) {
+            qDebug() << "[WizardPreviewWidget] 开始加载UI文件...";
             QWidget *loadedWidget = loader.load(&uiFile, this);
             uiFile.close();
             
             if (loadedWidget) {
+                qDebug() << "[WizardPreviewWidget] QUiLoader加载成功，loadedWidget:" << loadedWidget;
                 containerWidget = new QWidget(this);
                 containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
                 
@@ -773,8 +778,15 @@ void WizardPreviewWidget::loadCurrentPage()
                 containerLayout->addWidget(statusLabel);
                 
                 qDebug() << "[WizardPreviewWidget] UI文件加载成功:" << currentPage->filePath;
+            } else {
+                qDebug() << "[WizardPreviewWidget] QUiLoader加载失败，loadedWidget为nullptr";
+                qDebug() << "[WizardPreviewWidget] 错误信息:" << loader.errorString();
             }
+        } else {
+            qDebug() << "[WizardPreviewWidget] 无法打开UI文件:" << currentPage->filePath;
         }
+    } else {
+        qDebug() << "[WizardPreviewWidget] filePath为空或文件不存在:" << currentPage->filePath;
     }
     
     if (!containerWidget) {
@@ -1196,6 +1208,62 @@ void StateMachineEditorV2::deleteWizard()
     }
 }
 
+void StateMachineEditorV2::loadUIInterfaceFromFile(UIInterface *uiInterface, const QString &filePath)
+{
+    if (!uiInterface || filePath.isEmpty()) {
+        return;
+    }
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "[loadUIInterfaceFromFile] 无法打开文件:" << filePath;
+        return;
+    }
+    
+    QString content = file.readAll();
+    file.close();
+    
+    QXmlStreamReader xml(content);
+    int controlCount = 0;
+    
+    while (!xml.atEnd() && !xml.hasError()) {
+        QXmlStreamReader::TokenType token = xml.readNext();
+        
+        if (token == QXmlStreamReader::StartElement) {
+            QString elementName = xml.name().toString();
+            
+            if (elementName == "widget") {
+                QString widgetClass = xml.attributes().value("class").toString();
+                QString widgetName = xml.attributes().value("name").toString();
+                
+                if (widgetClass.startsWith("Q") && widgetClass.length() > 1 && 
+                    widgetClass != "QWidget" && widgetClass != "QMainWindow" && 
+                    widgetClass != "QDialog" && widgetClass != "QFrame" && 
+                    widgetClass != "QGroupBox" && widgetClass != "QTabWidget" &&
+                    widgetClass != "QScrollArea" && widgetClass != "QSplitter" &&
+                    widgetClass != "QStackedWidget" && widgetClass != "QDockWidget" &&
+                    widgetClass != "QVBoxLayout" && widgetClass != "QHBoxLayout" &&
+                    widgetClass != "QGridLayout" && widgetClass != "QFormLayout") {
+                    
+                    LayoutItem *item = new LayoutItem(widgetClass, widgetName);
+                    item->setText(widgetName);
+                    item->setSize(QSize(100, 30));
+                    uiInterface->addLayoutItem(item);
+                    controlCount++;
+                    
+                    qDebug() << "[loadUIInterfaceFromFile] 加载控件:" << widgetClass << widgetName;
+                }
+            }
+        }
+    }
+    
+    if (xml.hasError()) {
+        qDebug() << "[loadUIInterfaceFromFile] XML解析错误:" << xml.errorString();
+    } else {
+        qDebug() << "[loadUIInterfaceFromFile] 成功加载" << controlCount << "个控件";
+    }
+}
+
 void StateMachineEditorV2::runWizard()
 {
     qDebug() << "[DEBUG] runWizard() function started";
@@ -1288,6 +1356,13 @@ void StateMachineEditorV2::runWizard()
     mainPage.enableBackButton = false;
     mainPage.enableFinishButton = false;
     
+    // 创建并设置主界面的UIInterface
+    UIInterface *mainUiInterface = new UIInterface(mainUiFile.name, mainPage.description);
+    mainUiInterface->setTitle(mainPage.title);
+    mainUiInterface->setIsMainWindow(true);
+    loadUIInterfaceFromFile(mainUiInterface, mainUiFile.filePath);
+    mainPage.uiInterface = mainUiInterface;
+    
     // 5. 查找下一个界面
     QString nextPageId;
     UIFilePreviewItem *nextUiItem = nullptr;
@@ -1321,6 +1396,13 @@ void StateMachineEditorV2::runWizard()
         nextPage.enableBackButton = true;
         nextPage.enableFinishButton = true;
         nextPage.previousPageId = "main_page";
+        
+        // 创建并设置下一个界面的UIInterface
+        UIInterface *nextUiInterface = new UIInterface(nextUiItem->fileName(), nextPage.description);
+        nextUiInterface->setTitle(nextPage.title);
+        nextUiInterface->setIsMainWindow(false);
+        loadUIInterfaceFromFile(nextUiInterface, nextUiItem->filePath());
+        nextPage.uiInterface = nextUiInterface;
         
         wizard->addPage(nextPage);
         qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
