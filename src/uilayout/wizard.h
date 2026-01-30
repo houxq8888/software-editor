@@ -5,6 +5,7 @@
 #include <QString>
 #include <QList>
 #include <QStack>
+#include <QMap>
 #include "uiinterface.h"
 
 // 前向声明
@@ -27,6 +28,7 @@ public:
     bool enableBackButton;
     bool enableFinishButton;
     bool enableCancelButton;
+    QMap<QString, QString> buttonTransitions;
 
     WizardPage() : uiInterface(nullptr), isStartPage(false), isFinalPage(false), 
                  enableNextButton(true), enableBackButton(true), 

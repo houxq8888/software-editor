@@ -42,6 +42,8 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QUiLoader>
+#include <QPushButton>
+#include <QToolButton>
 
 // UI文件预览列表项
 class UIFilePreviewItem : public QWidget
@@ -125,6 +127,7 @@ public:
     void nextPage();
     void previousPage();
     void goToPage(int pageIndex);
+    void goToPageById(const QString &pageId);
     void showPage(int pageIndex);
     
     // 获取当前页面信息

@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QToolButton>
 #include <QLabel>
 #include <QWidget>
 
@@ -242,72 +243,57 @@ QWidget* UIInterface::widget()
     QWidget *widget = new QWidget();
     widget->setWindowTitle(m_title);
     widget->setMinimumSize(m_size);
-    
-    // 创建主布局
-    QVBoxLayout *mainLayout = new QVBoxLayout(widget);
-    
-    // 添加标题标签
-    QLabel *titleLabel = new QLabel(m_name);
-    titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("font-size: 16px; font-weight: bold; margin: 10px;");
-    mainLayout->addWidget(titleLabel);
-    
-    // 添加描述标签
-    if (!m_description.isEmpty()) {
-        QLabel *descLabel = new QLabel(m_description);
-        descLabel->setAlignment(Qt::AlignCenter);
-        descLabel->setStyleSheet("font-size: 12px; color: gray; margin: 5px;");
-        mainLayout->addWidget(descLabel);
-    }
-    
-    // 创建控件容器
-    QWidget *controlsContainer = new QWidget();
-    QVBoxLayout *controlsLayout = new QVBoxLayout(controlsContainer);
-    
-    // 根据布局项创建控件
+
     for (LayoutItem *item : m_layoutItems) {
         QString widgetType = item->widgetType();
         QString text = item->text();
-        
-        if (widgetType.contains("Button", Qt::CaseInsensitive) || 
+        QPoint pos = item->pos();
+        QSize size = item->size();
+
+        if (widgetType.contains("Button", Qt::CaseInsensitive) ||
             text.contains("按钮", Qt::CaseInsensitive)) {
-            // 创建按钮
-            QPushButton *button = new QPushButton(text.isEmpty() ? "按钮" : text);
+            QPushButton *button = new QPushButton(text.isEmpty() ? "按钮" : text, widget);
             button->setObjectName(text);
-            button->setMinimumSize(item->size());
-            
-            // 连接按钮点击信号
+            button->setGeometry(pos.x(), pos.y(), size.width(), size.height());
+
             connect(button, &QPushButton::clicked, [this, text]() {
                 emit buttonClicked(text);
             });
-            
-            controlsLayout->addWidget(button);
-        } else if (widgetType.contains("Label", Qt::CaseInsensitive) || 
+
+            qDebug() << "[UIInterface::widget] 创建按钮" << text << "位置:" << pos << "尺寸:" << size;
+        } else if (widgetType.contains("ToolButton", Qt::CaseInsensitive)) {
+            QToolButton *toolButton = new QToolButton(widget);
+            toolButton->setObjectName(text);
+            toolButton->setText(text.isEmpty() ? "..." : text);
+            toolButton->setGeometry(pos.x(), pos.y(), size.width(), size.height());
+
+            connect(toolButton, &QToolButton::clicked, [this, text]() {
+                emit buttonClicked(text);
+            });
+
+            qDebug() << "[UIInterface::widget] 创建工具按钮" << text << "位置:" << pos << "尺寸:" << size;
+        } else if (widgetType.contains("Label", Qt::CaseInsensitive) ||
                    text.contains("标签", Qt::CaseInsensitive)) {
-            // 创建标签
-            QLabel *label = new QLabel(text.isEmpty() ? "标签" : text);
+            QLabel *label = new QLabel(text.isEmpty() ? "标签" : text, widget);
             label->setObjectName(text);
-            label->setMinimumSize(item->size());
-            controlsLayout->addWidget(label);
+            label->setGeometry(pos.x(), pos.y(), size.width(), size.height());
+
+            qDebug() << "[UIInterface::widget] 创建标签" << text << "位置:" << pos << "尺寸:" << size;
         } else {
-            // 默认创建标签显示控件信息
-            QLabel *defaultLabel = new QLabel(QString("%1: %2").arg(widgetType, text));
+            QLabel *defaultLabel = new QLabel(QString("%1: %2").arg(widgetType, text), widget);
             defaultLabel->setObjectName(text);
-            defaultLabel->setMinimumSize(item->size());
-            controlsLayout->addWidget(defaultLabel);
+            defaultLabel->setGeometry(pos.x(), pos.y(), size.width(), size.height());
+
+            qDebug() << "[UIInterface::widget] 创建默认控件" << widgetType << text << "位置:" << pos << "尺寸:" << size;
         }
     }
-    
-    // 如果没有布局项，添加提示信息
+
     if (m_layoutItems.isEmpty()) {
-        QLabel *emptyLabel = new QLabel("此界面没有可显示的控件");
+        QLabel *emptyLabel = new QLabel("此界面没有可显示的控件", widget);
         emptyLabel->setAlignment(Qt::AlignCenter);
         emptyLabel->setStyleSheet("color: gray; font-style: italic;");
-        controlsLayout->addWidget(emptyLabel);
+        emptyLabel->setGeometry(100, 100, 200, 30);
     }
-    
-    mainLayout->addWidget(controlsContainer);
-    mainLayout->addStretch();
-    
+
     return widget;
 }
