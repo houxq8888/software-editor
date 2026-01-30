@@ -24,6 +24,9 @@
 #include <QScrollArea>
 #include <QFrame>
 #include <QGroupBox>
+#include <QUiLoader>
+#include <QToolButton>
+#include <QRadioButton>
 
 // 产品相关头文件
 #include "../product/product.h"
@@ -295,6 +298,9 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     
     // 创建UI运行时预览窗口
     m_uiRuntimePreview = new UIRuntimePreviewWidget(this);
+    
+    // 创建向导预览窗口
+    m_wizardPreviewWidget = new WizardPreviewWidget(this);
     
     qDebug()<<"createStateMachineEditor()";
     // 设置布局
@@ -754,6 +760,84 @@ void WizardPreviewWidget::loadCurrentPage()
     descriptionLabel->setAlignment(Qt::AlignCenter);
     containerLayout->addWidget(descriptionLabel);
     
+    // 如果页面有关联的UI文件，尝试加载UI文件内容
+    if (currentPage->uiInterface) {
+        // 使用title属性获取文件路径
+        QString uiFilePath = currentPage->uiInterface->title();
+        qDebug() << "[DEBUG] UI file path from title:" << uiFilePath;
+        qDebug() << "[DEBUG] UI file exists:" << QFile::exists(uiFilePath);
+        
+        if (!uiFilePath.isEmpty() && QFile::exists(uiFilePath)) {
+            qDebug() << "Loading UI file from path:" << uiFilePath;
+            
+            // 使用QUiLoader加载UI文件
+            QUiLoader loader;
+            QFile file(uiFilePath);
+            if (file.open(QIODevice::ReadOnly)) {
+                QWidget *uiWidget = loader.load(&file, containerWidget);
+                file.close();
+                
+                if (uiWidget) {
+                    qDebug() << "[DEBUG] UI file loaded successfully, widget created";
+                    // 设置UI控件的样式
+                    uiWidget->setStyleSheet("QWidget { background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 5px; margin: 5px; }");
+                    
+                    // 添加UI控件到容器中
+                    containerLayout->addWidget(uiWidget);
+                    
+                    // 为UI控件添加事件处理
+                    QObject::connect(uiWidget, &QObject::destroyed, []() {
+                        qDebug() << "UI widget destroyed";
+                    });
+                    
+                    // 查找所有按钮并添加点击事件
+                    QList<QPushButton*> buttons = uiWidget->findChildren<QPushButton*>();
+                    for (QPushButton *button : buttons) {
+                        QObject::connect(button, &QPushButton::clicked, [this, button]() {
+                            QMessageBox::information(this, "按钮点击", QString("按钮 '%1' 被点击了！").arg(button->text()));
+                        });
+                    }
+                    
+                    // 查找所有工具按钮并添加点击事件
+                    QList<QToolButton*> toolButtons = uiWidget->findChildren<QToolButton*>();
+                    for (QToolButton *toolButton : toolButtons) {
+                        QObject::connect(toolButton, &QToolButton::clicked, [this, toolButton]() {
+                            QMessageBox::information(this, "工具按钮点击", QString("工具按钮 '%1' 被点击了！").arg(toolButton->text()));
+                        });
+                    }
+                    
+                    // 查找所有单选按钮并添加点击事件
+                    QList<QRadioButton*> radioButtons = uiWidget->findChildren<QRadioButton*>();
+                    for (QRadioButton *radioButton : radioButtons) {
+                        QObject::connect(radioButton, &QRadioButton::clicked, [this, radioButton]() {
+                            QMessageBox::information(this, "单选按钮点击", QString("单选按钮 '%1' 被点击了！").arg(radioButton->text()));
+                        });
+                    }
+                    
+                    qDebug() << "UI file loaded successfully";
+                } else {
+                            QLabel *errorLabel = new QLabel("无法加载UI文件: " + uiFilePath, containerWidget);
+                            errorLabel->setStyleSheet("QLabel { color: red; font-size: 12px; padding: 5px; }");
+                            errorLabel->setAlignment(Qt::AlignCenter);
+                            containerLayout->addWidget(errorLabel);
+                            qDebug() << "[ERROR] Failed to load UI file:" << loader.errorString();
+                        }
+                    } else {
+                        QLabel *errorLabel = new QLabel("无法打开UI文件: " + uiFilePath, containerWidget);
+                        errorLabel->setStyleSheet("QLabel { color: red; font-size: 12px; padding: 5px; }");
+                        errorLabel->setAlignment(Qt::AlignCenter);
+                        containerLayout->addWidget(errorLabel);
+                        qDebug() << "[ERROR] Failed to open UI file:" << uiFilePath;
+                    }
+                } else {
+                    QLabel *infoLabel = new QLabel("页面未关联UI文件或文件不存在: " + uiFilePath, containerWidget);
+                    infoLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
+                    infoLabel->setAlignment(Qt::AlignCenter);
+                    containerLayout->addWidget(infoLabel);
+                    qDebug() << "[DEBUG] UI file does not exist or is empty:" << uiFilePath;
+                }
+    }
+    
     // 添加页面类型指示
     QString pageType = "向导页面";
     QLabel *typeLabel = new QLabel("类型: " + pageType, containerWidget);
@@ -1172,9 +1256,12 @@ void StateMachineEditorV2::runWizard()
     }
     
     if (!m_wizardPreviewWidget) {
-        qDebug() << "[ERROR] m_wizardPreviewWidget is null";
-        QMessageBox::critical(this, "错误", "向导预览窗口未初始化");
-        return;
+        qDebug() << "[ERROR] m_wizardPreviewWidget is null, creating new one";
+        m_wizardPreviewWidget = new WizardPreviewWidget(this);
+        if (!m_wizardPreviewWidget) {
+            QMessageBox::critical(this, "错误", "无法创建向导预览窗口");
+            return;
+        }
     }
     
     // 1. 检查是否有可用的UI文件
@@ -1212,8 +1299,46 @@ void StateMachineEditorV2::runWizard()
     }
     
     if (!hasMainUi) {
-        QMessageBox::critical(this, "运行向导", "请先选择一个主界面，作为程序的第一个窗口。\n\n您可以在UI文件列表中点击'设为主界面'按钮来设置主界面。");
-        return;
+        // 如果没有设置主界面，自动将第一个UI文件设置为主界面
+        if (m_uiFilesListWidget->count() > 0) {
+            QListWidgetItem *firstItem = m_uiFilesListWidget->item(0);
+            if (firstItem) {
+                UIFilePreviewItem *firstUiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(firstItem));
+                if (firstUiItem) {
+                    // 自动设置第一个UI文件为主界面
+                    onSetAsMainInterfaceRequested(firstUiItem->filePath());
+                    
+                    // 重新查找主界面
+                    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+                        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+                        if (!listItem) continue;
+                        
+                        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+                        if (uiItem && uiItem->isMainInterface()) {
+                            mainUiFile = ProductUIFile();
+                            mainUiFile.name = uiItem->fileName();
+                            mainUiFile.filePath = uiItem->filePath();
+                            mainUiFile.isMain = true;
+                            hasMainUi = true;
+                            mainUiItem = uiItem;
+                            qDebug() << "[DEBUG] Auto-set main interface: " << mainUiFile.name;
+                            break;
+                        }
+                    }
+                    
+                    if (hasMainUi) {
+                        QMessageBox::information(this, "运行向导", 
+                                                QString("已自动将 %1 设置为主界面").arg(mainUiFile.name));
+                    }
+                }
+            }
+        }
+        
+        // 如果仍然没有主界面，显示错误
+        if (!hasMainUi) {
+            QMessageBox::critical(this, "运行向导", "没有可用的UI文件，请先添加UI文件。");
+            return;
+        }
     }
     
     qDebug() << "[DEBUG] Main interface found, proceeding to create wizard flow";
@@ -1240,6 +1365,24 @@ void StateMachineEditorV2::runWizard()
     mainPage.enableNextButton = true;
     mainPage.enableBackButton = false;
     mainPage.enableFinishButton = false;
+    
+    // 设置主界面的UI接口
+    if (mainUiItem) {
+        mainPage.uiInterface = new UIInterface();
+        mainPage.uiInterface->setName(mainUiItem->fileName());
+        mainPage.uiInterface->setDescription("主界面UI文件: " + mainUiItem->filePath());
+        // 使用title属性存储文件路径
+        mainPage.uiInterface->setTitle(mainUiItem->filePath());
+        
+        // 从UI文件加载内容
+        if (mainPage.uiInterface->loadFromFile(mainUiItem->filePath())) {
+            qDebug() << "[DEBUG] Main page UI file loaded successfully";
+        } else {
+            qDebug() << "[ERROR] Failed to load main page UI file";
+        }
+        
+        qDebug() << "[DEBUG] Main page UI interface set to: " << mainUiItem->filePath();
+    }
     
     // 5. 查找下一个界面
     QString nextPageId;
@@ -1273,6 +1416,22 @@ void StateMachineEditorV2::runWizard()
         nextPage.enableBackButton = true;
         nextPage.enableFinishButton = true;
         nextPage.previousPageId = "main_page";
+        
+        // 设置下一个界面的UI接口
+        nextPage.uiInterface = new UIInterface();
+        nextPage.uiInterface->setName(nextUiItem->fileName());
+        nextPage.uiInterface->setDescription("下一个界面UI文件: " + nextUiItem->filePath());
+        // 使用title属性存储文件路径
+        nextPage.uiInterface->setTitle(nextUiItem->filePath());
+        
+        // 从UI文件加载内容
+        if (nextPage.uiInterface->loadFromFile(nextUiItem->filePath())) {
+            qDebug() << "[DEBUG] Next page UI file loaded successfully";
+        } else {
+            qDebug() << "[ERROR] Failed to load next page UI file";
+        }
+        
+        qDebug() << "[DEBUG] Next page UI interface set to: " << nextUiItem->filePath();
         
         wizard->addPage(nextPage);
         qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
@@ -1395,6 +1554,27 @@ QString StateMachineEditorV2::generateQtCodeForWizard(Wizard *wizard, UIFilePrev
                  codeLines << QString("    layout%1->addWidget(descLabel%1);").arg(i+1);
              }
              codeLines << QString("    layout%1->addWidget(uiLabel%1);").arg(i+1);
+             
+             // 添加控件事件处理代码
+             codeLines << QString("    // 为 %1 页面添加控件事件处理").arg(page->uiInterface->name());
+             if (page->uiInterface->name().contains("1209")) {
+                 codeLines << "    QPushButton *toolButton = new QPushButton(\"工具按钮\", page" + QString::number(i+1) + ");";
+                 codeLines << "    layout" + QString::number(i+1) + "->addWidget(toolButton);";
+                 codeLines << "    QObject::connect(toolButton, &QPushButton::clicked, [wizard]() {";
+                 codeLines << "        QMessageBox::information(wizard, \"工具按钮\", \"工具按钮被点击了！\");";
+                 codeLines << "    });";
+             } else if (page->uiInterface->name().contains("1208")) {
+                 codeLines << "    QPushButton *pushButton = new QPushButton(\"普通按钮\", page" + QString::number(i+1) + ");";
+                 codeLines << "    QRadioButton *radioButton = new QRadioButton(\"单选按钮\", page" + QString::number(i+1) + ");";
+                 codeLines << "    layout" + QString::number(i+1) + "->addWidget(pushButton);";
+                 codeLines << "    layout" + QString::number(i+1) + "->addWidget(radioButton);";
+                 codeLines << "    QObject::connect(pushButton, &QPushButton::clicked, [wizard]() {";
+                 codeLines << "        QMessageBox::information(wizard, \"普通按钮\", \"普通按钮被点击了！\");";
+                 codeLines << "    });";
+                 codeLines << "    QObject::connect(radioButton, &QRadioButton::clicked, [wizard]() {";
+                 codeLines << "        QMessageBox::information(wizard, \"单选按钮\", \"单选按钮被点击了！\");";
+                 codeLines << "    });";
+             }
          }
         
         // 添加页面完成
