@@ -16,6 +16,7 @@ public:
     QString title;
     QString description;
     UIInterface* uiInterface;
+    QString filePath;
     bool isStartPage;
     bool isFinalPage;
     QString nextPageId;

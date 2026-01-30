@@ -281,6 +281,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_uiFilesLabel(nullptr)
     , m_uiFilesDataPendingUpdate(false)
     , m_definedEventsListWidget(nullptr)
+    , m_wizardPreviewWidget(nullptr)
 {
     qDebug() << "[DEBUG] StateMachineEditorV2 constructor started";
     
@@ -295,6 +296,9 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     
     // 创建UI运行时预览窗口
     m_uiRuntimePreview = new UIRuntimePreviewWidget(this);
+    
+    // 创建向导预览窗口
+    m_wizardPreviewWidget = new WizardPreviewWidget(this);
     
     qDebug()<<"createStateMachineEditor()";
     // 设置布局
@@ -733,42 +737,84 @@ void WizardPreviewWidget::loadCurrentPage()
     WizardPage *currentPage = pages[m_currentPageIndex];
     if (!currentPage) return;
     
-    // 创建预览容器
-    QWidget *containerWidget = new QWidget(this);
-    containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
+    qDebug() << "[WizardPreviewWidget] Loading page: " << currentPage->title;
+    qDebug() << "[WizardPreviewWidget] Page filePath: " << currentPage->filePath;
+    qDebug() << "[WizardPreviewWidget] File exists: " << QFile::exists(currentPage->filePath);
     
-    QVBoxLayout *containerLayout = new QVBoxLayout(containerWidget);
-    containerLayout->setContentsMargins(20, 20, 20, 20);
-    containerLayout->setSpacing(10);
+    QWidget *containerWidget = nullptr;
     
-    // 添加页面内容预览
-    QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
-    contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
-    contentLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(contentLabel);
+    if (!currentPage->filePath.isEmpty() && QFile::exists(currentPage->filePath)) {
+        QUiLoader loader;
+        QFile uiFile(currentPage->filePath);
+        
+        if (uiFile.open(QFile::ReadOnly)) {
+            QWidget *loadedWidget = loader.load(&uiFile, this);
+            uiFile.close();
+            
+            if (loadedWidget) {
+                containerWidget = new QWidget(this);
+                containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
+                
+                QVBoxLayout *containerLayout = new QVBoxLayout(containerWidget);
+                containerLayout->setContentsMargins(10, 10, 10, 10);
+                containerLayout->setSpacing(5);
+                
+                QLabel *titleLabel = new QLabel("页面: " + currentPage->title, containerWidget);
+                titleLabel->setStyleSheet("QLabel { color: #333; font-weight: bold; font-size: 14px; padding: 8px; background-color: #e8f5e8; border-radius: 4px; }");
+                titleLabel->setAlignment(Qt::AlignCenter);
+                containerLayout->addWidget(titleLabel);
+                
+                loadedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                containerLayout->addWidget(loadedWidget, 1);
+                
+                QLabel *statusLabel = new QLabel("✓ UI文件加载成功: " + QFileInfo(currentPage->filePath).fileName(), containerWidget);
+                statusLabel->setStyleSheet("QLabel { color: #4CAF50; font-size: 11px; padding: 5px; border-top: 1px solid #ddd; }");
+                statusLabel->setAlignment(Qt::AlignCenter);
+                containerLayout->addWidget(statusLabel);
+                
+                qDebug() << "[WizardPreviewWidget] UI文件加载成功:" << currentPage->filePath;
+            }
+        }
+    }
     
-    // 添加页面描述
-    QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
-    descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
-    descriptionLabel->setWordWrap(true);
-    descriptionLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(descriptionLabel);
+    if (!containerWidget) {
+        containerWidget = new QWidget(this);
+        containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
+        
+        QVBoxLayout *containerLayout = new QVBoxLayout(containerWidget);
+        containerLayout->setContentsMargins(20, 20, 20, 20);
+        containerLayout->setSpacing(10);
+        
+        // 添加页面内容预览
+        QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
+        contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
+        contentLabel->setAlignment(Qt::AlignCenter);
+        containerLayout->addWidget(contentLabel);
+        
+        // 添加页面描述
+        QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
+        descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
+        descriptionLabel->setWordWrap(true);
+        descriptionLabel->setAlignment(Qt::AlignCenter);
+        containerLayout->addWidget(descriptionLabel);
+        
+        // 添加页面类型指示
+        QString pageType = "向导页面";
+        QLabel *typeLabel = new QLabel("类型: " + pageType, containerWidget);
+        typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
+        typeLabel->setAlignment(Qt::AlignCenter);
+        containerLayout->addWidget(typeLabel);
+    }
     
-    // 添加页面类型指示
-    QString pageType = "向导页面";
-    QLabel *typeLabel = new QLabel("类型: " + pageType, containerWidget);
-    typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
-    typeLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(typeLabel);
-    
-    m_previewWidget = containerWidget;
-    m_mainLayout->insertWidget(2, m_previewWidget, 1);
-    m_previewLoaded = true;
-    
-    // 移除占位符
-    if (m_placeholderLabel) {
-        m_mainLayout->removeWidget(m_placeholderLabel);
-        m_placeholderLabel->hide();
+    if (containerWidget) {
+        m_previewWidget = containerWidget;
+        m_mainLayout->addWidget(m_previewWidget, 1);
+        m_previewLoaded = true;
+        
+        if (m_placeholderLabel) {
+            m_mainLayout->removeWidget(m_placeholderLabel);
+            m_placeholderLabel->hide();
+        }
     }
 }
 
@@ -1235,6 +1281,7 @@ void StateMachineEditorV2::runWizard()
     mainPage.pageId = "main_page";
     mainPage.title = "主界面";
     mainPage.description = "应用程序的起始界面";
+    mainPage.filePath = mainUiFile.filePath;
     mainPage.isStartPage = true;
     mainPage.isFinalPage = false;
     mainPage.enableNextButton = true;
@@ -1267,6 +1314,7 @@ void StateMachineEditorV2::runWizard()
         nextPage.pageId = nextPageId;
         nextPage.title = "下一个界面";
         nextPage.description = "应用程序的第二个界面";
+        nextPage.filePath = nextUiItem->filePath();
         nextPage.isStartPage = false;
         nextPage.isFinalPage = true;
         nextPage.enableNextButton = false;

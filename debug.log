@@ -818,3 +818,19 @@
 2025-12-20 21:18:53.017 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
 2025-12-20 21:18:58.990 PowerShell encoding setup completed: UTF-8
 2025-12-20 21:18:58.990 Application configuration loaded successfully
+2026-01-30 15:26:36.553 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 15:26:41.442 PowerShell encoding setup completed: UTF-8
+2026-01-30 15:26:41.442 Application configuration loaded successfully
+2026-01-30 21:42:06.766 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:42:11.587 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:42:11.588 Application configuration loaded successfully
+2026-01-30 21:48:06.062 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:48:11.010 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:48:11.011 Application configuration loaded successfully
+2026-01-30 21:57:18.230 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 21:57:22.986 PowerShell encoding setup completed: UTF-8
+2026-01-30 21:57:22.986 Application configuration loaded successfully
+2026-01-30 21:57:22.991 "Unable to open monitor interface to \\\\.\\DISPLAY1:" "Unknown error 0xe0000225."
+2026-01-30 23:13:49.425 QCoreApplication::applicationDirPath: Please instantiate the QApplication object first
+2026-01-30 23:13:54.847 PowerShell encoding setup completed: UTF-8
+2026-01-30 23:13:54.848 Application configuration loaded successfully
