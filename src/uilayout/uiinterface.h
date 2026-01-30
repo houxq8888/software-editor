@@ -61,6 +61,9 @@ public:
     
     // 界面控件创建
     QWidget* widget();
+    
+    // 从UI文件加载内容
+    bool loadFromFile(const QString &filePath);
 
 signals:
     void buttonClicked(const QString &buttonName);

@@ -8,6 +8,10 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QWidget>
+#include <QUiLoader>
+#include <QFile>
+#include <QToolButton>
+#include <QRadioButton>
 
 UIInterface::UIInterface(const QString &name, const QString &description, QObject *parent)
     : QObject(parent)
@@ -310,4 +314,79 @@ QWidget* UIInterface::widget()
     mainLayout->addStretch();
     
     return widget;
+}
+
+bool UIInterface::loadFromFile(const QString &filePath)
+{
+    if (filePath.isEmpty()) {
+        qDebug() << "[ERROR] UI file path is empty";
+        return false;
+    }
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "[ERROR] Cannot open UI file:" << filePath;
+        return false;
+    }
+    
+    QUiLoader loader;
+    QWidget *loadedWidget = loader.load(&file, nullptr);
+    file.close();
+    
+    if (!loadedWidget) {
+        qDebug() << "[ERROR] Failed to load UI file:" << filePath << "Error:" << loader.errorString();
+        return false;
+    }
+    
+    // 清除现有的布局项
+    clearLayoutItems();
+    
+    // 遍历加载的UI文件中的控件，创建对应的LayoutItem
+    QList<QPushButton*> buttons = loadedWidget->findChildren<QPushButton*>();
+    for (QPushButton *button : buttons) {
+        LayoutItem *item = new LayoutItem("QPushButton", button->text());
+        item->setText(button->text());
+        item->setSize(button->size());
+        item->setPos(button->pos());
+        addLayoutItem(item);
+        qDebug() << "[DEBUG] Added button LayoutItem:" << button->text();
+    }
+    
+    QList<QLabel*> labels = loadedWidget->findChildren<QLabel*>();
+    for (QLabel *label : labels) {
+        if (!label->text().isEmpty()) {
+            LayoutItem *item = new LayoutItem("QLabel", label->text());
+            item->setText(label->text());
+            item->setSize(label->size());
+            item->setPos(label->pos());
+            addLayoutItem(item);
+            qDebug() << "[DEBUG] Added label LayoutItem:" << label->text();
+        }
+    }
+    
+    QList<QToolButton*> toolButtons = loadedWidget->findChildren<QToolButton*>();
+    for (QToolButton *toolButton : toolButtons) {
+        LayoutItem *item = new LayoutItem("QToolButton", toolButton->text());
+        item->setText(toolButton->text());
+        item->setSize(toolButton->size());
+        item->setPos(toolButton->pos());
+        addLayoutItem(item);
+        qDebug() << "[DEBUG] Added tool button LayoutItem:" << toolButton->text();
+    }
+    
+    QList<QRadioButton*> radioButtons = loadedWidget->findChildren<QRadioButton*>();
+    for (QRadioButton *radioButton : radioButtons) {
+        LayoutItem *item = new LayoutItem("QRadioButton", radioButton->text());
+        item->setText(radioButton->text());
+        item->setSize(radioButton->size());
+        item->setPos(radioButton->pos());
+        addLayoutItem(item);
+        qDebug() << "[DEBUG] Added radio button LayoutItem:" << radioButton->text();
+    }
+    
+    // 删除加载的widget，因为我们只需要它的信息
+    delete loadedWidget;
+    
+    qDebug() << "[DEBUG] Successfully loaded UI file and created" << m_layoutItems.size() << "layout items from:" << filePath;
+    return true;
 }
