@@ -18,7 +18,7 @@ echo Debug: Current directory is %CD%
 
 REM Run CMake to configure the project
 echo Debug: Running CMake configuration...
-"D:\Qt\Tools\CMake_64\bin\cmake.exe" -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="%QT_DIR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DFEATURE_clang=OFF ..
+"D:\Qt\Tools\CMake_64\bin\cmake.exe" -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="%QT_DIR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="%MINGW_DIR%\bin\gcc.exe" -DCMAKE_CXX_COMPILER="%MINGW_DIR%\bin\g++.exe" -DFEATURE_clang=OFF ..
 echo Debug: CMake configuration returned %errorlevel%
 
 if %errorlevel% neq 0 (

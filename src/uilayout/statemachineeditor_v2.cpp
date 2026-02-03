@@ -280,6 +280,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_uiFileDetailsTextEdit(nullptr)
     , m_uiFilesLabel(nullptr)
     , m_uiFilesDataPendingUpdate(false)
+    , m_mainInterfaceLoadedFromJson(false)
     , m_definedEventsListWidget(nullptr)
 {
     qDebug() << "[DEBUG] StateMachineEditorV2 constructor started";
@@ -559,6 +560,10 @@ void WizardPreviewWidget::createNavigationControls()
     m_nextButton->setStyleSheet("QPushButton { background-color: #007bff; color: white; padding: 8px 16px; border-radius: 4px; }");
     m_nextButton->hide();
     
+    m_backButton = new QPushButton("返回", this);
+    m_backButton->setStyleSheet("QPushButton { background-color: #ffc107; color: black; padding: 8px 16px; border-radius: 4px; }");
+    m_backButton->hide();
+    
     m_finishButton = new QPushButton("完成", this);
     m_finishButton->setStyleSheet("QPushButton { background-color: #28a745; color: white; padding: 8px 16px; border-radius: 4px; }");
     m_finishButton->hide();
@@ -573,6 +578,7 @@ void WizardPreviewWidget::createNavigationControls()
     m_navigationLayout->addStretch();
     m_navigationLayout->addWidget(m_prevButton);
     m_navigationLayout->addWidget(m_nextButton);
+    m_navigationLayout->addWidget(m_backButton);
     m_navigationLayout->addWidget(m_finishButton);
     m_navigationLayout->addWidget(m_cancelButton);
     m_navigationLayout->addStretch();
@@ -580,6 +586,7 @@ void WizardPreviewWidget::createNavigationControls()
     // 连接按钮信号
     connect(m_prevButton, &QPushButton::clicked, this, &WizardPreviewWidget::previousPage);
     connect(m_nextButton, &QPushButton::clicked, this, &WizardPreviewWidget::nextPage);
+    connect(m_backButton, &QPushButton::clicked, this, &WizardPreviewWidget::backToPreviousPage);
     connect(m_finishButton, &QPushButton::clicked, this, &WizardPreviewWidget::onWizardCompleted);
     connect(m_cancelButton, &QPushButton::clicked, this, &WizardPreviewWidget::onWizardCancelled);
 }
@@ -596,6 +603,9 @@ void WizardPreviewWidget::loadWizard(Wizard *wizard)
     
     m_currentWizard = wizard;
     m_totalPages = wizard->allPages().size();
+    
+    // 清空导航历史记录
+    m_navigationHistory.clear();
     
     if (m_totalPages == 0) {
         qDebug() << "向导没有页面，无法预览";
@@ -629,6 +639,7 @@ void WizardPreviewWidget::clearPreview()
     m_navigationLabel->hide();
     m_prevButton->hide();
     m_nextButton->hide();
+    m_backButton->hide();
     m_finishButton->hide();
     m_cancelButton->hide();
     
@@ -659,6 +670,12 @@ void WizardPreviewWidget::goToPage(int pageIndex)
         return;
     }
     
+    // 如果不是从历史记录返回，将当前页面添加到历史记录
+    if (m_currentPageIndex >= 0 && m_currentPageIndex != pageIndex) {
+        m_navigationHistory.push(m_currentPageIndex);
+        qDebug() << "[DEBUG] goToPage: Added page" << m_currentPageIndex << "to navigation history";
+    }
+    
     clearCurrentPage();
     
     m_currentPageIndex = pageIndex;
@@ -675,6 +692,29 @@ void WizardPreviewWidget::goToPage(int pageIndex)
 void WizardPreviewWidget::showPage(int pageIndex)
 {
     goToPage(pageIndex);
+}
+
+void WizardPreviewWidget::backToPreviousPage()
+{
+    if (m_navigationHistory.isEmpty()) {
+        qDebug() << "[DEBUG] backToPreviousPage: Navigation history is empty";
+        return;
+    }
+    
+    int previousPageIndex = m_navigationHistory.pop();
+    qDebug() << "[DEBUG] backToPreviousPage: Returning to page" << previousPageIndex;
+    
+    // 直接设置页面索引，不添加到历史记录
+    clearCurrentPage();
+    m_currentPageIndex = previousPageIndex;
+    
+    // 加载当前页面内容
+    loadCurrentPage();
+    
+    // 更新导航控件
+    updateNavigationControls();
+    
+    emit pageChanged(previousPageIndex, currentPageTitle());
 }
 
 QString WizardPreviewWidget::currentPageTitle() const
@@ -719,6 +759,15 @@ void WizardPreviewWidget::updateNavigationControls()
     if (m_nextButton) m_nextButton->hide();
     if (m_finishButton) m_finishButton->hide();
     if (m_cancelButton) m_cancelButton->hide();
+    
+    // 根据导航历史记录状态显示或隐藏返回按钮
+    if (m_backButton) {
+        if (m_navigationHistory.isEmpty()) {
+            m_backButton->hide();
+        } else {
+            m_backButton->show();
+        }
+    }
     
     // 显示导航标签
     m_navigationLabel->show();
@@ -808,9 +857,25 @@ void WizardPreviewWidget::loadCurrentPage()
 
 void WizardPreviewWidget::bindControlEvents(QWidget *uiWidget, const QString &uiFilePath)
 {
-    if (!uiWidget) return;
+    if (!uiWidget) {
+        qDebug() << "[ERROR] bindControlEvents: uiWidget is null";
+        return;
+    }
+    
+    qDebug() << "[DEBUG] bindControlEvents: Starting to bind events for UI file:" << uiFilePath;
+    qDebug() << "[DEBUG] bindControlEvents: Total control events:" << m_controlEvents.size();
+    
+    // 先列出所有可用的控件
+    QList<QObject*> allChildren = uiWidget->findChildren<QObject*>();
+    qDebug() << "[DEBUG] bindControlEvents: Total children widgets:" << allChildren.size();
+    for (QObject* child : allChildren) {
+        if (!child->objectName().isEmpty()) {
+            qDebug() << "[DEBUG] bindControlEvents: Found child widget:" << child->objectName() << "type:" << child->metaObject()->className();
+        }
+    }
     
     // 解析控件事件定义，查找当前UI文件的事件
+    int boundEvents = 0;
     for (const QString &eventData : m_controlEvents) {
         QStringList parts = eventData.split('|');
         if (parts.size() >= 5) {
@@ -820,52 +885,99 @@ void WizardPreviewWidget::bindControlEvents(QWidget *uiWidget, const QString &ui
             QString sourceUIPath = parts[3];
             QString targetUIPath = parts[4];
             
+            qDebug() << "[DEBUG] bindControlEvents: Processing event - name:" << eventName 
+                     << "control:" << controlName << "type:" << eventType 
+                     << "source:" << sourceUIPath << "target:" << targetUIPath;
+            
             // 只处理当前UI文件的事件
-            if (sourceUIPath != uiFilePath || targetUIPath.isEmpty()) {
+            if (sourceUIPath != uiFilePath) {
+                qDebug() << "[DEBUG] bindControlEvents: Skipping event - source UI path mismatch";
+                continue;
+            }
+            
+            if (targetUIPath.isEmpty()) {
+                qDebug() << "[DEBUG] bindControlEvents: Skipping event - target UI path is empty";
                 continue;
             }
             
             // 查找控件
             QObject *control = uiWidget->findChild<QObject*>(controlName);
             if (!control) {
-                qDebug() << "[WARNING] Control not found:" << controlName;
+                qDebug() << "[WARNING] bindControlEvents: Control not found:" << controlName;
                 continue;
             }
             
+            qDebug() << "[DEBUG] bindControlEvents: Found control:" << controlName 
+                     << "type:" << control->metaObject()->className();
+            
             // 根据事件类型绑定事件
-            if (eventType == "clicked") {
+            if (eventType == "clicked" || eventType == "clicked()") {
                 QPushButton *button = qobject_cast<QPushButton*>(control);
                 if (button) {
-                    connect(button, &QPushButton::clicked, this, [this, targetUIPath]() {
+                    connect(button, &QPushButton::clicked, this, [this, targetUIPath, controlName]() {
+                        qDebug() << "[DEBUG] Button clicked:" << controlName << "navigating to:" << targetUIPath;
                         handleControlEvent(targetUIPath);
                     });
-                    qDebug() << "[DEBUG] Bound clicked event for control:" << controlName << "to target:" << targetUIPath;
+                    boundEvents++;
+                    qDebug() << "[DEBUG] bindControlEvents: Successfully bound clicked event for control:" << controlName << "to target:" << targetUIPath;
+                } else {
+                    qDebug() << "[WARNING] bindControlEvents: Control is not a QPushButton:" << controlName;
                 }
+            } else if (eventType == "pressed" || eventType == "pressed()") {
+                QPushButton *button = qobject_cast<QPushButton*>(control);
+                if (button) {
+                    connect(button, &QPushButton::pressed, this, [this, targetUIPath, controlName]() {
+                        qDebug() << "[DEBUG] Button pressed:" << controlName << "navigating to:" << targetUIPath;
+                        handleControlEvent(targetUIPath);
+                    });
+                    boundEvents++;
+                    qDebug() << "[DEBUG] bindControlEvents: Successfully bound pressed event for control:" << controlName << "to target:" << targetUIPath;
+                } else {
+                    qDebug() << "[WARNING] bindControlEvents: Control is not a QPushButton:" << controlName;
+                }
+            } else {
+                qDebug() << "[WARNING] bindControlEvents: Unsupported event type:" << eventType;
             }
+        } else {
+            qDebug() << "[WARNING] bindControlEvents: Invalid event data format:" << eventData;
         }
     }
+    
+    qDebug() << "[DEBUG] bindControlEvents: Total events bound:" << boundEvents;
 }
 
 void WizardPreviewWidget::handleControlEvent(const QString &targetUIPath)
 {
-    if (targetUIPath.isEmpty()) return;
+    qDebug() << "[DEBUG] handleControlEvent: Called with target UI path:" << targetUIPath;
+    
+    if (targetUIPath.isEmpty()) {
+        qDebug() << "[WARNING] handleControlEvent: Target UI path is empty";
+        return;
+    }
+    
+    qDebug() << "[DEBUG] handleControlEvent: Total pages:" << m_totalPages;
+    qDebug() << "[DEBUG] handleControlEvent: UI file path map:" << m_uiFilePathMap;
     
     // 查找目标UI文件对应的页面索引
     int targetPageIndex = -1;
     for (int i = 0; i < m_totalPages; ++i) {
         QString pageId = QString("page_%1").arg(i);
         QString uiPath = m_uiFilePathMap.value(pageId);
+        qDebug() << "[DEBUG] handleControlEvent: Checking page" << i << "pageId:" << pageId << "uiPath:" << uiPath;
+        
         if (uiPath == targetUIPath) {
             targetPageIndex = i;
+            qDebug() << "[DEBUG] handleControlEvent: Found target page index:" << targetPageIndex;
             break;
         }
     }
     
     if (targetPageIndex >= 0 && targetPageIndex < m_totalPages) {
-        qDebug() << "[DEBUG] Navigating to page:" << targetPageIndex << "for UI:" << targetUIPath;
+        qDebug() << "[DEBUG] handleControlEvent: Navigating to page:" << targetPageIndex << "for UI:" << targetUIPath;
         goToPage(targetPageIndex);
     } else {
-        qDebug() << "[WARNING] Target page not found for UI:" << targetUIPath;
+        qDebug() << "[WARNING] handleControlEvent: Target page not found for UI:" << targetUIPath;
+        qDebug() << "[WARNING] handleControlEvent: Available UI paths:" << m_uiFilePathMap.values();
     }
 }
 
@@ -3341,11 +3453,38 @@ void StateMachineEditorV2::saveCurrentWizard()
         return;
     }
     
-    // 保存向导的实际数据
+    //保存向导的实际数据
     QJsonObject wizardData;
     wizardData["name"] = m_currentWizardName;
     wizardData["type"] = "wizard";
     wizardData["created"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    
+    // 保存主界面信息
+    QString mainInterfacePath;
+    for (const auto &uiFile : m_productUiFiles) {
+        if (uiFile.isMain) {
+            mainInterfacePath = uiFile.filePath;
+            break;
+        }
+    }
+    
+    if (!mainInterfacePath.isEmpty()) {
+        // 将主界面路径转换为相对于产品配置目录的相对路径
+        if (m_product) {
+            QString configPackageRootPath = m_product->configPackageRootPath();
+            if (!configPackageRootPath.isEmpty()) {
+                QDir configDir(configPackageRootPath);
+                QString relativePath = configDir.relativeFilePath(mainInterfacePath);
+                wizardData["mainInterfacePath"] = relativePath;
+                qDebug() << "Saving main interface path (relative):" << relativePath;
+            } else {
+                wizardData["mainInterfacePath"] = mainInterfacePath;
+                qDebug() << "Saving main interface path (absolute):" << mainInterfacePath;
+            }
+        } else {
+            wizardData["mainInterfacePath"] = mainInterfacePath;
+        }
+    }
     
     // 保存控件事件定义 - 先检查JSON文件中是否已存在对应事件
     QJsonArray controlEventsArray;
@@ -3646,6 +3785,37 @@ void StateMachineEditorV2::loadWizardsFromProductConfig()
                     
                     // 将新创建的向导设置为当前向导
                     m_wizardManager->setCurrentWizard(wizard);
+                    
+                    // 加载主界面信息
+                    if (json.contains("mainInterfacePath")) {
+                        QString mainInterfacePath = json["mainInterfacePath"].toString();
+                        if (!mainInterfacePath.isEmpty()) {
+                            // 将相对路径转换为绝对路径
+                            QString absoluteMainInterfacePath = mainInterfacePath;
+                            if (m_product && QDir::isRelativePath(mainInterfacePath)) {
+                                QString configPackageRootPath = m_product->configPackageRootPath();
+                                if (!configPackageRootPath.isEmpty()) {
+                                    QDir configDir(configPackageRootPath);
+                                    absoluteMainInterfacePath = configDir.absoluteFilePath(mainInterfacePath);
+                                }
+                            }
+                            
+                            // 更新UI文件列表中的主界面状态
+                            for (auto &uiFile : m_productUiFiles) {
+                                if (uiFile.filePath == absoluteMainInterfacePath) {
+                                    uiFile.isMain = true;
+                                    qDebug() << "Loaded main interface from JSON:" << uiFile.name;
+                                } else {
+                                    uiFile.isMain = false;
+                                }
+                            }
+                            
+                            // 设置标志，表示已从JSON文件中加载主界面信息
+                            m_mainInterfaceLoadedFromJson = true;
+                            qDebug() << "Main interface loaded from wizard JSON:" << absoluteMainInterfacePath;
+                            qDebug() << "Set m_mainInterfaceLoadedFromJson flag to true";
+                        }
+                    }
                     
                     qDebug() << "Wizard loaded successfully:" << wizardName;
                 }
@@ -4006,6 +4176,13 @@ void StateMachineEditorV2::updateUIFilesList()
     
     qDebug() << "UI file list updated, total" << m_productUiFiles.size() << "files, added:" << addedCount;
     qDebug() << "List widget item count:" << m_uiFilesListWidget->count();
+    
+    // 如果已从向导JSON文件中加载主界面信息，则更新UI显示
+    if (m_mainInterfaceLoadedFromJson) {
+        qDebug() << "Main interface was loaded from JSON, updating UI display";
+        updateMainInterfaceStatus();
+        m_mainInterfaceLoadedFromJson = false; // 重置标志
+    }
 }
 
 void StateMachineEditorV2::displayUIFileDetails(const QString &filePath)
