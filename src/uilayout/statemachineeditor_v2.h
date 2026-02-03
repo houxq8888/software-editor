@@ -19,6 +19,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QMap>
+#include <QStack>
 #include <QPointF>
 #include <QPropertyAnimation>
 #include <QEasingCurve>
@@ -132,6 +133,7 @@ public:
     void previousPage();
     void goToPage(int pageIndex);
     void showPage(int pageIndex);
+    void backToPreviousPage(); // 返回到上一页
     
     // 获取当前页面信息
     int currentPageIndex() const { return m_currentPageIndex; }
@@ -163,6 +165,7 @@ private:
     QLabel *m_navigationLabel;
     QPushButton *m_prevButton;
     QPushButton *m_nextButton;
+    QPushButton *m_backButton;
     QPushButton *m_finishButton;
     QPushButton *m_cancelButton;
     QVBoxLayout *m_mainLayout;
@@ -172,6 +175,7 @@ private:
     int m_totalPages;
     QMap<QString, QString> m_uiFilePathMap; // 页面ID到UI文件路径的映射
     QList<QString> m_controlEvents; // 控件事件定义列表
+    QStack<int> m_navigationHistory; // 导航历史记录栈
     
     void createPreviewLayout();
     void createPlaceholder();
@@ -696,6 +700,7 @@ private:
     QTextEdit *m_uiFileDetailsTextEdit;  // UI文件详情显示控件
     QLabel *m_uiFilesLabel;              // UI文件列表标题
     bool m_uiFilesDataPendingUpdate;     // UI文件数据待更新标志
+    bool m_mainInterfaceLoadedFromJson; // 是否已从向导JSON文件中加载主界面信息
     
     // 控件事件定义相关
     QString m_currentUIFilePath;         // 当前选中的UI文件路径
