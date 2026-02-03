@@ -711,7 +711,7 @@ private:
     void updateMainInterfaceStatus(); // 更新所有UI文件的主界面状态显示
     
     // QT代码生成方法
-    QString generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem);
+    QString generateQtCodeForWizard(Wizard *wizard, const QList<UIFilePreviewItem*> &uiItems);
 
 };
 
