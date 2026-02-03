@@ -24,6 +24,7 @@
 #include <QScrollArea>
 #include <QFrame>
 #include <QGroupBox>
+#include <QUiLoader>
 
 // 产品相关头文件
 #include "../product/product.h"
@@ -266,6 +267,7 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     , m_runtimeView(nullptr)
     , m_runtimeDock(nullptr)
     , m_uiRuntimePreview(nullptr)
+    , m_wizardPreviewWidget(nullptr)
     , m_productUiFiles()  // 显式初始化QList
     , m_product(nullptr)
     , m_propertiesTab(nullptr)
@@ -295,6 +297,10 @@ StateMachineEditorV2::StateMachineEditorV2(QWidget *parent)
     
     // 创建UI运行时预览窗口
     m_uiRuntimePreview = new UIRuntimePreviewWidget(this);
+    
+    // 创建向导预览窗口
+    m_wizardPreviewWidget = new WizardPreviewWidget(this);
+    m_wizardPreviewWidget->hide();
     
     qDebug()<<"createStateMachineEditor()";
     // 设置布局
@@ -474,7 +480,7 @@ void UIRuntimePreviewWidget::clearPreview()
 
 // WizardPreviewWidget 实现
 WizardPreviewWidget::WizardPreviewWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Window)
     , m_currentWizard(nullptr)
     , m_previewWidget(nullptr)
     , m_placeholderLabel(nullptr)
@@ -578,52 +584,66 @@ void WizardPreviewWidget::createNavigationControls()
 
 void WizardPreviewWidget::loadWizard(Wizard *wizard)
 {
+    qDebug() << "[DEBUG] loadWizard() called";
+    qDebug() << "[DEBUG] Wizard pointer:" << wizard;
+    qDebug() << "[DEBUG] this pointer:" << this;
+    qDebug() << "[DEBUG] isVisible:" << isVisible();
+    qDebug() << "[DEBUG] size:" << size();
+
     clearPreview();
-    
+
     if (!wizard) {
-        qDebug() << "向导为空，无法加载预览";
+        qDebug() << "[ERROR] 向导为空，无法加载预览";
         createPlaceholder();
         return;
     }
-    
+
     m_currentWizard = wizard;
     m_totalPages = wizard->allPages().size();
-    
+
+    qDebug() << "[DEBUG] Wizard total pages:" << m_totalPages;
+
     if (m_totalPages == 0) {
-        qDebug() << "向导没有页面，无法预览";
+        qDebug() << "[ERROR] 向导没有页面，无法预览";
         createPlaceholder();
         return;
     }
-    
+
     // 显示导航控件
     m_pageTitleLabel->show();
     m_pageDescriptionLabel->show();
     m_navigationLabel->show();
-    
+
+    qDebug() << "[DEBUG] Navigation controls shown";
+
     // 加载第一页
     goToPage(0);
-    
-    qDebug() << "向导预览加载成功，总页数:" << m_totalPages;
+
+    qDebug() << "[DEBUG] 向导预览加载成功，总页数:" << m_totalPages;
 }
 
 void WizardPreviewWidget::clearPreview()
 {
+    qDebug() << "[DEBUG] clearPreview() called";
+
     clearCurrentPage();
-    
+
     m_currentWizard = nullptr;
     m_currentPageIndex = -1;
     m_totalPages = 0;
     m_previewLoaded = false;
-    
+
     // 隐藏导航控件
-    m_pageTitleLabel->hide();
-    m_pageDescriptionLabel->hide();
-    m_navigationLabel->hide();
-    m_prevButton->hide();
-    m_nextButton->hide();
-    m_finishButton->hide();
-    m_cancelButton->hide();
-    
+    if (m_pageTitleLabel) m_pageTitleLabel->hide();
+    if (m_pageDescriptionLabel) m_pageDescriptionLabel->hide();
+    if (m_navigationLabel) m_navigationLabel->hide();
+    if (m_prevButton) m_prevButton->hide();
+    if (m_nextButton) m_nextButton->hide();
+    if (m_finishButton) m_finishButton->hide();
+    if (m_cancelButton) m_cancelButton->hide();
+
+    qDebug() << "[DEBUG] Navigation controls hidden";
+
     // 显示占位符
     if (!m_previewWidget && m_placeholderLabel) {
         m_mainLayout->addWidget(m_placeholderLabel, 1);
@@ -647,20 +667,27 @@ void WizardPreviewWidget::previousPage()
 
 void WizardPreviewWidget::goToPage(int pageIndex)
 {
+    qDebug() << "[DEBUG] goToPage() called with index:" << pageIndex;
+    qDebug() << "[DEBUG] m_currentWizard:" << m_currentWizard;
+    qDebug() << "[DEBUG] m_totalPages:" << m_totalPages;
+
     if (!m_currentWizard || pageIndex < 0 || pageIndex >= m_totalPages) {
+        qDebug() << "[ERROR] Invalid page index or no wizard";
         return;
     }
-    
+
     clearCurrentPage();
-    
+
     m_currentPageIndex = pageIndex;
-    
+
+    qDebug() << "[DEBUG] Loading current page...";
     // 加载当前页面内容
     loadCurrentPage();
-    
+
+    qDebug() << "[DEBUG] Updating navigation controls...";
     // 更新导航控件
     updateNavigationControls();
-    
+
     emit pageChanged(pageIndex, currentPageTitle());
 }
 
@@ -725,61 +752,138 @@ void WizardPreviewWidget::updateNavigationControls()
 
 void WizardPreviewWidget::loadCurrentPage()
 {
-    if (!m_currentWizard || m_currentPageIndex < 0) return;
-    
+    qDebug() << "[DEBUG] loadCurrentPage() called";
+    qDebug() << "[DEBUG] m_currentWizard:" << m_currentWizard;
+    qDebug() << "[DEBUG] m_currentPageIndex:" << m_currentPageIndex;
+
+    if (!m_currentWizard || m_currentPageIndex < 0) {
+        qDebug() << "[ERROR] No wizard or invalid page index";
+        return;
+    }
+
     QList<WizardPage*> pages = m_currentWizard->allPages();
-    if (m_currentPageIndex >= pages.size()) return;
-    
+    qDebug() << "[DEBUG] Total pages in wizard:" << pages.size();
+
+    if (m_currentPageIndex >= pages.size()) {
+        qDebug() << "[ERROR] Page index out of range";
+        return;
+    }
+
     WizardPage *currentPage = pages[m_currentPageIndex];
-    if (!currentPage) return;
-    
-    // 创建预览容器
+    if (!currentPage) {
+        qDebug() << "[ERROR] Current page is null";
+        return;
+    }
+
+    qDebug() << "[DEBUG] Current page title:" << currentPage->title;
+    qDebug() << "[DEBUG] Current page uiFilePath:" << currentPage->uiFilePath;
+
+    // 创建预览容器 - 使用绝对定位布局
     QWidget *containerWidget = new QWidget(this);
     containerWidget->setStyleSheet("QWidget { background-color: white; border: 2px solid #4CAF50; border-radius: 8px; }");
-    
-    QVBoxLayout *containerLayout = new QVBoxLayout(containerWidget);
-    containerLayout->setContentsMargins(20, 20, 20, 20);
-    containerLayout->setSpacing(10);
-    
-    // 添加页面内容预览
-    QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
-    contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
-    contentLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(contentLabel);
-    
-    // 添加页面描述
-    QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
-    descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
-    descriptionLabel->setWordWrap(true);
-    descriptionLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(descriptionLabel);
-    
-    // 添加页面类型指示
-    QString pageType = "向导页面";
-    QLabel *typeLabel = new QLabel("类型: " + pageType, containerWidget);
-    typeLabel->setStyleSheet("QLabel { color: #999; font-size: 12px; padding: 5px; }");
-    typeLabel->setAlignment(Qt::AlignCenter);
-    containerLayout->addWidget(typeLabel);
-    
-    m_previewWidget = containerWidget;
-    m_mainLayout->insertWidget(2, m_previewWidget, 1);
+    containerWidget->setMinimumSize(600, 400);  // 设置最小大小
+
+    // 使用绝对定位布局，不使用布局管理器
+    containerWidget->setLayout(nullptr);
+
+    // 如果有UI文件路径，加载UI文件
+    if (!currentPage->uiFilePath.isEmpty() && QFile::exists(currentPage->uiFilePath)) {
+        QUiLoader uiLoader;
+        QFile uiFile(currentPage->uiFilePath);
+
+        if (uiFile.open(QIODevice::ReadOnly)) {
+            QWidget *loadedWidget = uiLoader.load(&uiFile, containerWidget);
+            uiFile.close();
+
+            if (loadedWidget) {
+                // 获取UI文件中的控件并按原位置显示
+                loadedWidget->setParent(containerWidget);
+
+                // 保持原UI的几何位置和大小
+                QRect originalGeometry = loadedWidget->geometry();
+                if (originalGeometry.isEmpty()) {
+                    originalGeometry = QRect(10, 50, 400, 300); // 默认大小
+                }
+                loadedWidget->setGeometry(originalGeometry);
+
+                // 查找所有按钮并连接点击事件到下一步
+                QList<QPushButton*> buttons = loadedWidget->findChildren<QPushButton*>();
+                for (QPushButton* button : buttons) {
+                    connect(button, &QPushButton::clicked, this, [this, button]() {
+                        qDebug() << "Button clicked:" << button->text();
+                        // 自动进入下一页
+                        if (m_currentPageIndex < m_totalPages - 1) {
+                            nextPage();
+                        } else {
+                            // 最后一页，显示完成提示但不关闭窗口
+                            QMessageBox::information(this, "向导完成", "恭喜！您已完成所有步骤。");
+                            emit wizardCompleted();
+                        }
+                    });
+                }
+
+                m_previewWidget = loadedWidget;
+                qDebug() << "[DEBUG] UI file loaded successfully:" << currentPage->uiFilePath;
+            } else {
+                qDebug() << "[ERROR] Failed to load UI file:" << currentPage->uiFilePath;
+                // 创建错误提示
+                QLabel *errorLabel = new QLabel("无法加载UI文件: " + currentPage->uiFilePath, containerWidget);
+                errorLabel->setGeometry(10, 50, 400, 30);
+                errorLabel->setStyleSheet("QLabel { color: red; font-size: 14px; }");
+                m_previewWidget = errorLabel;
+            }
+        } else {
+            qDebug() << "[ERROR] Cannot open UI file:" << currentPage->uiFilePath;
+            QLabel *errorLabel = new QLabel("无法打开UI文件: " + currentPage->uiFilePath, containerWidget);
+            errorLabel->setGeometry(10, 50, 400, 30);
+            errorLabel->setStyleSheet("QLabel { color: red; font-size: 14px; }");
+            m_previewWidget = errorLabel;
+        }
+    } else {
+        // 没有UI文件，显示默认内容
+        QLabel *contentLabel = new QLabel("页面内容预览: " + currentPage->title, containerWidget);
+        contentLabel->setGeometry(10, 50, 400, 30);
+        contentLabel->setStyleSheet("QLabel { color: #333; font-size: 16px; font-weight: bold; }");
+
+        QLabel *descriptionLabel = new QLabel(currentPage->description, containerWidget);
+        descriptionLabel->setGeometry(10, 90, 400, 60);
+        descriptionLabel->setStyleSheet("QLabel { color: #666; font-size: 14px; padding: 10px; }");
+        descriptionLabel->setWordWrap(true);
+
+        m_previewWidget = contentLabel;
+    }
+
+    qDebug() << "[DEBUG] Adding container widget to layout...";
+    m_mainLayout->insertWidget(2, containerWidget, 1);
     m_previewLoaded = true;
-    
+
+    qDebug() << "[DEBUG] Container widget added, size:" << containerWidget->size();
+
     // 移除占位符
     if (m_placeholderLabel) {
         m_mainLayout->removeWidget(m_placeholderLabel);
         m_placeholderLabel->hide();
+        qDebug() << "[DEBUG] Placeholder hidden";
     }
+
+    qDebug() << "[DEBUG] loadCurrentPage() completed successfully";
 }
 
 void WizardPreviewWidget::clearCurrentPage()
 {
+    // 删除容器widget（它会自动删除所有子控件）
     if (m_previewWidget) {
-        m_mainLayout->removeWidget(m_previewWidget);
-        delete m_previewWidget;
+        QWidget *container = m_previewWidget->parentWidget();
+        if (container && container != this) {
+            m_mainLayout->removeWidget(container);
+            delete container;
+        } else {
+            m_mainLayout->removeWidget(m_previewWidget);
+            delete m_previewWidget;
+        }
         m_previewWidget = nullptr;
     }
-    
+
     m_previewLoaded = false;
 }
 
@@ -1233,13 +1337,14 @@ void StateMachineEditorV2::runWizard()
     // 4. 创建主界面向导页
     WizardPage mainPage;
     mainPage.pageId = "main_page";
-    mainPage.title = "主界面";
+    mainPage.title = mainUiItem->fileName();
     mainPage.description = "应用程序的起始界面";
     mainPage.isStartPage = true;
     mainPage.isFinalPage = false;
     mainPage.enableNextButton = true;
     mainPage.enableBackButton = false;
     mainPage.enableFinishButton = false;
+    mainPage.uiFilePath = mainUiItem->filePath();  // 设置主界面UI文件路径
     
     // 5. 查找下一个界面
     QString nextPageId;
@@ -1265,7 +1370,7 @@ void StateMachineEditorV2::runWizard()
     if (nextUiItem) {
         WizardPage nextPage;
         nextPage.pageId = nextPageId;
-        nextPage.title = "下一个界面";
+        nextPage.title = nextUiItem->fileName();
         nextPage.description = "应用程序的第二个界面";
         nextPage.isStartPage = false;
         nextPage.isFinalPage = true;
@@ -1273,7 +1378,8 @@ void StateMachineEditorV2::runWizard()
         nextPage.enableBackButton = true;
         nextPage.enableFinishButton = true;
         nextPage.previousPageId = "main_page";
-        
+        nextPage.uiFilePath = nextUiItem->filePath();  // 设置下一个界面UI文件路径
+
         wizard->addPage(nextPage);
         qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
     }
@@ -1308,14 +1414,28 @@ void StateMachineEditorV2::runWizard()
     // 8. 启动向导
     if (wizard->start()) {
         qDebug() << "[DEBUG] Wizard started successfully";
-        
+
+        // 设置向导预览窗口属性
+        m_wizardPreviewWidget->setWindowTitle("向导运行预览 - " + wizard->name());
+        m_wizardPreviewWidget->setMinimumSize(800, 600);
+        m_wizardPreviewWidget->resize(1024, 768);
+
+        // 居中显示窗口
+        QScreen *screen = QGuiApplication::primaryScreen();
+        if (screen) {
+            QRect screenGeometry = screen->availableGeometry();
+            int x = (screenGeometry.width() - m_wizardPreviewWidget->width()) / 2;
+            int y = (screenGeometry.height() - m_wizardPreviewWidget->height()) / 2;
+            m_wizardPreviewWidget->move(x, y);
+        }
+
         // 弹出向导运行效果
         m_wizardPreviewWidget->loadWizard(wizard);
         m_wizardPreviewWidget->show();
         m_wizardPreviewWidget->raise();
         m_wizardPreviewWidget->activateWindow();
-        
-        QMessageBox::information(this, "运行向导", "向导已成功启动！\n\n向导运行效果已弹出，您可以在新窗口中体验向导流程。\n\n主界面是起始页，点击'下一步'按钮将跳转到下一个界面。\n\nQT代码已生成并保存到临时文件。");
+
+        qDebug() << "[DEBUG] Wizard preview widget shown with size:" << m_wizardPreviewWidget->size();
     } else {
         qDebug() << "[ERROR] Failed to start wizard";
         QMessageBox::critical(this, "错误", "无法启动向导，向导可能未正确初始化。");

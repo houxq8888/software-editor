@@ -26,9 +26,10 @@ public:
     bool enableBackButton;
     bool enableFinishButton;
     bool enableCancelButton;
+    QString uiFilePath;  // UI文件路径，用于向导页面加载
 
-    WizardPage() : uiInterface(nullptr), isStartPage(false), isFinalPage(false), 
-                 enableNextButton(true), enableBackButton(true), 
+    WizardPage() : uiInterface(nullptr), isStartPage(false), isFinalPage(false),
+                 enableNextButton(true), enableBackButton(true),
                  enableFinishButton(false), enableCancelButton(true) {}
 };
 
