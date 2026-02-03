@@ -25,6 +25,8 @@
 #include <QFrame>
 #include <QGroupBox>
 #include <QUiLoader>
+#include <QDateTime>
+#include <QStackedWidget>
 
 // 产品相关头文件
 #include "../product/product.h"
@@ -1321,86 +1323,94 @@ void StateMachineEditorV2::runWizard()
     }
     
     qDebug() << "[DEBUG] Main interface found, proceeding to create wizard flow";
-    
-    // 3. 创建向导并添加页面
+
+    // 3. 收集所有UI文件（按列表顺序）
+    QList<UIFilePreviewItem*> allUiItems;
+    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
+        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
+        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
+        if (uiItem) {
+            allUiItems.append(uiItem);
+            qDebug() << "[DEBUG] Collected UI file:" << uiItem->fileName() << "at index" << i;
+        }
+    }
+
+    if (allUiItems.isEmpty()) {
+        QMessageBox::warning(this, "运行向导", "没有可用的UI文件。");
+        return;
+    }
+
+    // 4. 创建向导并添加所有页面
     Wizard *wizard = m_wizardManager->createWizard("MainApplicationWizard", "主应用程序向导");
-    
+
     if (!wizard) {
         qDebug() << "[ERROR] Failed to create wizard";
         QMessageBox::critical(this, "错误", "无法创建向导实例");
         return;
     }
-    
+
     // 设置当前向导
     m_wizardManager->setCurrentWizard(wizard);
-    
-    // 4. 创建主界面向导页
-    WizardPage mainPage;
-    mainPage.pageId = "main_page";
-    mainPage.title = mainUiItem->fileName();
-    mainPage.description = "应用程序的起始界面";
-    mainPage.isStartPage = true;
-    mainPage.isFinalPage = false;
-    mainPage.enableNextButton = true;
-    mainPage.enableBackButton = false;
-    mainPage.enableFinishButton = false;
-    mainPage.uiFilePath = mainUiItem->filePath();  // 设置主界面UI文件路径
-    
-    // 5. 查找下一个界面
-    QString nextPageId;
-    UIFilePreviewItem *nextUiItem = nullptr;
-    
-    for (int i = 0; i < m_uiFilesListWidget->count(); ++i) {
-        QListWidgetItem *listItem = m_uiFilesListWidget->item(i);
-        UIFilePreviewItem *uiItem = qobject_cast<UIFilePreviewItem*>(m_uiFilesListWidget->itemWidget(listItem));
-        
-        if (uiItem && uiItem != mainUiItem) {
-            nextPageId = "next_page_" + QString::number(i);
-            nextUiItem = uiItem;
-            mainPage.nextPageId = nextPageId;
-            qDebug() << "[DEBUG] Next page found: " << uiItem->fileName() << " with ID: " << nextPageId;
-            break;
-        }
-    }
-    
-    // 添加主页面到向导
-    wizard->addPage(mainPage);
-    
-    // 6. 添加下一个界面到向导
-    if (nextUiItem) {
-        WizardPage nextPage;
-        nextPage.pageId = nextPageId;
-        nextPage.title = nextUiItem->fileName();
-        nextPage.description = "应用程序的第二个界面";
-        nextPage.isStartPage = false;
-        nextPage.isFinalPage = true;
-        nextPage.enableNextButton = false;
-        nextPage.enableBackButton = true;
-        nextPage.enableFinishButton = true;
-        nextPage.previousPageId = "main_page";
-        nextPage.uiFilePath = nextUiItem->filePath();  // 设置下一个界面UI文件路径
 
-        wizard->addPage(nextPage);
-        qDebug() << "[DEBUG] Next page added to wizard: " << nextUiItem->fileName();
+    // 5. 为每个UI文件创建向导页面
+    for (int i = 0; i < allUiItems.size(); ++i) {
+        UIFilePreviewItem *uiItem = allUiItems[i];
+        WizardPage page;
+        page.pageId = "page_" + QString::number(i);
+        page.title = uiItem->fileName();
+        page.description = QString("应用程序的第%1个界面").arg(i + 1);
+        page.uiFilePath = uiItem->filePath();
+
+        // 设置页面属性
+        if (i == 0) {
+            // 第一个页面（主界面）
+            page.isStartPage = true;
+            page.isFinalPage = false;
+            page.enableNextButton = true;
+            page.enableBackButton = false;
+            page.enableFinishButton = false;
+        } else if (i == allUiItems.size() - 1) {
+            // 最后一个页面
+            page.isStartPage = false;
+            page.isFinalPage = true;
+            page.enableNextButton = false;
+            page.enableBackButton = true;
+            page.enableFinishButton = true;
+            page.previousPageId = "page_" + QString::number(i - 1);
+        } else {
+            // 中间页面
+            page.isStartPage = false;
+            page.isFinalPage = false;
+            page.enableNextButton = true;
+            page.enableBackButton = true;
+            page.enableFinishButton = false;
+            page.previousPageId = "page_" + QString::number(i - 1);
+        }
+
+        if (i < allUiItems.size() - 1) {
+            page.nextPageId = "page_" + QString::number(i + 1);
+        }
+
+        wizard->addPage(page);
+        qDebug() << "[DEBUG] Added page" << i << ":" << uiItem->fileName();
     }
     
-    // 7. 检查向导是否有足够的页面
+    // 检查向导是否有足够的页面
     if (wizard->allPages().isEmpty()) {
         qDebug() << "[ERROR] Wizard has no pages";
         QMessageBox::critical(this, "错误", "向导未初始化，至少需要一个页面才能运行。");
         return;
     }
-    
-    // 7. 生成QT代码
+
+    // 6. 生成QT代码
     qDebug() << "[DEBUG] Generating QT code for wizard flow...";
-    QString qtCode = generateQtCodeForWizard(wizard, mainUiItem, nextUiItem);
-    
+    QString qtCode = generateQtCodeForWizard(wizard, allUiItems);
+
     // 保存生成的代码到临时文件或显示给用户
     if (!qtCode.isEmpty()) {
         qDebug() << "[DEBUG] QT code generated successfully";
-        
-        // 这里可以选择将代码保存到文件或显示在对话框中
-        // 暂时保存到临时文件
+
+        // 保存到临时文件
         QString tempFile = QDir::tempPath() + "/wizard_generated_code.cpp";
         QFile file(tempFile);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1409,9 +1419,19 @@ void StateMachineEditorV2::runWizard()
             file.close();
             qDebug() << "[DEBUG] Generated code saved to: " << tempFile;
         }
+
+        // 同时保存到项目目录，方便编译
+        QString projectFile = QDir::currentPath() + "/wizard_generated_code.cpp";
+        QFile projectCodeFile(projectFile);
+        if (projectCodeFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&projectCodeFile);
+            out << qtCode;
+            projectCodeFile.close();
+            qDebug() << "[DEBUG] Generated code also saved to project: " << projectFile;
+        }
     }
-    
-    // 8. 启动向导
+
+    // 7. 启动向导
     if (wizard->start()) {
         qDebug() << "[DEBUG] Wizard started successfully";
 
@@ -1444,101 +1464,189 @@ void StateMachineEditorV2::runWizard()
     qDebug() << "[DEBUG] runWizard() function completed successfully";
 }
 
-QString StateMachineEditorV2::generateQtCodeForWizard(Wizard *wizard, UIFilePreviewItem *mainUiItem, UIFilePreviewItem *nextUiItem)
+QString StateMachineEditorV2::generateQtCodeForWizard(Wizard *wizard, const QList<UIFilePreviewItem*> &uiItems)
 {
-    if (!wizard) {
-        qDebug() << "[ERROR] Invalid wizard parameter for generateQtCodeForWizard";
+    if (!wizard || uiItems.isEmpty()) {
+        qDebug() << "[ERROR] Invalid parameters for generateQtCodeForWizard";
         return QString();
     }
-    
+
     QStringList codeLines;
-    
+
     // 头文件包含
+    codeLines << "// 自动生成的向导应用程序代码";
+    codeLines << "// 生成时间: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    codeLines << "";
     codeLines << "#include <QApplication>";
     codeLines << "#include <QMainWindow>";
-    codeLines << "#include <QDialog>";
-    codeLines << "#include <QWizard>";
-    codeLines << "#include <QWizardPage>";
+    codeLines << "#include <QWidget>";
     codeLines << "#include <QPushButton>";
     codeLines << "#include <QVBoxLayout>";
+    codeLines << "#include <QHBoxLayout>";
     codeLines << "#include <QLabel>";
     codeLines << "#include <QMessageBox>";
     codeLines << "#include <QFile>";
-    codeLines << "#include <QTextStream>";
+    codeLines << "#include <QUiLoader>";
+    codeLines << "#include <QDebug>";
+    codeLines << "#include <QStackedWidget>";
     codeLines << "";
-    
-    // 命名空间
-    codeLines << "using namespace std;";
+
+    // 生成页面类前向声明
+    for (int i = 0; i < uiItems.size(); ++i) {
+        codeLines << QString("class Page%1;").arg(i);
+    }
     codeLines << "";
-    
+
+    // 生成主窗口类
+    codeLines << "class WizardMainWindow : public QMainWindow";
+    codeLines << "{";
+    codeLines << "    Q_OBJECT";
+    codeLines << "public:";
+    codeLines << "    explicit WizardMainWindow(QWidget *parent = nullptr);";
+    codeLines << "    ~WizardMainWindow();";
+    codeLines << "";
+    codeLines << "private slots:";
+    for (int i = 0; i < uiItems.size(); ++i) {
+        codeLines << QString("    void goToPage%1();").arg(i);
+    }
+    codeLines << "    void onWizardFinished();";
+    codeLines << "";
+    codeLines << "private:";
+    codeLines << "    QStackedWidget *m_stackedWidget;";
+    codeLines << "    int m_currentPageIndex;";
+    codeLines << "    int m_totalPages;";
+    codeLines << "};";
+    codeLines << "";
+
+    // 生成每个页面的类
+    for (int i = 0; i < uiItems.size(); ++i) {
+        UIFilePreviewItem *uiItem = uiItems[i];
+        QString uiFilePath = uiItem->filePath().replace("\\", "/");
+
+        codeLines << QString("// 页面 %1: %2").arg(i + 1).arg(uiItem->fileName());
+        codeLines << QString("class Page%1 : public QWidget").arg(i);
+        codeLines << "{";
+        codeLines << "    Q_OBJECT";
+        codeLines << "public:";
+        codeLines << QString("    explicit Page%1(QWidget *parent = nullptr);").arg(i);
+        codeLines << "    ~Page%1();";
+        codeLines << "";
+        codeLines << "signals:";
+        codeLines << "    void nextPageRequested();";
+        codeLines << "    void previousPageRequested();";
+        codeLines << "";
+        codeLines << "private:";
+        codeLines << "    QWidget *m_uiWidget;";
+        codeLines << "};";
+        codeLines << "";
+
+        // 页面实现
+        codeLines << QString("Page%1::Page%1(QWidget *parent)").arg(i);
+        codeLines << "    : QWidget(parent)";
+        codeLines << "    , m_uiWidget(nullptr)";
+        codeLines << "{";
+        codeLines << "    // 加载UI文件";
+        codeLines << QString("    QString uiFilePath = \"%1\";").arg(uiFilePath);
+        codeLines << "    QFile uiFile(uiFilePath);";
+        codeLines << "    if (uiFile.open(QIODevice::ReadOnly)) {";
+        codeLines << "        QUiLoader loader;";
+        codeLines << "        m_uiWidget = loader.load(&uiFile, this);";
+        codeLines << "        uiFile.close();";
+        codeLines << "";
+        codeLines << "        if (m_uiWidget) {";
+        codeLines << "            m_uiWidget->setParent(this);";
+        codeLines << "            // 保持原UI的几何位置";
+        codeLines << "            QRect geom = m_uiWidget->geometry();";
+        codeLines << "            if (geom.isEmpty()) {";
+        codeLines << "                geom = QRect(10, 10, 400, 300);";
+        codeLines << "            }";
+        codeLines << "            m_uiWidget->setGeometry(geom);";
+        codeLines << "";
+        codeLines << "            // 连接所有按钮的点击信号";
+        codeLines << "            QList<QPushButton*> buttons = m_uiWidget->findChildren<QPushButton*>();";
+        codeLines << "            for (QPushButton* btn : buttons) {";
+        codeLines << "                connect(btn, &QPushButton::clicked, this, [this]() {";
+        codeLines << "                    emit nextPageRequested();";
+        codeLines << "                });";
+        codeLines << "            }";
+        codeLines << "        }";
+        codeLines << "    }";
+        codeLines << "";
+        codeLines << "    // 设置窗口大小";
+        codeLines << "    setMinimumSize(600, 400);";
+        codeLines << "}";
+        codeLines << "";
+        codeLines << QString("Page%1::~Page%1()").arg(i);
+        codeLines << "{";
+        codeLines << "}";
+        codeLines << "";
+    }
+
+    // 主窗口实现
+    codeLines << "WizardMainWindow::WizardMainWindow(QWidget *parent)";
+    codeLines << "    : QMainWindow(parent)";
+    codeLines << "    , m_stackedWidget(new QStackedWidget(this))";
+    codeLines << "    , m_currentPageIndex(0)";
+    codeLines << QString("    , m_totalPages(%1)").arg(uiItems.size());
+    codeLines << "{";
+    codeLines << QString("    setWindowTitle(\"%1\");").arg(wizard->name().isEmpty() ? "向导应用程序" : wizard->name());
+    codeLines << "    resize(1024, 768);";
+    codeLines << "";
+    codeLines << "    // 创建所有页面";
+    for (int i = 0; i < uiItems.size(); ++i) {
+        codeLines << QString("    Page%1 *page%1 = new Page%1(this);").arg(i);
+        codeLines << QString("    connect(page%1, &Page%1::nextPageRequested, this, &WizardMainWindow::goToPage%1);").arg(i);
+        codeLines << QString("    m_stackedWidget->addWidget(page%1);").arg(i);
+        codeLines << "";
+    }
+    codeLines << "    setCentralWidget(m_stackedWidget);";
+    codeLines << "}";
+    codeLines << "";
+
+    codeLines << "WizardMainWindow::~WizardMainWindow()";
+    codeLines << "{";
+    codeLines << "}";
+    codeLines << "";
+
+    // 页面跳转槽函数实现
+    for (int i = 0; i < uiItems.size(); ++i) {
+        codeLines << QString("void WizardMainWindow::goToPage%1()").arg(i);
+        codeLines << "{";
+        if (i < uiItems.size() - 1) {
+            codeLines << QString("    // 跳转到页面 %1").arg(i + 1);
+            codeLines << QString("    m_stackedWidget->setCurrentIndex(%1);").arg(i + 1);
+            codeLines << QString("    m_currentPageIndex = %1;").arg(i + 1);
+        } else {
+            codeLines << "    // 最后一个页面，显示完成提示";
+            codeLines << "    QMessageBox::information(this, \"完成\", \"恭喜！您已完成所有步骤。\");";
+            codeLines << "    onWizardFinished();";
+        }
+        codeLines << "}";
+        codeLines << "";
+    }
+
+    codeLines << "void WizardMainWindow::onWizardFinished()";
+    codeLines << "{";
+    codeLines << "    // 向导完成处理";
+    codeLines << "    qDebug() << \"Wizard finished\";";
+    codeLines << "}";
+    codeLines << "";
+
     // 主函数
     codeLines << "int main(int argc, char *argv[])";
     codeLines << "{";
     codeLines << "    QApplication app(argc, argv);";
-    codeLines << "    ";
-    codeLines << "    // 设置应用程序信息";
-    codeLines << QString("    app.setApplicationName(\"%1\");").arg(wizard->name().isEmpty() ? "Wizard Application" : wizard->name());
+    codeLines << QString("    app.setApplicationName(\"%1\");").arg(wizard->name().isEmpty() ? "向导应用程序" : wizard->name());
     codeLines << "    app.setApplicationVersion(\"1.0\");";
-    codeLines << "    ";
-    
-    // 创建向导对象
-    codeLines << "    // 创建向导";
-    codeLines << QString("    QWizard *wizard = new QWizard();");
-    codeLines << QString("    wizard->setWindowTitle(\"%1\");").arg(wizard->name().isEmpty() ? "Wizard Application" : wizard->name());
-    if (!wizard->description().isEmpty()) {
-        codeLines << QString("    // 向导描述: %1").arg(wizard->description());
-    }
-    codeLines << "    wizard->resize(800, 600);";
-    codeLines << "    ";
-    
-    // 生成向导页面代码
-    QList<WizardPage*> pages = wizard->allPages();
-    for (int i = 0; i < pages.size(); ++i) {
-        WizardPage *page = pages[i];
-        codeLines << QString("    // 创建向导页面 %1: %2").arg(i+1).arg(page->title.isEmpty() ? "Untitled Page" : page->title);
-        codeLines << QString("    QWizardPage *page%1 = new QWizardPage(wizard);").arg(i+1);
-        codeLines << QString("    page%1->setTitle(\"%2\");").arg(i+1).arg(page->title.isEmpty() ? QString("Page %1").arg(i+1) : page->title);
-        
-        if (!page->description.isEmpty()) {
-            codeLines << QString("    page%1->setSubTitle(\"%2\");").arg(i+1).arg(page->description);
-        }
-        
-        // 添加页面内容布局
-        codeLines << QString("    QVBoxLayout *layout%1 = new QVBoxLayout(page%1);").arg(i+1);
-        
-        // 如果有UI界面信息，添加说明
-         if (page->uiInterface) {
-             codeLines << QString("    // 该页面关联UI界面: %1").arg(page->uiInterface->name());
-             codeLines << QString("    QLabel *uiLabel%1 = new QLabel(\"UI界面: %2\", page%1);").arg(i+1).arg(page->uiInterface->name());
-             if (!page->uiInterface->description().isEmpty()) {
-                 codeLines << QString("    QLabel *descLabel%1 = new QLabel(\"%2\", page%1);").arg(i+1).arg(page->uiInterface->description());
-                 codeLines << QString("    layout%1->addWidget(descLabel%1);").arg(i+1);
-             }
-             codeLines << QString("    layout%1->addWidget(uiLabel%1);").arg(i+1);
-         }
-        
-        // 添加页面完成
-        codeLines << QString("    wizard->addPage(page%1);").arg(i+1);
-        codeLines << "    ";
-    }
-    
-    // 设置向导按钮
-    codeLines << "    // 设置向导按钮";
-    codeLines << "    wizard->setOption(QWizard::HaveNextButton, true);";
-    codeLines << "    wizard->setOption(QWizard::HaveBackButton, true);";
-    codeLines << "    wizard->setOption(QWizard::HaveFinishButton, true);";
-    codeLines << "    wizard->setOption(QWizard::HaveCancelButton, true);";
-    codeLines << "    ";
-    
-    // 显示向导
-    codeLines << "    // 显示向导";
-    codeLines << "    wizard->show();";
-    codeLines << "    ";
-    
-    // 执行应用程序
+    codeLines << "";
+    codeLines << "    WizardMainWindow window;";
+    codeLines << "    window.show();";
+    codeLines << "";
     codeLines << "    return app.exec();";
     codeLines << "}";
-    
+    codeLines << "";
+    codeLines << "#include \"main.moc\"";
+
     return codeLines.join("\n");
 }
 
