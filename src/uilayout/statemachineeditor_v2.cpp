@@ -614,7 +614,6 @@ void WizardPreviewWidget::loadWizard(Wizard *wizard)
     m_totalPages = wizard->allPages().size();
 
     qDebug() << "[DEBUG] Wizard total pages:" << m_totalPages;
-
     if (m_totalPages == 0) {
         qDebug() << "[ERROR] 向导没有页面，无法预览";
         createPlaceholder();
@@ -706,6 +705,29 @@ void WizardPreviewWidget::goToPage(int pageIndex)
 void WizardPreviewWidget::showPage(int pageIndex)
 {
     goToPage(pageIndex);
+}
+
+void WizardPreviewWidget::backToPreviousPage()
+{
+    if (m_navigationHistory.isEmpty()) {
+        qDebug() << "[DEBUG] backToPreviousPage: Navigation history is empty";
+        return;
+    }
+    
+    int previousPageIndex = m_navigationHistory.pop();
+    qDebug() << "[DEBUG] backToPreviousPage: Returning to page" << previousPageIndex;
+    
+    // 直接设置页面索引，不添加到历史记录
+    clearCurrentPage();
+    m_currentPageIndex = previousPageIndex;
+    
+    // 加载当前页面内容
+    loadCurrentPage();
+    
+    // 更新导航控件
+    updateNavigationControls();
+    
+    emit pageChanged(previousPageIndex, currentPageTitle());
 }
 
 void WizardPreviewWidget::backToPreviousPage()
